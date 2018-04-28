@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Camera : MonoBehaviour {
+public class CusCamera : MonoBehaviour {
     public List<GameObject> positions = new List<GameObject>();
     public int Level;
     public bool lookPlayer;

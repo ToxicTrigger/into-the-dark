@@ -29,6 +29,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
 
+        Vector3 tmp;
 
 		void Start()
 		{
@@ -43,40 +44,76 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 
-		public void Move(Vector3 move, bool crouch, bool jump)
-		{
+        //public void Move(Vector3 move, bool crouch, bool jump)
+        //{
 
-			// convert the world relative moveInput vector into a local-relative
-			// turn amount and forward amount required to head in the desired
-			// direction.
-			if (move.magnitude > 1f) move.Normalize();
-			move = transform.InverseTransformDirection(move);
-			CheckGroundStatus();
-			move = Vector3.ProjectOnPlane(move, m_GroundNormal);
-			m_TurnAmount = Mathf.Atan2(move.x, move.z);
-			m_ForwardAmount = move.z;
+        //	// convert the world relative moveInput vector into a local-relative
+        //	// turn amount and forward amount required to head in the desired
+        //	// direction.
+        //	if (move.magnitude > 1f) move.Normalize();
+        //	move = transform.InverseTransformDirection(move);
+        //	CheckGroundStatus();
+        //	move = Vector3.ProjectOnPlane(move, m_GroundNormal);
+        //	m_TurnAmount = Mathf.Atan2(move.x, move.z);
+        //	m_ForwardAmount = move.z;
+        //          tmp = move;
 
-			ApplyExtraTurnRotation();
+        //	ApplyExtraTurnRotation();
 
-			// control and velocity handling is different when grounded and airborne:
-			if (m_IsGrounded)
-			{
-				HandleGroundedMovement(crouch, jump);
-			}
-			else
-			{
-				HandleAirborneMovement();
-			}
+        //	// control and velocity handling is different when grounded and airborne:
+        //	if (m_IsGrounded)
+        //	{
+        //		HandleGroundedMovement(crouch, jump);
 
-			ScaleCapsuleForCrouching(crouch);
-			PreventStandingInLowHeadroom();
+        //          }
+        //	else
+        //	{
+        //		HandleAirborneMovement();
+        //	}
 
-			// send input and other state parameters to the animator
-			UpdateAnimator(move);
-		}
+        //	ScaleCapsuleForCrouching(crouch);
+        //	PreventStandingInLowHeadroom();
+
+        //	// send input and other state parameters to the animator
+        //	UpdateAnimator(move);
+        //}
 
 
-		void ScaleCapsuleForCrouching(bool crouch)
+        public void Move(Vector3 move, bool crouch, bool jump)
+        {
+
+            // convert the world relative moveInput vector into a local-relative
+            // turn amount and forward amount required to head in the desired
+            // direction.
+            if (move.magnitude > 1f) move.Normalize();
+            tmp = move;
+            move = transform.InverseTransformDirection(move);
+            CheckGroundStatus();
+            move = Vector3.ProjectOnPlane(move, m_GroundNormal);
+            m_TurnAmount = Mathf.Atan2(move.x, move.z);
+            m_ForwardAmount = move.z;
+
+            ApplyExtraTurnRotation();
+
+            // control and velocity handling is different when grounded and airborne:
+            if (m_IsGrounded)
+            {
+                HandleGroundedMovement(crouch, jump);
+            }
+            else
+            {
+                HandleAirborneMovement();
+            }
+
+            ScaleCapsuleForCrouching(crouch);
+            PreventStandingInLowHeadroom();
+
+            // send input and other state parameters to the animator
+            UpdateAnimator(move);
+        }
+
+
+        void ScaleCapsuleForCrouching(bool crouch)
 		{
 			if (m_IsGrounded && crouch)
 			{
@@ -190,12 +227,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// this allows us to modify the positional speed before it's applied.
 			if (m_IsGrounded && Time.deltaTime > 0)
 			{
-				Vector3 v = (m_Animator.deltaPosition * m_MoveSpeedMultiplier) / Time.deltaTime;
-
-				// we preserve the existing y part of the current velocity.
-				v.y = m_Rigidbody.velocity.y;
+				//Vector3 v = (m_Animator.deltaPosition * m_MoveSpeedMultiplier) / Time.deltaTime;
+                Vector3 v = (tmp * m_MoveSpeedMultiplier) / Time.deltaTime;
+                // we preserve the existing y part of the current velocity.
+                v.y = m_Rigidbody.velocity.y;
 				m_Rigidbody.velocity = v;
-			}
+                //Debug.Log("z = " + m_Animator.deltaPosition.y);
+            }
 		}
 
 
