@@ -9,8 +9,9 @@ public class Element : MonoBehaviour {
         Void,
         Fire,
         Water,
-        Ig
+        Ice,
+        Lava
     }
-
+    
     public Type type;
 }
