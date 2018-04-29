@@ -11,6 +11,8 @@ public class Player : MonoBehaviour {
 
     public Element.Type cur_attack_type;
     public UnityEngine.Camera cam;
+    public GameObject fire_effect, ice_effect;
+    public AudioSource bow_fullback, bow_release;
 
     public float bow_time;
 
@@ -18,38 +20,8 @@ public class Player : MonoBehaviour {
     {
         weapon = GetComponent<Weapon>();
     }
-    
-    void Update () {
-        Vector3 tmp = transform.position;
-        tmp.y = 10f;
 
-        if (Input.GetButton("Fire1"))
-        {
-            ani.SetBool("Attack", true);
-            weapon.type = Weapon.Type.Sword;
-        }
-        else if (Input.GetButton("Fire2"))
-        {
-            bow_time += Time.deltaTime;
-            RaycastHit hit;
-            Vector3 mouse = Input.mousePosition;
-            if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
-            {
-                click_pos = hit.point;
-                click_pos.y = transform.position.y;
-                transform.LookAt(click_pos);
-                line.gameObject.SetActive(true);
-                line.SetPosition(0, transform.position);
-                line.SetPosition(1, click_pos);
-
-                
-                weapon.type = Weapon.Type.Bow;
-            }
-        }
-        ani.SetFloat("Bow_Fire", bow_time);
-    }
-
-    private void FixedUpdate()
+    public void LateUpdate()
     {
         if (!is_attack)
         {
@@ -63,7 +35,19 @@ public class Player : MonoBehaviour {
                 GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
                 arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
                 arrow.transform.LookAt(weapon.fire_point.forward);
+                if (bow_time <= 3.0f & bow_time < 3.5f)
+                {
+                    arrow.GetComponent<Arrow>().type = cur_attack_type;
+                    Debug.Log(cur_attack_type);
+                }
                 Destroy(arrow, 5.0f);
+
+                if(!bow_release.isPlaying)
+                {
+                    bow_fullback.Stop();
+                    bow_release.Play();
+                }
+
 
                 bow_time = 0f;
                 weapon.type = Weapon.Type.Idle;
@@ -77,5 +61,54 @@ public class Player : MonoBehaviour {
                 weapon.type = Weapon.Type.Idle;
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            cur_attack_type = cur_attack_type == Element.Type.Fire ? Element.Type.Ice : Element.Type.Fire;
+            GameObject tmp = 
+                cur_attack_type == Element.Type.Fire ? 
+                Instantiate(fire_effect, transform.position, Quaternion.identity, null) : 
+                Instantiate(ice_effect, transform.position, Quaternion.identity, null);
+            Destroy(tmp, 2.0f);
+        }
+    }
+
+    void Update () {
+        Vector3 tmp = transform.position;
+        tmp.y = 10f;
+
+        if (Input.GetButton("Fire1"))
+        {
+            ani.SetBool("Attack", true);
+            weapon.type = Weapon.Type.Sword;
+        }
+        else if (Input.GetButton("Fire2"))
+        {
+            bow_time += Time.deltaTime;
+            if(!bow_fullback.isPlaying)
+            {
+                bow_fullback.Play();
+            }
+
+            RaycastHit hit;
+            Vector3 mouse = Input.mousePosition;
+            if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
+            {
+                click_pos = hit.point;
+                click_pos.y = transform.position.y;
+                transform.LookAt(click_pos);
+                line.gameObject.SetActive(true);
+                line.SetPosition(0, transform.position);
+                line.SetPosition(1, click_pos);
+
+                weapon.type = Weapon.Type.Bow;
+            }
+        }
+        ani.SetFloat("Bow_Fire", bow_time);
+    }
+
+    private void FixedUpdate()
+    {
+
     }
 }

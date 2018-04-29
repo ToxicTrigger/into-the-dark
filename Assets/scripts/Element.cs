@@ -12,6 +12,4 @@ public class Element : MonoBehaviour {
         Ice,
         Lava
     }
-    
-    public Type type;
 }

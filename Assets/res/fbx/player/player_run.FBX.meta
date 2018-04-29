@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6c45abd2148da7e48a5bbe27dd7aba98
-timeCreated: 1524896745
+guid: 07f9cc6acd2ae1f4696d40b59163c6d9
+timeCreated: 1525000857
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -80,7 +80,6 @@ ModelImporter:
     100144: Box030
     100146: //RootNode
     100148: Teapot001
-    100150: Tube001
     400000: Bip001
     400002: Bip001 Footsteps
     400004: Bip001 Head
@@ -156,9 +155,7 @@ ModelImporter:
     400144: Box030
     400146: //RootNode
     400148: Teapot001
-    400150: Tube001
     2100000: 01 - Default
-    2100002: No Name
     2300000: Box001
     2300002: Box002
     2300004: Box003
@@ -190,7 +187,6 @@ ModelImporter:
     2300056: Box029
     2300058: Box030
     2300060: Teapot001
-    2300062: Tube001
     3300000: Box001
     3300002: Box002
     3300004: Box003
@@ -222,7 +218,6 @@ ModelImporter:
     3300056: Box029
     3300058: Box030
     3300060: Teapot001
-    3300062: Tube001
     4300000: Box026
     4300002: Box025
     4300004: Box024
@@ -238,32 +233,23 @@ ModelImporter:
     4300024: Box009
     4300026: Box008
     4300028: Box005
-    4300030: Tube001
-    4300032: Box004
-    4300034: Box003
-    4300036: Box002
-    4300038: Box017
-    4300040: Box016
-    4300042: Box018
-    4300044: Box019
-    4300046: Box021
-    4300048: Box020
-    4300050: Box015
-    4300052: Box014
-    4300054: Box013
-    4300056: Box012
-    4300058: Teapot001
-    4300060: Box001
-    4300062: Box022
-    7400000: short_shot
-    7400002: ready
-    7400004: point_shot
-    7400006: over_shot
-    7400008: Idle
-    7400010: Run
-    7400012: Run_left
-    7400014: Run_right
-    7400016: Change
+    4300030: Box004
+    4300032: Box003
+    4300034: Box002
+    4300036: Box017
+    4300038: Box016
+    4300040: Box018
+    4300042: Box019
+    4300044: Box021
+    4300046: Box020
+    4300048: Box015
+    4300050: Box014
+    4300052: Box013
+    4300054: Box012
+    4300056: Teapot001
+    4300058: Box001
+    4300060: Box022
+    7400000: Run
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -293,18 +279,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Change
+      name: Run
       takeName: Take 001
-      firstFrame: 40
-      lastFrame: 63
+      firstFrame: 0
+      lastFrame: 20
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      hasAdditiveReferencePose: 1
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0

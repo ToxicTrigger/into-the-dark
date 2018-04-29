@@ -9,14 +9,17 @@ public class Arrow : MonoBehaviour {
     public int max_penetrate;
     public Vector3 look;
     public Rigidbody rig;
-    
+    public Element.Type type = Element.Type.None;
+    public TrailRenderer tr;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        if(collision.gameObject.tag.Equals("Player"))
+        bool is_player = false;
+        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2)
         {
-            return;
+            is_player = true;
         }
+
         Look look = collision.gameObject.GetComponent<Look>();
         Element element = collision.gameObject.GetComponent<Element>();
         if (look != null)
@@ -29,13 +32,27 @@ public class Arrow : MonoBehaviour {
         {
 
         }
-
-        Destroy(gameObject);
+        
+        if (!is_player)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+        }
     }
 
     private void Start()
     {
         rig = GetComponent<Rigidbody>();
+        if(type == Element.Type.Fire)
+        {
+            tr.startColor = Color.red;
+        }
+        else if (type == Element.Type.Ice)
+        {
+            tr.startColor = Color.cyan;
+        }
 
     }
 

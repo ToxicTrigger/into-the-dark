@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6c45abd2148da7e48a5bbe27dd7aba98
-timeCreated: 1524896745
+guid: e802ff3292fee28459ab70ca8bee33e3
+timeCreated: 1525005412
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -255,15 +255,7 @@ ModelImporter:
     4300058: Teapot001
     4300060: Box001
     4300062: Box022
-    7400000: short_shot
-    7400002: ready
-    7400004: point_shot
-    7400006: over_shot
-    7400008: Idle
-    7400010: Run
-    7400012: Run_left
-    7400014: Run_right
-    7400016: Change
+    7400000: OverShotReady
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -293,18 +285,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Change
+      name: OverShotReady
       takeName: Take 001
-      firstFrame: 40
-      lastFrame: 63
+      firstFrame: 56
+      lastFrame: 73
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
