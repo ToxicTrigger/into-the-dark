@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
     public Weapon weapon;
     public LineRenderer line;
 
-    public Element.Type cur_attack_type;
+    public Element cur_attack_type;
     public UnityEngine.Camera cam;
     public GameObject fire_effect, ice_effect;
     public AudioSource bow_fullback, bow_release;
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour {
     public void Start()
     {
         weapon = GetComponent<Weapon>();
+        cur_attack_type = GetComponent<Element>();
     }
 
     public void LateUpdate()
@@ -31,23 +32,31 @@ public class Player : MonoBehaviour {
         {
             if (weapon.isUsing)
             {
-                Vector3 nor = transform.forward.normalized;
-                GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
-                arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
-                arrow.transform.LookAt(weapon.fire_point.forward);
-                if (bow_time <= 3.0f & bow_time < 3.5f)
+                if(bow_time >= 1.0f)
                 {
-                    arrow.GetComponent<Arrow>().type = cur_attack_type;
-                    Debug.Log(cur_attack_type);
-                }
-                Destroy(arrow, 5.0f);
+                    Vector3 nor = transform.forward.normalized;
+                    GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
+                    arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
+                    arrow.transform.LookAt(weapon.fire_point.forward);
 
-                if(!bow_release.isPlaying)
-                {
-                    bow_fullback.Stop();
-                    bow_release.Play();
-                }
+                    if (bow_time >= 3.0f & bow_time < 3.7f)
+                    {
+                        arrow.GetComponent<Arrow>().type.type = cur_attack_type.type;
+                        GameObject tmp =
+                        cur_attack_type.type == Element.Type.Fire ?
+                            Instantiate(fire_effect, transform.position, Quaternion.identity, null) :
+                            Instantiate(ice_effect, transform.position, Quaternion.identity, null);
+                        Destroy(tmp, 2.0f);
+                    }
+                    Destroy(arrow, 5.0f);
 
+                    if (!bow_release.isPlaying)
+                    {
+                        bow_fullback.Stop();
+                        bow_release.Play();
+                    }
+
+                }
 
                 bow_time = 0f;
                 weapon.type = Weapon.Type.Idle;
@@ -64,9 +73,9 @@ public class Player : MonoBehaviour {
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            cur_attack_type = cur_attack_type == Element.Type.Fire ? Element.Type.Ice : Element.Type.Fire;
+            cur_attack_type.type = cur_attack_type.type == Element.Type.Fire ? Element.Type.Water : Element.Type.Fire;
             GameObject tmp = 
-                cur_attack_type == Element.Type.Fire ? 
+                cur_attack_type.type == Element.Type.Fire ? 
                 Instantiate(fire_effect, transform.position, Quaternion.identity, null) : 
                 Instantiate(ice_effect, transform.position, Quaternion.identity, null);
             Destroy(tmp, 2.0f);

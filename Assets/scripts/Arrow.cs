@@ -9,7 +9,7 @@ public class Arrow : MonoBehaviour {
     public int max_penetrate;
     public Vector3 look;
     public Rigidbody rig;
-    public Element.Type type = Element.Type.None;
+    public Element type;
     public TrailRenderer tr;
 
     private void OnTriggerEnter(Collider collision)
@@ -42,17 +42,10 @@ public class Arrow : MonoBehaviour {
         }
     }
 
-    private void Start()
+    private void Awake()
     {
+        type = GetComponent<Element>();
         rig = GetComponent<Rigidbody>();
-        if(type == Element.Type.Fire)
-        {
-            tr.startColor = Color.red;
-        }
-        else if (type == Element.Type.Ice)
-        {
-            tr.startColor = Color.cyan;
-        }
 
     }
 
@@ -62,8 +55,15 @@ public class Arrow : MonoBehaviour {
         rig.velocity = look * speed;
         transform.LookAt(transform.forward);
     }
-    // Update is called once per frame
+
     void Update () {
-		
-	}
+        if (type.type == Element.Type.Fire)
+        {
+            tr.startColor = Color.red;
+        }
+        else if (type.type == Element.Type.Water)
+        {
+            tr.startColor = Color.cyan;
+        }
+    }
 }

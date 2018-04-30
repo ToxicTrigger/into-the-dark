@@ -9,7 +9,7 @@ public class Element : MonoBehaviour {
         Void,
         Fire,
         Water,
-        Ice,
-        Lava
     }
+
+    public Type type;
 }
