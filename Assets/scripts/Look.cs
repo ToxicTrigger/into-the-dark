@@ -39,13 +39,14 @@ public class Look : MonoBehaviour {
         {
             case State.Dead:
                 na.enabled = false;
-                Destroy(gameObject);
                 if(!isOnDeadEff)
                 {
                     GameObject dead = GameObject.Instantiate(Dead, transform.position, Quaternion.identity, null);
                     Destroy(dead, 2.0f);
                     isOnDeadEff = true;
                 }
+                Destroy(det.gameObject);
+                Destroy(gameObject);
                 break;
             case State.Hit:
                 //gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * 10) * -1, ForceMode.Impulse);

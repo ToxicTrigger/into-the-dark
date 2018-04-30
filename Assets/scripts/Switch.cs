@@ -60,7 +60,8 @@ public class Switch : Observable {
         if(other_element != null)
         {
             switch_on = other_element.type == element.type ? true : false;
-            if(switch_on)
+            Debug.Log("fail : " + gameObject.name + ", " + other.name + " | " + switch_on);
+            if (switch_on)
             {
                 if (!point_on)
                 {
@@ -79,7 +80,6 @@ public class Switch : Observable {
             else
             {
                 point_on = false;
-                switch_on = false;
                 notify_all();
             }
         }
