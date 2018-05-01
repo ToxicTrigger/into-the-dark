@@ -11,6 +11,7 @@ public class Arrow : MonoBehaviour {
     public Rigidbody rig;
     public Element type;
     public TrailRenderer tr;
+    public AudioSource arrow_hit_rub, arrow_hit_stone,arrow_fire_start,arrow_water_start;
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -31,7 +32,42 @@ public class Arrow : MonoBehaviour {
         }
 
         //TODO :: ObjectPool refactoring here
-        if (!is_player) Destroy(gameObject);
+        if (!is_player)
+        {
+            AudioSource AS = null;
+            if(element != null)
+            {
+                switch (element.type)
+                {
+                    case Element.Type.None: AS = arrow_hit_rub; break;
+                    case Element.Type.Fire: AS = arrow_hit_stone; break;
+                    case Element.Type.Water: AS = arrow_hit_stone; break;
+                    default: break;
+                }
+            }
+            else
+            {
+                AS = arrow_hit_rub;
+            }
+            Debug.Log(collision.gameObject.name);
+            GameObject tmp = Instantiate(AS.gameObject, transform.position, Quaternion.identity, null);
+            tmp.GetComponent<AudioSource>().Play();
+            Destroy(tmp, 2.0f);
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        AudioSource AS = null;
+        if (type.type == Element.Type.Fire)
+        {
+            AS = arrow_fire_start;
+            GameObject tmp = Instantiate(AS.gameObject, transform.position, Quaternion.identity, null);
+            tmp.GetComponent<AudioSource>().Play();
+            Destroy(tmp, 2.0f);
+        }
+        
     }
 
     private void Awake()

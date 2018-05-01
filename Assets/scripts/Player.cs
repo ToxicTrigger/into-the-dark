@@ -29,10 +29,18 @@ public class Player : MonoBehaviour {
 
     void gen_arrow()
     {
+        RaycastHit hit;
+        Vector3 mouse = Input.mousePosition;
+        if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
+        {
+
+        }
+
         Vector3 nor = transform.forward.normalized;
         GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
         arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
-        arrow.transform.LookAt(weapon.fire_point.forward);
+        //arrow.transform.LookAt(weapon.fire_point.forward);
+
 
         if (bow_time >= 3.2f & bow_time < 4f)
         {
@@ -121,6 +129,7 @@ public class Player : MonoBehaviour {
         {
             ani.SetBool("Attack", true);
             weapon.type = Weapon.Type.Sword;
+            calc_click_pos();
         }
         else if (Input.GetButton("Fire2"))
         {

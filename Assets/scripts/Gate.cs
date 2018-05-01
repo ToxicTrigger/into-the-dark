@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Gate : Observer {
-    private int on_switch_number;
+    [SerializeField] int on_switch_number;
     public bool open = false;
     private Vector3 origin, down;
     public int switch_number;
@@ -14,9 +14,9 @@ public class Gate : Observer {
         down = origin + (Vector3.down * 10);
     }
 
-    public override void notify(Observable observable)
+    public override void notify(GameObject obj)
     {
-        Switch tmp = observable as Switch;
+        Switch tmp = obj.GetComponent<Switch>();
         if(tmp.switch_on)
         {
             on_switch_number+=1;

@@ -7,6 +7,7 @@ public class Switch : Observable {
     public bool point_on;
     public Element element;
     public Light point;
+    bool cur_state;
 
     private void Start()
     {
@@ -44,8 +45,8 @@ public class Switch : Observable {
         IEnumerator iterr = this.observers.GetEnumerator();
         while (iterr.MoveNext())
         {
-            Gate tmp = iterr.Current as Gate;
-            tmp.notify(this);
+            Observer tmp = iterr.Current as Observer;
+            tmp.notify(this.gameObject);
         }
     }
 
@@ -55,26 +56,19 @@ public class Switch : Observable {
         if(other_element != null)
         {
             switch_on = other_element.type == element.type ? true : false;
-            Debug.Log("fail : " + gameObject.name + ", " + other.name + " | " + switch_on);
-            if (switch_on)
+            Debug.Log("Enter : " + gameObject.name + ", " + other.name + " | " + switch_on);
+            if(cur_state != switch_on)
             {
-                if (!point_on)
+                if(!point_on)
                 {
                     point_on = true;
+                    cur_state = true;
                 }
                 else
                 {
-                    switch_on = false;
-                    point_on = false ;
-                    notify_all();
-                    return;
+                    point_on = false;
+                    cur_state = false;
                 }
-
-                notify_all();
-            }
-            else
-            {
-                point_on = false;
                 notify_all();
             }
         }
