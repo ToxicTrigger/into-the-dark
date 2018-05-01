@@ -59,6 +59,7 @@ public class Look : MonoBehaviour {
         UpdateState();
     }
 
+    //공격자가 호출합니다.
     public void onAttack(float damage)
     {
         GameObject eff = GameObject.Instantiate(Hit, transform.position, Quaternion.identity, null);
@@ -73,7 +74,6 @@ public class Look : MonoBehaviour {
         }
     }
 
-    float updateTick = 2;
     void Update () {
         if(Hp <= 0)
         {
@@ -86,16 +86,15 @@ public class Look : MonoBehaviour {
                 this.transform.LookAt(Target);
                 na.SetDestination(Target.position);
 
-                if (updateTick >= 2.0f)
+                if (updateRushTick >= 2.0f)
                 {
-                    StartCoroutine(setRushPoint());
                     rush_point = (transform.forward * 2 + transform.position);
-                    tmp.position = rush_point;
-                    updateTick = 0;
+                    StartCoroutine(setRushPoint());
+                    updateRushTick = 0;
                 }
                 else
                 {
-                    updateTick += Time.deltaTime;
+                    updateRushTick += Time.deltaTime;
                 }
                 
             }
@@ -105,7 +104,9 @@ public class Look : MonoBehaviour {
             if(na.enabled) na.SetDestination(start);
         }
 	}
-    public Transform tmp;
+
+
+    float updateRushTick = 2;
     IEnumerator setRushPoint()
     {
         while (Vector3.Distance(transform.position, rush_point) >= 0.1f)

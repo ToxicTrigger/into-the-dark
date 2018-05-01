@@ -5,12 +5,13 @@ using UnityEngine;
 public class CusCamera : MonoBehaviour {
     public List<GameObject> positions = new List<GameObject>();
     public int Level;
-    public bool lookPlayer;
+    private bool is_look_player;
     public Transform player;
     public Vector3 offset;
 	
 	void Update () {
         int cantFind = 0;
+
         IEnumerator iter = positions.GetEnumerator();
         while(iter.MoveNext())
         {
@@ -22,23 +23,20 @@ public class CusCamera : MonoBehaviour {
                 cantFind += 1;
             }
         }
+
         if(cantFind != 0)
         {
             transform.position = Vector3.Lerp(transform.position, positions[Level].transform.position, Time.deltaTime);
-            lookPlayer = false;
+            is_look_player = false;
         }
         else if(cantFind == 0)
         {
-            lookPlayer = true;
+            is_look_player = true;
         }
 
-        if (lookPlayer)
+        if (is_look_player)
         {
             transform.position = Vector3.Lerp(transform.position, player.position + offset, Time.deltaTime * 10);
         }
-
     }
-
-
-	
 }

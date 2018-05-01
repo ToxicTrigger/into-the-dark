@@ -12,8 +12,9 @@ public class Switch : Observable {
     {
         element = GetComponent<Element>();
     }
+    
+    void light_source
 
-    [ExecuteInEditMode]
     private void Update()
     {
         if (switch_on)
@@ -37,11 +38,6 @@ public class Switch : Observable {
                 draw_debug_wire(tmp.transform, Color.white);
             }
         }
-    }
-    [ExecuteInEditMode]
-    void draw_debug_wire(Transform target, Color color)
-    {
-        Debug.DrawLine(transform.position, target.position, color);
     }
 
     void notify_all()

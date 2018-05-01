@@ -15,55 +15,40 @@ public class Arrow : MonoBehaviour {
     private void OnTriggerEnter(Collider collision)
     {
         bool is_player = false;
-        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2)
-        {
-            is_player = true;
-        }
+        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2) is_player = true;
 
         Look look = collision.gameObject.GetComponent<Look>();
         Element element = collision.gameObject.GetComponent<Element>();
+
         if (look != null)
         {
             look = collision.gameObject.GetComponent<Look>();
             look.Hp -= 1;
-            
         }
         if (element != null)
         {
+            //TODO :: 만약 몬스터가 속성에 대응할 여부가 있을 때
+        }
 
-        }
-        
-        if (!is_player)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-        }
+        //TODO :: ObjectPool refactoring here
+        if (!is_player) Destroy(gameObject);
     }
 
     private void Awake()
     {
         type = GetComponent<Element>();
         rig = GetComponent<Rigidbody>();
-
     }
 
     private void FixedUpdate()
     {
-        //rig.AddForce((look * speed), ForceMode.Acceleration);
         rig.velocity = look * speed;
-        transform.LookAt(transform.forward);
     }
 
     void Update () {
-        if (type.type == Element.Type.Fire)
-        {
-            tr.startColor = Color.red;
-        }
-        else if (type.type == Element.Type.Water)
-        {
-            tr.startColor = Color.cyan;
-        }
+        if (type.type == Element.Type.Fire)tr.startColor = Color.red;
+
+        else if (type.type == Element.Type.Water) tr.startColor = Color.cyan;
+        
     }
 }
