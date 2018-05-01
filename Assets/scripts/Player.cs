@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class Player : MonoBehaviour {
     bool is_attack;
@@ -8,6 +9,8 @@ public class Player : MonoBehaviour {
     Vector3 click_pos;
     public Weapon weapon;
     public LineRenderer line;
+    ThirdPersonCharacter tpc;
+    float origin_move_speed;
 
     public Element cur_attack_type;
     public Camera cam;
@@ -20,6 +23,8 @@ public class Player : MonoBehaviour {
     {
         weapon = GetComponent<Weapon>();
         cur_attack_type = GetComponent<Element>();
+        tpc = GetComponent<ThirdPersonCharacter>();
+        origin_move_speed = tpc.m_MoveSpeedMultiplier;
     }
 
     void gen_arrow()
@@ -29,7 +34,7 @@ public class Player : MonoBehaviour {
         arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
         arrow.transform.LookAt(weapon.fire_point.forward);
 
-        if (bow_time >= 3.0f & bow_time < 3.7f)
+        if (bow_time >= 3.2f & bow_time < 4f)
         {
             arrow.GetComponent<Arrow>().type.type = cur_attack_type.type;
             GameObject tmp =
@@ -66,7 +71,7 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public void LateUpdate()
+    public void FixedUpdate()
     {
         if (!is_attack)
         {
@@ -83,7 +88,7 @@ public class Player : MonoBehaviour {
                     bow_time = 0f;
                     weapon.type = Weapon.Type.Idle;
                     line.gameObject.SetActive(false);
-
+                    tpc.m_MoveSpeedMultiplier = origin_move_speed;
                     if (!bow_release.isPlaying)
                     {
                         bow_fullback.Stop();
@@ -124,7 +129,7 @@ public class Player : MonoBehaviour {
             {
                 bow_fullback.Play();
             }
-
+            tpc.m_MoveSpeedMultiplier = 0;
             calc_click_pos();
         }
         ani.SetFloat("Bow_Fire", bow_time);

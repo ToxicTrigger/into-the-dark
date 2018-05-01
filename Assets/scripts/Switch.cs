@@ -13,7 +13,6 @@ public class Switch : Observable {
         element = GetComponent<Element>();
     }
     
-    void light_source
 
     private void Update()
     {
