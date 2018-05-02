@@ -24,7 +24,7 @@
 			fixed4 colorMid = tex2D(_MainTex2, IN.uv_MainTex);
 
 			o.Albedo = _Color;
-			float alpha = 1.0f;// - colorZero.b - colorMid.b /4;
+			float alpha = 1.0f - colorMid.b ;
 			o.Alpha = alpha;
 		}
 		ENDCG

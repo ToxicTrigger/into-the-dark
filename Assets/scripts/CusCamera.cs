@@ -8,8 +8,14 @@ public class CusCamera : MonoBehaviour {
     public bool lookPlayer;
     public Transform player;
     public Vector3 offset;
-	
-	void Update () {
+    public Vector3 tmp_pos;
+
+    private void Start()
+    {
+        tmp_pos = transform.position;
+    }
+
+    void Update () {
         int cantFind = 0;
         IEnumerator iter = positions.GetEnumerator();
         while(iter.MoveNext())
