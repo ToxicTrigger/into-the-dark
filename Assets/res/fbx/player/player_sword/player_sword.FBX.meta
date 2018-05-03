@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 985e8932d46a0c440b40f07b359ffbf3
-timeCreated: 1525186985
+guid: 82011cb34d3d3e5458c4badac73f8d8a
+timeCreated: 1525267772
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -79,8 +79,10 @@ ModelImporter:
     100142: Box029
     100144: Box030
     100146: Box032
-    100148: //RootNode
-    100150: Teapot001
+    100148: Box033
+    100150: Box034
+    100152: //RootNode
+    100154: Teapot001
     400000: Bip001
     400002: Bip001 Footsteps
     400004: Bip001 Head
@@ -155,8 +157,10 @@ ModelImporter:
     400142: Box029
     400144: Box030
     400146: Box032
-    400148: //RootNode
-    400150: Teapot001
+    400148: Box033
+    400150: Box034
+    400152: //RootNode
+    400154: Teapot001
     2100000: 01 - Default
     2100002: No Name
     2300000: Box001
@@ -190,7 +194,9 @@ ModelImporter:
     2300056: Box029
     2300058: Box030
     2300060: Box032
-    2300062: Teapot001
+    2300062: Box033
+    2300064: Box034
+    2300066: Teapot001
     3300000: Box001
     3300002: Box002
     3300004: Box003
@@ -222,7 +228,9 @@ ModelImporter:
     3300056: Box029
     3300058: Box030
     3300060: Box032
-    3300062: Teapot001
+    3300062: Box033
+    3300064: Box034
+    3300066: Teapot001
     4300000: Box026
     4300002: Box025
     4300004: Box024
@@ -253,12 +261,18 @@ ModelImporter:
     4300054: Box013
     4300056: Box012
     4300058: Teapot001
-    4300060: Box001
-    4300062: Box022
-    7400000: stand_one
-    7400002: swing_one
-    7400004: stand_two
-    7400006: swing_two
+    4300060: Box034
+    4300062: Box033
+    4300064: Box001
+    4300066: Box022
+    7400000: stand_1
+    7400002: swing_1
+    7400004: stand_2
+    7400006: swing_2
+    7400008: stand_3
+    7400010: stand_3
+    7400012: finish
+    7400014: stand_0
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -288,10 +302,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: stand_one
+      name: stand_1
       takeName: Take 001
-      firstFrame: 5
-      lastFrame: 27
+      firstFrame: 28
+      lastFrame: 35
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -316,10 +330,10 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: swing_one
+      name: swing_1
       takeName: Take 001
-      firstFrame: 27
-      lastFrame: 45
+      firstFrame: 35
+      lastFrame: 42
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -344,10 +358,10 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: stand_two
+      name: stand_2
       takeName: Take 001
-      firstFrame: 45
-      lastFrame: 55
+      firstFrame: 42
+      lastFrame: 58
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -372,10 +386,122 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: swing_two
+      name: swing_2
       takeName: Take 001
-      firstFrame: 55
-      lastFrame: 67
+      firstFrame: 58
+      lastFrame: 69
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: stand_3
+      takeName: Take 001
+      firstFrame: 69
+      lastFrame: 96
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: stand_3
+      takeName: Take 001
+      firstFrame: 96
+      lastFrame: 104
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: finish
+      takeName: Take 001
+      firstFrame: 104
+      lastFrame: 116
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: stand_0
+      takeName: Take 001
+      firstFrame: 6
+      lastFrame: 28
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
