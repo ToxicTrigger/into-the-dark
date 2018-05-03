@@ -1,19 +1,31 @@
 ﻿Shader "Custom/FOWshader" {
 	Properties {
 		_Color ("Color", Color) = (0,0,0,1)
+		_MidDark ("MidFogDarkness", float) = 0
+		
+	[Space(32)]
 		_MainTex ("AlphaZero (RGB)", 2D) = "white" {}
 		_MainTex2 ("AlphaMid (RGB)", 2D) = "white" {}
-		//_Float ("")
-	}
-	SubShader {
+		_FogTex("FogTexture (RGB)", 2D) = "white" {}
 
+
+	}
+	SubShader {		
+	//Blend Off
+	Tags { "RenderType"="opaque" }
 		CGPROGRAM
+
 		#pragma surface surf Lambert alpha:blend
 
 		
 		sampler2D _MainTex;
 		sampler2D _MainTex2;
+		sampler2D _FogTex;
+
 		float4 _Color;
+		float _MidDark;
+
+		//float MaxAlpha = 1.0f;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -23,8 +35,9 @@
 			fixed4 colorZero = tex2D(_MainTex, IN.uv_MainTex);
 			fixed4 colorMid = tex2D(_MainTex2, IN.uv_MainTex);
 
-			o.Albedo = _Color;
-			float alpha = 1.0f - colorMid.b ;
+
+			o.Albedo = tex2D(_FogTex, IN.uv_MainTex) * _Color;
+			float alpha = 1.0f - colorZero.b -colorMid.b/_MidDark ;
 			o.Alpha = alpha;
 		}
 		ENDCG
