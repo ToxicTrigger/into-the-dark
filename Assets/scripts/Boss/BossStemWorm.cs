@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class BossStemWorm : MonoBehaviour {
     //줄기 지렁이(?) 보스
 
-    enum Action
+    public enum Action
     {
         Stop = 0,
         Move_Signal_A,   //땅속에서 이동상태
@@ -58,7 +58,7 @@ public class BossStemWorm : MonoBehaviour {
 
     int targetnum;
 
-    Action action_state;
+    public Action action_state;
 
     public NavMeshAgent nav;
     public GameObject player;
@@ -279,11 +279,17 @@ public class BossStemWorm : MonoBehaviour {
             else Debug.LogError("receive signal type Error");
         }
 
-        if (receive_complete)
+        if (receive_complete) {
+
             move_target = _sound_pos;   //움직일 곳을 신호가난 장소로 정해준다.
+        }
         receive_complete = false;
     }
+    IEnumerator Timer(Vector3 _pos)
+    {
+        yield return new WaitForSeconds(0.5f);
 
+    }
     //불, 물속성을 세팅함
     void set_element()
     {
