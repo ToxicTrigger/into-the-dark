@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Look : MonoBehaviour {
-    public Transform Target;
     public enum State
     {
         Dead,
@@ -24,6 +23,7 @@ public class Look : MonoBehaviour {
     public float Hp = 2;
 
     public Vector3 rush_point;
+    public bool is_end_attack;
 
     public GameObject Hit, Dead;
     public bool isOnDeadEff;
@@ -79,13 +79,16 @@ public class Look : MonoBehaviour {
         {
             mind = State.Dead;
         }
-        if(det.is_fined)
+        if(det.is_find)
         {
             if(na.enabled)
             {
-                this.transform.LookAt(Target);
-                na.SetDestination(Target.position);
-
+                transform.LookAt(det.target.transform);
+                if(is_end_attack)
+                {
+                    na.SetDestination(det.target.transform.position);
+                }
+               
                 if (updateRushTick >= 2.0f)
                 {
                     rush_point = (transform.forward * 2 + transform.position);
@@ -95,6 +98,7 @@ public class Look : MonoBehaviour {
                 else
                 {
                     updateRushTick += Time.deltaTime;
+                    is_end_attack = true;
                 }
                 
             }
@@ -109,11 +113,13 @@ public class Look : MonoBehaviour {
     float updateRushTick = 2;
     IEnumerator setRushPoint()
     {
+        is_end_attack = false;
         while (Vector3.Distance(transform.position, rush_point) >= 0.1f)
         {
             transform.position = Vector3.Lerp(transform.position, rush_point, Time.deltaTime);
             yield return new WaitForSeconds(0.02f);
         }
+
     }
 
 

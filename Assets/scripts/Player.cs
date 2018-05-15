@@ -16,6 +16,10 @@ public class Player : MonoBehaviour {
     public Camera cam;
     public GameObject fire_effect, ice_effect;
     public AudioSource bow_fullback, bow_release;
+    public TrailRenderer red, blue;
+    public Queue<GameObject> totems;
+    public int cur_totems, installable_totems;
+    public GameObject totem;
 
     public float bow_time;
 
@@ -25,6 +29,7 @@ public class Player : MonoBehaviour {
         cur_attack_type = GetComponent<Element>();
         tpc = GetComponent<ThirdPersonCharacter>();
         origin_move_speed = tpc.m_MoveSpeedMultiplier;
+        totems = new Queue<GameObject>(0);
     }
 
     void gen_arrow()
@@ -79,6 +84,22 @@ public class Player : MonoBehaviour {
         }
     }
 
+    void gen_totem()
+    {
+        cur_totems = totems.Count;
+        installable_totems = 3 - cur_totems;
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (totems.Count > 2)
+            {
+                Destroy(totems.Dequeue());
+            }
+
+            GameObject t = Instantiate(totem, transform.position, Quaternion.identity, null);
+            totems.Enqueue(t);
+        }
+    }
+
     public void FixedUpdate()
     {
         if (!is_attack)
@@ -112,6 +133,8 @@ public class Player : MonoBehaviour {
             {
                 //TODO :: melee attack here
                 weapon.type = Weapon.Type.Idle;
+                red.time = 0;
+                blue.time = 0;
             }
         }
 
@@ -124,11 +147,20 @@ public class Player : MonoBehaviour {
     void Update () {
         Vector3 tmp = transform.position;
         tmp.y = 10f;
+        gen_totem();
 
         if (Input.GetButton("Fire1"))
         {
             ani.SetBool("Attack", true);
             weapon.type = Weapon.Type.Sword;
+            if(cur_attack_type.type == Element.Type.Fire)
+            {
+                red.time = 0.63f;
+            }else if(cur_attack_type.type == Element.Type.Water)
+            {
+                blue.time = 0.63f;
+            }
+            
             calc_click_pos();
         }
         else if (Input.GetButton("Fire2"))

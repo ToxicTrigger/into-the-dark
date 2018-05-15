@@ -17,10 +17,13 @@ public class CusCamera : MonoBehaviour {
         {
             GameObject tmp = iter.Current as GameObject;
             Detecter tmp1 = tmp.GetComponent<Detecter>();
-            if (tmp1.is_fined)
+            if (tmp1.is_find)
             {
-                Level = int.Parse(tmp.name);
-                cantFind += 1;
+                if(tmp1.target != null & !tmp1.target.tag.Equals("Totem"))
+                {
+                    Level = int.Parse(tmp.name);
+                    cantFind += 1;
+                }
             }
         }
 

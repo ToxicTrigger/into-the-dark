@@ -3,38 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Detecter : MonoBehaviour {
-    public bool is_fined;
+    public bool is_find;
+    public GameObject target;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.name.Equals("Heejin"))
-        {
-            is_fined = true;
-        }
-    }
     private void OnTriggerStay(Collider other)
     {
-        if (other.name.Equals("Heejin"))
+        if (other.name.Equals("Heejin") || other.tag.Equals("Totem"))
         {
-            is_fined = true;
+            if (gameObject.tag.Equals("Cam pos"))
+            {
+                if (other.tag.Equals("Totem"))
+                {
+                    return;
+                }
+            }
+            is_find = true;
+            target = other.gameObject;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.name.Equals("Heejin"))
+        if (other.name.Equals("Heejin") || other.tag.Equals("Totem"))
         {
-            is_fined = false;
+            is_find = false;
+            target = null;
         }
     }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
