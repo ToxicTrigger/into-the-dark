@@ -66,6 +66,7 @@ public class Player : MonoBehaviour {
             Instantiate(fire_effect, transform.position, Quaternion.identity, null) :
             Instantiate(ice_effect, transform.position, Quaternion.identity, null);
         Destroy(tmp, 2.0f);
+        t = cur_attack_type.type;
     }
     void calc_click_pos()
     {
@@ -80,8 +81,19 @@ public class Player : MonoBehaviour {
             line.SetPosition(0, transform.position);
             line.SetPosition(1, click_pos);
 
-            weapon.type = Weapon.Type.Bow;
         }
+    }
+
+    public Element.Type t;
+    public void editElementTypeInAni(int input)
+    {
+        switch (input)
+        {
+            // None
+            case 0: cur_attack_type.type = Element.Type.None; break;
+            case 1: cur_attack_type.type = t; break;
+        }
+
     }
 
     void gen_totem()
@@ -124,18 +136,28 @@ public class Player : MonoBehaviour {
                         bow_release.Play();
                     }
                 }
+                else
+                {
+                    bow_time = 0f;
+                    weapon.type = Weapon.Type.Idle;
+                    line.gameObject.SetActive(false);
+                    tpc.m_MoveSpeedMultiplier = origin_move_speed;
+                    if (!bow_release.isPlaying)
+                    {
+                        bow_fullback.Stop();
+                        //bow_release.Play();
+                    }
+                }
             }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (weapon.isUsing)
-            {
                 //TODO :: melee attack here
-                weapon.type = Weapon.Type.Idle;
-                red.time = 0;
-                blue.time = 0;
-            }
+            weapon.type = Weapon.Type.Idle;
+            red.time = 0;
+            blue.time = 0;
+
         }
 
         if(Input.GetKeyDown(KeyCode.Space))
@@ -165,6 +187,7 @@ public class Player : MonoBehaviour {
         }
         else if (Input.GetButton("Fire2"))
         {
+            weapon.type = Weapon.Type.Bow;
             bow_time += Time.deltaTime;
             if(!bow_fullback.isPlaying)
             {
