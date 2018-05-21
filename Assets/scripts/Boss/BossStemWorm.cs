@@ -13,7 +13,7 @@ public class BossStemWorm : MonoBehaviour {
         Move_Signal_B,
         Move_End,   //땅속 이동 끝
         Move_Up,    //솟아오름
-        Move_Down, //타겟을향해 내려감
+        Move_Attack,
         Death
     }
 
@@ -30,6 +30,7 @@ public class BossStemWorm : MonoBehaviour {
     [SerializeField]
     int level;
 
+    float jump;
     float speed;
     Element.Type element = Element.Type.Fire;    //현재 속성 초기속성입니다.
     //////////////////////////////////////
@@ -60,7 +61,6 @@ public class BossStemWorm : MonoBehaviour {
 
     public Action action_state;
 
-    public NavMeshAgent nav;
     public GameObject player;
 
     ///////////////////////////////////////////////////
@@ -74,25 +74,6 @@ public class BossStemWorm : MonoBehaviour {
         hole_list = new TargetHole[max_level * 8];
     }
 
-    void Update()
-    {
-        for (int i = 0; i < 24; i++)
-            Debug.DrawRay(hole_list[i].target_hole_pos, Vector3.up * 1000, Color.red);
-
-        if (action_state != Action.Stop)
-        {
-            if (action_state == Action.Move_Signal_A || action_state == Action.Move_Signal_B) move_on_target();
-            if (action_state == Action.Move_Up) move_on_mid();
-            if (action_state == Action.Move_Down) move_on_attack();
-
-            boss_move();
-        }
-        else //정지해있으면 땅 속에서 타겟을 포착한다. (타겟에 따라 A타입과 B타입이 존재함)
-        {
-            //조건에 따라 타겟을 할당해주고 Action옵션을 부여해줌 (현재는 Action.Move 뿐이지만 필요에 따라 Move종류를 줄 수 있다.)
-
-        }
-    }
     void OnTriggerEnter(Collider other)
     {
         if (action_state == Action.Move_Up)  //올라갈때만 공격받는다.
@@ -120,17 +101,232 @@ public class BossStemWorm : MonoBehaviour {
         }
     }
 
-    //move_target의 값으로 이동만 담당하는 함수이다.
-    void boss_move()
+    void Update()
     {
-        this.transform.position += ((move_target - this.transform.position).normalized * speed) * Time.deltaTime;
-        this.transform.LookAt(move_target);
+        if (action_state != Action.Stop)
+        {
+            if (action_state == Action.Move_Signal_A || action_state == Action.Move_Signal_B) move_on_target();
+            if (action_state == Action.Move_Up) move_on_up();
+            if (action_state == Action.Move_Attack) move_on_attack();
+
+            boss_move();
+        }
+        else
+        {
+        }
     }
 
+    //move_target으로 이동 
+    void boss_move()
+    {
+        if (action_state == Action.Move_Attack)
+        {
+            check_distance();
+        }
+        else jump = 0;
+
+        this.transform.position += new Vector3((move_target - this.transform.position).normalized.x, jump, (move_target - this.transform.position).normalized.z) * speed * Time.deltaTime;
+        
+        boss_lookat();
+    }
+
+
+    //lookat 함수 어택시 boss의 각도에 따라 보는 곳을 정해주려고 만들어줌...
+    void boss_lookat()  
+    {
+        Quaternion Angle = Quaternion.identity;
+        Vector3 v = move_target - this.transform.position;
+        float angle = Mathf.Atan2(v.x, v.z) * Mathf.Rad2Deg;
+        //높이/밑변을 하면 두 변이 이루는 각의 결과값이 나옴 (Matfh.Atan2(높이,밑변))
+        //Mathf.Rad2Deg 는 저렇게 계산하면 나오는 값이 라디안 값인데 이걸 디그리값으로 바꿔주는 것이다.
+
+        Angle.eulerAngles = new Vector3(0, angle, 0);   //좌,우의 회전만을 하기 때문에 y축 회전용임..
+
+        //**(추가)**시작 각을 정해주고 전체 회전해야하는 값을 거리 이동값에 따라 백분율(?)로 계산해줌
+
+        this.transform.rotation = Angle;
+    }
+
+
+    //신호 A와 B를 받은 후 이동한다. 
+    void move_on_target()
+    {
+        if (action_state == Action.Move_Signal_A)
+        {
+            if (move_complete(action_state))
+            {
+                action_state = Action.Move_End;
+            }
+        }
+
+        if (action_state == Action.Move_Signal_B)
+        {
+            if (move_complete(action_state))
+            {
+                action_state = Action.Move_End;
+            }
+        }
+
+        //이동이 완료되었다면 신호에 따라 상승공격과 돌진공격을 실행한다. (현재는 돌진공격만 적용)
+        if (action_state == Action.Move_End)
+        {
+            attack_start_pos = this.transform.position; //공격 시작 위치를 현재 위치로 저장한다. (구멍에서 솟아오를 부분)
+            if (!on_timer)  //코루틴 중복실행(?)방지용
+                StartCoroutine(AttackTimer());  //코루틴 실행 잠깐의 시간을 갖고 플레이어를 포착할 예정이므로 타이머를 넣어줌..
+        }
+    }
+
+    public float attack_timer = 0.5f;
+    bool on_timer = false;
+    float origin_distance;  //공격시 계산되는 gameobject와 타겟의 거리 계산값의 초기값 (?)
+
+    IEnumerator AttackTimer()   //일정 시간이 지난 후 플레이어 위치를 타겟으로 설정
+    {
+        on_timer = true;
+
+        yield return new WaitForSeconds(attack_timer);  //지정한 시간만큼 기다림
+
+        speed = max_speed;  //attack시 공격 속도 빠르게 해줌
+        move_target = player.transform.position;    //move_target을 현재 플레이어 포지션으로 선택해줌 (이후에 플레이어가 움직여도 현재 move_target으로 이동함)
+        origin_distance = Vector2.Distance(new Vector2(move_target.x, move_target.z),
+                                            new Vector2(this.transform.position.x, this.transform.position.z)); 
+        action_state = Action.Move_Attack;  //지금부터 주어진 정보를 이용해 공격 시작!
+        on_timer = false;   //다시 타이머 사용이 가능하게 세팅
+    }
+
+    //현재는 공격이 끝났는지 체크해주는 용도임.. 
+    void move_on_attack()
+    {
+        if (move_complete(action_state))
+        {
+            //속도를 기본값으로 돌린다.
+            speed = normal_speed;
+            action_state = Action.Stop; //이동이 끝난 것으로 정함
+        }
+
+    }
+
+    //attack시 거리 체크
+    public float jump_power;
+    void check_distance()
+    {
+        speed = max_speed;
+
+        if (Vector2.Distance(new Vector2(move_target.x, move_target.z), new Vector2(this.transform.position.x, this.transform.position.z))
+            < origin_distance / 2)
+        {
+            jump = -jump_power;
+            jump_power += 0.05f;
+        }
+        else
+        {
+            jump = jump_power;
+            if (jump_power >= 0) jump_power -= 0.05f;
+        }
+    }
+
+    //up할 때 나온 지점에서 빠른 속도로 올라간다. (mid x)
+    void move_on_up()
+    {
+
+    }
+
+    //신호받는 함수 
+    bool receive_complete = false;
+    public void signal_receive(Vector3 _sound_pos, string _signal_type)
+    {
+        if (action_state == Action.Move_Signal_A ||
+            action_state == Action.Move_Signal_B ||
+            action_state == Action.Stop)//땅 속에서 움직일 때! (A의 신호를 받았는데 또 A의 신호를 받을 수 있는가? (A도중에 다른 A로의 이동을 하는가?))
+        {
+            if (_signal_type == "A")    //일단 A는 땅 속에서 받는 신호에 무조건적인 우선순위를 가지고있음.
+            {
+                action_state = Action.Move_Signal_A;
+                receive_complete = true;
+            }
+            else if (_signal_type == "B")
+            {
+                //현재 A신호를 받지 않았을 때만 Signal B의 영향을 받게한다. (A가 우선순위가 높음)
+                if (action_state != Action.Move_Signal_A)
+                {
+                    action_state = Action.Move_Signal_B;
+                    receive_complete = true;
+                }
+            }
+            else Debug.LogError("receive signal type Error");
+        }
+
+        if (receive_complete) {
+
+            move_target = _sound_pos;   //움직일 곳을 신호가난 장소로 정해준다.
+        }
+        receive_complete = false;
+    }
+
+
+
+
+    //이동완료했는지 체크하는 함수
+    bool move_complete(Action _state)
+    {
+        //만약 x,z 좌표상에서 범위에 들어왔는데
+        if (transform.position.x > move_target.x - dis_standard.x &&
+            transform.position.x < move_target.x + dis_standard.x &&
+            transform.position.z > move_target.z - dis_standard.z &&
+            transform.position.z < move_target.z + dis_standard.z)
+        {
+            if (_state == Action.Move_Up)    //올라가는 중이었다면 y좌표도 마저 체크한다.
+            {
+                if (transform.position.y > move_target.y - dis_standard.y &&
+                    transform.position.y < move_target.y + dis_standard.y)
+                {
+                    return true;    //this의 y위치가 타겟의 y위치보다 높이 올라갔다면 바로 이동완료로 보고 내려간다.
+                }
+                else return false;  //x,z는 완료했으나 y가 아직 범위에 안들어왔다면 이동완료 x!
+            }
+            else return true;   //올라가능 중이 아니라면 y좌표 체크는 하지 않고 바로 이동완료 체크
+        }
+        else return false;
+
+    }
+
+    /// /속성/ ///
+    
+    //불, 물속성을 세팅함
+    void set_element()
+    {
+        //랜덤으로
+
+    }
+
+    //불, 물속성에서 반대되는 속성으로 바꾸는 함수
+    void reverse_element()
+    {
+        //불이면 물로 물이면 불로 바꾼다.
+        if (element == Element.Type.Fire)
+            element = Element.Type.Water;
+        else if (element == Element.Type.Water)
+            element = Element.Type.Fire;
+    }
+
+    //불, 물속성에서 무속성으로 해제한다.
+    void clear_element()
+    {
+        if (element == Element.Type.Fire || element == Element.Type.Water)  //혹시 모르니 체크 불,물에서 돌아가므로 
+            element = Element.Type.Void;
+    }
+}
+
+
+
+
+
+/* 보스 공격 방식이 변경되며 필요 없어진 코드...
+ * 보스의 정해진 영역에 타겟의 위치를 쫙 세팅해주고 플레이어 위치에 제일 가까운 타겟을 선택해주는 함수임...
+ * 
     //보스가 나온 후 들어갈 "타겟들의 위치를" 설정한다. 
     void set_hole_pos()
     {
-
         int level_up_num = 0;
         int dis_level = 1;
 
@@ -187,134 +383,7 @@ public class BossStemWorm : MonoBehaviour {
 
     }
 
-    //타겟의 위치를 초기화하고 그중 하나의 타겟을 선택하고 "그 타겟으로 이동(공격)을 시작하는 일"이다.
-    void move_on_attack()
-    {
-        if (move_complete(action_state))
-        {
-            speed = normal_speed;
-            action_state = Action.Stop; //이동이 끝난 것으로 정함
-        }
-
-    }
-
-    //up할 때 나온 지점에서 빠른 속도로 올라간다. (mid x)
-    void move_on_mid()
-    {
-        move_target = attack_start_pos + new Vector3(0, jump_height, 0);
-        speed = max_speed;
-
-        if (move_complete(action_state))
-        {
-            speed = min_speed;
-            StartCoroutine(timer());
-            action_state = Action.Move_Down; //이동이 끝난 것으로 정함
-            //올라간 순간 내려갈 곳을 선택 (계속 플레이어 움직임을 체크하고 있다가 이 때 정한다.)
-            set_player_hole_distance();
-
-        }
-
-    }
-    public float time;
-    IEnumerator timer()
-    {
-        yield return new WaitForSeconds(time);
-
-        speed = max_speed;
-    }
-
-
-    //땅 속에서 지상의 타겟을 향해 이동한다 하는 상태일 때 
-    void move_on_target()
-    {
-        if (action_state == Action.Move_Signal_A)
-        {
-            if (move_complete(action_state))
-            {
-                action_state = Action.Move_End;
-            }
-        }
-
-        if (action_state == Action.Move_Signal_B)
-        {
-            if (move_complete(action_state))
-            {
-                action_state = Action.Move_End;
-            }
-        }
-
-        //이동이 완료되었다면
-        if (action_state == Action.Move_End)
-        {
-            action_state = Action.Move_Up;   //바로 Up상태로 전환
-
-            attack_start_pos = this.transform.position; //시작 위치를 현재 위치로 정한다.
-            set_hole_pos(); //그리고 시작 위치를 중심으로 타겟 구멍들의 위치를 초기화하고
-        }
-    }
-
- 
-
-    bool receive_complete = false;
-    public void signal_receive(Vector3 _sound_pos, string _signal_type)
-    {
-        if (action_state == Action.Move_Signal_A ||
-            action_state == Action.Move_Signal_B ||
-            action_state == Action.Stop)//땅 속에서 움직일 때! (A의 신호를 받았는데 또 A의 신호를 받을 수 있는가? (A도중에 다른 A로의 이동을 하는가?))
-        {
-            if (_signal_type == "A")    //일단 A는 땅 속에서 받는 신호에 무조건적인 우선순위를 가지고있음.
-            {
-                action_state = Action.Move_Signal_A;
-                receive_complete = true;
-            }
-            else if (_signal_type == "B")
-            {
-                //현재 A신호를 받지 않았을 때만 Signal B의 영향을 받게한다. (A가 우선순위가 높음)
-                if (action_state != Action.Move_Signal_A)
-                {
-                    action_state = Action.Move_Signal_B;
-                    receive_complete = true;
-                }
-            }
-            else Debug.LogError("receive signal type Error");
-        }
-
-        if (receive_complete) {
-
-            move_target = _sound_pos;   //움직일 곳을 신호가난 장소로 정해준다.
-        }
-        receive_complete = false;
-    }
-    IEnumerator Timer(Vector3 _pos)
-    {
-        yield return new WaitForSeconds(0.5f);
-
-    }
-    //불, 물속성을 세팅함
-    void set_element()
-    {
-        //랜덤으로
-        
-    }
-
-    //불, 물속성에서 반대되는 속성으로 바꾸는 함수
-    void reverse_element()
-    {
-        //불이면 물로 물이면 불로 바꾼다.
-        if (element == Element.Type.Fire)
-            element = Element.Type.Water;
-        else if (element == Element.Type.Water)
-            element = Element.Type.Fire;
-    }
-
-    //불, 물속성에서 무속성으로 해제한다.
-    void clear_element()
-    {
-        if (element == Element.Type.Fire || element == Element.Type.Water)  //혹시 모르니 체크 불,물에서 돌아가므로 
-            element = Element.Type.Void;
-    }
-
-    bool on = false;
+        bool on = false;
     bool set_hole = false;
     //플레이어랑 구멍사이의 거리 세팅
     void set_player_hole_distance()
@@ -338,33 +407,4 @@ public class BossStemWorm : MonoBehaviour {
     }
 
 
-    //이동완료했는지 체크하는 함수
-    bool move_complete(Action _state)
-    {
-        //만약 x,z 좌표상에서 범위에 들어왔는데
-        if (transform.position.x > move_target.x - dis_standard.x &&
-            transform.position.x < move_target.x + dis_standard.x &&
-            transform.position.z > move_target.z - dis_standard.z &&
-            transform.position.z < move_target.z + dis_standard.z)
-        {
-            if (_state == Action.Move_Up)    //올라가는 중이었다면 y좌표도 마저 체크한다.
-            {
-                if (transform.position.y > move_target.y - dis_standard.y &&
-                    transform.position.y < move_target.y + dis_standard.y)
-                {
-                    return true;    //this의 y위치가 타겟의 y위치보다 높이 올라갔다면 바로 이동완료로 보고 내려간다.
-                }
-                else return false;  //x,z는 완료했으나 y가 아직 범위에 안들어왔다면 이동완료 x!
-            }
-            else if (_state == Action.Move_Down)
-            {
-                if (transform.position.y < move_target.y) return true;
-                else return false;
-            }
-            else return true;   //올라가능 중이 아니라면 y좌표 체크는 하지 않고 바로 이동완료 체크
-        }
-        else return false;
-
-    }
-
-}
+ */
