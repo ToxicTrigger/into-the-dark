@@ -14,6 +14,7 @@ public class BossStemWorm : MonoBehaviour {
         Move_End,   //땅속 이동 끝
         Move_Up,    //솟아오름
         Move_Attack,
+        Groggy,
         Death
     }
 
@@ -21,8 +22,7 @@ public class BossStemWorm : MonoBehaviour {
     //캐릭터들의 상태를 나타내는 변수들////
     [SerializeField]
     int hp;
-    [SerializeField]
-    float max_speed;
+
     [SerializeField]
     float normal_speed;
     [SerializeField]
@@ -100,9 +100,10 @@ public class BossStemWorm : MonoBehaviour {
             Destroy(this.gameObject);   //현재는 바로 삭제, 
         }
     }
-
+    float temp_jump;
     void Update()
     {
+        
         if (action_state != Action.Stop)
         {
             if (action_state == Action.Move_Signal_A || action_state == Action.Move_Signal_B) move_on_target();
@@ -113,6 +114,7 @@ public class BossStemWorm : MonoBehaviour {
         }
         else
         {
+            
         }
     }
 
@@ -129,7 +131,21 @@ public class BossStemWorm : MonoBehaviour {
         
         boss_lookat();
     }
+    [Space(32)]
+    [Tooltip("솟아 오르는 각도")]
+    public float x_angle_start = -90.0f;
+    [Tooltip("들어가는 각도")]
+    public float x_angle_end = 90.0f;
+    float x_angle = -9999;
 
+    [Space(16)]
+
+    [Tooltip("최대 속도(현재 공격시에 적용되는 속도임)")]
+    public float max_speed;
+    [Tooltip("공격시 점프하는 힘클수록 높이 점프함")]
+    public float jump_power;
+    [Tooltip("이동완료 후 공격시작까지 걸리는 시간")]
+    public float attack_timer = 0.5f;
 
     //lookat 함수 어택시 boss의 각도에 따라 보는 곳을 정해주려고 만들어줌...
     void boss_lookat()  
@@ -140,9 +156,16 @@ public class BossStemWorm : MonoBehaviour {
         //높이/밑변을 하면 두 변이 이루는 각의 결과값이 나옴 (Matfh.Atan2(높이,밑변))
         //Mathf.Rad2Deg 는 저렇게 계산하면 나오는 값이 라디안 값인데 이걸 디그리값으로 바꿔주는 것이다.
 
-        Angle.eulerAngles = new Vector3(0, angle, 0);   //좌,우의 회전만을 하기 때문에 y축 회전용임..
+        if (action_state == Action.Move_Attack)
+        {
+            x_angle = Mathf.Lerp(x_angle_start, x_angle_end, (origin_distance / Vector2.Distance(new Vector2(this.transform.position.x, this.transform.position.z), new Vector2(move_target.x, move_target.z))) / 10.0f);
+            //거리는 멀수록 값이 큼 때문에 값을 반대로 넣어줌
 
-        //**(추가)**시작 각을 정해주고 전체 회전해야하는 값을 거리 이동값에 따라 백분율(?)로 계산해줌
+        }
+        else
+            x_angle = 0;
+
+        Angle.eulerAngles = new Vector3(x_angle, angle, 0);
 
         this.transform.rotation = Angle;
     }
@@ -176,18 +199,18 @@ public class BossStemWorm : MonoBehaviour {
         }
     }
 
-    public float attack_timer = 0.5f;
     bool on_timer = false;
     float origin_distance;  //공격시 계산되는 gameobject와 타겟의 거리 계산값의 초기값 (?)
 
     IEnumerator AttackTimer()   //일정 시간이 지난 후 플레이어 위치를 타겟으로 설정
     {
         on_timer = true;
-
+        temp_jump = jump_power; //임시로
         yield return new WaitForSeconds(attack_timer);  //지정한 시간만큼 기다림
 
         speed = max_speed;  //attack시 공격 속도 빠르게 해줌
-        move_target = player.transform.position;    //move_target을 현재 플레이어 포지션으로 선택해줌 (이후에 플레이어가 움직여도 현재 move_target으로 이동함)
+        move_target = new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z);
+
         origin_distance = Vector2.Distance(new Vector2(move_target.x, move_target.z),
                                             new Vector2(this.transform.position.x, this.transform.position.z)); 
         action_state = Action.Move_Attack;  //지금부터 주어진 정보를 이용해 공격 시작!
@@ -202,12 +225,12 @@ public class BossStemWorm : MonoBehaviour {
             //속도를 기본값으로 돌린다.
             speed = normal_speed;
             action_state = Action.Stop; //이동이 끝난 것으로 정함
+            transform.position = new Vector3(transform.position.x, move_target.y, transform.position.z);
         }
 
     }
 
     //attack시 거리 체크
-    public float jump_power;
     void check_distance()
     {
         speed = max_speed;
@@ -215,13 +238,13 @@ public class BossStemWorm : MonoBehaviour {
         if (Vector2.Distance(new Vector2(move_target.x, move_target.z), new Vector2(this.transform.position.x, this.transform.position.z))
             < origin_distance / 2)
         {
-            jump = -jump_power;
-            jump_power += 0.05f;
+            jump = -temp_jump;
+            temp_jump += 0.05f;
         }
         else
         {
-            jump = jump_power;
-            if (jump_power >= 0) jump_power -= 0.05f;
+            jump = temp_jump;
+            if (temp_jump >= 0) temp_jump -= 0.05f;
         }
     }
 
@@ -258,7 +281,7 @@ public class BossStemWorm : MonoBehaviour {
 
         if (receive_complete) {
 
-            move_target = _sound_pos;   //움직일 곳을 신호가난 장소로 정해준다.
+            move_target = new Vector3(_sound_pos.x, this.transform.position.y, _sound_pos.z);   //움직일 곳을 신호가 난 장소로 정해준다.
         }
         receive_complete = false;
     }
@@ -284,10 +307,25 @@ public class BossStemWorm : MonoBehaviour {
                 }
                 else return false;  //x,z는 완료했으나 y가 아직 범위에 안들어왔다면 이동완료 x!
             }
+            else if(_state == Action.Move_Attack)
+            {
+
+                if (transform.position.y < move_target.y) return true;
+
+                else return false;
+
+            }
             else return true;   //올라가능 중이 아니라면 y좌표 체크는 하지 않고 바로 이동완료 체크
         }
         else return false;
 
+    }
+
+    /// /상태/ ///
+    
+    public void state_change(Action _state)
+    {
+        action_state = _state;
     }
 
     /// /속성/ ///

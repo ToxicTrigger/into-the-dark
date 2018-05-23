@@ -40,4 +40,10 @@ public class BossRoomManager : MonoBehaviour {
         boss.signal_receive(_sound_pos, _signal_type);
     }
 
+    //고대병기 활성화시 호출하게될 함수로 보스의 상태를 그로기상태로 바꿔준다.
+    public void weapon_activation()
+    {
+        boss.state_change(BossStemWorm.Action.Groggy);  //보스의 상태를 그로기상태로 바꿔줌
+    }
+
 }
