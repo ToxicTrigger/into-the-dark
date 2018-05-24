@@ -22,6 +22,8 @@ public class BossRoomManager : MonoBehaviour {
     /// ///////////////////////////////////////////////////
     public BossStemWorm boss;
     public Player player;
+    public BasicSwitch [] all_switch;
+    //public ObservableTorch[] torch;
 
 	void Start () {
 
@@ -41,9 +43,32 @@ public class BossRoomManager : MonoBehaviour {
     }
 
     //고대병기 활성화시 호출하게될 함수로 보스의 상태를 그로기상태로 바꿔준다.
-    public void weapon_activation()
+    public void boss_groggy()
     {
         boss.state_change(BossStemWorm.Action.Groggy);  //보스의 상태를 그로기상태로 바꿔줌
     }
 
+    public void boss_groggy_end()
+    {
+        
+        boss.state_change(BossStemWorm.Action.Groggy_End);  //보스를 그로기 끝 상태로 바꿔줌
+    }
+
+    public void off_switch()
+    {
+        for(int i =0; i<all_switch.Length; i++)
+        {
+            all_switch[i].set_switch(false);
+        }
+        //모든 스위치를 꺼줌
+    }
+
+   ////추후변경 촛불도 또 하나의 옵저버 이므로 지금은 매니저에서 일괄로 처리해주지만...!
+   //public void torch_deactivation()
+   //{
+   //    for(int i =0; i< torch.Length; i++)
+   //    {
+   //        torch[i].off_light();
+   //    }
+   //}
 }

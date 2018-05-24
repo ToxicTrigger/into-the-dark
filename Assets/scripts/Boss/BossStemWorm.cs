@@ -14,7 +14,8 @@ public class BossStemWorm : MonoBehaviour {
         Move_End,   //땅속 이동 끝
         Move_Up,    //솟아오름
         Move_Attack,
-        Groggy,
+        Groggy,     //그로기상태
+        Groggy_End, //그로기 해제 상태
         Death
     }
 
@@ -63,10 +64,13 @@ public class BossStemWorm : MonoBehaviour {
 
     public GameObject player;
 
+    Vector3 normal_position;    //땅속에서의 기본 위치
+
     ///////////////////////////////////////////////////
 
     private void Start()
     {
+        normal_position = this.transform.position;  //초기위치로 한다.
         speed = normal_speed;
         move_target = player.transform.position;
         action_state = Action.Stop;
@@ -74,19 +78,16 @@ public class BossStemWorm : MonoBehaviour {
         hole_list = new TargetHole[max_level * 8];
     }
 
+
     void OnTriggerEnter(Collider other)
     {
-        if (action_state == Action.Move_Up)  //올라갈때만 공격받는다.
+        if (action_state == Action.Groggy)  
         {
-            Element other_element = other.GetComponent<Element>();
-            if (other_element != null)
-            {
                 //other의 속성이 내 속성과 같으면 데미지를 입는다.
-                if (other_element.type == element)
+                if (other.CompareTag("Arrow"))  //임의로 태그를 달았음, 추후 속성으로 체크할것, 빛?
                 {
                     add_damage();
                 }
-            }
         }
     }
 
@@ -94,6 +95,7 @@ public class BossStemWorm : MonoBehaviour {
     {
         //올바른 공격을 맞았다면 무조건 1씩 닳는다.
         hp--;
+        BossRoomManager.get_instance().off_switch();
 
         if (hp <= 0)  //만약 hp가 0이 된다면 죽음
         {
@@ -103,8 +105,8 @@ public class BossStemWorm : MonoBehaviour {
     float temp_jump;
     void Update()
     {
-        
-        if (action_state != Action.Stop)
+        //그로기 액션상태가 아닐 때만 이동하고 기타 행동을함,
+        if (action_state != Action.Stop && action_state != Action.Groggy && action_state != Action.Groggy_End)
         {
             if (action_state == Action.Move_Signal_A || action_state == Action.Move_Signal_B) move_on_target();
             if (action_state == Action.Move_Up) move_on_up();
@@ -112,11 +114,18 @@ public class BossStemWorm : MonoBehaviour {
 
             boss_move();
         }
-        else
+        else if(action_state == Action.Groggy)  //그로기 상태라면
         {
-            
+            if(!groggy_timer_on) groggy_action();
+        }
+        else if(action_state == Action.Groggy_End)
+        {
+            action_state = Action.Stop;
+            this.transform.position = normal_position;  //그로기 상태에서 해제한 후 위치를 기본 위치로 바꾼다.
+            groggy_timer_on = false;
         }
     }
+    bool groggy_timer_on;
 
     //move_target으로 이동 
     void boss_move()
@@ -213,7 +222,7 @@ public class BossStemWorm : MonoBehaviour {
 
         origin_distance = Vector2.Distance(new Vector2(move_target.x, move_target.z),
                                             new Vector2(this.transform.position.x, this.transform.position.z)); 
-        action_state = Action.Move_Attack;  //지금부터 주어진 정보를 이용해 공격 시작!
+        if(action_state != Action.Groggy)action_state = Action.Move_Attack;  //지금부터 주어진 정보를 이용해 공격 시작!
         on_timer = false;   //다시 타이머 사용이 가능하게 세팅
     }
 
@@ -319,6 +328,15 @@ public class BossStemWorm : MonoBehaviour {
         }
         else return false;
 
+    }
+
+    /// /그로기/ ////
+    
+    //그로기 상태일 때 액션한다. (데미지를 입거나, 모습을 보인다.)
+    void groggy_action()
+    {
+        groggy_timer_on = true;
+        this.transform.position = new Vector3(this.transform.position.x, normal_position.y + 2, this.transform.position.z);   //일단 현재 위치에서 플레이어의 높이까지 모습을 드러냄 (추후 수정)
     }
 
     /// /상태/ ///
