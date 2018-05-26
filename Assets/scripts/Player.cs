@@ -57,6 +57,7 @@ public class Player : MonoBehaviour {
             Destroy(tmp, 2.0f);
         }
         Destroy(arrow, 5.0f);
+        AggroManager.get_instance().gen_aggro(transform.position, 10 + bow_time, 3);
     }
     void swap_element_type()
     {

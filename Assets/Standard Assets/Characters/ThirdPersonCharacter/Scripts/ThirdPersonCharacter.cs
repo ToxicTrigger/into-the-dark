@@ -28,8 +28,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		Vector3 m_CapsuleCenter;
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
-
+        public GameObject _aggro;
         Vector3 tmp;
+
+        public float move_aggro_tick = 0.4f;
 
 		void Start()
 		{
@@ -43,49 +45,29 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
 		}
 
-
-        //public void Move(Vector3 move, bool crouch, bool jump)
-        //{
-
-        //	// convert the world relative moveInput vector into a local-relative
-        //	// turn amount and forward amount required to head in the desired
-        //	// direction.
-        //	if (move.magnitude > 1f) move.Normalize();
-        //	move = transform.InverseTransformDirection(move);
-        //	CheckGroundStatus();
-        //	move = Vector3.ProjectOnPlane(move, m_GroundNormal);
-        //	m_TurnAmount = Mathf.Atan2(move.x, move.z);
-        //	m_ForwardAmount = move.z;
-        //          tmp = move;
-
-        //	ApplyExtraTurnRotation();
-
-        //	// control and velocity handling is different when grounded and airborne:
-        //	if (m_IsGrounded)
-        //	{
-        //		HandleGroundedMovement(crouch, jump);
-
-        //          }
-        //	else
-        //	{
-        //		HandleAirborneMovement();
-        //	}
-
-        //	ScaleCapsuleForCrouching(crouch);
-        //	PreventStandingInLowHeadroom();
-
-        //	// send input and other state parameters to the animator
-        //	UpdateAnimator(move);
-        //}
-
-
         public void Move(Vector3 move, bool crouch, bool jump)
         {
-
             // convert the world relative moveInput vector into a local-relative
             // turn amount and forward amount required to head in the desired
             // direction.
-            if (move.magnitude > 1f) move.Normalize();
+            if (move.magnitude > 1f)
+            {
+                if(move_aggro_tick >= 0.4f)
+                {
+                    GameObject tmp = Instantiate(_aggro, transform.position, Quaternion.identity, null);
+                    Destroy(tmp, 2.0f);
+                    move_aggro_tick = 0;
+                }
+                else
+                {
+                    move_aggro_tick += Time.deltaTime;
+                }
+                move.Normalize();
+            }
+            else
+            {
+                move_aggro_tick = 0;
+            }
             tmp = move;
             move = transform.InverseTransformDirection(move);
             CheckGroundStatus();

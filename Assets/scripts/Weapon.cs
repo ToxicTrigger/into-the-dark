@@ -15,8 +15,6 @@ public class Weapon : MonoBehaviour {
     public Arrow arrow;
     public Transform fire_point;
 
-
-
     private void Update()
     {
         if(type != Type.Idle)
