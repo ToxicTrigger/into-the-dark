@@ -7,6 +7,7 @@ public class BasicSwitch : Observable {
     // 스위치의 on off 여부와 모든 옵저버에게 신호전달
 
     protected bool switch_on = false; //활성화 되어있는지 여부
+    protected bool use_enable;
 
     public void notify_all()
     {
@@ -25,9 +26,18 @@ public class BasicSwitch : Observable {
         notify_all();
     }
 
+    public void set_use_enable(bool _set_boll)
+    {
+        use_enable = _set_boll;
+    }
+
     public bool get_switch()
     {
         return switch_on;
     }
 
+    public bool get_use_enable()
+    {
+        return use_enable;
+    }
 }

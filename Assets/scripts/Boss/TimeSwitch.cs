@@ -16,12 +16,13 @@ public class TimeSwitch : BasicSwitch {
     private void Start()
     {
         _light.gameObject.SetActive(false);
+        use_enable = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         //현재 활만 (근거리공격 추후 추가 어딨는지몰겠음ㅠㅜ) 모든 공격에 상호작용 하므로 속성체크안함
-        if(other.CompareTag("Arrow") && !get_switch())
+        if(other.CompareTag("Arrow") && !get_switch() && use_enable)
         {
             StartCoroutine(switch_on_timer());
         }

@@ -371,6 +371,11 @@ public class BossStemWorm : MonoBehaviour {
         if (element == Element.Type.Fire || element == Element.Type.Water)  //혹시 모르니 체크 불,물에서 돌아가므로 
             element = Element.Type.Void;
     }
+
+    public Action get_action_state()
+    {
+        return action_state;
+    }
 }
 
 

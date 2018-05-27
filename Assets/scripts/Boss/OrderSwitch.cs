@@ -14,13 +14,14 @@ public class OrderSwitch : BasicSwitch {
 
 	void Start () {
         _light.gameObject.SetActive(false);
+        use_enable = true;
     }
 	
 
     private void OnTriggerEnter(Collider other)
     {
         //순서대로 입력해야하는 스위치는 빛의 공격에만 반응하므로 추후 변경해야함
-        if(other.CompareTag("Arrow") && !get_switch())
+        if(other.CompareTag("Arrow") && !get_switch() && use_enable)
         {
             //빛의 공격이 들어오면 무조건 성공시킨다.
             set_switch(true);
