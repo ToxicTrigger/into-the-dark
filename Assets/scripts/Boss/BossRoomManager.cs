@@ -59,6 +59,7 @@ public class BossRoomManager : MonoBehaviour {
         for(int i =0; i<all_switch.Length; i++)
         {
             all_switch[i].set_switch(false);
+            all_switch[i].off_switch_set();
         }
         //모든 스위치를 꺼줌
     }

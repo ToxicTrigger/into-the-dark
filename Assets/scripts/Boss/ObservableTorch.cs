@@ -11,10 +11,11 @@ public class ObservableTorch : Observable {
         Off       //꺼짐
     }
 
-    public Light torch_light;
+    
 
     State torch_state;
     public bool use_enabled;   //사용 가능 상태 (퍼즐을 모두 풀면 true로 바뀜)
+    public Light torch_light;
 
     bool on_player=false;
 
@@ -22,15 +23,15 @@ public class ObservableTorch : Observable {
         use_enabled = false;
         torch_state = State.Off;
         torch_light.gameObject.SetActive(false);
-	}
+    }
 	
 	void Update () {
 		if(on_player && use_enabled && Input.GetKey(KeyCode.E))
         {
             torch_state = State.On;
             notify_all();
-            torch_light.gameObject.SetActive(true);
             use_enabled = false;
+            torch_light.gameObject.SetActive(true);
         }
 	}
 
@@ -70,9 +71,9 @@ public class ObservableTorch : Observable {
     public void off_light()
     {
         use_enabled = true;
-        torch_light.gameObject.SetActive(false);
         torch_state = State.Off;
-        notify_all();    //불이 꺼졌으면 꺼짐을 알리기위해 ancientweapon에게 알림
+        notify_all();    //불이 꺼졌으면 꺼짐을 알리기위해 ancientweapon에게 알림            
+        torch_light.gameObject.SetActive(false);
     }
 
 

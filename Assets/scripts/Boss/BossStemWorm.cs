@@ -96,6 +96,7 @@ public class BossStemWorm : MonoBehaviour {
         //올바른 공격을 맞았다면 무조건 1씩 닳는다.
         hp--;
         BossRoomManager.get_instance().off_switch();
+        action_state = Action.Groggy_End;
 
         if (hp <= 0)  //만약 hp가 0이 된다면 죽음
         {

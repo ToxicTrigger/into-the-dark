@@ -19,7 +19,7 @@ public class BasicSwitch : Observable {
         }
     }
 
-    //스위치가 꺼지거나 켜질대마다 신호를 보내야함...
+    //스위치가 꺼지거나 켜질 때 마다 신호를 보내야함...
     public virtual void set_switch(bool _onoff)
     {
         switch_on = _onoff;
@@ -39,5 +39,10 @@ public class BasicSwitch : Observable {
     public bool get_use_enable()
     {
         return use_enable;
+    }
+
+    public virtual void off_switch_set()
+    {
+        
     }
 }

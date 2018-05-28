@@ -23,9 +23,10 @@ public class DisturbSwitch : BasicSwitch {
             BossStemWorm boss = other.gameObject.GetComponent<BossStemWorm>();
 
             //솟아오르기 공격에만 해당되나 테스트를 위해 RushAttack에도 적용함
-            if(boss.get_action_state() == BossStemWorm.Action.Move_Up 
-                || boss.get_action_state() == BossStemWorm.Action.Move_Attack)
+            if((boss.get_action_state() == BossStemWorm.Action.Move_Up 
+                || boss.get_action_state() == BossStemWorm.Action.Move_Attack)&&!destroy_switch)
             {
+                Debug.Log("충돌! = " + this.name);
                 this_model.switch_destroy();
                 destroy_switch = true;
                 set_switch(true);
@@ -34,13 +35,11 @@ public class DisturbSwitch : BasicSwitch {
     }
 
     //새로운 게임 (플레이어가 처음부터 공략해야하는 상태) 초기화
-    public void basic_state()
+    public override void off_switch_set()
     {
         //모델을 켜준다.
         this_model.gameObject.SetActive(true);
         destroy_switch = false; //안부숴짐 
-        set_switch(false);
     }
-
 
 }

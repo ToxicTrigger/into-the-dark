@@ -45,8 +45,9 @@ public class AncientWeapon : Observer {
         }
         else
         {
+            if(activate_torch_count > 0)
             activate_torch_count--;
-            torch_deactivate();
+            if(state == State.Activated) torch_deactivate();
         }
     }
 
