@@ -17,14 +17,12 @@ public class ObserverTorch : Observer {
 
             if(switch_on_cnt == 3)
             {
-                observerble_torch.use_enabled = true;
-
+                observerble_torch.on_light();
             }
         }
         else
         {
             if(0 < switch_on_cnt)switch_on_cnt--;
-            observerble_torch.use_enabled = false;
 
             observerble_torch.off_light();
 

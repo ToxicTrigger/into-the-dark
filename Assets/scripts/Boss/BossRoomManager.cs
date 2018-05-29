@@ -21,6 +21,7 @@ public class BossRoomManager : MonoBehaviour {
 
     /// ///////////////////////////////////////////////////
     public BossStemWorm boss;
+    public Boss_Worm tboss;
     public Player player;
     public BasicSwitch [] all_switch;
     //public ObservableTorch[] torch;
@@ -40,6 +41,11 @@ public class BossRoomManager : MonoBehaviour {
     public void send_signal(Vector3 _sound_pos , string _signal_type)
     {
         boss.signal_receive(_sound_pos, _signal_type);
+    }
+
+    public void send_boss_state(Boss_Worm.Action _action)
+    {
+        tboss.action_ready(_action);
     }
 
     //고대병기 활성화시 호출하게될 함수로 보스의 상태를 그로기상태로 바꿔준다.

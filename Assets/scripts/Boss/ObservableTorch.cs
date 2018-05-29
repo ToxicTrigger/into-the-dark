@@ -70,11 +70,17 @@ public class ObservableTorch : Observable {
     //스위치에 변화가 생김, 보스가 피가 1깎임(오브젝트 재배치), 보스의 그로기 상태가 풀림 일때 다시 거점을 활성화 해야 하므로... (통상 스위치에 변화가 생겼을 때! 가 빛이 꺼지는 때 갇 ㅚㄹ듯,,,,) 
     public void off_light()
     {
-        use_enabled = true;
+        use_enabled = false;
         torch_state = State.Off;
         notify_all();    //불이 꺼졌으면 꺼짐을 알리기위해 ancientweapon에게 알림            
         torch_light.gameObject.SetActive(false);
     }
 
+    public void on_light()
+    {
+        use_enabled = true;
+        BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Rush_Attack);
+        
+    }
 
 }

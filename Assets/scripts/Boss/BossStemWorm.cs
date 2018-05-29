@@ -141,6 +141,7 @@ public class BossStemWorm : MonoBehaviour {
         
         boss_lookat();
     }
+
     [Space(32)]
     [Tooltip("솟아 오르는 각도")]
     public float x_angle_start = -90.0f;
