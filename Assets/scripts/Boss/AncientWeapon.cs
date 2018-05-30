@@ -33,8 +33,8 @@ public class AncientWeapon : Observer {
     {
         //throw new System.NotImplementedException();
         ObservableTorch torch = observable as ObservableTorch;
-        
-        if(torch.get_state() == ObservableTorch.State.On)
+        Debug.Log("AncientWeapon __ torch.name = \"" + torch.name + " || torch.get_switch() = \"" + torch.get_state());
+        if (torch.get_state() == ObservableTorch.State.On)
         {
             activate_torch_count++;
 
@@ -46,7 +46,7 @@ public class AncientWeapon : Observer {
         else
         {
             if(activate_torch_count > 0)
-            activate_torch_count--;
+                activate_torch_count--;
             if(state == State.Activated) torch_deactivate();
         }
     }
@@ -56,7 +56,7 @@ public class AncientWeapon : Observer {
     {
         weapon_light.gameObject.SetActive(true);
         state = State.Activated;
-        BossRoomManager.get_instance().boss_groggy(); //weapon_activation() : 보스 그로기상태 전환 
+        BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Groggy); //weapon_activation() : 보스 그로기상태 전환 
         StartCoroutine(activate_timer());
     }
     
@@ -74,7 +74,7 @@ public class AncientWeapon : Observer {
     {
         weapon_light.gameObject.SetActive(false);
         state = State.Deactivated;
-        BossRoomManager.get_instance().boss_groggy_end();
+        BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Idle);
         BossRoomManager.get_instance().off_switch();
         //BossRoomManager.get_instance().torch_deactivation();
     }

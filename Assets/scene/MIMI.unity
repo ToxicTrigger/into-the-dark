@@ -569,6 +569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 719988481}
+  switch_on: 0
   this_model: {fileID: 894711611}
   destroy_switch: 0
 --- !u!65 &70514662
@@ -680,8 +681,8 @@ GameObject:
   - component: {fileID: 113831996}
   - component: {fileID: 113831995}
   - component: {fileID: 113831994}
-  - component: {fileID: 113831993}
   - component: {fileID: 113831998}
+  - component: {fileID: 113831993}
   m_Layer: 0
   m_Name: AncientTorch
   m_TagString: Untagged
@@ -697,12 +698,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 113831992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 923cccf9dbdae50469c8957512619809, type: 3}
+  m_Script: {fileID: 11500000, guid: 77cf4766592379142aa59725cef9ee5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 1029675202}
-  use_enabled: 1
+  use_enabled: 0
   torch_light: {fileID: 631215241}
 --- !u!23 &113831994
 MeshRenderer:
@@ -784,6 +785,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observerble_torch: {fileID: 113831993}
   switch_on_cnt: 0
+  switch_num_for_clear: 3
 --- !u!4 &114368667 stripped
 Transform:
   m_PrefabParentObject: {fileID: 435760, guid: b553d14a7dd357941a362b1d7df2e2b3, type: 2}
@@ -1206,8 +1208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb99ef0db2c58384eb3c57d26c1f9db7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boss: {fileID: 1301684223}
-  tboss: {fileID: 798672556}
+  boss: {fileID: 798672556}
   player: {fileID: 426928151}
   all_switch:
   - {fileID: 1441596164}
@@ -1216,9 +1217,6 @@ MonoBehaviour:
   - {fileID: 550259284}
   - {fileID: 1103093383}
   - {fileID: 2066095985}
-  - {fileID: 70514661}
-  - {fileID: 563499029}
-  - {fileID: 1707048136}
 --- !u!4 &270755469
 Transform:
   m_ObjectHideFlags: 0
@@ -5215,6 +5213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 113831998}
+  switch_on: 0
   _light: {fileID: 1809509665}
   check: {fileID: 114706553}
   order_number: 3
@@ -5465,6 +5464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 719988481}
+  switch_on: 0
   this_model: {fileID: 1705022529}
   destroy_switch: 0
 --- !u!65 &563499030
@@ -6162,8 +6162,8 @@ GameObject:
   - component: {fileID: 719988479}
   - component: {fileID: 719988478}
   - component: {fileID: 719988477}
-  - component: {fileID: 719988476}
   - component: {fileID: 719988481}
+  - component: {fileID: 719988476}
   m_Layer: 0
   m_Name: AncientTorch (2)
   m_TagString: Untagged
@@ -6179,12 +6179,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 719988475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 923cccf9dbdae50469c8957512619809, type: 3}
+  m_Script: {fileID: 11500000, guid: 77cf4766592379142aa59725cef9ee5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 1029675202}
-  use_enabled: 1
+  use_enabled: 0
   torch_light: {fileID: 1088306542}
 --- !u!23 &719988477
 MeshRenderer:
@@ -6264,8 +6264,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62faa601973229847b8e9aeebe7c8e12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  observerble_torch: {fileID: 719988476}
+  observerble_torch: {fileID: 0}
   switch_on_cnt: 3
+  switch_num_for_clear: 0
 --- !u!4 &723808320 stripped
 Transform:
   m_PrefabParentObject: {fileID: 426988, guid: 538b7d8f2d0d67244bc65c3efc5c63b7, type: 2}
@@ -6614,6 +6615,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 1658709764}
+  switch_on: 0
   time_switch_list:
   - {fileID: 1441596164}
   - {fileID: 1116871235}
@@ -6712,6 +6714,8 @@ GameObject:
   m_Component:
   - component: {fileID: 798672555}
   - component: {fileID: 798672556}
+  - component: {fileID: 798672552}
+  - component: {fileID: 798672553}
   m_Layer: 0
   m_Name: BoxBoss
   m_TagString: Untagged
@@ -6719,6 +6723,33 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!54 &798672552
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 798672551}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!65 &798672553
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 798672551}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &798672555
 Transform:
   m_ObjectHideFlags: 0
@@ -6757,16 +6788,15 @@ MonoBehaviour:
   - {fileID: 514917153}
   action_state: 0
   hp: 3
-  idle_y_pos: 6
-  idle_radius: 4
   idle_speed: 4
+  idle_y_pos: 4
+  idle_radius: 5
   rush_attack_speed: 20
-  rush_attack_origin_dis: 0
-  min_speed: 0
+  rush_jump_power: 1.2
   around_transform: {fileID: 1085880908}
   player: {fileID: 426928146}
-  dis_standard: {x: 1, y: 0, z: 1}
   rush_attack_timer: 2
+  dis_standard: {x: 1, y: 0, z: 1}
 --- !u!1 &807589191
 GameObject:
   m_ObjectHideFlags: 0
@@ -7820,7 +7850,7 @@ MonoBehaviour:
   - 50
   - 5
   - 1
-  max_count: 3
+  max_count: 2
   activate_torch_count: 0
 --- !u!1 &1033729044
 GameObject:
@@ -8076,6 +8106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 113831998}
+  switch_on: 0
   _light: {fileID: 1177289224}
   check: {fileID: 114706553}
   order_number: 1
@@ -8705,6 +8736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 1658709764}
+  switch_on: 0
   time_switch_list:
   - {fileID: 1441596164}
   - {fileID: 797933240}
@@ -10451,16 +10483,15 @@ MonoBehaviour:
   - {fileID: 899411846}
   action_state: 0
   hp: 0
+  idle_speed: 0
   idle_y_pos: 0
   idle_radius: 0
-  idle_speed: 0
   rush_attack_speed: 0
-  rush_attack_origin_dis: 0
-  min_speed: 0
+  rush_jump_power: 0
   around_transform: {fileID: 0}
   player: {fileID: 0}
-  dis_standard: {x: 0, y: 0, z: 0}
   rush_attack_timer: 0
+  dis_standard: {x: 0, y: 0, z: 0}
 --- !u!1 &1439047937
 GameObject:
   m_ObjectHideFlags: 0
@@ -10603,6 +10634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 1658709764}
+  switch_on: 0
   time_switch_list:
   - {fileID: 797933240}
   - {fileID: 1116871235}
@@ -11659,8 +11691,8 @@ GameObject:
   - component: {fileID: 1658709768}
   - component: {fileID: 1658709767}
   - component: {fileID: 1658709766}
-  - component: {fileID: 1658709765}
   - component: {fileID: 1658709764}
+  - component: {fileID: 1658709765}
   m_Layer: 0
   m_Name: AncientTorch (1)
   m_TagString: Untagged
@@ -11681,6 +11713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observerble_torch: {fileID: 1658709765}
   switch_on_cnt: 0
+  switch_num_for_clear: 3
 --- !u!114 &1658709765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11689,12 +11722,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1658709763}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 923cccf9dbdae50469c8957512619809, type: 3}
+  m_Script: {fileID: 11500000, guid: 77cf4766592379142aa59725cef9ee5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 1029675202}
-  use_enabled: 1
+  use_enabled: 0
   torch_light: {fileID: 967106632}
 --- !u!23 &1658709766
 MeshRenderer:
@@ -11938,6 +11971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 719988481}
+  switch_on: 0
   this_model: {fileID: 1575170613}
   destroy_switch: 0
 --- !u!65 &1707048137
@@ -12680,7 +12714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1855251494
 Transform:
   m_ObjectHideFlags: 0
@@ -13139,16 +13173,15 @@ MonoBehaviour:
   - {fileID: 1036722882}
   action_state: 0
   hp: 0
+  idle_speed: 0
   idle_y_pos: 0
   idle_radius: 0
-  idle_speed: 0
   rush_attack_speed: 0
-  rush_attack_origin_dis: 0
-  min_speed: 0
+  rush_jump_power: 0
   around_transform: {fileID: 0}
   player: {fileID: 0}
-  dis_standard: {x: 0, y: 0, z: 0}
   rush_attack_timer: 0
+  dis_standard: {x: 0, y: 0, z: 0}
 --- !u!1001 &1932268705
 Prefab:
   m_ObjectHideFlags: 0
@@ -13378,7 +13411,6 @@ GameObject:
   - component: {fileID: 2002438614}
   - component: {fileID: 2002438613}
   - component: {fileID: 2002438612}
-  - component: {fileID: 2002438611}
   m_Layer: 0
   m_Name: Water
   m_TagString: Untagged
@@ -13386,17 +13418,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &2002438611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2002438610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72efaea62c5fd9e4ba0699e2ee7c9c05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &2002438612
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13678,6 +13699,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observers:
   - {fileID: 113831998}
+  switch_on: 0
   _light: {fileID: 1814613239}
   check: {fileID: 114706553}
   order_number: 2

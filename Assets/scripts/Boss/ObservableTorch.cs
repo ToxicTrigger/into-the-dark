@@ -9,9 +9,7 @@ public class ObservableTorch : Observable {
     {
         On =0,  //켜짐
         Off       //꺼짐
-    }
-
-    
+    }    
 
     State torch_state;
     public bool use_enabled;   //사용 가능 상태 (퍼즐을 모두 풀면 true로 바뀜)
@@ -57,7 +55,7 @@ public class ObservableTorch : Observable {
         //내가 가지고있는 옵저버 수만큼 실행
         for(int i=0; i < this.observers.Count; i++)
         {
-            AncientWeapon weapon = this.observers[i] as AncientWeapon;
+            Observer weapon = this.observers[i] as Observer;
             weapon.notify(this);
         }
     }
@@ -68,7 +66,7 @@ public class ObservableTorch : Observable {
     }
 
     //스위치에 변화가 생김, 보스가 피가 1깎임(오브젝트 재배치), 보스의 그로기 상태가 풀림 일때 다시 거점을 활성화 해야 하므로... (통상 스위치에 변화가 생겼을 때! 가 빛이 꺼지는 때 갇 ㅚㄹ듯,,,,) 
-    public void off_light()
+    public virtual void off_light()
     {
         use_enabled = false;
         torch_state = State.Off;
@@ -76,11 +74,10 @@ public class ObservableTorch : Observable {
         torch_light.gameObject.SetActive(false);
     }
 
-    public void on_light()
+    public virtual void on_light()
     {
         use_enabled = true;
-        BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Rush_Attack);
-        
+        //BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Rush_Attack);
     }
 
 }

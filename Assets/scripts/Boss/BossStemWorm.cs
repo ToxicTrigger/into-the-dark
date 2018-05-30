@@ -41,7 +41,7 @@ public class BossStemWorm : MonoBehaviour {
     [SerializeField]
     float jump_height;
 
-    int max_level = 3; //최대 레벨 3
+    //int max_level = 3; //최대 레벨 3
 
     //타겟들의 정보가 담겨있는 구조체
     public struct TargetHole
@@ -52,9 +52,9 @@ public class BossStemWorm : MonoBehaviour {
         public float player_distance;   //구멍에서 플레이어까지의 거리
     }
 
-    TargetHole[] hole_list; //지상에 올라온 후 내려갈 구멍의 리스트
+    //TargetHole[] hole_list; //지상에 올라온 후 내려갈 구멍의 리스트
     Vector3 move_target; //지하에서 이동할 때 갖는 타겟
-    Vector3 attack_start_pos;   //지하에서 공격을 시작 할 위치
+//Vector3 attack_start_pos;   //지하에서 공격을 시작 할 위치
     [SerializeField]
     Vector3 dis_standard;   //이동 완료로 보는 기준거리를 설정
 
@@ -75,7 +75,7 @@ public class BossStemWorm : MonoBehaviour {
         move_target = player.transform.position;
         action_state = Action.Stop;
         //타겟 리스트를 max_level * 8 만큼 생성
-        hole_list = new TargetHole[max_level * 8];
+        //hole_list = new TargetHole[max_level * 8];
     }
 
 
@@ -204,7 +204,7 @@ public class BossStemWorm : MonoBehaviour {
         //이동이 완료되었다면 신호에 따라 상승공격과 돌진공격을 실행한다. (현재는 돌진공격만 적용)
         if (action_state == Action.Move_End)
         {
-            attack_start_pos = this.transform.position; //공격 시작 위치를 현재 위치로 저장한다. (구멍에서 솟아오를 부분)
+           // attack_start_pos = this.transform.position; //공격 시작 위치를 현재 위치로 저장한다. (구멍에서 솟아오를 부분)
             if (!on_timer)  //코루틴 중복실행(?)방지용
                 StartCoroutine(AttackTimer());  //코루틴 실행 잠깐의 시간을 갖고 플레이어를 포착할 예정이므로 타이머를 넣어줌..
         }

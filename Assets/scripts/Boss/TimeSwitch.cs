@@ -59,13 +59,12 @@ public class TimeSwitch : BasicSwitch {
             set_switch(false);
         }
 
-        clear_puzzle = false;   //바로 돌려줌
-
     }
 
     public override void off_switch_set()
     {
         _light.gameObject.SetActive(false);
+        clear_puzzle = false;
     }
 
 }

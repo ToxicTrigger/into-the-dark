@@ -6,7 +6,7 @@ public class BasicSwitch : Observable {
     //모든 스위치가 공통적으로 가지는 항목 
     // 스위치의 on off 여부와 모든 옵저버에게 신호전달
 
-    protected bool switch_on = false; //활성화 되어있는지 여부
+    public bool switch_on = false; //활성화 되어있는지 여부
     protected bool use_enable;
 
     public void notify_all()
@@ -43,6 +43,6 @@ public class BasicSwitch : Observable {
 
     public virtual void off_switch_set()
     {
-        
+        switch_on = false;
     }
 }
