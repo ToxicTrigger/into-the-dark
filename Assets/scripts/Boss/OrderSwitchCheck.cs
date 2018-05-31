@@ -39,7 +39,7 @@ public class OrderSwitchCheck : MonoBehaviour {
         else
         {
             order_switch_list[_num-1].set_switch(true);
-            if (count < 3) count++;
+            if (count < order_switch_list.Length) count++;
             else count = 1;
         }
     }

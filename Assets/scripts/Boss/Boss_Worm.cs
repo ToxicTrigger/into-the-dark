@@ -63,10 +63,14 @@ public class Boss_Worm : MonoBehaviour {
 
     private void Start()
     {
-        action_ready(Action.Idle);
+        StartCoroutine(start_timer());
         around_transform.position = new Vector3(player.position.x + idle_radius, player.position.y - idle_y_pos, player.position.z);
     }
-
+    IEnumerator start_timer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        action_ready(Action.Idle);
+    }
     private void Update()
     {
         if (Input.GetKey(KeyCode.Space))
@@ -223,8 +227,7 @@ public class Boss_Worm : MonoBehaviour {
                 //y위치로 목표값 -1 보다 아래에 있음
                 if (transform.position.y < rush_move_target.y - 1)
                 {
-                    Debug.Log("d");
-                    Debug.Log("target.y = \"" + rush_move_target.y + "\"" + "complete.y =\"" + (rush_move_target.y - 1) + "\"");
+                    //Debug.Log("target.y = \"" + rush_move_target.y + "\"" + "complete.y =\"" + (rush_move_target.y - 1) + "\"");
                     return true;
                 }
 

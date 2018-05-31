@@ -12,7 +12,7 @@ public class ObserverTorch : Observer {
     public override void notify(Observable observable)
     {
         BasicSwitch torch = observable as BasicSwitch;
-        Debug.Log("torch.name = \"" + torch.name + " || torch.get_switch() = \"" + torch.get_switch());
+        //Debug.Log("torch.name = \"" + torch.name + " || torch.get_switch() = \"" + torch.get_switch());
         if (torch.get_switch())
         {
             switch_on_cnt++;
