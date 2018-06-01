@@ -56,7 +56,7 @@ public class Boss_Worm : MonoBehaviour {
 
     
     /// //타이머
-    public float rush_attack_timer;
+    public int rush_attack_timer;
 
     public Vector3 dis_standard;    //이동 완료로 보는 기준거리
     Vector3 rush_move_target;    //Rush_Attack시 타겟으로 삼는 벡터 (솟아오르는 곳에서 캐릭터의 방향 + 반지름 *2 around_transform.y 를 기준으로 한다.)
@@ -127,7 +127,9 @@ public class Boss_Worm : MonoBehaviour {
         if(action_state == Action.Idle)  action_idle();
         if (action_state == Action.Rush_Attack) action_rush_attack();
 
-        transform.position += move_dir * speed * Time.deltaTime;
+        if (action_state != Action.Idle && action_state != Action.Rush_Attack)
+            transform.position += move_dir * speed * Time.deltaTime;
+
         tail_dir = move_dir;    //꼬리에 넘겨줄 움직이는 방향을 저장함.
         move_dir = Vector3.zero;
     }   
@@ -135,29 +137,61 @@ public class Boss_Worm : MonoBehaviour {
     //idle상태 움직임
     void action_idle()
     {
-        around_transform.RotateAround(player.transform.position, Vector3.up, 1f) ;
+        around_transform.RotateAround(player.transform.position, Vector3.up, 2f) ;
         move_dir = (around_transform.position - this.transform.position).normalized;
+        transform.position = around_transform.position;
     }
 
+    float mid_y_pos = 0;
     void action_rush_attack()
     {
         move_dir = (rush_move_target - transform.position).normalized;  //이동 방향
-        move_dir.y = Mathf.Lerp(1.0f, -1.0f, (rush_attack_origin_dis / Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z))) /10.0f);
-        move_dir.y *= rush_jump_power;
+        //move_dir.y = Mathf.Lerp(1.0f, -1.0f, (rush_attack_origin_dis / Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z))) /10.0f);
+        //move_dir.y *= rush_jump_power;
+
+        float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z));
+        //float y_pos = Mathf.Lerp(1.0f, -1.0f, Mathf.Lerp(1,0,rush_attack_origin_dis / cur_dis));
+        float y_pos = Mathf.Lerp(1.0f, 1.0f, (rush_attack_origin_dis - cur_dis) /10);
+
+
+        Debug.Log("보간 결과 = \"" + (rush_attack_origin_dis - cur_dis) / 10 + "\""+ "y_pos = \"" + y_pos + "\"");
+        //Debug.Log(rush_attack_origin_dis);
+
+        if (y_pos >0)
+            y_pos = Mathf.Lerp( rush_attack_start_pos.y, rush_attack_start_pos.y + rush_jump_power, y_pos);
+        else
+        {
+            if (y_pos == 0) mid_y_pos = transform.position.y;
+            if (y_pos < 0)
+            {
+                y_pos *= -1;    // 0이하의 값을 가지므로 -1을 곱해주기
+            }
+            y_pos = Mathf.Lerp( mid_y_pos , rush_move_target.y*speed , y_pos);
+        }
+
+        move_dir.y = y_pos - transform.position.y;
+
+        transform.position = move_dir *speed * Time.deltaTime;
+
+        //move_dir = new Vector3(move_dir.x, y_pos, move_dir.z).normalized;
 
         if (move_complete(action_state))
             action_ready(Action.Idle);  //이동 완료했다면 Idle상태로 변환
     }
     IEnumerator timer;  //**************이렇게 쓰는거 공부해!*************
 
+    Vector3 rush_attack_start_pos;
     IEnumerator Rush_Attack_Timer()
     {
         action_state = Action.Ready;    //이동을 하지 않기 위함 (이 자리를 공격시작 자리로 정한다.)
-        rush_move_target = (player.transform.position - transform.position).normalized ;    //이동 방향
-        rush_move_target = new Vector3(transform.position.x+((idle_radius * 2) * rush_move_target.x), around_transform.position.y , transform.position.z+ ((idle_radius * 2)* rush_move_target.z)); //내위치 + ((반지름*2) * 이동방향) _ x,z || around_transform의 y위치 
-        rush_attack_origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z));  //거리 계산 (실시간 이동 거리에 따라 상승/하락 이동의 지정을 위함)_내 위치(x,z)와 타겟(x,z) 높이는 거리에 반영하지 않으므로!
+        BossRoomManager.get_instance().send_attack_count_ui(rush_attack_timer);
+        rush_attack_start_pos = transform.position;
 
         yield return new WaitForSeconds(rush_attack_timer); // 공격 대기시간
+
+        rush_move_target = (player.transform.position - transform.position).normalized;    //이동 방향
+        rush_move_target = new Vector3(player.position.x, around_transform.position.y, player.position.z); //내위치 + ((반지름*2) * 이동방향) _ x,z || around_transform의 y위치 
+        rush_attack_origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z));  //거리 계산 (실시간 이동 거리에 따라 상승/하락 이동의 지정을 위함)_내 위치(x,z)와 타겟(x,z) 높이는 거리에 반영하지 않으므로!
 
         action_state = Action.Rush_Attack;  //공격상태로 전환
         speed = rush_attack_speed;          //공격 스피드로 전환

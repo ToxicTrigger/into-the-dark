@@ -41,4 +41,13 @@ public class BossRoomManager : MonoBehaviour {
         }
         //모든 스위치를 꺼줌
     }
+
+
+
+
+    public void send_attack_count_ui(int _time)
+    {
+        UIManager.get_instance().play_attack_timer(_time);
+    }
+
 }

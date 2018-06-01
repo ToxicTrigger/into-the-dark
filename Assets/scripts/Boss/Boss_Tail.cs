@@ -10,6 +10,10 @@ public class Boss_Tail : MonoBehaviour {
     Quaternion this_tail_rot_temp;    //보관용
     Quaternion this_tail_rot;     //자신 tail의 Rotation정보를 저장할 변수 (목표값)
 
+    Transform parent_tr;
+    Vector3 target_pos;
+    float bone_distance;
+
     Boss_Tail head_tail;
 
     public float rot_speed_min;    //꼬리의 회전지연
@@ -26,6 +30,8 @@ public class Boss_Tail : MonoBehaviour {
         parent_tail_rot = Quaternion.identity;
         this_tail_rot_temp = this.transform.rotation;
         head_tail = head_seach(this.transform);
+        bone_distance = Vector3.Distance(transform.parent.position, transform.position);
+        parent_tr = transform.parent.transform;
     }
 
     Boss_Tail head_seach(Transform tail)
@@ -88,11 +94,27 @@ public class Boss_Tail : MonoBehaviour {
                 speed = rot_speed;
             }
 
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, parent_tail_rot , speed * Time.deltaTime);
+
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, parent_tail_rot, speed * Time.deltaTime);
 
             this_tail_rot_temp = this.transform.rotation;
-         }
 
+
+            // //부모의 바로 뒤, 이동 방향의 반대에 위치한 곳으로 하지만 이동 방향을 바라보는 
+
+            ////target_pos = (transform.parent.position) * -bone_distance ;
+            ////target_pos = (parent_tr.position - target_pos).normalized;
+            // target_pos = (-parent_tr.forward * bone_distance);
+            // //target_pos = new Vector3(parent_tr.position.x, parent_tr.position.y, parent_tr.position.z );
+
+            // Vector3 originAxis = transform.TransformDirection(transform.forward);
+            // Quaternion targetDir = Quaternion.FromToRotation(originAxis , target_pos);
+
+            // transform.rotation *= targetDir;
+
+            // this_tail_rot_temp = this.transform.rotation;
+
+        }
     }        
 
 }
