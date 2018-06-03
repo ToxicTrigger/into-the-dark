@@ -12,11 +12,12 @@ public class Arrow : MonoBehaviour {
     public Element type;
     public TrailRenderer tr;
     public AudioSource arrow_hit_rub, arrow_hit_stone,arrow_fire_start,arrow_water_start;
+    public bool has_targeting_totem;
 
     private void OnTriggerEnter(Collider collision)
     {
         bool is_player = false;
-        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2) is_player = true;
+        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2 || collision.gameObject.layer == 9) is_player = true;
 
         Look look = collision.gameObject.GetComponent<Look>();
         Element element = collision.gameObject.GetComponent<Element>();
@@ -57,8 +58,18 @@ public class Arrow : MonoBehaviour {
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Fog"))
+        {
+            Destroy(gameObject);
+        }
+        
+    }
+
     private void Start()
     {
+       
         AudioSource AS = null;
         if (type.type == Element.Type.Fire)
         {
