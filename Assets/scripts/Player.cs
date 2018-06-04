@@ -80,6 +80,7 @@ public class Player : MonoBehaviour {
             click_pos.y = transform.position.y + 0.1f;
 
             line.gameObject.SetActive(true);
+
             Vector3 pos = transform.position;
             pos.y += 0.5f;
 
@@ -92,7 +93,14 @@ public class Player : MonoBehaviour {
                     Debug.Log("name : " + coll.collider.gameObject.name);
                     click_pos = coll.collider.gameObject.transform.position;
                     has_targeting_totem = true;
+                    line.startColor = Color.yellow;
+                    line.endColor = Color.yellow;
                 }
+            }
+            else
+            {
+                line.startColor = Color.white;
+                line.endColor = Color.white;
             }
             Debug.DrawLine(pos, click_pos, Color.red);
 

@@ -35,7 +35,7 @@ public class BossRoomManager : MonoBehaviour {
 
     public void send_boss_state(Boss_Worm.Action _action)
     {
-        boss.action_ready(_action);
+        if(boss != null)boss.action_ready(_action);
     }
 
     public void off_switch()

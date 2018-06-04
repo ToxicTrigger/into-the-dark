@@ -28,8 +28,7 @@ public class OrderSwitch : BasicSwitch {
 
     public override void set_switch(bool _onoff)
     {
-        switch_on = _onoff;
-        notify_all();
+        base.set_switch(_onoff);
 
         _light.gameObject.SetActive(_onoff);
     }

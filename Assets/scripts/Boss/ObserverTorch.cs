@@ -27,7 +27,8 @@ public class ObserverTorch : Observer {
             if (0 < switch_on_cnt)
             {
                 switch_on_cnt--;
-                observerble_torch.off_light();
+                if(observerble_torch.torch_state == ObservableTorch.State.On)
+                    observerble_torch.off_light();
             }
 
         }
