@@ -31,7 +31,7 @@ public class Boss_Worm : MonoBehaviour
     [Header("*Boss State*")]
     public Action action_state;
     public float hp;
-    float speed;    //이동속도
+    public float speed;    //이동속도
 
     /// // Idle Set// ///
     [Space(16)]
@@ -99,6 +99,21 @@ public class Boss_Worm : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        //그로기 상태에서만 충돌체크 (현재 충돌체크를 이용하는게 공격받는것 밖에 없음)
+        if (action_state == Action.Groggy)
+        {
+            if (collision.transform.CompareTag("Arrow"))
+            {
+                add_damage();
+                Destroy(collision.gameObject);
+            }
+        }
+
+
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //그로기 상태에서만 충돌체크 (현재 충돌체크를 이용하는게 공격받는것 밖에 없음)
@@ -107,6 +122,14 @@ public class Boss_Worm : MonoBehaviour
             if (other.CompareTag("Arrow"))
             {
                 add_damage();
+                Destroy(other.gameObject);
+            }
+        }
+        if (action_state == Action.Rush_Attack)
+        {
+            if(other.CompareTag("Player"))
+            {
+                action_ready(Action.Rush_Attack_End);
             }
         }
     }
@@ -156,11 +179,13 @@ public class Boss_Worm : MonoBehaviour
     public float jump_power;
     void action_rush_attack()
     {
-        move_dir = (rush_move_target - transform.position).normalized;  //이동 방향
-        //move_dir.y = Mathf.Lerp(1.0f, -1.0f, (rush_attack_origin_dis / Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z))) /10.0f);
-        //move_dir.y *= rush_jump_power;
+        rush_move_target = new Vector3(player.position.x, player.position.y + 10, player.position.z);
+        rush_attack_origin_dis = Vector2.Distance(new Vector2(rush_attack_start_pos.x, rush_attack_start_pos.z), new Vector2(rush_move_target.x, rush_move_target.z));
 
-        float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z));
+        move_dir = (rush_move_target - transform.position).normalized;  //이동 방향        
+        float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z)); //
+
+        //-> 일정높이까지 진행하는 코드
         //float y_pos = Mathf.Lerp(1.0f, -1.0f, Mathf.Lerp(1,0,rush_attack_origin_dis / cur_dis));
         //float y_pos = Mathf.Lerp(1.0f, -1.0f, (rush_attack_origin_dis - cur_dis) / rush_attack_origin_dis);
         ////Debug.Log(rush_attack_origin_dis);
@@ -178,16 +203,15 @@ public class Boss_Worm : MonoBehaviour
         //    }
         //    if (y_pos > 0.95f) rush_attack_end = true;
         //    y_pos = Mathf.Lerp(mid_y_pos, around_transform.position.y, y_pos);
-
         //}
-
         //move_dir.y = y_pos - transform.position.y;
         //move_dir.y *= jump_power;
+        //-> 일정높이까지 진행하는 코드
 
-        move_dir.y = Mathf.Lerp(2.0f, -2.0f, (rush_attack_origin_dis - cur_dis) / rush_attack_origin_dis);
-        move_dir.y *= jump_power;
-
-        transform.position += move_dir * speed * Time.deltaTime;
+        move_dir.y = Mathf.Lerp(1.0f,-1.0f, (rush_attack_origin_dis - cur_dis) / rush_attack_origin_dis - 0.3f);
+        if(move_dir.y < 0) move_dir.y*= jump_power;
+        Debug.Log(rush_attack_origin_dis + " // " + cur_dis + " // " + move_dir.y);
+        transform.position += move_dir  *speed * Time.deltaTime;
 
         //move_dir = new Vector3(move_dir.x, y_pos, move_dir.z).normalized;
 
@@ -206,7 +230,7 @@ public class Boss_Worm : MonoBehaviour
         yield return new WaitForSeconds(rush_attack_timer); // 공격 대기시간
 
         //rush_move_target = (player.transform.position - transform.position).normalized;    //이동 방향
-        rush_move_target = new Vector3(player.position.x, player.position.y, player.position.z); //내위치 + ((반지름*2) * 이동방향) _ x,z || around_transform의 y위치 
+        rush_move_target = new Vector3(player.position.x, player.position.y+2, player.position.z); //내위치 + ((반지름*2) * 이동방향) _ x,z || around_transform의 y위치 
         rush_attack_origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z));  //거리 계산 (실시간 이동 거리에 따라 상승/하락 이동의 지정을 위함)_내 위치(x,z)와 타겟(x,z) 높이는 거리에 반영하지 않으므로!
 
         action_state = Action.Rush_Attack;  //공격상태로 전환
@@ -250,7 +274,7 @@ public class Boss_Worm : MonoBehaviour
 
                 break;
             case Action.Rush_Attack_End:
-                speed = rush_attack_speed * 3;
+                speed = rush_attack_speed * 5;
                 break;
 
             case Action.Soar_Attack:
@@ -298,7 +322,8 @@ public class Boss_Worm : MonoBehaviour
                     return true;
                 }
 
-                if(around_transform.position.y -10 > tail[tail.Length-1].transform.position.y)
+                //if(around_transform.position.y -5 > tail[tail.Length-1].transform.position.y)
+                if(around_transform.position.y -5 > tail[0].transform.position.y)
                 {
                     action_state = Action.Rush_Attack_End;
                     return true;

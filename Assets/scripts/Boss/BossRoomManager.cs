@@ -97,12 +97,6 @@ public class BossRoomManager : MonoBehaviour {
         }
 
         BossRoomRelocation.get_instance().togle_set();
-
-        for (int i = 0; i < random_Array.Length; i++)
-        {
-            Debug.Log("random_Array["+i+"] = "+random_Array[i]);
-        }
-        Debug.Log(random_Array.Length);
     }
 
 }
