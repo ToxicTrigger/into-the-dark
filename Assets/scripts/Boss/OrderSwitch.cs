@@ -15,7 +15,16 @@ public class OrderSwitch : BasicSwitch {
 	void Start () {
         _light.gameObject.SetActive(false);
         use_enable = true;
-    }	
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if ((collision.transform.CompareTag("Sword") || collision.transform.CompareTag("Arrow")) && !get_switch() && use_enable)
+        {
+            check.check_number(order_number);
+            Destroy(collision.gameObject);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -28,7 +37,8 @@ public class OrderSwitch : BasicSwitch {
 
     public override void set_switch(bool _onoff)
     {
-        base.set_switch(_onoff);
+        if((switch_on && _onoff == false) || _onoff)
+            base.set_switch(_onoff);
 
         _light.gameObject.SetActive(_onoff);
     }

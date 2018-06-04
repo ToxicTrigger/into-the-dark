@@ -22,6 +22,7 @@ public class Player : MonoBehaviour {
     public bool has_targeting_totem;
     public Image Hp;
     public Text HpTex;
+    public Text totem_cnt;
     public Damageable damageable;
     
     public float bow_time;
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour {
 
     public void Start()
     {
+        totem_cnt.text = "3 /" + (3 - cur_totems).ToString();
         weapon = GetComponent<Weapon>();
         cur_attack_type = GetComponent<Element>();
         tpc = GetComponent<ThirdPersonCharacter>();
@@ -133,8 +135,20 @@ public class Player : MonoBehaviour {
                 Destroy(totems.Dequeue());
             }
 
+            Totem[] tot = FindObjectsOfType<Totem>();
+            for( int i = 0; i < tot.Length; i ++)
+            {
+
+                if (Vector3.Distance(tot[i].gameObject.transform.position, transform.position) <= 1)
+                {
+                    Destroy(tot[i]);
+                }
+            }
+
+
             GameObject t = Instantiate(totem, transform.position, Quaternion.identity, null);
             totems.Enqueue(t);
+            totem_cnt.text = "3 /" +installable_totems.ToString();
             //ParticleCollider.instance.ps.trigger.SetCollider(2, t.transform.GetChild(1));
         }
     }

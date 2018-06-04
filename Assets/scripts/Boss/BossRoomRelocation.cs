@@ -44,7 +44,7 @@ public class BossRoomRelocation : MonoBehaviour {
 
 
     void Start () {
-        current_turn = Relocation_Turn.One;
+        //current_turn = Relocation_Turn.One;
 	}
 	
 
@@ -59,7 +59,7 @@ public class BossRoomRelocation : MonoBehaviour {
         if(current_turn == Relocation_Turn.One)
         {
             current_turn = Relocation_Turn.Two;
-
+            Debug.Log("one -> two로 바꿈");
         }
         else if(current_turn == Relocation_Turn.Two)
         {

@@ -18,7 +18,7 @@ public class BossRoomDoor : Observer {
     public override void notify(Observable obs)
     {
         BasicSwitch puzzle_switch = obs as BasicSwitch;
-
+        Debug.Log(obs.name);
         if(puzzle_switch.get_switch())
         {
             clear_cnt++;
@@ -43,7 +43,7 @@ public class BossRoomDoor : Observer {
         for (int i = 0; i <= loop_cnt; i++)
         {
             gameObject.transform.position += Vector3.up * open_speed;
-            yield return new WaitForSeconds(open_speed);
+            yield return new WaitForSeconds(0.01f);
         }
     }
 }

@@ -6,7 +6,7 @@ public class Boss_Worm : MonoBehaviour
 {
     //이동과 기능(hp,공격등의)을 담당 
 
-
+    public AudioSource boss_cry;
 
     //꼬리 움직임
     public Boss_Tail[] tail;
@@ -223,6 +223,7 @@ public class Boss_Worm : MonoBehaviour
     Vector3 rush_attack_start_pos;
     IEnumerator Rush_Attack_Timer()
     {
+        boss_cry.Play();
         action_state = Action.Ready;    //이동을 하지 않기 위함 (이 자리를 공격시작 자리로 정한다.)
         BossRoomManager.get_instance().send_attack_count_ui(rush_attack_timer);
         rush_attack_start_pos = transform.position;

@@ -25,6 +25,16 @@ public class TimeSwitch : BasicSwitch {
         if(other.CompareTag("Arrow") && !get_switch() && use_enable)
         {
             StartCoroutine(switch_on_timer());
+            
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Arrow") && !get_switch() && use_enable)
+        {
+            StartCoroutine(switch_on_timer());
+            Destroy(collision.gameObject);
         }
     }
 

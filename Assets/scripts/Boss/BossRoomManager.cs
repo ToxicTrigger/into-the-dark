@@ -30,7 +30,8 @@ public class BossRoomManager : MonoBehaviour {
 
     void Start()
     {
-        set_switch_pos();
+        Debug.Log("start");
+        set_switch_pos(); 
     }
 
     public void send_boss_state(Boss_Worm.Action _action)
@@ -46,8 +47,6 @@ public class BossRoomManager : MonoBehaviour {
             all_switch[i].off_switch_set();
         }
         //모든 스위치를 꺼줌
-
-
     }
     
     public void send_attack_count_ui(int _time)
@@ -57,6 +56,7 @@ public class BossRoomManager : MonoBehaviour {
 
     public void set_switch_pos()
     {
+        Debug.Log("set_switch_pos");
         int[] random_Array = new int[all_switch.Length];
         int num = -1;
 
@@ -93,9 +93,8 @@ public class BossRoomManager : MonoBehaviour {
 
             all_switch[i].transform.position =
                 BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].switch_position[random_Array[i]].transform.position;
-
+            
         }
-
         BossRoomRelocation.get_instance().togle_set();
     }
 

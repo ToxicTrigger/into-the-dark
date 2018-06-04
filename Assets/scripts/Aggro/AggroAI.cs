@@ -20,7 +20,6 @@ public abstract class AggroAI : Observable {
     public string cur_ani;
     public bool has_FoundTarget, has_RangedTarget, has_Dead, has_Hit;
     public float attack_range = 1.0f;
-    public float Attack_Power = 1.0f;
     public Attackable attack;
     public Damageable damage;
 
@@ -76,6 +75,7 @@ public abstract class AggroAI : Observable {
         {
             if (Vector3.Distance(target.transform.position, transform.position) >= na.radius & !has_carry_on)
             {
+                if(na.enabled)
                 na.SetDestination(target.transform.position);
                 has_carry_on = true;
                 has_FoundTarget = true;
@@ -136,6 +136,7 @@ public abstract class AggroAI : Observable {
             has_Dead = true;
             //ani.applyRootMotion = false;
             enabled = false;
+            
             na.enabled = false;
             Destroy(gameObject, 1.0f);
         }
