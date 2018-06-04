@@ -71,7 +71,7 @@ public class Player : MonoBehaviour {
         cur_attack_type.type = cur_attack_type.type == Element.Type.Fire ? Element.Type.Water : Element.Type.Fire;
         t = cur_attack_type.type;
     }
-    void calc_click_pos()
+    void calc_click_pos(bool sword)
     {
         has_targeting_totem = false;
         RaycastHit hit, coll;
@@ -81,12 +81,14 @@ public class Player : MonoBehaviour {
             click_pos = hit.point;
             click_pos.y = transform.position.y + 0.1f;
 
+            if( !sword )
             line.gameObject.SetActive(true);
 
             Vector3 pos = transform.position;
             pos.y += 0.5f;
 
-            line.SetPosition(0, pos);
+            if (!sword)
+                line.SetPosition(0, pos);
             if (Physics.Linecast(pos, click_pos, out coll))
             {
                 Debug.Log(coll.collider.name + "" + coll.collider.tag);
@@ -106,8 +108,9 @@ public class Player : MonoBehaviour {
             }
             Debug.DrawLine(pos, click_pos, Color.red);
 
- 
-            line.SetPosition(1, click_pos);
+
+            if (!sword)
+                line.SetPosition(1, click_pos);
             transform.LookAt(click_pos);
         }
     }
@@ -123,7 +126,7 @@ public class Player : MonoBehaviour {
         }
 
     }
-
+    int totem_size;
     void gen_totem()
     {
         cur_totems = totems.Count;
@@ -133,6 +136,11 @@ public class Player : MonoBehaviour {
             if (totems.Count > 2)
             {
                 Destroy(totems.Dequeue());
+            }
+
+            if( totem_size > 2)
+            {
+                totem_size = 0;
             }
 
             Totem[] tot = FindObjectsOfType<Totem>();
@@ -149,7 +157,8 @@ public class Player : MonoBehaviour {
             GameObject t = Instantiate(totem, transform.position, Quaternion.identity, null);
             totems.Enqueue(t);
             totem_cnt.text = "3 /" +installable_totems.ToString();
-            //ParticleCollider.instance.ps.trigger.SetCollider(2, t.transform.GetChild(1));
+            totem_size += 1;
+            ParticleCollider.instance.ps.trigger.SetCollider(1 + totem_size, t.transform.GetChild(0));
         }
     }
 
@@ -246,7 +255,7 @@ public class Player : MonoBehaviour {
                 //blue.time = 0.63f;
             }
 
-            calc_click_pos();
+            calc_click_pos(true);
         }
         else if (Input.GetButton("Fire2"))
         {
@@ -257,7 +266,7 @@ public class Player : MonoBehaviour {
                 bow_fullback.Play();
             }
             tpc.m_MoveSpeedMultiplier = 0;
-            calc_click_pos();
+            calc_click_pos(false);
         }
         ani.SetFloat("Bow_Fire", bow_time);
 
@@ -267,7 +276,7 @@ public class Player : MonoBehaviour {
             {
                 if (bow_time >= 0.5f)
                 {
-                    calc_click_pos();
+                    calc_click_pos(false);
                     gen_arrow();
 
                     bow_time = 0f;
