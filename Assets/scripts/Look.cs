@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Look : MonoBehaviour {
-    public Transform Target;
     public enum State
     {
         Dead,
@@ -24,6 +23,7 @@ public class Look : MonoBehaviour {
     public float Hp = 2;
 
     public Vector3 rush_point;
+    public bool is_end_attack;
 
     public GameObject Hit, Dead;
     public bool isOnDeadEff;
@@ -59,6 +59,7 @@ public class Look : MonoBehaviour {
         UpdateState();
     }
 
+    //공격자가 호출합니다.
     public void onAttack(float damage)
     {
         GameObject eff = GameObject.Instantiate(Hit, transform.position, Quaternion.identity, null);
@@ -73,29 +74,31 @@ public class Look : MonoBehaviour {
         }
     }
 
-    float updateTick = 2;
     void Update () {
         if(Hp <= 0)
         {
             mind = State.Dead;
         }
-        if(det.is_fined)
+        if(det.is_find)
         {
             if(na.enabled)
             {
-                this.transform.LookAt(Target);
-                na.SetDestination(Target.position);
-
-                if (updateTick >= 2.0f)
+                transform.LookAt(det.target.transform);
+                if(is_end_attack)
                 {
-                    StartCoroutine(setRushPoint());
+                    na.SetDestination(det.target.transform.position);
+                }
+               
+                if (updateRushTick >= 2.0f)
+                {
                     rush_point = (transform.forward * 2 + transform.position);
-                    tmp.position = rush_point;
-                    updateTick = 0;
+                    StartCoroutine(setRushPoint());
+                    updateRushTick = 0;
                 }
                 else
                 {
-                    updateTick += Time.deltaTime;
+                    updateRushTick += Time.deltaTime;
+                    is_end_attack = true;
                 }
                 
             }
@@ -105,14 +108,18 @@ public class Look : MonoBehaviour {
             if(na.enabled) na.SetDestination(start);
         }
 	}
-    public Transform tmp;
+
+
+    float updateRushTick = 2;
     IEnumerator setRushPoint()
     {
+        is_end_attack = false;
         while (Vector3.Distance(transform.position, rush_point) >= 0.1f)
         {
             transform.position = Vector3.Lerp(transform.position, rush_point, Time.deltaTime);
             yield return new WaitForSeconds(0.02f);
         }
+
     }
 
 

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Gate : Observer {
-    public int on_switch_number;
+    [SerializeField] int on_switch_number;
     public bool open = false;
-    public Vector3 origin, down;
+    private Vector3 origin, down;
+    public int switch_number;
 
     private void Start()
     {
@@ -13,21 +14,34 @@ public class Gate : Observer {
         down = origin + (Vector3.down * 10);
     }
 
-    public override void notify(Observable observable)
+    public override void notify(GameObject obj)
     {
-        Switch tmp = observable as Switch;
+        Switch tmp = obj.GetComponent<Switch>();
         if(tmp.switch_on)
         {
             on_switch_number+=1;
         }
         else
         {
-            if(on_switch_number != 0)
+            if(on_switch_number > 0)
             on_switch_number-=1;
         }
     }
-	
-	void Update () {
+
+    private void FixedUpdate()
+    {
+        if (on_switch_number == switch_number)
+        {
+            open = true;
+        }
+        else
+        {
+            open = false;
+        }
+    }
+
+    void LateUpdate () {
+        //TODO :: using Coroutine
         if(open)
         {
             transform.position = down;
@@ -35,15 +49,6 @@ public class Gate : Observer {
         else
         {
             transform.position = origin;
-        }
-
-		if(on_switch_number == 2)
-        {
-            open = true;
-        }
-        else
-        {
-            open = false;
         }
 	}
 }
