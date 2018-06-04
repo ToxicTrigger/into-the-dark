@@ -138,7 +138,7 @@ public class Player : MonoBehaviour {
 
             GameObject t = Instantiate(totem, transform.position, Quaternion.identity, null);
             totems.Enqueue(t);
-            ParticleCollider.instance.ps.trigger.SetCollider(2, t.transform.GetChild(1));
+            //ParticleCollider.instance.ps.trigger.SetCollider(2, t.transform.GetChild(1));
         }
     }
 

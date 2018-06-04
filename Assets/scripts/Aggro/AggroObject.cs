@@ -7,7 +7,7 @@ public class AggroObject : Observer {
     public float aggro_point = 1;
     public SphereCollider sc;
 
-    public override void notify(GameObject obj)
+    public override void notify(Observable obj)
     {
         AggroDetector ai = obj.GetComponent<AggroDetector>();
         if (!ai.ao.observers.Contains(this))

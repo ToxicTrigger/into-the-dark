@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class Observer : MonoBehaviour {
 
-    public abstract void notify(GameObject obj);
+    public abstract void notify(Observable obj);
 }

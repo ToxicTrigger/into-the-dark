@@ -50,12 +50,14 @@ public abstract class AggroAI : Observable {
             if(Vector3.Distance(target.transform.position, transform.position) <= attack_range)
             {
                 has_RangedTarget = true;
-                na.isStopped = true;
+                //na.isStopped = true;
+                na.enabled = false;
             }
             else
             {
                 has_RangedTarget = false;
-                na.isStopped = false;
+                // na.isStopped = false;
+                na.enabled = true;
             }
         }
     }
@@ -99,7 +101,7 @@ public abstract class AggroAI : Observable {
         while(iter.MoveNext())
         {
             Observer obj = iter.Current as Observer;
-            Debug.DrawLine(transform.position, obj.transform.position, Color.blue);
+            //Debug.DrawLine(transform.position, obj.transform.position, Color.blue);
         }
     }
 
