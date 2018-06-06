@@ -9,6 +9,7 @@ public class Element : MonoBehaviour {
         Void,
         Fire,
         Water,
+        Light
     }
 
     public Type type;
