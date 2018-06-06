@@ -68,8 +68,7 @@ public class Arrow : MonoBehaviour {
     }
 
     private void Start()
-    {
-       
+    {       
         AudioSource AS = null;
         if (type.type == Element.Type.Fire)
         {

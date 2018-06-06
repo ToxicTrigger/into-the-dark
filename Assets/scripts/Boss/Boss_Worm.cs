@@ -110,8 +110,6 @@ public class Boss_Worm : MonoBehaviour
                 Destroy(collision.gameObject);
             }
         }
-
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -172,10 +170,7 @@ public class Boss_Worm : MonoBehaviour
         move_dir = (around_transform.position - this.transform.position).normalized;
         transform.position = around_transform.position;
     }
-    float y_pos;
-    float mid_y_pos = 0;
-    bool rush_attack_end = false;
-    public float gravity = 1;
+
     public float jump_power;
     void action_rush_attack()
     {
@@ -210,7 +205,7 @@ public class Boss_Worm : MonoBehaviour
 
         move_dir.y = Mathf.Lerp(1.0f,-1.0f, (rush_attack_origin_dis - cur_dis) / rush_attack_origin_dis - 0.3f);
         if(move_dir.y < 0) move_dir.y*= jump_power;
-        Debug.Log(rush_attack_origin_dis + " // " + cur_dis + " // " + move_dir.y);
+
         transform.position += move_dir  *speed * Time.deltaTime;
 
         //move_dir = new Vector3(move_dir.x, y_pos, move_dir.z).normalized;
@@ -245,6 +240,11 @@ public class Boss_Worm : MonoBehaviour
 
         if (move_complete(action_state))
             action_ready(Action.Idle);
+    }
+
+    void action_soar_attack()
+    {
+
     }
 
     // 다른 상태로 변환되기까지 행동을 지정.
@@ -312,18 +312,9 @@ public class Boss_Worm : MonoBehaviour
             case Action.Dash:
                 break;
             case Action.Rush_Attack:
-                //Rush_Attack상태에서의 이동 완료 체크...
-                //y위치로 목표값 -1 보다 아래에 있음
-                //if (transform.position.y < rush_move_target.y-1)
-                if (rush_attack_end)
-                {
-                    //Debug.Log("target.y = \"" + rush_move_target.y + "\"" + "complete.y =\"" + (rush_move_target.y - 1) + "\"");
-                    action_state = Action.Rush_Attack_End;
-                    rush_attack_end = false;
-                    return true;
-                }
+                //Rush_Attack상태에서의 이동 완료 체크.
 
-                //if(around_transform.position.y -5 > tail[tail.Length-1].transform.position.y)
+                //if(around_transform.position.y -5 > tail[tail.Length-1].transform.position.y) 꼬리기준 체크 아래는 머리기준 체크
                 if(around_transform.position.y -5 > tail[0].transform.position.y)
                 {
                     action_state = Action.Rush_Attack_End;
