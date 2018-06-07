@@ -15,7 +15,6 @@ public class Player : MonoBehaviour
     float origin_move_speed;
 
     public Element cur_attack_type;
-    public Camera cam;
     public AudioSource bow_fullback, bow_release;
     public Queue<GameObject> totems;
     public int cur_totems, installable_totems;
@@ -40,7 +39,6 @@ public class Player : MonoBehaviour
         origin_move_speed = tpc.m_MoveSpeedMultiplier;
         totems = new Queue<GameObject>(0);
         damageable = GetComponent<Damageable>();
-        cam = Camera.main;
         //  UI-issue
         //  UI 를 다른 씬으로 분리 하여 작업하고 merge 시에 따로 관리 할 수 있도록 하는게 좋을 것 같아요.
         //  다른 커밋에서 가령 제가 작업한 UI 가 있거나 미혜씨가 작업하신 UI 가 있을 때 
@@ -66,12 +64,6 @@ public class Player : MonoBehaviour
 
     void gen_arrow()
     {
-        RaycastHit hit;
-        Vector3 mouse = Input.mousePosition;
-        if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
-        {
-
-        }
 
         Vector3 nor = transform.forward.normalized;
         GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
@@ -102,7 +94,7 @@ public class Player : MonoBehaviour
         has_targeting_totem = false;
         RaycastHit hit, coll;
         Vector3 mouse = Input.mousePosition;
-        if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(mouse), out hit, 10000))
         {
             click_pos = hit.point;
             click_pos.y = transform.position.y + 0.1f;

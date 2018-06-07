@@ -27,9 +27,18 @@ public class Boss_Worm : MonoBehaviour
         Ready           //준비상태 모든 상태가 되기 전 거치는 상태임
     }
 
+    //각 Action상태에 대한 단계를 표시 (rush는 두가지고 soar도 세가지 상태로 나누려 했는데 차라리 이렇게 하는건?)
+    public enum Phase
+    {
+        one,
+        two,
+        three
+    }
+
     [Space(16)]
     [Header("*Boss State*")]
     public Action action_state;
+    public Phase action_phase;
     public float hp;
     public float speed;    //이동속도
 
@@ -50,9 +59,14 @@ public class Boss_Worm : MonoBehaviour
     [Tooltip("RushAttack시 강하게 올라오는 정도에 대한 수치 (값이 크면 높이 올라감)")]
     public float rush_jump_power;
     public float rush_jump_top;
-    //RushAttack시 목표 까지의 거리
-    float rush_attack_origin_dis;
+    //RushAttack(SoarAttack)시 목표 까지의 거리
+    float origin_dis;
     [Space(16)]
+    [Tooltip("솟아오를 위치 (높이)")]
+    public float soar_height;
+    [Tooltip("해당 스테이지의 중간지점, 배치 후 넣어줄 예정")]
+    public Transform stage_center;
+    public float soar_attack_speed;
 
     [Tooltip("Idle상태에서 보스가 around_transform을 기준으로 이동")]
     public Transform around_transform;
@@ -64,7 +78,7 @@ public class Boss_Worm : MonoBehaviour
     public int rush_attack_timer;
 
     public Vector3 dis_standard;    //이동 완료로 보는 기준거리
-    Vector3 rush_move_target;    //Rush_Attack시 타겟으로 삼는 벡터 (솟아오르는 곳에서 캐릭터의 방향 + 반지름 *2 around_transform.y 를 기준으로 한다.)
+    Vector3 move_target;    //Rush_Attack시 타겟으로 삼는 벡터 (솟아오르는 곳에서 캐릭터의 방향 + 반지름 *2 around_transform.y 를 기준으로 한다.)
 
     private void Start()
     {
@@ -144,7 +158,7 @@ public class Boss_Worm : MonoBehaviour
             Destroy(this.gameObject);
         }
         //매니저에게 데미지입음 전달 (데미지 입으면 어떤행동을 할까?)
-        action_ready(Action.Idle);  //현재 데미지를 입으면 Idle 상태로 전환한다.
+        action_ready(Action.Soar_Attack);  //현재 데미지를 입으면 Idle 상태로 전환한다.
         BossRoomManager.get_instance().off_switch();
         BossRoomManager.get_instance().set_switch_pos();
     }
@@ -156,6 +170,7 @@ public class Boss_Worm : MonoBehaviour
         if (action_state == Action.Idle) action_idle();
         if (action_state == Action.Rush_Attack) action_rush_attack();
         if (action_state == Action.Rush_Attack_End) action_rush_attack_end();
+        if (action_state == Action.Soar_Attack) action_soar_attack();
 
         if (action_state != Action.Idle && action_state != Action.Rush_Attack)
             transform.position += move_dir * speed * Time.deltaTime;
@@ -174,11 +189,11 @@ public class Boss_Worm : MonoBehaviour
     public float jump_power;
     void action_rush_attack()
     {
-        rush_move_target = new Vector3(player.position.x, player.position.y + 10, player.position.z);
-        rush_attack_origin_dis = Vector2.Distance(new Vector2(rush_attack_start_pos.x, rush_attack_start_pos.z), new Vector2(rush_move_target.x, rush_move_target.z));
+        move_target = new Vector3(player.position.x, player.position.y + 10, player.position.z);
+        origin_dis = Vector2.Distance(new Vector2(rush_attack_start_pos.x, rush_attack_start_pos.z), new Vector2(move_target.x, move_target.z));
 
-        move_dir = (rush_move_target - transform.position).normalized;  //이동 방향        
-        float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z)); //
+        move_dir = (move_target - transform.position).normalized;  //이동 방향        
+        float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z)); //
 
         //-> 일정높이까지 진행하는 코드
         //float y_pos = Mathf.Lerp(1.0f, -1.0f, Mathf.Lerp(1,0,rush_attack_origin_dis / cur_dis));
@@ -203,7 +218,7 @@ public class Boss_Worm : MonoBehaviour
         //move_dir.y *= jump_power;
         //-> 일정높이까지 진행하는 코드
 
-        move_dir.y = Mathf.Lerp(1.0f,-1.0f, (rush_attack_origin_dis - cur_dis) / rush_attack_origin_dis - 0.3f);
+        move_dir.y = Mathf.Lerp(1.0f,-1.0f, (origin_dis - cur_dis) / origin_dis - 0.3f);
         if(move_dir.y < 0) move_dir.y*= jump_power;
 
         transform.position += move_dir  *speed * Time.deltaTime;
@@ -226,8 +241,8 @@ public class Boss_Worm : MonoBehaviour
         yield return new WaitForSeconds(rush_attack_timer); // 공격 대기시간
 
         //rush_move_target = (player.transform.position - transform.position).normalized;    //이동 방향
-        rush_move_target = new Vector3(player.position.x, player.position.y+2, player.position.z); //내위치 + ((반지름*2) * 이동방향) _ x,z || around_transform의 y위치 
-        rush_attack_origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(rush_move_target.x, rush_move_target.z));  //거리 계산 (실시간 이동 거리에 따라 상승/하락 이동의 지정을 위함)_내 위치(x,z)와 타겟(x,z) 높이는 거리에 반영하지 않으므로!
+        move_target = new Vector3(player.position.x, player.position.y+2, player.position.z); //내위치 + ((반지름*2) * 이동방향) _ x,z || around_transform의 y위치 
+        origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));  //거리 계산 (실시간 이동 거리에 따라 상승/하락 이동의 지정을 위함)_내 위치(x,z)와 타겟(x,z) 높이는 거리에 반영하지 않으므로!
 
         action_state = Action.Rush_Attack;  //공격상태로 전환
         speed = rush_attack_speed;          //공격 스피드로 전환
@@ -244,7 +259,24 @@ public class Boss_Worm : MonoBehaviour
 
     void action_soar_attack()
     {
+        move_dir = (move_target - transform.position).normalized;
 
+        switch (action_phase)
+        {
+            case Phase.one:
+                break;
+            case Phase.two:
+                break;
+            case Phase.three:
+                break;
+            default:
+                break;
+        }
+
+        if(move_complete(Action.Soar_Attack))
+        {
+            action_ready(Action.Idle); 
+        }
     }
 
     // 다른 상태로 변환되기까지 행동을 지정.
@@ -279,7 +311,9 @@ public class Boss_Worm : MonoBehaviour
                 break;
 
             case Action.Soar_Attack:
-
+                action_state = Action.Soar_Attack;
+                move_target = transform.position + (Vector3.up * soar_height) ;
+                speed = soar_attack_speed;
                 break;
             case Action.Groggy:
                 //공격가능 상태   
@@ -330,6 +364,39 @@ public class Boss_Worm : MonoBehaviour
                 }
                 break;
             case Action.Soar_Attack:
+
+                switch (action_phase)
+                {
+                    case Phase.one: //솟아오르는 중 y좌표로 목표보다 올라가있으면 이동 완료로 본다.
+                        if (transform.position.y > move_target.y)
+                        {
+                            action_phase = Phase.two;
+                            move_target = new Vector3(stage_center.position.x, transform.position.y, stage_center.position.z);
+                            //origin_dis = Vector3.Distance(move_target, transform.position);
+                            return false;
+                        }
+                        break;
+                    case Phase.two:
+                        float cur_dis = Vector3.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
+                        if (cur_dis < 0.5)
+                        {
+                            action_phase = Phase.three;
+                            move_target = new Vector3(stage_center.position.x, around_transform.position.y, stage_center.position.z);
+                            return false;
+                        }
+                        break;
+                    case Phase.three://내려가는 중 y좌표로 목표보다 아래라면 이동 완료로 본다.
+                        if (transform.position.y < move_target.y)
+                        {
+                            action_phase = Phase.one;
+                            move_target = Vector3.zero;
+                            return true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
                 break;
             case Action.Groggy:
                 break;
