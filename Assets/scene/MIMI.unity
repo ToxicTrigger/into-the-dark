@@ -140,6 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677361a1c92543b409c6de8fa1c96295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  p_camera: {fileID: 687983407}
 --- !u!4 &2863549
 Transform:
   m_ObjectHideFlags: 0
@@ -5279,7 +5281,7 @@ MonoBehaviour:
   observers:
   - {fileID: 1079166340}
   torch_state: 0
-  use_enabled: 0
+  use_enabled: 1
   torch_light: {fileID: 625211018}
 --- !u!23 &363630501
 MeshRenderer:
@@ -6750,6 +6752,7 @@ GameObject:
   - component: {fileID: 465811131}
   - component: {fileID: 465811130}
   - component: {fileID: 465811129}
+  - component: {fileID: 465811133}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -6903,10 +6906,11 @@ MonoBehaviour:
   rush_jump_power: 5
   rush_jump_top: 0
   soar_height: 25
-  stage_center: {fileID: 863245284}
+  stage_center: {fileID: 1933955936}
   soar_attack_speed: 20
   around_transform: {fileID: 1555714587}
   player: {fileID: 2068241857}
+  soar_event: {fileID: 465811133}
   rush_attack_timer: 3
   dis_standard: {x: 0, y: 0, z: 0}
   jump_power: 0
@@ -6928,6 +6932,30 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &465811133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 465811127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8b7b93c36205994c89a99a080bf6534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+  - camera_position: {fileID: 687983406}
+    target_ctrl: 0
+    camera_type: 2
+    cam_pos_target: {fileID: 1933955936}
+    cam_speed: 5
+    c_effect: 00000000
+    target_move_target: {fileID: 0}
+    scene_change_condition: 0
+    maintain_time: 0
+    fixed_x: 0
+    fixed_y: 1
+    fixed_z: 0
 --- !u!1 &469626965
 GameObject:
   m_ObjectHideFlags: 0
@@ -9273,12 +9301,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene:
   - camera_position: {fileID: 0}
-    follow: 0
+    target_ctrl: 0
+    camera_type: 0
+    cam_pos_target: {fileID: 0}
+    cam_speed: 0
     c_effect: 
-    player: {fileID: 0}
-    player_move_target: {fileID: 0}
-    enemy: []
+    target_move_target: {fileID: 0}
     scene_change_condition: 0
+    maintain_time: 0
+    fixed_x: 0
+    fixed_y: 0
+    fixed_z: 0
 --- !u!4 &659776341
 Transform:
   m_ObjectHideFlags: 0
@@ -9448,7 +9481,7 @@ Transform:
   m_LocalPosition: {x: -1.8, y: 4.7, z: -15.9}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
-  - {fileID: 863245284}
+  - {fileID: 1933955936}
   - {fileID: 1493603071}
   - {fileID: 1131300988}
   - {fileID: 1782446401}
@@ -11838,34 +11871,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 859060874}
   m_Mesh: {fileID: 4300096, guid: d4a6d6f19228a864eaefafdb184f8802, type: 3}
---- !u!1 &863245283
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 863245284}
-  m_Layer: 0
-  m_Name: Center
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &863245284
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 863245283}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 674368011}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &864532772
 GameObject:
   m_ObjectHideFlags: 0
@@ -23407,7 +23412,7 @@ MonoBehaviour:
   observers:
   - {fileID: 1079166340}
   torch_state: 0
-  use_enabled: 0
+  use_enabled: 1
   torch_light: {fileID: 658751709}
 --- !u!23 &1510245864
 MeshRenderer:
@@ -39692,6 +39697,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1931254999}
   m_Mesh: {fileID: 4300088, guid: d4a6d6f19228a864eaefafdb184f8802, type: 3}
+--- !u!1 &1933955935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1933955936}
+  m_Layer: 0
+  m_Name: Center (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1933955936
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1933955935}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.00000047683716, y: 0.00000031789145, z: 0.0000012715658}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 674368011}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1934677308
 GameObject:
   m_ObjectHideFlags: 0
@@ -41491,10 +41524,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ani: {fileID: 2068241856}
+  fsm: {fileID: 0}
   weapon: {fileID: 0}
   line: {fileID: 1406771539}
   tpc: {fileID: 0}
   cur_attack_type: {fileID: 0}
+  cam: {fileID: 0}
   bow_fullback: {fileID: 763137625}
   bow_release: {fileID: 2074610099}
   cur_totems: 0
@@ -41601,7 +41636,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2068241847}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.875782, y: 22.203907, z: -27.948437}
+  m_LocalPosition: {x: 5.875782, y: 22.203907, z: 41.8}
   m_LocalScale: {x: 1.6854492, y: 1.6854491, z: 1.6854491}
   m_Children:
   - {fileID: 1738472641}

@@ -62,18 +62,20 @@ public class Boss_Worm : MonoBehaviour
     //RushAttack(SoarAttack)시 목표 까지의 거리
     float origin_dis;
     [Space(16)]
+    [Header("*SoarAttackSetting*")]
     [Tooltip("솟아오를 위치 (높이)")]
     public float soar_height;
     [Tooltip("해당 스테이지의 중간지점, 배치 후 넣어줄 예정")]
     public Transform stage_center;
     public float soar_attack_speed;
+    [Space(16)]
 
     [Tooltip("Idle상태에서 보스가 around_transform을 기준으로 이동")]
     public Transform around_transform;
     public Transform player;
     Vector3 move_dir;   //이동용
 
-
+    public EventPlot soar_event;
     /// //타이머
     public int rush_attack_timer;
 
@@ -161,6 +163,7 @@ public class Boss_Worm : MonoBehaviour
         action_ready(Action.Soar_Attack);  //현재 데미지를 입으면 Idle 상태로 전환한다.
         BossRoomManager.get_instance().off_switch();
         BossRoomManager.get_instance().set_switch_pos();
+        EventManager.get_instance().event_setting(soar_event);
     }
 
     //테스트를 위해 키 입력을 받아 움직임 조정
@@ -390,6 +393,7 @@ public class Boss_Worm : MonoBehaviour
                         {
                             action_phase = Phase.one;
                             move_target = Vector3.zero;
+                            EventManager.get_instance().off_event();
                             return true;
                         }
                         break;

@@ -24,6 +24,7 @@ public class EventManager : MonoBehaviour {
     public GameObject player;
     public PlayerCamera p_camera;
 
+    EventPlot cur_event;
 	void Start () {
 		
 	}
@@ -38,8 +39,17 @@ public class EventManager : MonoBehaviour {
     }
 
     //이벤트를 실행할 준비를 한다. 모든 키입력에 대한 컨트롤을 멈춘다. (대표적으로 플레이어와 카메라)
-    public void event_setting()
+    public void event_setting(EventPlot _event)
     {
         p_camera.set_state(PlayerCamera.State.Event);
+        cur_event = _event;
+        cur_event.set_play_event(true);
+        cur_event.set_event(p_camera);
+    }
+
+    public void off_event()
+    {
+        p_camera.set_state(PlayerCamera.State.Follow);  //현재 follow상태로 바꿔주고 있으나 다음부터는 이전 상태 (원래 상태로 바꿔야함) 고정에서 이벤트로 바뀌었을 수도 있으니까!
+        cur_event.set_play_event(false);
     }
 }

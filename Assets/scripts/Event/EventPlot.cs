@@ -7,6 +7,7 @@ public class EventPlot : MonoBehaviour {
 
     public enum CameraEffect
     {
+        Null,
         Fade_In,
         Fade_Out,
         Shake
@@ -14,8 +15,16 @@ public class EventPlot : MonoBehaviour {
 
     public enum Finish_Condition
     {
+        Null,
         time_out,
         move_finish
+    }
+
+    public enum Camera_Type
+    {
+        Fixed,
+        Follow,
+        Move
     }
 
     //하나의 씬에 들어가는 정보의 목록
@@ -23,51 +32,85 @@ public class EventPlot : MonoBehaviour {
     public class Scene_Data
     {
         public Transform camera_position;
-        public bool follow;
+        public bool target_ctrl;
+        public Camera_Type camera_type;
+        public Transform cam_pos_target;
         public float cam_speed;
         public CameraEffect[] c_effect;
-        public Transform player_move_target;
-        public float player_speed;
+        public Transform target_move_target;
         public Finish_Condition scene_change_condition;
         public float maintain_time;
+        public bool fixed_x;
+        public bool fixed_y;
+        public bool fixed_z;
     }
 
     public Scene_Data[] scene;
     PlayerCamera p_camera;
-    GameObject player;
+    GameObject target;
+
     int scene_turn; //현재 씬의 순서 
+
+    bool play_event = false;
 
 	void Start () {
 		
 	}
 	
 	void Update () {
-		
+        if (play_event)
+        {
+            play_scene();
+        }
 	}
 
+    Vector3 fixed_vector = Vector3.zero;
     void play_scene()
     {
-        //*플레이어 처리*
-        
-
-        //*카메라 처리*플레이어가 이동하는 만큼 본인도 이동한다.
-        if (scene[scene_turn].follow)
+        //*타겟 처리*
+        if(scene[scene_turn].target_ctrl)
         {
 
         }
+        
+        //*카메라 처리*
+        switch (scene[scene_turn].camera_type)
+        {
+            case Camera_Type.Fixed:
+                p_camera.transform.position = scene[scene_turn].cam_pos_target.position;    //바로 target pos로 위치 고정
+                break;
+            case Camera_Type.Follow:
+                break;
+            case Camera_Type.Move:
+                fixed_vector = scene[scene_turn].cam_pos_target.position;
+                if (scene[scene_turn].fixed_x) fixed_vector.x = p_camera.transform.position.x;
+                if (scene[scene_turn].fixed_y) fixed_vector.y = p_camera.transform.position.y;
+                if (scene[scene_turn].fixed_z) fixed_vector.z = p_camera.transform.position.z;
+
+                p_camera.transform.position += (fixed_vector - p_camera.transform.position).normalized * scene[scene_turn].cam_speed *  Time.deltaTime;
+
+                break;
+        }
+
+        //이벤트 종료으 ㅣ경우 시간, 이동의 완료, 외부에서의 입력 총 세가지로 이루어진다.
     }
 
-    void set_event(PlayerCamera _cam, GameObject _player)
+    public void set_event(PlayerCamera _cam)
     {
         p_camera = _cam;
-        player = _player;
+        //player = _player;
 
         p_camera.transform.position = scene[scene_turn].camera_position.position;
 
     }
 
+    public void set_play_event(bool _set)
+    {
+        play_event = _set;
+    }
+
     void send_event()
     {
-        EventManager.get_instance().event_setting();
+        EventManager.get_instance().event_setting(this);
     }
 }
