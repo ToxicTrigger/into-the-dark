@@ -281,8 +281,6 @@ public class Player : MonoBehaviour
             is_attack = false;
         }
 
-        //현재 재생중인 ani 상태가 Run || Player_Idle 일 때만 입력을 받아오게 했습니다.
-        //진작에 이렇게 할껄. 읽으신 후에 주석은 제거해주세요~ 
         if (cur_ani.Equals("Run") || cur_ani.Equals("Player_Idle"))
         {
             input_con.enabled = true;

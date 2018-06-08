@@ -113,6 +113,46 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 36a6ebdc6ea55ef4ca293a863bead7ad, type: 2}
+--- !u!1 &2863547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2863549}
+  - component: {fileID: 2863548}
+  m_Layer: 0
+  m_Name: EventManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2863548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2863547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 677361a1c92543b409c6de8fa1c96295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2863549
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2863547}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.527832, y: -8.3125, z: 31.578125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3275533
 GameObject:
   m_ObjectHideFlags: 0
@@ -9204,6 +9244,54 @@ Transform:
   m_Father: {fileID: 1510245867}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &659776339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 659776341}
+  - component: {fileID: 659776340}
+  m_Layer: 0
+  m_Name: EventPlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &659776340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 659776339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8b7b93c36205994c89a99a080bf6534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene:
+  - camera_position: {fileID: 0}
+    follow: 0
+    c_effect: 
+    player: {fileID: 0}
+    player_move_target: {fileID: 0}
+    enemy: []
+    scene_change_condition: 0
+--- !u!4 &659776341
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 659776339}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 15.527832, y: -8.3125, z: 31.578125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &663244257
 GameObject:
   m_ObjectHideFlags: 0
@@ -9666,7 +9754,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam_state: 0
   player: {fileID: 2068241857}
-  fixed_target: {fileID: 0}
   offset: {x: 0, y: 30, z: -25}
   move_speed: 5
 --- !u!81 &687983408
@@ -41408,7 +41495,6 @@ MonoBehaviour:
   line: {fileID: 1406771539}
   tpc: {fileID: 0}
   cur_attack_type: {fileID: 0}
-  cam: {fileID: 687983410}
   bow_fullback: {fileID: 763137625}
   bow_release: {fileID: 2074610099}
   cur_totems: 0
