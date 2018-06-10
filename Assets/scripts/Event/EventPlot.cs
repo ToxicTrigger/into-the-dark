@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventPlot : MonoBehaviour {
+public class EventPlot : MonoBehaviour
+{
     //실질적인 이벤트의 정보가 들어가는 스크립트이다.
 
     public enum CameraEffect
@@ -35,7 +36,9 @@ public class EventPlot : MonoBehaviour {
         public bool target_ctrl;
         public Camera_Type camera_type;
         public Transform cam_pos_target;
+        public float over_dis;
         public float cam_speed;
+        public float rot_speed;
         public CameraEffect[] c_effect;
         public Transform target_move_target;
         public Finish_Condition scene_change_condition;
@@ -53,26 +56,29 @@ public class EventPlot : MonoBehaviour {
 
     bool play_event = false;
 
-	void Start () {
-		
-	}
-	
-	void Update () {
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
         if (play_event)
         {
             play_scene();
         }
-	}
+    }
 
     Vector3 fixed_vector = Vector3.zero;
+    float origin_distance;
     void play_scene()
     {
         //*타겟 처리*
-        if(scene[scene_turn].target_ctrl)
+        if (scene[scene_turn].target_ctrl)
         {
 
         }
-        
+
         //*카메라 처리*
         switch (scene[scene_turn].camera_type)
         {
@@ -82,13 +88,16 @@ public class EventPlot : MonoBehaviour {
             case Camera_Type.Follow:
                 break;
             case Camera_Type.Move:
-                fixed_vector = scene[scene_turn].cam_pos_target.position;
+
                 if (scene[scene_turn].fixed_x) fixed_vector.x = p_camera.transform.position.x;
                 if (scene[scene_turn].fixed_y) fixed_vector.y = p_camera.transform.position.y;
                 if (scene[scene_turn].fixed_z) fixed_vector.z = p_camera.transform.position.z;
+                float cur_dis = Vector2.Distance(new Vector2(fixed_vector.x, fixed_vector.z), new Vector2(p_camera.transform.position.x, p_camera.transform.position.z));
 
-                p_camera.transform.position += (fixed_vector - p_camera.transform.position).normalized * scene[scene_turn].cam_speed *  Time.deltaTime;
-
+                if ((origin_distance - cur_dis) / origin_distance < 0.9)
+                {
+                    p_camera.transform.position += (fixed_vector - p_camera.transform.position).normalized * scene[scene_turn].cam_speed * Time.deltaTime;
+                }
                 break;
         }
 
@@ -102,6 +111,8 @@ public class EventPlot : MonoBehaviour {
 
         p_camera.transform.position = scene[scene_turn].camera_position.position;
 
+        fixed_vector = scene[scene_turn].cam_pos_target.position + (scene[scene_turn].cam_pos_target.position - p_camera.transform.position).normalized * scene[scene_turn].over_dis;
+        origin_distance = Vector2.Distance(new Vector2(fixed_vector.x, fixed_vector.z), new Vector2(p_camera.transform.position.x, p_camera.transform.position.z));
     }
 
     public void set_play_event(bool _set)

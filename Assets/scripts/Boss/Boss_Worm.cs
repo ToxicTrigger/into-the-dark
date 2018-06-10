@@ -163,6 +163,7 @@ public class Boss_Worm : MonoBehaviour
         action_ready(Action.Soar_Attack);  //현재 데미지를 입으면 Idle 상태로 전환한다.
         BossRoomManager.get_instance().off_switch();
         BossRoomManager.get_instance().set_switch_pos();
+        BossRoomManager.get_instance().add_phase(); //페이즈 +1
         EventManager.get_instance().event_setting(soar_event);
     }
 

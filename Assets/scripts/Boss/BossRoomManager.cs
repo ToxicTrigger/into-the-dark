@@ -26,6 +26,15 @@ public class BossRoomManager : MonoBehaviour {
     [Tooltip("재배치 하는 스크립트와 총 스위치 개수를 통일할 것, 반드시 시간 스위치부터 입력할 것")]
     public BasicSwitch [] all_switch;
 
+    [System.Serializable]
+    public class PhasePillarList
+    {
+        public CrumblingPillar[] c_pillar;
+    }
+    public PhasePillarList []phase_pillar_list;
+
+    int boss_phase =1;
+
     //public ObservableTorch[] torch;
 
     void Start()
@@ -49,6 +58,13 @@ public class BossRoomManager : MonoBehaviour {
         //모든 스위치를 꺼줌
     }
     
+    //등록된 모든 기둥을 무너뜨린다.
+    public void crumbling_pillar_all()
+    {
+        for(int i =0; i< phase_pillar_list[boss_phase-1].c_pillar.Length; i++)
+            phase_pillar_list[boss_phase-1].c_pillar[i].crumbling_all();
+    }
+
     public void send_attack_count_ui(int _time)
     {
         UIManager.get_instance().play_attack_timer(_time);
@@ -96,6 +112,11 @@ public class BossRoomManager : MonoBehaviour {
             
         }
         BossRoomRelocation.get_instance().togle_set();
+    }
+
+    public void add_phase()
+    {
+        boss_phase++;
     }
 
 }
