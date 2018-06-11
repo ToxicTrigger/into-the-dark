@@ -14,25 +14,34 @@ public class PillarFloor : MonoBehaviour {
     bool crumbling; //무너지는 중?
     Vector3 target_position;
     float speed;
+    float rot_speed;
 
     float origin_dis;
+    Quaternion target_rot = Quaternion.identity;
 
-	void Update () {
+    void Update () {
         if (crumbling)
         {
-            transform.position += (target_position - transform.position).normalized * speed * Time.deltaTime;
+            Vector3 dir = (target_position - transform.position).normalized;
+
+            transform.position += dir * speed * Time.deltaTime;
             //회전 추가
+            dir.y = 0;
+            target_rot.SetFromToRotation(Vector3.up, dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation,target_rot, rot_speed * Time.deltaTime);
 
             if(move_complete())
             {
+                //EventManager.get_instance().camera_shake(power);
                 crumbling = false;
             }
         }
 	}
 
-    public void set_state(Vector3 _pos, bool _crack, float _speed)
+    public void set_state(Vector3 _pos, bool _crack, float _speed, float _rot_speed)
     {
         speed = _speed;
+        rot_speed = _rot_speed;
         target_position = _pos;
         crack = _crack;
 
@@ -64,8 +73,9 @@ public class PillarFloor : MonoBehaviour {
             }
         }
 
-        if (crumbling) { 
-}
+        if (crumbling)
+        {
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

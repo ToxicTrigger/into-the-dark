@@ -68,6 +68,11 @@ public class Boss_Worm : MonoBehaviour
     [Tooltip("해당 스테이지의 중간지점, 배치 후 넣어줄 예정")]
     public Transform stage_center;
     public float soar_attack_speed;
+    [Tooltip("위 아래로 몇번 흔들건지")]
+    public int c_shake_cnt;
+    [Tooltip("반복 속도 ")]
+    public float c_shake_speed;
+    public float c_shake_power;
     [Space(16)]
 
     [Tooltip("Idle상태에서 보스가 around_transform을 기준으로 이동")]
@@ -163,7 +168,8 @@ public class Boss_Worm : MonoBehaviour
         action_ready(Action.Soar_Attack);  //현재 데미지를 입으면 Idle 상태로 전환한다.
         BossRoomManager.get_instance().off_switch();
         BossRoomManager.get_instance().set_switch_pos();
-        BossRoomManager.get_instance().add_phase(); //페이즈 +1
+        BossRoomManager.get_instance().add_phase(); //페이즈 +1        
+
         EventManager.get_instance().event_setting(soar_event);
     }
 
@@ -324,7 +330,7 @@ public class Boss_Worm : MonoBehaviour
                 //(임시) 그로기 상태가 되면 현재위치 + 플레이어 y위치로 이동
                 transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
                 action_state = Action.Groggy;
-                StopCoroutine(timer); //그로기 상태가 되면 공격을 취소함
+                if(timer != null)StopCoroutine(timer); //그로기 상태가 되면 공격을 취소함
 
                 break;
             case Action.Groggy_End:
@@ -369,6 +375,10 @@ public class Boss_Worm : MonoBehaviour
                 break;
             case Action.Soar_Attack:
 
+                if (tail[0].transform.position.y <= player.position.y+5)
+                {
+                    EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed);
+                }
                 switch (action_phase)
                 {
                     case Phase.one: //솟아오르는 중 y좌표로 목표보다 올라가있으면 이동 완료로 본다.
@@ -395,6 +405,8 @@ public class Boss_Worm : MonoBehaviour
                             action_phase = Phase.one;
                             move_target = Vector3.zero;
                             EventManager.get_instance().off_event();
+                            BossRoomManager.get_instance().crumbling_pillar_all();  //페이즈에 따라 기둥을 무너뜨린다. 
+
                             return true;
                         }
                         break;

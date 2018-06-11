@@ -9,7 +9,8 @@ public class PlayerCamera : MonoBehaviour {
     {
         Follow, //플레이어 따라감
         Fixed,   //특정 구간에 고정
-        Event   //연출 카메라 
+        Event,   //연출 카메라 
+        Active
     }
     public State cam_state;
 
@@ -19,26 +20,34 @@ public class PlayerCamera : MonoBehaviour {
     Transform[] event_target;
 
     public Vector3 offset;
+    Vector3 _offset;
     public float move_speed;
     float speed;
+    public bool shake;
+    IEnumerator timer;
 
 	void Start () {
         tr = transform;
         cam_state = State.Follow;
         speed = move_speed;
+        _offset = offset;
     }
 	
 	void Update () {
         speed = move_speed;
         if (cam_state == State.Follow)
         {
-            tr.position = Vector3.Lerp(tr.position, player.position + offset, Time.deltaTime * speed);
+            tr.position = Vector3.Lerp(tr.position, player.position + _offset, Time.deltaTime * speed);
         }
         else if(cam_state == State.Fixed)
         {
-            tr.position = Vector3.Lerp(tr.position, fixed_target.position + offset, Time.deltaTime * speed);
+            tr.position = Vector3.Lerp(tr.position, fixed_target.position + _offset, Time.deltaTime * speed);
         }
-	}
+        else if(cam_state == State.Active )
+        {
+            tr.position = player.position + _offset;
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -51,6 +60,35 @@ public class PlayerCamera : MonoBehaviour {
             CameraEventSetting _tr = other.GetComponent<CameraEventSetting>();
             set_event_target(_tr.get_target_list());
         }
+    }
+
+    public void up_down_move(float _power, int loop_cnt, float loop_speed)
+    {
+        if (timer != null)
+        {
+            _offset.y = offset.y;
+            tr.position = player.position + _offset;
+            cam_state = State.Follow;
+            StopCoroutine(timer);
+        }
+        timer = up_down_timer(_power,loop_cnt, loop_speed);
+        StartCoroutine(timer);
+    }
+
+    IEnumerator up_down_timer(float _power, int loop_cnt, float loop_speed)
+    {
+        shake = true;
+        for (int i = 0; i < loop_cnt; i++)
+        {
+            _offset.y -= _power;
+            yield return new WaitForSeconds(loop_speed);
+            _offset.y = offset.y;
+            _offset.y += _power;
+            yield return new WaitForSeconds(loop_speed);
+            _offset.y = offset.y;
+        }
+        cam_state = State.Follow;
+        shake = false;
     }
 
     //이벤트 타겟의 Transform을 모두 복사해온다.
