@@ -7,19 +7,21 @@ public class Boss_Worm : MonoBehaviour
     //이동과 기능(hp,공격등의)을 담당 
 
     public AudioSource boss_cry;
-
+    Animator this_animator;
     //꼬리 움직임
     public Boss_Tail[] tail;
     Vector3 tail_dir;       //꼬리 회전계산용
-                            /// ///////////////////////////////////////////////////////
+                        /// ///////////////////////////////////////////////////////
     // 기본 정보 (hp, speed 등)
 
     public enum Action
     {
         Idle = 0,   //대기상태 (플레이어 주위를 뱅글뱅글 돈다.)
         Dash,       //돌진 (소리가 난 곳으로 돌진한다.)
+        Attack,
         Rush_Attack,    //포물선 공격
         Rush_Attack_End,
+        Whipping_Attack,
         Soar_Attack,    //솟아오르는 공격
         Groggy,         //그로기 상태
         Groggy_End,   //그로기 끝난 상태
@@ -32,7 +34,9 @@ public class Boss_Worm : MonoBehaviour
     {
         one,
         two,
-        three
+        three,
+        four,
+        five
     }
 
     [Space(16)]
@@ -41,6 +45,7 @@ public class Boss_Worm : MonoBehaviour
     public Phase action_phase;
     public float hp;
     public float speed;    //이동속도
+    public bool edge_attack;    //플레이어 영역에 따라 값이 바뀜.
 
     /// // Idle Set// ///
     [Space(16)]
@@ -59,8 +64,29 @@ public class Boss_Worm : MonoBehaviour
     [Tooltip("RushAttack시 강하게 올라오는 정도에 대한 수치 (값이 크면 높이 올라감)")]
     public float rush_jump_power;
     public float rush_jump_top;
+    float jump_power;
+    Vector3 rush_attack_start_pos;
+
+    [Space(16)]
+    [Header("*WhippingAttackSetting*")]
+    [Tooltip("솟아나는 위치 (계산을 통할 것)")]
+    public Vector3 whipping_attack_start_pos;
+    [Tooltip("위치로부터 솟아나는 높이")]
+    public float attack_y_pos;
+    [Tooltip("공격시 가장 빠른 속도")]
+    public float attack_speed_max;
+    [Tooltip("공격시 가장 느린 속도")]
+    public float attack_speed_min;
+    [Tooltip("준비 거리 (공격 직전 고개를 살짝 뒤로 뺄것임)")]
+    public float attack_ready_dis;
+    [Tooltip("솟아오르는 속도")]
+    public float up_speed;
+    [Tooltip("머리가 플레이어를 바라보는 속도")]
+    public float look_speed;
+
     //RushAttack(SoarAttack)시 목표 까지의 거리
     float origin_dis;
+
     [Space(16)]
     [Header("*SoarAttackSetting*")]
     [Tooltip("솟아오를 위치 (높이)")]
@@ -73,6 +99,14 @@ public class Boss_Worm : MonoBehaviour
     [Tooltip("반복 속도 ")]
     public float c_shake_speed;
     public float c_shake_power;
+    [Tooltip("위에서 떨굴 몹의 수")]
+    public int enemy_cnt;
+    [Tooltip("떨굴 몹 오브젝트")]
+    public GameObject enemy;
+    float split_num;    // 총 거리를 몹의 수로 나눈 수 저장(?)
+
+
+
     [Space(16)]
 
     [Tooltip("Idle상태에서 보스가 around_transform을 기준으로 이동")]
@@ -87,55 +121,45 @@ public class Boss_Worm : MonoBehaviour
     public Vector3 dis_standard;    //이동 완료로 보는 기준거리
     Vector3 move_target;    //Rush_Attack시 타겟으로 삼는 벡터 (솟아오르는 곳에서 캐릭터의 방향 + 반지름 *2 around_transform.y 를 기준으로 한다.)
 
+    IEnumerator timer;  //**************이렇게 쓰는거 공부해!*************
+
     private void Start()
     {
+        this_animator = GetComponent<Animator>();
         StartCoroutine(start_timer());
         around_transform.position = new Vector3(player.position.x + idle_radius, player.position.y - idle_y_pos, player.position.z);
     }
+
     IEnumerator start_timer()
     {
         yield return new WaitForSeconds(0.5f);
         action_ready(Action.Idle);
     }
+
     private void Update()
     {
         around_transform.RotateAround(player.transform.position, Vector3.up, 2f);
-
-        if (Input.GetKey(KeyCode.Space))
-            action_ready(Action.Rush_Attack);
         move_control();
+
         if (action_state == Action.Idle)
             speed = idle_speed;
         if (action_state == Action.Rush_Attack)
             speed = rush_attack_speed;
-
     }
 
     private void LateUpdate()
     {
-        //꼬리 업데이트
-        for (int i = 0; i < tail.Length; i++)
-        {
-            tail[i].move_update(tail_dir);
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        //그로기 상태에서만 충돌체크 (현재 충돌체크를 이용하는게 공격받는것 밖에 없음)
-        if (action_state == Action.Groggy)
-        {
-            if (collision.transform.CompareTag("Arrow"))
+        //if (!edge_attack)
+        //{
+            for (int i = 0; i < tail.Length; i++)
             {
-                add_damage();
-                Destroy(collision.gameObject);
+                tail[i].move_update(tail_dir);
             }
-        }
+        //}
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        //그로기 상태에서만 충돌체크 (현재 충돌체크를 이용하는게 공격받는것 밖에 없음)
         if (action_state == Action.Groggy)
         {
             if (other.CompareTag("Arrow"))
@@ -144,16 +168,8 @@ public class Boss_Worm : MonoBehaviour
                 Destroy(other.gameObject);
             }
         }
-        if (action_state == Action.Rush_Attack)
-        {
-            if(other.CompareTag("Player"))
-            {
-                action_ready(Action.Rush_Attack_End);
-            }
-        }
     }
 
-    //데미지입는 함수 hp가 0이되면 Destroy
     void add_damage()
     {
         hp -= 1;
@@ -161,10 +177,9 @@ public class Boss_Worm : MonoBehaviour
         if (hp <= 0)
         {
             action_ready(Action.Death);
-            //매니저에게 죽음 상태를 전달
             Destroy(this.gameObject);
         }
-        //매니저에게 데미지입음 전달 (데미지 입으면 어떤행동을 할까?)
+
         action_ready(Action.Soar_Attack);  //현재 데미지를 입으면 Idle 상태로 전환한다.
         BossRoomManager.get_instance().off_switch();
         BossRoomManager.get_instance().set_switch_pos();
@@ -173,10 +188,8 @@ public class Boss_Worm : MonoBehaviour
         EventManager.get_instance().event_setting(soar_event);
     }
 
-    //테스트를 위해 키 입력을 받아 움직임 조정
     void move_control()
     {
-        //땅 아래에서 주인공 주위를 뱅글뱅글 돈다.
         if (action_state == Action.Idle) action_idle();
         if (action_state == Action.Rush_Attack) action_rush_attack();
         if (action_state == Action.Rush_Attack_End) action_rush_attack_end();
@@ -184,63 +197,35 @@ public class Boss_Worm : MonoBehaviour
 
         if (action_state != Action.Idle && action_state != Action.Rush_Attack)
             transform.position += move_dir * speed * Time.deltaTime;
-        tail_dir = move_dir;    //꼬리에 넘겨줄 움직이는 방향을 저장함.
+
+        tail_dir = move_dir; 
         move_dir = Vector3.zero;
     }
 
-    //idle상태 움직임
     void action_idle()
     {
-        //around_transform.RotateAround(player.transform.position, Vector3.up, 2f) ;
         move_dir = (around_transform.position - this.transform.position).normalized;
         transform.position = around_transform.position;
     }
 
-    public float jump_power;
+
     void action_rush_attack()
     {
         move_target = new Vector3(player.position.x, player.position.y + 10, player.position.z);
         origin_dis = Vector2.Distance(new Vector2(rush_attack_start_pos.x, rush_attack_start_pos.z), new Vector2(move_target.x, move_target.z));
 
         move_dir = (move_target - transform.position).normalized;  //이동 방향        
-        float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z)); //
-
-        //-> 일정높이까지 진행하는 코드
-        //float y_pos = Mathf.Lerp(1.0f, -1.0f, Mathf.Lerp(1,0,rush_attack_origin_dis / cur_dis));
-        //float y_pos = Mathf.Lerp(1.0f, -1.0f, (rush_attack_origin_dis - cur_dis) / rush_attack_origin_dis);
-        ////Debug.Log(rush_attack_origin_dis);
-
-        //if (y_pos > 0)
-        //{
-        //    y_pos = Mathf.Lerp(rush_attack_start_pos.y + rush_jump_top, rush_attack_start_pos.y, y_pos);
-        //    mid_y_pos = transform.position.y;
-        //}
-        //else
-        //{
-        //    if (y_pos < 0)
-        //    {
-        //        y_pos *= -1;    // 0이하의 값을 가지므로 -1을 곱해주기
-        //    }
-        //    if (y_pos > 0.95f) rush_attack_end = true;
-        //    y_pos = Mathf.Lerp(mid_y_pos, around_transform.position.y, y_pos);
-        //}
-        //move_dir.y = y_pos - transform.position.y;
-        //move_dir.y *= jump_power;
-        //-> 일정높이까지 진행하는 코드
+        float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z)); 
 
         move_dir.y = Mathf.Lerp(1.0f,-1.0f, (origin_dis - cur_dis) / origin_dis - 0.3f);
-        if(move_dir.y < 0) move_dir.y*= jump_power;
+        if(move_dir.y < 0) move_dir.y *= jump_power;
 
         transform.position += move_dir  *speed * Time.deltaTime;
-
-        //move_dir = new Vector3(move_dir.x, y_pos, move_dir.z).normalized;
 
         if (move_complete(action_state))
             action_ready(Action.Rush_Attack_End);  //이동 완료했다면 Idle상태로 변환
     }
-    IEnumerator timer;  //**************이렇게 쓰는거 공부해!*************
 
-    Vector3 rush_attack_start_pos;
     IEnumerator Rush_Attack_Timer()
     {
         boss_cry.Play();
@@ -271,22 +256,15 @@ public class Boss_Worm : MonoBehaviour
     {
         move_dir = (move_target - transform.position).normalized;
 
-        switch (action_phase)
-        {
-            case Phase.one:
-                break;
-            case Phase.two:
-                break;
-            case Phase.three:
-                break;
-            default:
-                break;
-        }
-
         if(move_complete(Action.Soar_Attack))
         {
             action_ready(Action.Idle); 
         }
+    }
+
+    void action_whipping_attack()
+    {
+        move_dir = (move_target - transform.position).normalized;
     }
 
     // 다른 상태로 변환되기까지 행동을 지정.
@@ -320,6 +298,13 @@ public class Boss_Worm : MonoBehaviour
                 speed = rush_attack_speed * 5;
                 break;
 
+            case Action.Whipping_Attack:
+                whipping_attack_start_pos = player.transform.position;
+                tail[0].transform.position = whipping_attack_start_pos;
+                move_target = transform.position;
+                move_target.y = transform.position.y + attack_y_pos;
+                break;
+            
             case Action.Soar_Attack:
                 action_state = Action.Soar_Attack;
                 move_target = transform.position + (Vector3.up * soar_height) ;
@@ -357,8 +342,6 @@ public class Boss_Worm : MonoBehaviour
                 break;
             case Action.Rush_Attack:
                 //Rush_Attack상태에서의 이동 완료 체크.
-
-                //if(around_transform.position.y -5 > tail[tail.Length-1].transform.position.y) 꼬리기준 체크 아래는 머리기준 체크
                 if(around_transform.position.y -5 > tail[0].transform.position.y)
                 {
                     action_state = Action.Rush_Attack_End;
@@ -373,12 +356,34 @@ public class Boss_Worm : MonoBehaviour
                     return true;
                 }
                 break;
+
+            case Action.Whipping_Attack:
+                switch (action_phase)
+                {
+                    case Phase.one:
+                        if(transform.position.y > move_target.y)
+                        {
+                            action_phase = Phase.two;
+                            move_target = transform.position;
+                            
+                            return false;
+                        }
+                        break;
+                    case Phase.two:
+                        break;
+                    case Phase.three:
+                        break;
+                    case Phase.four:
+                        break;
+                    case Phase.five:
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
             case Action.Soar_Attack:
 
-                if (tail[0].transform.position.y <= player.position.y+5)
-                {
-                    EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed);
-                }
                 switch (action_phase)
                 {
                     case Phase.one: //솟아오르는 중 y좌표로 목표보다 올라가있으면 이동 완료로 본다.
@@ -386,12 +391,21 @@ public class Boss_Worm : MonoBehaviour
                         {
                             action_phase = Phase.two;
                             move_target = new Vector3(stage_center.position.x, transform.position.y, stage_center.position.z);
-                            //origin_dis = Vector3.Distance(move_target, transform.position);
+                            origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
+                            split_num = origin_dis / enemy_cnt;
                             return false;
                         }
                         break;
                     case Phase.two:
-                        float cur_dis = Vector3.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
+                        float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
+
+                        if(cur_dis < origin_dis - split_num)
+                        {
+                            //몹 동적생성
+                            GameObject _enemy = (GameObject)Instantiate(enemy, tail[0].transform.position, Quaternion.identity);
+                            split_num += split_num;
+                        }
+
                         if (cur_dis < 0.5)
                         {
                             action_phase = Phase.three;
@@ -406,6 +420,7 @@ public class Boss_Worm : MonoBehaviour
                             move_target = Vector3.zero;
                             EventManager.get_instance().off_event();
                             BossRoomManager.get_instance().crumbling_pillar_all();  //페이즈에 따라 기둥을 무너뜨린다. 
+                            EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed);
 
                             return true;
                         }
@@ -429,5 +444,15 @@ public class Boss_Worm : MonoBehaviour
 
         return false;
     }
+
+    public void set_edge_attack(bool _edge)
+    {
+        edge_attack = _edge;
+    }
+    public bool get_edge_attack()
+    {
+        return edge_attack;
+    }
 }
+
 

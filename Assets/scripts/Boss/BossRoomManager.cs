@@ -39,13 +39,25 @@ public class BossRoomManager : MonoBehaviour {
 
     void Start()
     {
-        Debug.Log("start");
         set_switch_pos(); 
     }
 
     public void send_boss_state(Boss_Worm.Action _action)
     {
-        if(boss != null)boss.action_ready(_action);
+        if (boss != null)
+        {
+            if (_action == Boss_Worm.Action.Attack)
+            {
+                if (boss.get_edge_attack())
+                    boss.action_ready(Boss_Worm.Action.Whipping_Attack);
+                else
+                    boss.action_ready(Boss_Worm.Action.Rush_Attack);
+            }
+            else
+            {
+                boss.action_ready(_action);
+            }
+        }
     }
 
     public void off_switch()

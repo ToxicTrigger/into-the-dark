@@ -10,7 +10,7 @@ public class WaterSound : MonoBehaviour {
     {
         if(other.CompareTag("Player"))
         {
-            BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Rush_Attack);
+            BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Attack);
         }
     }
 }
