@@ -36,7 +36,8 @@ public class BossRoomRelocation : MonoBehaviour {
         //public Transform[] order_position;
         [Tooltip("Switch를 다 채우고 Order를 채울것")]
         public Transform[] switch_position;
-
+        public Transform[] water_position;
+        public Transform[] enemy_position;
     }
 
     [Tooltip("reloc_set 1에 time과 order의 배치 1개가 들어감")]

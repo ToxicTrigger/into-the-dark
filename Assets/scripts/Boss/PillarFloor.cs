@@ -10,6 +10,9 @@ public class PillarFloor : MonoBehaviour {
     public int hp;
     [Tooltip("기둥의 힘 (플레이어에게 몇의 데미지를 줄 것인가?)")]
     public int power;
+
+    public GameObject piece;
+
     bool crack;        //균열이 있는지?
     bool crumbling; //무너지는 중?
     Vector3 target_position;
@@ -69,7 +72,14 @@ public class PillarFloor : MonoBehaviour {
                 hp -= 1;
 
                 if (hp <= 0)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        GameObject c_piece = (GameObject)Instantiate(piece, transform.position, Quaternion.identity);
+                    }
+
                     Destroy(gameObject);
+                }
             }
         }
 
