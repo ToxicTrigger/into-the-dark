@@ -37,8 +37,11 @@ public class BossRoomRelocation : MonoBehaviour {
         [Tooltip("Switch를 다 채우고 Order를 채울것")]
         public Transform[] switch_position;
         public Transform[] water_position;
+        public GameObject[] water_object;   //만약 웅덩이가 제각기 모양이 다르다면 이 곳에서 넣어줍시다. 
         public Transform[] enemy_position;
     }
+    //보스룸이 바뀔 때 요소들 (스위치, 물웅덩이, 잡몹)
+    //물웅덩이는 크기가 제각각 다른가요?
 
     [Tooltip("reloc_set 1에 time과 order의 배치 1개가 들어감")]
     public position_setd[] reloc_set;
@@ -46,14 +49,11 @@ public class BossRoomRelocation : MonoBehaviour {
 
     void Start () {
         //current_turn = Relocation_Turn.One;
-	}
-	
+	}	
 
 	void Update () {
 		
-	}
-
-    
+	}    
 
     public void togle_set()
     {

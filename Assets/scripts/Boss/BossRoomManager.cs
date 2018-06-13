@@ -25,6 +25,7 @@ public class BossRoomManager : MonoBehaviour {
     public Player player;
     [Tooltip("재배치 하는 스크립트와 총 스위치 개수를 통일할 것, 반드시 시간 스위치부터 입력할 것")]
     public BasicSwitch [] all_switch;
+    public GameObject enemy;
 
     [System.Serializable]
     public class PhasePillarList
@@ -34,6 +35,8 @@ public class BossRoomManager : MonoBehaviour {
     public PhasePillarList []phase_pillar_list;
 
     int boss_phase =1;
+
+    ArrayList water_list = new ArrayList();
 
     //public ObservableTorch[] torch;
 
@@ -123,6 +126,28 @@ public class BossRoomManager : MonoBehaviour {
                 BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].switch_position[random_Array[i]].transform.position;
             
         }
+
+
+        for (int i =0; i< BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].enemy_position.Length; i++)
+        {
+            GameObject _enemy = (GameObject)Instantiate(enemy, BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].enemy_position[i].position, Quaternion.identity);
+        }
+
+        for(int i=0; i<water_list.Count; i++)
+        {
+            Destroy((GameObject)water_list[i]);
+        }
+
+        water_list.Clear();
+
+        for(int i = 0; i< BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].water_position.Length; i++)
+        {
+            GameObject _water = (GameObject)Instantiate(BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].water_object[i], 
+                                                        BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].water_position[i].position, Quaternion.identity);
+
+            water_list.Add(_water);
+        }
+
         BossRoomRelocation.get_instance().togle_set();
     }
 
