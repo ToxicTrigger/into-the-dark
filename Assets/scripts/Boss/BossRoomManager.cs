@@ -27,6 +27,8 @@ public class BossRoomManager : MonoBehaviour {
     public BasicSwitch [] all_switch;
     public GameObject enemy;
 
+    public MeshRenderer[] alpha_ctrl_obj;
+
     [System.Serializable]
     public class PhasePillarList
     {
@@ -156,4 +158,36 @@ public class BossRoomManager : MonoBehaviour {
         boss_phase++;
     }
 
+
+    private void Update()
+    {
+        if (player_pos_check)
+        {
+            //일단 매니저에서 등록된 오브젝트의 위치와 비교
+            for (int i = 0; i < alpha_ctrl_obj.Length; i++)
+            {
+                alpha_ctrl_obj[i].material.color =
+                    player.transform.position.z >= alpha_ctrl_obj[i].gameObject.transform.position.z ? new Color(alpha_ctrl_obj[i].material.color.r, alpha_ctrl_obj[i].material.color.g, alpha_ctrl_obj[i].material.color.b, 0.5f) :
+                                                               new Color(alpha_ctrl_obj[i].material.color.r, alpha_ctrl_obj[i].material.color.g, alpha_ctrl_obj[i].material.color.b, 1.0f);
+
+            }
+        }
+    }
+
+    public bool player_pos_check;
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            player_pos_check = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            player_pos_check = false;
+        }
+    }
 }

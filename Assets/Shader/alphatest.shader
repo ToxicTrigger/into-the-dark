@@ -1,4 +1,4 @@
-﻿Shader "Custom/testShader" {
+﻿Shader "Custom/alphatest" {
 
 	Properties {
 		_Color ("Color", Color) = (0,0,0,1)

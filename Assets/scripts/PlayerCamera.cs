@@ -80,6 +80,8 @@ public class PlayerCamera : MonoBehaviour {
         shake = true;
         for (int i = 0; i < loop_cnt; i++)
         {
+            if(_power > 0)_power -= 0.7f;
+
             _offset.y -= _power;
             yield return new WaitForSeconds(loop_speed);
             _offset.y = offset.y;
