@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677361a1c92543b409c6de8fa1c96295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 419016032}
   p_camera: {fileID: 687983407}
 --- !u!4 &2863549
 Transform:
@@ -4389,7 +4389,6 @@ GameObject:
   m_Component:
   - component: {fileID: 356734568}
   - component: {fileID: 356734571}
-  - component: {fileID: 356734570}
   - component: {fileID: 356734569}
   m_Layer: 0
   m_Name: "\uC548\uB155 \uC5EC\uAE34 \uBCF4\uC2A4"
@@ -4423,41 +4422,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 48.83, y: 3.77, z: 45.13}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &356734570
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 356734567}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!33 &356734571
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5334,6 +5298,11 @@ Transform:
   m_Father: {fileID: 2032467626}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &419016032 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1156496781269014, guid: eec5f9072107099419123d965aa502af,
+    type: 2}
+  m_PrefabInternal: {fileID: 1071937340}
 --- !u!1 &419712376
 GameObject:
   m_ObjectHideFlags: 0
@@ -5757,9 +5726,9 @@ MonoBehaviour:
   c_shake_speed: 0.01
   c_shake_power: 20
   enemy_cnt: 3
-  enemy: {fileID: 0}
+  enemy: {fileID: 1759997280877100, guid: 527f70564bf58b7438137f26be3da7d5, type: 2}
   around_transform: {fileID: 1555714587}
-  player: {fileID: 0}
+  player: {fileID: 642029147}
   soar_event: {fileID: 465811133}
   rush_attack_timer: 3
   dis_standard: {x: 0, y: 0, z: 0}
@@ -5801,7 +5770,7 @@ MonoBehaviour:
     over_dis: 10
     cam_speed: 10
     rot_speed: 2
-    c_effect: 00000000
+    c_effect: 
     target_move_target: {fileID: 0}
     scene_change_condition: 0
     maintain_time: 0
@@ -44311,7 +44280,7 @@ MonoBehaviour:
   - {fileID: 1539065944}
   - {fileID: 694568539}
   - {fileID: 707445361}
-  enemy: {fileID: 0}
+  enemy: {fileID: 1759997280877100, guid: 527f70564bf58b7438137f26be3da7d5, type: 2}
   alpha_ctrl_obj:
   - {fileID: 676154355}
   - {fileID: 849852797}

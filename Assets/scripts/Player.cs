@@ -231,7 +231,7 @@ public class Player : MonoBehaviour{
         if(!character.isGrounded)
         {
             character.Move(Vector3.up * Physics.gravity.y * Time.deltaTime);
-            Debug.Log("Fly");
+            //Debug.Log("Fly");
         }
     }
 

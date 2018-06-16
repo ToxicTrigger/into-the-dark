@@ -52,12 +52,10 @@ public class ObjMove : Observer
         if (move)
         {
             transform.position += dir * move_speed * Time.deltaTime;
-            Debug.Log("d위치" + transform.position.y);
             if(transform.position.y >= -12.0f)
             {
                 transform.position = new Vector3(transform.position.x, -12, transform.position.z);
                 move = false;
-                Debug.Log("move_end");
             }
         }
     }

@@ -240,7 +240,7 @@ public abstract class AggroAI : Observable {
     {   
         if(other.CompareTag("Sword") || other.CompareTag("Arrow"))
         {
-            Debug.Log( other.name + " " + other.tag);
+            //Debug.Log( other.name + " " + other.tag);
             has_Hit = true;
         }
     }
@@ -256,7 +256,7 @@ public abstract class AggroAI : Observable {
     {   
         if(collision.gameObject.CompareTag("Arrow"))
         {
-            Debug.Log("Hit by Arrow");
+            //Debug.Log("Hit by Arrow");
             StartCoroutine(update_hit(collision.gameObject.GetComponent<Arrow>().power));
             Destroy(collision.gameObject);
         }else if(collision.gameObject.CompareTag("Sword"))
