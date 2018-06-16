@@ -24,8 +24,7 @@ public class TimeSwitch : BasicSwitch {
         //현재 활만 (근거리공격 추후 추가 어딨는지몰겠음ㅠㅜ) 모든 공격에 상호작용 하므로 속성체크안함
         if(other.CompareTag("Arrow") && !get_switch() && use_enable)
         {
-            StartCoroutine(switch_on_timer());
-            
+            StartCoroutine(switch_on_timer());            
         }
     }
 
@@ -47,7 +46,6 @@ public class TimeSwitch : BasicSwitch {
         {
             if (!time_switch_list[i].get_switch())
             {
-                Debug.Log(i +" = "+ time_switch_list[i].get_switch());
                 break;
             }
 

@@ -414,7 +414,7 @@ public class Boss_Worm : MonoBehaviour
                         }
                         break;
                     case Phase.three://내려가는 중 y좌표로 목표보다 아래라면 이동 완료로 본다.
-                        if (transform.position.y < move_target.y)
+                        if (transform.position.y <= move_target.y )
                         {
                             action_phase = Phase.one;
                             move_target = Vector3.zero;

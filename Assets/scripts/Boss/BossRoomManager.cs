@@ -89,7 +89,6 @@ public class BossRoomManager : MonoBehaviour {
 
     public void set_switch_pos()
     {
-        Debug.Log("set_switch_pos");
         int[] random_Array = new int[all_switch.Length];
         int num = -1;
 
@@ -102,7 +101,7 @@ public class BossRoomManager : MonoBehaviour {
         {
             if(i <= 3)
             {
-                num = Random.Range(0, 4);
+                num = Random.Range(0, 3);   //2번째 
 
             }
 

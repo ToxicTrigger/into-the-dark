@@ -24,7 +24,6 @@ public class OrderSwitchCheck : MonoBehaviour {
 
     public void check_number(int _num)
     {
-        Debug.Log("순서스위치 체크실행");
         if (count == 0) count = 1;
         
         success = ( _num == count ? true : false );
