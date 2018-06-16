@@ -230,7 +230,7 @@ public class Boss_Worm : MonoBehaviour
     {
         boss_cry.Play();
         action_state = Action.Ready;    //이동을 하지 않기 위함 (이 자리를 공격시작 자리로 정한다.)
-        BossRoomManager.get_instance().send_attack_count_ui(rush_attack_timer);
+        //BossRoomManager.get_instance().send_attack_count_ui(rush_attack_timer);
         rush_attack_start_pos = transform.position;
 
         yield return new WaitForSeconds(rush_attack_timer); // 공격 대기시간

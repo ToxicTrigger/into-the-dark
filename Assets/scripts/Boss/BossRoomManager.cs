@@ -82,10 +82,6 @@ public class BossRoomManager : MonoBehaviour {
             phase_pillar_list[boss_phase-1].c_pillar[i].crumbling_all();
     }
 
-    public void send_attack_count_ui(int _time)
-    {
-        UIManager.get_instance().play_attack_timer(_time);
-    }
 
     public void set_switch_pos()
     {

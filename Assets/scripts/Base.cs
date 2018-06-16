@@ -83,6 +83,7 @@ public class Base : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+        //Debug.Log("In" + other.name);
         if (other.gameObject.CompareTag("Arrow"))
         {
             Arrow tmp = other.gameObject.GetComponent<Arrow>();
@@ -115,8 +116,10 @@ public class Base : MonoBehaviour {
 
     private void OnTriggerExit(Collider other)
     {
+         Debug.Log("Out" + other.name);
         if (other.CompareTag("TotemAggro"))
         {
+           
             TotemIn = false;
             if (!has_clear) state = State.Idle;
         }

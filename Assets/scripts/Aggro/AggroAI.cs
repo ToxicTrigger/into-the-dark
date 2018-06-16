@@ -18,10 +18,13 @@ public abstract class AggroAI : Observable {
     public Vector3 origin_pos;
     public Animator ani;
     public string cur_ani;
-    public bool has_FoundTarget, has_RangedTarget, has_Dead, has_Hit;
+    public bool has_FoundTarget, has_RangedTarget, has_Dead, has_Hit, has_patrol;
     public float attack_range = 1.0f;
     public Attackable attack;
     public Damageable damage;
+    public Player player;
+    public Rigidbody rig;
+    public GameObject DeadParticle;
 
     //구현은 HunterAI 참조
     public abstract void FSM(AggroAI ai);
@@ -68,7 +71,7 @@ public abstract class AggroAI : Observable {
 
         }
     }
-
+    bool has_registered;
     void update_move()
     {
         if(target != null)
@@ -79,6 +82,11 @@ public abstract class AggroAI : Observable {
                 na.SetDestination(target.transform.position);
                 has_carry_on = true;
                 has_FoundTarget = true;
+                if(!has_registered)
+                {
+                    if(player != null) player.is_target_something += 1;
+                    has_registered = true;
+                }
             }
             else
             {
@@ -86,10 +94,16 @@ public abstract class AggroAI : Observable {
                 target = null;
                 has_carry_on = false;
                 high_aggro = 0;
+                if(has_registered)
+                {
+                    if(player != null) player.is_target_something -= 1;
+                    has_registered = false;
+                }
             }
         }
         else
         {
+            if(na.enabled & !has_patrol)
             na.SetDestination(origin_pos);
             has_FoundTarget = false;
         }
@@ -112,6 +126,7 @@ public abstract class AggroAI : Observable {
         ani.SetBool("hasRangedPlayer", has_RangedTarget);
         ani.SetBool("hasDead", has_Dead);
         ani.SetBool("hasHit", has_Hit);
+        ani.SetBool("hasPatrol", has_patrol);
     }
 
     private void Awake()
@@ -121,6 +136,51 @@ public abstract class AggroAI : Observable {
         ani = GetComponent<Animator>();
         attack = GetComponent<Attackable>();
         damage = GetComponent<Damageable>();
+        player = FindObjectOfType<Player>();
+    }
+    float rally_tick, patrol_done;
+    void Update_rally_point()
+    {   
+        if(has_patrol)
+        {
+            if(patrol_done >= 2.0f)
+            {
+                patrol_done = 0;
+                has_patrol =false;
+            }else{
+                patrol_done += Time.deltaTime;
+            }
+        }
+
+        if(!has_FoundTarget & !has_RangedTarget)
+        {   
+            if(rally_tick >= 5.0f){
+                has_patrol = true;
+                float x = Random.Range(-4, 4);
+                float z = Random.Range(-4, 4);
+                Vector3 pos = transform.position;
+                pos.x += x;
+                pos.z += z;
+                na.SetDestination(pos);
+                //Debug.Log("work" + na.pathPending);
+                rally_tick = 0;
+            }else{
+                //has_patrol = false;
+                rally_tick += Time.deltaTime;
+            }
+        }else{
+            has_patrol = false;
+        }
+    }
+
+    IEnumerator Make_DeadEffect()
+    {
+        yield return new WaitForSeconds(0.5f);
+                if(DeadParticle != null)
+            {
+                GameObject tmp = Instantiate(DeadParticle, transform.position, Quaternion.identity, null);
+                Destroy(tmp, 1.0f);
+            }
     }
     
     void Update () {
@@ -136,13 +196,23 @@ public abstract class AggroAI : Observable {
             has_Dead = true;
             //ani.applyRootMotion = false;
             enabled = false;
-            
+            if(rig != null)
+            {
+                rig.isKinematic = false;
+                rig.transform.parent = null;
+                rig.AddForce((transform.position - player.transform.position).normalized * 12, ForceMode.Impulse);
+                Destroy(rig.gameObject, 2.0f);
+            }
+
+
             na.enabled = false;
+            StartCoroutine(Make_DeadEffect());
             Destroy(gameObject, 1.0f);
         }
 
         update_attackable_range();
         update_state();
+        Update_rally_point();
 
         FSM(this);
     }
@@ -162,31 +232,48 @@ public abstract class AggroAI : Observable {
 
         this.damage.Hp -= damage;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         has_Hit = false;
     }
 
     private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Sword") | other.CompareTag("Arrow"))
+    {   
+        if(other.CompareTag("Sword") || other.CompareTag("Arrow"))
         {
+            Debug.Log( other.name + " " + other.tag);
             has_Hit = true;
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Sword") | other.CompareTag("Arrow"))
+        if (other.CompareTag("Sword") || other.CompareTag("Arrow"))
         {
             has_Hit = false;
         }
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
+    {   
         if(collision.gameObject.CompareTag("Arrow"))
         {
+            Debug.Log("Hit by Arrow");
             StartCoroutine(update_hit(collision.gameObject.GetComponent<Arrow>().power));
             Destroy(collision.gameObject);
+        }else if(collision.gameObject.CompareTag("Sword"))
+        {
+             has_Hit = true;
         }
+    }
+
+    private void OnCollisionExit(Collision other) {
+        if(other.gameObject.CompareTag("Sword"))
+        {
+             has_Hit = false;
+        }
+    }
+
+    private void OnDestroy() {
+        if(has_registered) 
+        if(player != null) player.is_target_something -= 1;
     }
 }

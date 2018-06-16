@@ -32,7 +32,7 @@ public class Attackable : MonoBehaviour {
                     }
                     else
                     {
-                        player.Hp -= Damage;
+                        player.Damaged(Damage, attackTick);
                         tick = 0;
                     }
                 }
@@ -52,10 +52,15 @@ public class Attackable : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Enemy"))
+        if(other.CompareTag("Enemy") & !gameObject.CompareTag("Enemy"))
         {
-            Damageable dam = other.GetComponent<Damageable>();
-            dam.Hp -= Damage;
+            Debug.Log("dd" + other.tag + " : " + gameObject.tag);
+            if(!gameObject.CompareTag("TotemAggro"))
+            {
+                Damageable dam = other.GetComponent<Damageable>();
+                dam.Hp -= Damage;
+           }
+
         }
     }
 

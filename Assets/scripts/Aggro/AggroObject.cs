@@ -36,7 +36,7 @@ public class AggroObject : Observer {
     {
         if (other.GetComponent<AggroDetector>() != null)
         {
-            Debug.Log(name);
+            
             other.GetComponent<AggroDetector>().ao.remove_observer(this);
         }
     }
