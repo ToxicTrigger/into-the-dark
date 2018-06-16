@@ -27,7 +27,6 @@ public class HitSwitch : BasicSwitch {
             Destroy(collision.gameObject);
             set_switch(true);
         }
-        
     }
 
 }

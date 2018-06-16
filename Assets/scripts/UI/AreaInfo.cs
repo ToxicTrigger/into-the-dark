@@ -64,4 +64,11 @@ public class AreaInfo : MonoBehaviour {
 			StartCoroutine(UpDown());
 		}
 	}
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Area"))
+        {
+            Down();
+        }
+    }
 }
