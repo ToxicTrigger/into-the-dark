@@ -40,7 +40,8 @@ public class EventPlot : MonoBehaviour
         public float cam_speed;
         public float rot_speed;
         public CameraEffect[] c_effect;
-        public Transform target_move_target;
+        public GameObject enemy;
+        public Transform enemy_move_target;
         public Finish_Condition scene_change_condition;
         public float maintain_time;
         public bool fixed_x;
@@ -76,7 +77,7 @@ public class EventPlot : MonoBehaviour
         //*타겟 처리*
         if (scene[scene_turn].target_ctrl)
         {
-
+            scene[scene_turn].enemy.transform.position = scene[scene_turn].enemy_move_target.position;
         }
 
         //*카메라 처리*

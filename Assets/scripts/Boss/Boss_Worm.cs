@@ -26,7 +26,8 @@ public class Boss_Worm : MonoBehaviour
         Groggy,         //그로기 상태
         Groggy_End,   //그로기 끝난 상태
         Death,            //죽음
-        Ready           //준비상태 모든 상태가 되기 전 거치는 상태임
+        Ready,           //준비상태 모든 상태가 되기 전 거치는 상태임
+        Up
     }
 
     //각 Action상태에 대한 단계를 표시 (rush는 두가지고 soar도 세가지 상태로 나누려 했는데 차라리 이렇게 하는건?)
@@ -138,6 +139,8 @@ public class Boss_Worm : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKey(KeyCode.Space))
+            action_ready(Action.Rush_Attack);
         around_transform.RotateAround(player.transform.position, Vector3.up, 2f);
         move_control();
 
@@ -149,13 +152,13 @@ public class Boss_Worm : MonoBehaviour
 
     private void LateUpdate()
     {
-        //if (!edge_attack)
-        //{
+        if (!edge_attack)
+        {
             for (int i = 0; i < tail.Length; i++)
             {
                 tail[i].move_update(tail_dir);
             }
-        //}
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -194,9 +197,13 @@ public class Boss_Worm : MonoBehaviour
         if (action_state == Action.Rush_Attack) action_rush_attack();
         if (action_state == Action.Rush_Attack_End) action_rush_attack_end();
         if (action_state == Action.Soar_Attack) action_soar_attack();
+        if (action_state == Action.Up) action_up();
 
-        if (action_state != Action.Idle && action_state != Action.Rush_Attack)
+        if (action_state != Action.Idle && action_state != Action.Rush_Attack && action_state != Action.Ready)
+        {
             transform.position += move_dir * speed * Time.deltaTime;
+            Debug.Log(move_dir);
+        }
 
         tail_dir = move_dir; 
         move_dir = Vector3.zero;
@@ -208,6 +215,11 @@ public class Boss_Worm : MonoBehaviour
         transform.position = around_transform.position;
     }
 
+    void action_up()
+    {
+        move_dir = Vector3.up;
+        rush_attack_start_pos = transform.position;
+    }
 
     void action_rush_attack()
     {
@@ -229,7 +241,9 @@ public class Boss_Worm : MonoBehaviour
     IEnumerator Rush_Attack_Timer()
     {
         boss_cry.Play();
-        action_state = Action.Ready;    //이동을 하지 않기 위함 (이 자리를 공격시작 자리로 정한다.)
+        if (action_state == Action.Ready)
+            action_state = Action.Up;    //이동을 하지 않기 위함 (이 자리를 공격시작 자리로 정한다.)
+        else action_state = Action.Ready;
         rush_attack_start_pos = transform.position;
 
         yield return new WaitForSeconds(rush_attack_timer); // 공격 대기시간
@@ -285,8 +299,9 @@ public class Boss_Worm : MonoBehaviour
                 break;
             case Action.Rush_Attack:
                 // 어그로 신호가 들어올 때 !한번! 해당 함수가 실행되지만. 코루틴 중첩(?)방지를 위해 Stop해준다. 
-                if (action_state == Action.Idle) //현재 Idle상태에서만 Rush_Attack을 실행한다.
+                if (action_state == Action.Idle || action_state == Action.Ready) //현재 Idle상태에서만 Rush_Attack을 실행한다.
                 {
+                    Debug.Log("rushattack");
                     timer = Rush_Attack_Timer();
                     StopCoroutine(timer);
                     StartCoroutine(timer);
@@ -324,7 +339,9 @@ public class Boss_Worm : MonoBehaviour
             case Action.Death:
 
                 break;
-
+            case Action.Ready:
+                action_state = Action.Ready;
+                break;
             default:
                 break;
         }
@@ -341,8 +358,10 @@ public class Boss_Worm : MonoBehaviour
                 break;
             case Action.Rush_Attack:
                 //Rush_Attack상태에서의 이동 완료 체크.
-                if(around_transform.position.y -5 > tail[0].transform.position.y)
+                //if(around_transform.position.y -5 > tail[0].transform.position.y)
+                if(around_transform.position.y > tail[tail.Length-1].transform.position.y)
                 {
+                    Debug.Log("RushAttackEnd || this.head.Ypos = \"" + tail[0].transform.position.y + "\"  || around_Ypos = \"" +around_transform.position.y + "\"");
                     action_state = Action.Rush_Attack_End;
                     return true;
                 }
@@ -400,8 +419,6 @@ public class Boss_Worm : MonoBehaviour
 
                         if(cur_dis < origin_dis - split_num)
                         {
-                            //몹 동적생성
-                            GameObject _enemy = (GameObject)Instantiate(enemy, tail[0].transform.position, Quaternion.identity);
                             split_num += split_num;
                         }
 
