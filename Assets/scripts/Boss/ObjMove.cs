@@ -40,10 +40,10 @@ public class ObjMove : Observer
 
             if (move_dir == Direction.Up)
             {
-                if (transform.position.y >= -10.0f)
+                if (transform.position.y >= move_target.y)
                 {
                     move_sound.Stop();
-                    transform.position = new Vector3(transform.position.x, -10, transform.position.z);
+                    transform.position = new Vector3(transform.position.x, move_target.y, transform.position.z);
                     move = false;
                 }
             }

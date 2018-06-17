@@ -112,7 +112,11 @@ public class EventPlot : MonoBehaviour
 
         p_camera.transform.position = scene[scene_turn].camera_position.position;
 
-        fixed_vector = scene[scene_turn].cam_pos_target.position + (scene[scene_turn].cam_pos_target.position - p_camera.transform.position).normalized * scene[scene_turn].over_dis;
+        Vector3 dir = ((scene[scene_turn].cam_pos_target.position - p_camera.transform.position).normalized * scene[scene_turn].over_dis);
+        dir.x = 0;
+
+        fixed_vector = scene[scene_turn].cam_pos_target.position + dir;
+        
         origin_distance = Vector2.Distance(new Vector2(fixed_vector.x, fixed_vector.z), new Vector2(p_camera.transform.position.x, p_camera.transform.position.z));
     }
 

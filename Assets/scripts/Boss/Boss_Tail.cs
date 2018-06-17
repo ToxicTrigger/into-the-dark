@@ -83,7 +83,6 @@ public class Boss_Tail : MonoBehaviour
     {
         if (_parent.action_state == Boss_Worm.Action.Groggy)
         {
-            Debug.Log(other.tag);
             if (other.CompareTag("Arrow"))
             {
                 Debug.Log("dd");

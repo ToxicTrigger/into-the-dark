@@ -77,7 +77,6 @@ public class PillarFloor : MonoBehaviour {
 
                 if (hp <= 0)
                 {
-                    Debug.Log("Piece.child.count = " + piece.transform.childCount);
                     for (int i = 0; i < piece.transform.childCount; i++)
                     {
                         GameObject c_piece = (GameObject)Instantiate(piece.transform.GetChild(i).gameObject , transform.position, Quaternion.identity);

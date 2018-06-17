@@ -98,7 +98,7 @@ public class Boss_Worm : MonoBehaviour
     [Tooltip("솟아오를 위치 (높이)")]
     public float soar_height;
     [Tooltip("해당 스테이지의 중간지점, 배치 후 넣어줄 예정")]
-    public Transform stage_center;
+    public Transform [] soar_target;
     public float soar_attack_speed;
     [Tooltip("위 아래로 몇번 흔들건지")]
     public int c_shake_cnt;
@@ -111,7 +111,7 @@ public class Boss_Worm : MonoBehaviour
     public GameObject enemy;
     float split_num;    // 총 거리를 몹의 수로 나눈 수 저장(?)
 
-
+    int soar_count;
 
     [Space(16)]
 
@@ -197,7 +197,7 @@ public class Boss_Worm : MonoBehaviour
         BossRoomManager.get_instance().off_switch();
         BossRoomManager.get_instance().set_switch_pos();
         BossRoomManager.get_instance().add_phase(); //페이즈 +1        
-
+        soar_event.scene[0].cam_pos_target = soar_target[soar_count].transform;
         EventManager.get_instance().event_setting(soar_event);
     }
 
@@ -379,7 +379,7 @@ public class Boss_Worm : MonoBehaviour
             case Action.Rush_Attack:
                 //Rush_Attack상태에서의 이동 완료 체크.
                 //if(around_transform.position.y -5 > tail[0].transform.position.y)
-                if(around_transform.position.y > tail[tail.Length-1].transform.position.y)
+                if(around_transform.position.y-10 > tail[tail.Length-1].transform.position.y)
                 {
                     Debug.Log("RushAttackEnd || this.head.Ypos = \"" + tail[0].transform.position.y + "\"  || around_Ypos = \"" +around_transform.position.y + "\"");
                     action_state = Action.Rush_Attack_End;
@@ -428,7 +428,7 @@ public class Boss_Worm : MonoBehaviour
                         if (transform.position.y > move_target.y)
                         {
                             action_phase = Phase.two;
-                            move_target = new Vector3(stage_center.position.x, transform.position.y, stage_center.position.z);
+                            move_target = new Vector3(soar_target[soar_count].position.x, transform.position.y, soar_target[soar_count].position.z);
                             origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
                             split_num = origin_dis / enemy_cnt;
                             return false;
@@ -445,19 +445,20 @@ public class Boss_Worm : MonoBehaviour
                         if (cur_dis < 0.5)
                         {
                             action_phase = Phase.three;
-                            move_target = new Vector3(stage_center.position.x, around_transform.position.y, stage_center.position.z);
+                            move_target = new Vector3(soar_target[soar_count].position.x, around_transform.position.y, soar_target[soar_count].position.z);
                             return false;
                         }
                         break;
                     case Phase.three://내려가는 중 y좌표로 목표보다 아래라면 이동 완료로 본다.
                         if (tail[0].transform.position.y <= move_target.y )
                         {
+                            soar_count++;
+                            action_ready(Action.Idle);
                             action_phase = Phase.one;
                             move_target = Vector3.zero;
                             EventManager.get_instance().off_event();
                             BossRoomManager.get_instance().crumbling_pillar_all();  //페이즈에 따라 기둥을 무너뜨린다. 
                             EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Up_Down);
-
                             return true;
                         }
                         break;

@@ -45,6 +45,7 @@ public class BossRoomManager : MonoBehaviour {
 
     void Start()
     {
+        all_switch[3].set_switch(true);
         set_switch_pos(); 
     }
 
@@ -93,7 +94,7 @@ public class BossRoomManager : MonoBehaviour {
 
     public void set_switch_pos()
     {
-        int[] random_Array = new int[all_switch.Length];
+        int[] random_Array = new int[BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].switch_position.Length];
         int num = -1;
 
         for(int i =0; i < random_Array.Length; i++)
@@ -101,18 +102,20 @@ public class BossRoomManager : MonoBehaviour {
             random_Array[i] = num;
         }
 
-        for (int i = 0; i < all_switch.Length; i++)
+        for (int i = 0; i < random_Array.Length; i++)
         {
-            if(i <= 3)
-            {
-                num = Random.Range(0, 3);   //2번째 
+            //if(i <= 3)
+            //{
+            //    num = Random.Range(0, 3);   //2번째 
 
-            }
+            //}
 
-            if(i >= 4)
-            {
-                num = Random.Range(4, all_switch.Length);
-            }
+            //if(i >= 4)
+            //{
+            //    num = Random.Range(4, all_switch.Length);
+            //}
+
+            num = Random.Range(0, BossRoomRelocation.get_instance().reloc_set[(int)BossRoomRelocation.get_instance().current_turn].switch_position.Length);
 
             for (int z = 0; z < random_Array.Length ; z++)
             {

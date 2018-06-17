@@ -54,7 +54,6 @@ public class PlayerCamera : MonoBehaviour {
             if (origin != null)
             {
                 tr.position = Vector3.Lerp(tr.position, origin.position + _offset, Time.deltaTime * speed);
-                Debug.Log(_offset);
             }
         }
     }
