@@ -7,6 +7,9 @@ public class Boss_Worm : MonoBehaviour
     //이동과 기능(hp,공격등의)을 담당 
 
     public AudioSource boss_cry;
+    public AudioSource [] boss_rush_attack;
+    public AudioSource boss_soar_attack;
+    public AudioSource boss_groggy;
     Animator this_animator;
     //꼬리 움직임
     public Boss_Tail[] tail;
@@ -182,7 +185,6 @@ public class Boss_Worm : MonoBehaviour
             action_ready(Action.Death);
             Destroy(this.gameObject);
         }
-
         action_ready(Action.Soar_Attack);  //현재 데미지를 입으면 Idle 상태로 전환한다.
         BossRoomManager.get_instance().off_switch();
         BossRoomManager.get_instance().set_switch_pos();
@@ -202,7 +204,7 @@ public class Boss_Worm : MonoBehaviour
         if (action_state != Action.Idle && action_state != Action.Rush_Attack && action_state != Action.Ready)
         {
             transform.position += move_dir * speed * Time.deltaTime;
-            Debug.Log(move_dir);
+
         }
 
         tail_dir = move_dir; 
@@ -255,6 +257,9 @@ public class Boss_Worm : MonoBehaviour
         action_state = Action.Rush_Attack;  //공격상태로 전환
         speed = rush_attack_speed;          //공격 스피드로 전환
         jump_power = rush_jump_power;
+
+        boss_rush_attack[Random.Range(0, 2)].Play();
+
     }
 
     void action_rush_attack_end()
@@ -301,7 +306,6 @@ public class Boss_Worm : MonoBehaviour
                 // 어그로 신호가 들어올 때 !한번! 해당 함수가 실행되지만. 코루틴 중첩(?)방지를 위해 Stop해준다. 
                 if (action_state == Action.Idle || action_state == Action.Ready) //현재 Idle상태에서만 Rush_Attack을 실행한다.
                 {
-                    Debug.Log("rushattack");
                     timer = Rush_Attack_Timer();
                     StopCoroutine(timer);
                     StartCoroutine(timer);
@@ -323,12 +327,14 @@ public class Boss_Worm : MonoBehaviour
                 action_state = Action.Soar_Attack;
                 move_target = transform.position + (Vector3.up * soar_height) ;
                 speed = soar_attack_speed;
+                boss_soar_attack.Play();
                 break;
             case Action.Groggy:
                 //공격가능 상태   
                 //(임시) 그로기 상태가 되면 현재위치 + 플레이어 y위치로 이동
                 transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
                 action_state = Action.Groggy;
+                boss_groggy.Play();
                 if(timer != null)StopCoroutine(timer); //그로기 상태가 되면 공격을 취소함
 
                 break;
@@ -430,13 +436,13 @@ public class Boss_Worm : MonoBehaviour
                         }
                         break;
                     case Phase.three://내려가는 중 y좌표로 목표보다 아래라면 이동 완료로 본다.
-                        if (transform.position.y <= move_target.y )
+                        if (tail[0].transform.position.y <= move_target.y )
                         {
                             action_phase = Phase.one;
                             move_target = Vector3.zero;
                             EventManager.get_instance().off_event();
                             BossRoomManager.get_instance().crumbling_pillar_all();  //페이즈에 따라 기둥을 무너뜨린다. 
-                            EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed);
+                            EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Up_Down);
 
                             return true;
                         }

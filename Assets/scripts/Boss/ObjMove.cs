@@ -10,6 +10,8 @@ public class ObjMove : Observer
     public int clear_cnt;
     public bool clear;
 
+    public AudioSource move_sound;
+
     public enum Direction
     {
         Up,
@@ -52,9 +54,10 @@ public class ObjMove : Observer
         if (move)
         {
             transform.position += dir * move_speed * Time.deltaTime;
-            if(transform.position.y >= -12.0f)
+            if(transform.position.y >= -10.0f)
             {
-                transform.position = new Vector3(transform.position.x, -12, transform.position.z);
+                move_sound.Stop();
+                transform.position = new Vector3(transform.position.x, -10, transform.position.z);
                 move = false;
             }
         }
@@ -77,7 +80,8 @@ public class ObjMove : Observer
     {
 
         yield return new WaitForSeconds(move_delay);
-        
+
+        move_sound.Play();
         move = true;
     }
 

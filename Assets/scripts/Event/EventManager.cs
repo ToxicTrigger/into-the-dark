@@ -52,10 +52,27 @@ public class EventManager : MonoBehaviour {
         p_camera.set_state(PlayerCamera.State.Follow);  //현재 follow상태로 바꿔주고 있으나 다음부터는 이전 상태 (원래 상태로 바꿔야함) 고정에서 이벤트로 바뀌었을 수도 있으니까!
         cur_event.set_play_event(false);
     }
-
-    public void camera_shake(float _power, int loop_cnt, float loop_speed)
+    public enum Direction
     {
-        if(!p_camera.shake)
-            p_camera.up_down_move(_power, loop_cnt , loop_speed);
+        Up_Down,
+        Left_Right
+    }
+    Direction dir;
+    public void camera_shake(float _power, int loop_cnt, float loop_speed, Direction _dir)
+    {
+        if (!p_camera.shake)
+        {
+            switch (_dir)
+            {
+                case Direction.Up_Down:
+                    p_camera.up_down_move(_power, loop_cnt, loop_speed);
+                    break;
+                case Direction.Left_Right:
+                    p_camera.left_right_move(_power, loop_cnt, loop_speed);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

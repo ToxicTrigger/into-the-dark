@@ -12,7 +12,15 @@ public class EntranceTrigger : MonoBehaviour {
     Animation animation;
     bool ongoing;
 
-	void Start () {
+    public AudioSource howling_sound;
+    
+    [Tooltip("몇번 흔들건지")]
+    public int c_shake_cnt;
+    [Tooltip("반복 속도 ")]
+    public float c_shake_speed;
+    public float c_shake_power;
+
+    void Start () {
         animator = boss.gameObject.GetComponent<Animator>();
         animation = boss.gameObject.GetComponent<Animation>();
         ongoing = false;
@@ -20,13 +28,10 @@ public class EntranceTrigger : MonoBehaviour {
 	
 	void Update () {
 
-        Debug.Log(animator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
         if (ongoing)
         {
-            Debug.Log("ongoing");
             if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Idle")
             {
-                Debug.Log("러쉬어택연계");
                 ongoing = false;
                 boss.action_ready(Boss_Worm.Action.Rush_Attack);
                 boss.edge_attack = false;
@@ -56,8 +61,13 @@ public class EntranceTrigger : MonoBehaviour {
 
     IEnumerator timer()
     {
-        yield return new WaitForSeconds(0.3f);
+        
+        yield return new WaitForSeconds(0.8f);
         animator.SetBool("howling", false);
         ongoing = true;
+        howling_sound.Play();
+        yield return new WaitForSeconds(0.5f);
+        EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Left_Right);
+        //사운드 재생
     }
 }

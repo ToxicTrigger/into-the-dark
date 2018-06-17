@@ -78,8 +78,11 @@ public class BossRoomManager : MonoBehaviour {
     //등록된 모든 기둥을 무너뜨린다.
     public void crumbling_pillar_all()
     {
-        for(int i =0; i< phase_pillar_list[boss_phase-1].c_pillar.Length; i++)
-            phase_pillar_list[boss_phase-1].c_pillar[i].crumbling_all();
+        if (phase_pillar_list.Length > 0)
+        {
+            for (int i = 0; i < phase_pillar_list[boss_phase - 1].c_pillar.Length; i++)
+                phase_pillar_list[boss_phase - 1].c_pillar[i].crumbling_all();
+        }
     }
 
 

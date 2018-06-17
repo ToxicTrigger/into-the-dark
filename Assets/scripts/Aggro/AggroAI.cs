@@ -256,7 +256,7 @@ public abstract class AggroAI : Observable {
     {   
         if(collision.gameObject.CompareTag("Arrow"))
         {
-            //Debug.Log("Hit by Arrow");
+            Debug.Log("Hit by Arrow");
             StartCoroutine(update_hit(collision.gameObject.GetComponent<Arrow>().power));
             Destroy(collision.gameObject);
         }else if(collision.gameObject.CompareTag("Sword"))

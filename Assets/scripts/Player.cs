@@ -22,8 +22,6 @@ public class Player : MonoBehaviour{
     public GameObject totem;
     [Tooltip("플레이어가 토템을 겨냥하고 있나?")]
     public bool has_targeting_totem;
-    [Tooltip("플레이어의 체력 UI 를 넣으세요")]
-    public Image Hp;
     
     public Text totem_cnt;
     public Damageable damageable;
@@ -247,7 +245,7 @@ public class Player : MonoBehaviour{
             is_fighting_something = true;
         }
 
-        if(click_tick >= 0.6f)
+        if(click_tick >= 0.4f)
         {   
             click_tick = 0;
             attack_click = false;

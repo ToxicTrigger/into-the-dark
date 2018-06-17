@@ -26,6 +26,8 @@ public class PlayerCamera : MonoBehaviour {
     public bool shake;
     IEnumerator timer;
 
+    Transform origin;
+
 	void Start () {
         tr = transform;
         cam_state = State.Follow;
@@ -47,6 +49,11 @@ public class PlayerCamera : MonoBehaviour {
         {
             tr.position = player.position + _offset;
         }
+        else if(cam_state == State.Event)
+        {
+            tr.position = Vector3.Lerp(tr.position, origin.position + _offset, Time.deltaTime * speed);
+            Debug.Log(_offset);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -64,6 +71,7 @@ public class PlayerCamera : MonoBehaviour {
 
     public void up_down_move(float _power, int loop_cnt, float loop_speed)
     {
+        origin = tr;
         if (timer != null)
         {
             _offset.y = offset.y;
@@ -72,6 +80,23 @@ public class PlayerCamera : MonoBehaviour {
             StopCoroutine(timer);
         }
         timer = up_down_timer(_power,loop_cnt, loop_speed);
+        StartCoroutine(timer);
+    }
+
+    public void left_right_move(float _power, int loop_cnt, float loop_speed)
+    {
+
+        origin = tr;
+        if (timer != null)
+        {
+            _offset.x = offset.x;
+            tr.position = player.position + _offset;
+            cam_state = State.Follow;
+            StopCoroutine(timer);
+        }
+        _offset.y = 0;
+        _offset.z = 0;
+        timer = left_right_timer(_power, loop_cnt, loop_speed);
         StartCoroutine(timer);
     }
 
@@ -90,6 +115,26 @@ public class PlayerCamera : MonoBehaviour {
             _offset.y = offset.y;
         }
         cam_state = State.Follow;
+        _offset = offset;
+        shake = false;
+    }
+
+    IEnumerator left_right_timer(float _power, int loop_cnt, float loop_speed)
+    {
+        shake = true;
+        for (int i = 0; i < loop_cnt; i++)
+        {
+            if (_power > 0) _power -= 0.7f;
+
+            _offset.x -= _power;
+            yield return new WaitForSeconds(loop_speed);
+            _offset.x = offset.x;
+            _offset.x += _power;
+            yield return new WaitForSeconds(loop_speed);
+            _offset.x = offset.x;
+        }
+        cam_state = State.Follow;
+        _offset = offset;
         shake = false;
     }
 
@@ -106,6 +151,11 @@ public class PlayerCamera : MonoBehaviour {
     {
         cam_state = _stat;
         if (_stat == State.Follow)
+        {
             speed = move_speed;
+            _offset = offset;
+        }
+        if (_stat == State.Event)
+            _offset = Vector3.zero;
     }
 }

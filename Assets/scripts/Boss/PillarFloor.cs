@@ -22,6 +22,8 @@ public class PillarFloor : MonoBehaviour {
     float origin_dis;
     Quaternion target_rot = Quaternion.identity;
 
+    public AudioSource [] drop_sound;
+
     void Update () {
         if (crumbling)
         {
@@ -35,8 +37,9 @@ public class PillarFloor : MonoBehaviour {
 
             if(move_complete())
             {
-                //EventManager.get_instance().camera_shake(power);
-                crumbling = false;
+                drop_sound[Random.Range(0,2)].Play();
+                   //EventManager.get_instance().camera_shake(power);
+                   crumbling = false;
             }
         }
 	}
