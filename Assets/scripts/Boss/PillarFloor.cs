@@ -12,6 +12,7 @@ public class PillarFloor : MonoBehaviour {
     public int power;
 
     public GameObject piece;
+    public GameObject[] damage_obj; 
 
     bool crack;        //균열이 있는지?
     bool crumbling; //무너지는 중?
@@ -72,13 +73,14 @@ public class PillarFloor : MonoBehaviour {
         {
             if (other.CompareTag("Sword"))
             {
-                hp -= 1;
+                add_damage(1);
 
                 if (hp <= 0)
                 {
-                    for (int i = 0; i < 5; i++)
+                    Debug.Log("Piece.child.count = " + piece.transform.childCount);
+                    for (int i = 0; i < piece.transform.childCount; i++)
                     {
-                        GameObject c_piece = (GameObject)Instantiate(piece, transform.position, Quaternion.identity);
+                        GameObject c_piece = (GameObject)Instantiate(piece.transform.GetChild(i).gameObject , transform.position, Quaternion.identity);
                     }
 
                     Destroy(gameObject);
@@ -95,19 +97,44 @@ public class PillarFloor : MonoBehaviour {
     {
         if (crack)
         {
+            if (collision.transform.CompareTag("Sword"))
+            {
+                add_damage(1);
+
+                if (hp <= 0)
+                {
+                    Debug.Log("Piece.child.count = " + piece.transform.childCount);
+                    for (int i = 0; i < piece.transform.childCount; i++)
+                    {
+                        GameObject c_piece = (GameObject)Instantiate(piece.transform.GetChild(i).gameObject, transform.position, Quaternion.identity);
+                    }
+
+                    Destroy(gameObject);
+                }
+            }
+
             if (collision.gameObject.CompareTag("Arrow"))
             {
                 if (collision.gameObject.GetComponent<Element>().type == Element.Type.Light)
                 {
-                    hp -= 3;
+                    add_damage(3);
                 }
                 else
-                    hp -= 1;
+                    add_damage(1);
+
 
                 if (hp <= 0)
-                    Destroy(gameObject);
+                {
+                    Debug.Log("Piece.child.count = " + piece.transform.childCount);
+                    for (int i = 0; i < piece.transform.childCount; i++)
+                    {
+                        GameObject c_piece = (GameObject)Instantiate(piece.transform.GetChild(i).gameObject, transform.position, Quaternion.identity);
+                    }
 
-                Debug.Log("화살 속성 = " + collision.gameObject.GetComponent<Element>().type);
+                    Destroy(gameObject);
+                }
+
+                //Debug.Log("화살 속성 = " + collision.gameObject.GetComponent<Element>().type);
                 Destroy(collision.gameObject);
             }
         }
@@ -121,6 +148,23 @@ public class PillarFloor : MonoBehaviour {
         }
     }
 
+    void add_damage(int _damage)
+    {
+        hp -= _damage;
+
+        for(int i = 0; i< damage_obj.Length; i++)
+        {
+            if (i == hp - 1)
+            {
+                if (!damage_obj[i].activeInHierarchy) damage_obj[i].SetActive(true);
+            }
+            else
+            {
+                if (damage_obj[i].activeInHierarchy) damage_obj[i].SetActive(false);
+            }
+        }
+        
+    }
 
 
 }

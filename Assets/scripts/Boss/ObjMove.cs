@@ -30,6 +30,58 @@ public class ObjMove : Observer
     float origin_dis;
 
 	void Start () {
+    }
+
+    private void Update()
+    {
+        if (move)
+        {
+            transform.position += dir * move_speed * Time.deltaTime;
+
+            if (move_dir == Direction.Up)
+            {
+                if (transform.position.y >= -10.0f)
+                {
+                    move_sound.Stop();
+                    transform.position = new Vector3(transform.position.x, -10, transform.position.z);
+                    move = false;
+                }
+            }
+            else if(move_dir == Direction.Down)
+            {
+                if (transform.position.y <= -20.0f)
+                {
+                    move_sound.Stop();
+                    transform.position = new Vector3(transform.position.x, -20, transform.position.z);
+                    move = false;
+                }
+            }
+        }
+    }
+
+    public override void notify(Observable obj)
+    {
+        BasicSwitch obj_switch = obj as BasicSwitch;
+        if (obj_switch.get_switch())
+        {         
+            cnt++;
+            if(cnt >= clear_cnt)
+            {
+                StartCoroutine(timer());
+            }
+        }
+        else
+        {
+            cnt--;
+            StartCoroutine(timer());
+        }
+    }
+
+    public IEnumerator timer()
+    {
+
+        move_dir = move_dir == Direction.Up ? Direction.Down : Direction.Up;
+
         switch (move_dir)
         {
             case Direction.Up:
@@ -47,37 +99,6 @@ public class ObjMove : Observer
             default:
                 break;
         }
-    }
-
-    private void Update()
-    {
-        if (move)
-        {
-            transform.position += dir * move_speed * Time.deltaTime;
-            if(transform.position.y >= -10.0f)
-            {
-                move_sound.Stop();
-                transform.position = new Vector3(transform.position.x, -10, transform.position.z);
-                move = false;
-            }
-        }
-    }
-
-    public override void notify(Observable obj)
-    {
-        if (!clear)
-        {
-            cnt++;
-            if(cnt >= clear_cnt)
-            {
-                clear = true;
-                StartCoroutine(timer());
-            }
-        }
-    }
-
-    IEnumerator timer()
-    {
 
         yield return new WaitForSeconds(move_delay);
 

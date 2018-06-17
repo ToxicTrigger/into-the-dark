@@ -51,8 +51,11 @@ public class PlayerCamera : MonoBehaviour {
         }
         else if(cam_state == State.Event)
         {
-            tr.position = Vector3.Lerp(tr.position, origin.position + _offset, Time.deltaTime * speed);
-            Debug.Log(_offset);
+            if (origin != null)
+            {
+                tr.position = Vector3.Lerp(tr.position, origin.position + _offset, Time.deltaTime * speed);
+                Debug.Log(_offset);
+            }
         }
     }
 
@@ -71,7 +74,6 @@ public class PlayerCamera : MonoBehaviour {
 
     public void up_down_move(float _power, int loop_cnt, float loop_speed)
     {
-        origin = tr;
         if (timer != null)
         {
             _offset.y = offset.y;
@@ -136,6 +138,7 @@ public class PlayerCamera : MonoBehaviour {
         cam_state = State.Follow;
         _offset = offset;
         shake = false;
+        origin = null;
     }
 
     //이벤트 타겟의 Transform을 모두 복사해온다.

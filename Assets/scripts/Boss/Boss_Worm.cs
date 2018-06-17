@@ -6,6 +6,8 @@ public class Boss_Worm : MonoBehaviour
 {
     //이동과 기능(hp,공격등의)을 담당 
 
+    Animator animator;
+
     public AudioSource boss_cry;
     public AudioSource [] boss_rush_attack;
     public AudioSource boss_soar_attack;
@@ -118,6 +120,8 @@ public class Boss_Worm : MonoBehaviour
     public Transform player;
     Vector3 move_dir;   //이동용
 
+    public Transform groggy_point;
+
     public EventPlot soar_event;
     /// //타이머
     public int rush_attack_timer;
@@ -129,6 +133,7 @@ public class Boss_Worm : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         this_animator = GetComponent<Animator>();
         StartCoroutine(start_timer());
         around_transform.position = new Vector3(player.position.x + idle_radius, player.position.y - idle_y_pos, player.position.z);
@@ -176,7 +181,7 @@ public class Boss_Worm : MonoBehaviour
         }
     }
 
-    void add_damage()
+    public void add_damage()
     {
         hp -= 1;
 
@@ -185,6 +190,9 @@ public class Boss_Worm : MonoBehaviour
             action_ready(Action.Death);
             Destroy(this.gameObject);
         }
+
+        animator.SetBool("groggy", false);
+        edge_attack = false;
         action_ready(Action.Soar_Attack);  //현재 데미지를 입으면 Idle 상태로 전환한다.
         BossRoomManager.get_instance().off_switch();
         BossRoomManager.get_instance().set_switch_pos();
@@ -291,6 +299,7 @@ public class Boss_Worm : MonoBehaviour
         switch (_action)
         {
             case Action.Idle:
+                animator.SetBool("groggy", false);
                 //around_transform을 플레이어의 발 아래 + x좌표로 반지름만큼 이동한 위치로 위치를 세팅한다.
                 action_state = Action.Idle;
                 around_transform.position = new Vector3(player.position.x + idle_radius, player.position.y - idle_y_pos, player.position.z);
@@ -332,7 +341,12 @@ public class Boss_Worm : MonoBehaviour
             case Action.Groggy:
                 //공격가능 상태   
                 //(임시) 그로기 상태가 되면 현재위치 + 플레이어 y위치로 이동
-                transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+                transform.position = groggy_point.position;
+                edge_attack = true;
+                Quaternion quat = Quaternion.identity;
+                quat = Quaternion.Euler(new Vector3(0, 140, 0));
+                transform.rotation = quat;
+                animator.SetBool("groggy", true);
                 action_state = Action.Groggy;
                 boss_groggy.Play();
                 if(timer != null)StopCoroutine(timer); //그로기 상태가 되면 공격을 취소함
@@ -453,6 +467,8 @@ public class Boss_Worm : MonoBehaviour
 
                 break;
             case Action.Groggy:
+                animator.SetBool("groggy", false);
+
                 break;
             case Action.Groggy_End:
                 break;

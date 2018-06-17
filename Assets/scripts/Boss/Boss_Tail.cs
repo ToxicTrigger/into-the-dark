@@ -53,9 +53,11 @@ public class Boss_Tail : MonoBehaviour
     Transform originTr;
     Transform tr;
 
+    Boss_Worm _parent;
 
     void Awake()
     {
+        if(transform.parent.GetComponent<Boss_Worm>()) _parent = transform.parent.GetComponent<Boss_Worm>();
         tr = transform;
         localRotation = transform.localRotation;
     }
@@ -75,6 +77,22 @@ public class Boss_Tail : MonoBehaviour
         //bone_distance = Vector3.Distance(transform.parent.position, transform.position);
         //parent_tr = transform.parent.transform;
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_parent.action_state == Boss_Worm.Action.Groggy)
+        {
+            Debug.Log(other.tag);
+            if (other.CompareTag("Arrow"))
+            {
+                Debug.Log("dd");
+                _parent.add_damage();
+                Destroy(other.gameObject);
+            }
+            _parent.add_damage();
+            Destroy(other.gameObject);
+        }
     }
 
     Boss_Tail head_seach(Transform tail)

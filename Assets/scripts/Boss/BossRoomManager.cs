@@ -25,6 +25,7 @@ public class BossRoomManager : MonoBehaviour {
     public Player player;
     [Tooltip("재배치 하는 스크립트와 총 스위치 개수를 통일할 것, 반드시 시간 스위치부터 입력할 것")]
     public BasicSwitch [] all_switch;
+    public BasicSwitch[] hit_switch;
     public GameObject enemy;
 
     public MeshRenderer[] alpha_ctrl_obj;
@@ -72,6 +73,11 @@ public class BossRoomManager : MonoBehaviour {
             all_switch[i].set_switch(false);
             all_switch[i].off_switch_set();
         }
+        for (int i = 0; i < hit_switch.Length; i++)
+        {
+            hit_switch[i].set_switch(false);
+            hit_switch[i].off_switch_set();
+        }
         //모든 스위치를 꺼줌
     }
     
@@ -84,7 +90,6 @@ public class BossRoomManager : MonoBehaviour {
                 phase_pillar_list[boss_phase - 1].c_pillar[i].crumbling_all();
         }
     }
-
 
     public void set_switch_pos()
     {
@@ -149,13 +154,17 @@ public class BossRoomManager : MonoBehaviour {
         }
 
         BossRoomRelocation.get_instance().togle_set();
+
+        //for(int i =0; i<move_obj.Length; i++)
+        //{
+        //    StartCoroutine(move_obj[i].timer());
+        //}
     }
 
     public void add_phase()
     {
         boss_phase++;
     }
-
 
     private void Update()
     {
