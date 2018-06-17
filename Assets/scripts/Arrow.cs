@@ -42,7 +42,7 @@ public class Arrow : MonoBehaviour {
             {
                 AS = arrow_hit_rub;
             }
-            //Debug.Log(collision.gameObject.name);
+            Debug.Log(collision.gameObject.name);
             GameObject tmp = Instantiate(AS.gameObject, transform.position, Quaternion.identity, null);
             tmp.GetComponent<AudioSource>().Play();
             Destroy(tmp, 2.0f);

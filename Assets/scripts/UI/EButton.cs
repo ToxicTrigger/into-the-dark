@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EButton : MonoBehaviour {
-	public TextMesh text;
+	public SpriteRenderer text;
 	public Color color;
 	// Use this for initialization
 	public float speed;
@@ -11,7 +11,7 @@ public class EButton : MonoBehaviour {
 	public bool EventOn;
 
 	void Start () {
-		text = GetComponent<TextMesh>();
+		text = GetComponent<SpriteRenderer>();
 		color = text.color;
 	}
 

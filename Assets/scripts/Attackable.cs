@@ -54,7 +54,7 @@ public class Attackable : MonoBehaviour {
     {
         if(other.CompareTag("Enemy") & !gameObject.CompareTag("Enemy"))
         {
-            //Debug.Log("dd" + other.tag + " : " + gameObject.tag);
+            Debug.Log("dd" + other.tag + " : " + gameObject.tag);
             if(!gameObject.CompareTag("TotemAggro"))
             {
                 Damageable dam = other.GetComponent<Damageable>();

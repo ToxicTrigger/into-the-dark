@@ -1,0 +1,9 @@
+diff a/Assets/scripts/PlayerCamera.cs b/Assets/scripts/PlayerCamera.cs	(rejected hunks)
+@@ -54,7 +54,6 @@
+             if (origin != null)
+             {
+                 tr.position = Vector3.Lerp(tr.position, origin.position + _offset, Time.deltaTime * speed);
+-                Debug.Log(_offset);
+             }
+         }
+     }

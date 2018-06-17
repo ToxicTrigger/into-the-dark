@@ -25,6 +25,7 @@ public abstract class AggroAI : Observable {
     public Player player;
     public Rigidbody rig;
     public GameObject DeadParticle;
+    public AudioSource HitSound;
 
     //구현은 HunterAI 참조
     public abstract void FSM(AggroAI ai);
@@ -173,13 +174,13 @@ public abstract class AggroAI : Observable {
         }
     }
 
-    IEnumerator Make_DeadEffect()
+    void Make_DeadEffect()
     {
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
                 if(DeadParticle != null)
             {
                 GameObject tmp = Instantiate(DeadParticle, transform.position, Quaternion.identity, null);
-                Destroy(tmp, 1.0f);
+                Destroy(tmp, 4.0f);
             }
     }
     
@@ -201,13 +202,15 @@ public abstract class AggroAI : Observable {
                 rig.isKinematic = false;
                 rig.transform.parent = null;
                 rig.AddForce((transform.position - player.transform.position).normalized * 12, ForceMode.Impulse);
+                rig.AddTorque((transform.position - player.transform.position).normalized * 200, ForceMode.Impulse);
                 Destroy(rig.gameObject, 2.0f);
             }
 
 
             na.enabled = false;
-            StartCoroutine(Make_DeadEffect());
-            Destroy(gameObject, 1.0f);
+            //StartCoroutine(Make_DeadEffect());
+            Make_DeadEffect();
+            Destroy(gameObject);
         }
 
         update_attackable_range();
@@ -226,22 +229,18 @@ public abstract class AggroAI : Observable {
         }
     }
 
-    IEnumerator update_hit(float damage)
-    {
-        has_Hit = true;
-
-        this.damage.Hp -= damage;
-
-        yield return new WaitForSeconds(0.1f);
-        has_Hit = false;
-    }
-
     private void OnTriggerEnter(Collider other)
     {   
         if(other.CompareTag("Sword") || other.CompareTag("Arrow"))
         {
-            //Debug.Log( other.name + " " + other.tag);
-            has_Hit = true;
+            GameObject sound = Instantiate(HitSound.gameObject, transform.position, Quaternion.identity, null);
+            sound.GetComponent<AudioSource>().PlayOneShot(sound.GetComponent<AudioSource>().clip);
+            //HitSound.PlayOneShot(HitSound.clip);
+            Destroy(sound, 1.0f);
+
+            Debug.Log( other.name + " " + other.tag);
+            damage.Damaged(1, 0.2f);
+            //has_Hit = true;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -257,7 +256,7 @@ public abstract class AggroAI : Observable {
         if(collision.gameObject.CompareTag("Arrow"))
         {
             Debug.Log("Hit by Arrow");
-            StartCoroutine(update_hit(collision.gameObject.GetComponent<Arrow>().power));
+            damage.Damaged(collision.gameObject.GetComponent<Arrow>().power, 0.1f);
             Destroy(collision.gameObject);
         }else if(collision.gameObject.CompareTag("Sword"))
         {

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCamera : MonoBehaviour {
+public class PlayerCamera : MonoBehaviour
+{
     //플레이어 카메라 (기본적인 팔로우캠 , 고정 캠 , 연출 캠이 있으며 해당 스크립트에서는 팔로우, 고정을 처리하고 연출은 적용만 시켜줌_외부에서 입력받을 수 있게끔 확장)
 
     public enum State
@@ -28,43 +29,46 @@ public class PlayerCamera : MonoBehaviour {
 
     Transform origin;
 
-	void Start () {
+    void Start()
+    {
         tr = transform;
         cam_state = State.Follow;
         speed = move_speed;
         _offset = offset;
     }
-	
-	void Update () {
+
+    void Update()
+    {
         speed = move_speed;
         if (cam_state == State.Follow)
         {
             tr.position = Vector3.Lerp(tr.position, player.position + _offset, Time.deltaTime * speed);
         }
-        else if(cam_state == State.Fixed)
+        else if (cam_state == State.Fixed)
         {
             tr.position = Vector3.Lerp(tr.position, fixed_target.position + _offset, Time.deltaTime * speed);
         }
-        else if(cam_state == State.Active )
+        else if (cam_state == State.Active)
         {
             tr.position = player.position + _offset;
         }
-        else if(cam_state == State.Event)
+        else if (cam_state == State.Event)
         {
             if (origin != null)
             {
                 tr.position = Vector3.Lerp(tr.position, origin.position + _offset, Time.deltaTime * speed);
+                Debug.Log(_offset);
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("CamTrigger"))
+        if (other.CompareTag("CamTrigger"))
         {
             fixed_target = other.transform;
-        }   
-        if(other.CompareTag("EventTrigger"))    //이벤트 발동은 영역에 들어가던가. 메세지를 받던가.
+        }
+        if (other.CompareTag("EventTrigger"))    //이벤트 발동은 영역에 들어가던가. 메세지를 받던가.
         {
             CameraEventSetting _tr = other.GetComponent<CameraEventSetting>();
             set_event_target(_tr.get_target_list());
@@ -80,7 +84,7 @@ public class PlayerCamera : MonoBehaviour {
             cam_state = State.Follow;
             StopCoroutine(timer);
         }
-        timer = up_down_timer(_power,loop_cnt, loop_speed);
+        timer = up_down_timer(_power, loop_cnt, loop_speed);
         StartCoroutine(timer);
     }
 
@@ -106,7 +110,7 @@ public class PlayerCamera : MonoBehaviour {
         shake = true;
         for (int i = 0; i < loop_cnt; i++)
         {
-            if(_power > 0)_power -= 0.7f;
+            if (_power > 0) _power -= 0.7f;
 
             _offset.y -= _power;
             yield return new WaitForSeconds(loop_speed);
@@ -143,7 +147,7 @@ public class PlayerCamera : MonoBehaviour {
     //이벤트 타겟의 Transform을 모두 복사해온다.
     public void set_event_target(Transform[] _tr)
     {
-        for(int i =0; i < _tr.Length; i++)
+        for (int i = 0; i < _tr.Length; i++)
         {
             event_target[i] = _tr[i];
         }

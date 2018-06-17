@@ -34,18 +34,32 @@ public class Player : MonoBehaviour{
     public bool is_fighting_something;
     [Tooltip("토템을 설치하나?")]
     public bool is_build_totem;
-    
+
+    public GameObject sword_Effect;
+
+    [Range(-1, 1)]
+    public float step_one = 0.04f;
+    [Range(-1, 1)]
+    public float step_two = 0.06f;
+    [Range(-1, 1)]
+    public float step_three = 0.3f;
+    [Range(-1, 1)]
+    public float step_Dodge = 0.15f;
+
     float bow_time;
     [Tooltip("현재 진행중인 애니메이션 이름")]
     public string cur_ani;
     public CharacterController character;
+
+    public AudioSource Foot_Step, Sword_Sound;
+
+
 
     public void Start()
     {
         character = GetComponent<CharacterController>();
         ani = GetComponent<Animator>();
         weapon = GetComponent<Weapon>();
-        //origin_move_speed = tpc.m_MoveSpeedMultiplier;
         totems = new Queue<GameObject>(0);
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
@@ -55,13 +69,14 @@ public class Player : MonoBehaviour{
     {
         if (val == 0)
         {
-           
+            //sword_Effect.SetActive(false);
             Sword.enabled = false;
         }
         else
         {
-            
+            //sword_Effect.SetActive(true);
             Sword.enabled = true;
+            Sword_Sound.PlayOneShot(Sword_Sound.clip);
         }
     }
 
@@ -173,7 +188,6 @@ public class Player : MonoBehaviour{
 
             GameObject t = Instantiate(totem, transform.position, Quaternion.identity, null);
             totems.Enqueue(t);
-            if( totem_cnt != null ) totem_cnt.text = (3 - (totems.Count)).ToString();
             totem_size += 1;
             ParticleCollider.instance.ps.trigger.SetCollider(1 + totem_size, t.transform.GetChild(0));
         }
@@ -202,19 +216,23 @@ public class Player : MonoBehaviour{
         switch (cur_ani)
         {
             case "Swing_0":
-                transform.position += transform.forward.normalized * 0.04f;
+                character.Move(transform.forward.normalized * step_one);
+                //transform.position += transform.forward.normalized * step_one;
                 break;
             case "Swing_1":
-                transform.position += (transform.forward.normalized * 0.06f);
+                character.Move(transform.forward.normalized * step_two);
+                //transform.position += (transform.forward.normalized * step_two);
                 break;
             case "Jump":
-                transform.position += (transform.forward.normalized * 0.3f);
+                character.Move(transform.forward.normalized * step_three);
+                //transform.position += (transform.forward.normalized * step_three);
                 break;
             case "wakeUp":
                 ani.SetBool("Dodge", false);
                 break;
             case "Dodge":
-                transform.position += (transform.forward.normalized * 0.1f);
+                character.Move(transform.forward.normalized * step_Dodge);
+                //transform.position += (transform.forward.normalized * step_Dodge);
                 break;
         }
     
@@ -229,7 +247,7 @@ public class Player : MonoBehaviour{
         if(!character.isGrounded)
         {
             character.Move(Vector3.up * Physics.gravity.y * Time.deltaTime);
-            //Debug.Log("Fly");
+            Debug.Log("Fly");
         }
     }
 
@@ -245,7 +263,7 @@ public class Player : MonoBehaviour{
             is_fighting_something = true;
         }
 
-        if(click_tick >= 0.4f)
+        if(click_tick >= 0.3f)
         {   
             click_tick = 0;
             attack_click = false;
