@@ -67,7 +67,7 @@ public class EntranceTrigger : MonoBehaviour {
         ongoing = true;
         howling_sound.Play();
         yield return new WaitForSeconds(0.5f);
-        EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Left_Right);
+        EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Left_Right,0.0f);
         //사운드 재생
     }
 }

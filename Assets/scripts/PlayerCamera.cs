@@ -75,7 +75,7 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
-    public void up_down_move(float _power, int loop_cnt, float loop_speed)
+    public void up_down_move(float _power, int loop_cnt, float loop_speed, float minus)
     {
         if (timer != null)
         {
@@ -84,7 +84,7 @@ public class PlayerCamera : MonoBehaviour
             cam_state = State.Follow;
             StopCoroutine(timer);
         }
-        timer = up_down_timer(_power, loop_cnt, loop_speed);
+        timer = up_down_timer(_power, loop_cnt, loop_speed , minus);
         StartCoroutine(timer);
     }
 
@@ -105,12 +105,12 @@ public class PlayerCamera : MonoBehaviour
         StartCoroutine(timer);
     }
 
-    IEnumerator up_down_timer(float _power, int loop_cnt, float loop_speed)
+    IEnumerator up_down_timer(float _power, int loop_cnt, float loop_speed, float minus)
     {
         shake = true;
         for (int i = 0; i < loop_cnt; i++)
         {
-            if (_power > 0) _power -= 0.7f;
+            if (_power > 0) _power -= minus;
 
             _offset.y -= _power;
             yield return new WaitForSeconds(loop_speed);
@@ -124,7 +124,7 @@ public class PlayerCamera : MonoBehaviour
         shake = false;
     }
 
-    IEnumerator left_right_timer(float _power, int loop_cnt, float loop_speed)
+    IEnumerator left_right_timer(float _power, int loop_cnt, float loop_speed )
     {
         shake = true;
         for (int i = 0; i < loop_cnt; i++)

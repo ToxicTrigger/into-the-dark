@@ -73,6 +73,13 @@ public class Boss_Worm : MonoBehaviour
     float jump_power;
     Vector3 rush_attack_start_pos;
 
+    [Tooltip("위 아래로 몇번 흔들건지")]
+    public int c_shake_cnt_rush;
+    [Tooltip("반복 속도 ")]
+    public float c_shake_speed_rush;
+    public float c_shake_power_rush;
+    public float c_shake_minus_rush;
+
     [Space(16)]
     [Header("*WhippingAttackSetting*")]
     [Tooltip("솟아나는 위치 (계산을 통할 것)")]
@@ -105,6 +112,7 @@ public class Boss_Worm : MonoBehaviour
     [Tooltip("반복 속도 ")]
     public float c_shake_speed;
     public float c_shake_power;
+    public float c_shake_minus;
     [Tooltip("위에서 떨굴 몹의 수")]
     public int enemy_cnt;
     [Tooltip("떨굴 몹 오브젝트")]
@@ -133,7 +141,8 @@ public class Boss_Worm : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        check = true;
+           animator = GetComponent<Animator>();
         this_animator = GetComponent<Animator>();
         StartCoroutine(start_timer());
         around_transform.position = new Vector3(player.position.x + idle_radius, player.position.y - idle_y_pos, player.position.z);
@@ -367,6 +376,7 @@ public class Boss_Worm : MonoBehaviour
         }
     }
 
+    bool check = true;
     //이동 완료 함수
     bool move_complete(Action _state)
     {
@@ -379,10 +389,20 @@ public class Boss_Worm : MonoBehaviour
             case Action.Rush_Attack:
                 //Rush_Attack상태에서의 이동 완료 체크.
                 //if(around_transform.position.y -5 > tail[0].transform.position.y)
+                Debug.Log("Check = \" " + check + " \" || tr.Ypos = \" " + transform.position.y + " \" || player.Ypos = \" " + player.position.y + " \"");
+                if(check &&transform.position.y < player.transform.position.y)
+                {
+                    check = false;
+
+                    EventManager.get_instance().camera_shake(c_shake_power_rush, c_shake_cnt_rush, c_shake_speed_rush, EventManager.Direction.Up_Down, c_shake_minus_rush);
+                }
+
                 if(around_transform.position.y-10 > tail[tail.Length-1].transform.position.y)
                 {
                     Debug.Log("RushAttackEnd || this.head.Ypos = \"" + tail[0].transform.position.y + "\"  || around_Ypos = \"" +around_transform.position.y + "\"");
                     action_state = Action.Rush_Attack_End;
+
+                    check = true;
                     return true;
                 }
 
@@ -458,7 +478,7 @@ public class Boss_Worm : MonoBehaviour
                             move_target = Vector3.zero;
                             EventManager.get_instance().off_event();
                             BossRoomManager.get_instance().crumbling_pillar_all();  //페이즈에 따라 기둥을 무너뜨린다. 
-                            EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Up_Down);
+                            EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Up_Down, c_shake_minus_rush);
                             return true;
                         }
                         break;

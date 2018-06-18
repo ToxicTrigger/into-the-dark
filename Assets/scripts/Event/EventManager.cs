@@ -58,14 +58,14 @@ public class EventManager : MonoBehaviour {
         Left_Right
     }
     Direction dir;
-    public void camera_shake(float _power, int loop_cnt, float loop_speed, Direction _dir)
+    public void camera_shake(float _power, int loop_cnt, float loop_speed, Direction _dir,float minus)
     {
         if (!p_camera.shake)
         {
             switch (_dir)
             {
                 case Direction.Up_Down:
-                    p_camera.up_down_move(_power, loop_cnt, loop_speed);
+                    p_camera.up_down_move(_power, loop_cnt, loop_speed, minus);
                     break;
                 case Direction.Left_Right:
                     p_camera.left_right_move(_power, loop_cnt, loop_speed);
