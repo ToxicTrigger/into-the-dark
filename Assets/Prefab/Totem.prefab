@@ -88,6 +88,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -166,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ecff0babd1cf247bdf0e3a103f3496, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aggro_point: 1
+  aggro_point: 2
   sc: {fileID: 0}
 --- !u!135 &135066648194700734
 SphereCollider:

@@ -13,7 +13,9 @@ public class Player : MonoBehaviour{
     float origin_move_speed;
     Camera cam;
     public AudioSource bow_fullback, bow_release;
-    Queue<GameObject> totems;
+
+    public List<GameObject> totems;
+    //Queue<GameObject> totems;
     [Tooltip("설치된 토템의 갯수")]
     public int cur_totems;
     [Tooltip("설치 가능한 토템의 수")]
@@ -60,7 +62,7 @@ public class Player : MonoBehaviour{
         character = GetComponent<CharacterController>();
         ani = GetComponent<Animator>();
         weapon = GetComponent<Weapon>();
-        totems = new Queue<GameObject>(0);
+        totems = new List<GameObject>(3);
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
     }
@@ -156,44 +158,68 @@ public class Player : MonoBehaviour{
             transform.LookAt(click_pos);
         }
     }
-
     int totem_size;
     void gen_totem()
     {
         if(totems != null)
-        cur_totems = totems.Count;
-        installable_totems = 3 - cur_totems;
-        if (Input.GetKeyDown(KeyCode.Q))
         {
-            is_build_totem = true;
-            if (totems.Count > 2)
+            cur_totems = totems.Count;
+            installable_totems = 3 - cur_totems;
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                Destroy(totems.Dequeue());
-            }
+                is_build_totem = true;
 
-            if( totem_size > 2)
-            {
-                totem_size = 0;
-            }
-
-            Totem[] tot = FindObjectsOfType<Totem>();
-            for( int i = 0; i < tot.Length; i ++)
-            {
-
-                if (Vector3.Distance(tot[i].gameObject.transform.position, transform.position) <= 1)
+                IEnumerator iter = totems.GetEnumerator();
+                int i = 0;
+                while(iter.MoveNext())
                 {
-                    Destroy(tot[i]);
+                    Debug.Log("Totem:" + i);
+                    GameObject tmp = iter.Current as GameObject;
+                    if (Vector3.Distance(tmp.transform.position, transform.position) <= 1.4f)
+                    {   
+                        Destroy(totems[i].gameObject);
+                        totems.RemoveAt(i);
+                        Debug.Log("Totem:" + i + " is Over");
+                    }
+                    i+=1;
                 }
-            }
 
-            GameObject t = Instantiate(totem, transform.position, Quaternion.identity, null);
-            totems.Enqueue(t);
-            totem_size += 1;
-            ParticleCollider.instance.ps.trigger.SetCollider(1 + totem_size, t.transform.GetChild(0));
-        }
-        if(Input.GetKeyUp(KeyCode.Q))
-        {
-            is_build_totem = false;
+                if (totems.Count > 2)
+                {
+                    Destroy(totems[0].gameObject);
+                    totems.RemoveAt(0);
+                }
+
+                if( totem_size > 2)
+                {
+                    totem_size = 0;
+                }
+
+                GameObject t = Instantiate(totem, transform.position, Quaternion.identity, null);
+                totems.Insert(totems.Count , t);
+                ParticleSystem[] fogs = FindObjectsOfType<ParticleSystem>();
+                List<ParticleSystem> tmpFog = new List<ParticleSystem>();
+                foreach(var tmp in fogs)
+                {
+                    if(tmp.CompareTag("Fog"))
+                    {
+                        tmpFog.Add(tmp);
+                    }
+                }
+
+                IEnumerator it = tmpFog.GetEnumerator();
+                while(it.MoveNext())
+                {
+                    ParticleSystem trigger = it.Current as ParticleSystem;
+                    trigger.trigger.SetCollider(1 + totems.Count + 1, t.transform.GetChild(0));
+                }
+
+                //ParticleCollider.instance.ps.trigger.SetCollider(1 + totems.Count + 1, t.transform.GetChild(0));
+            }
+            if(Input.GetKeyUp(KeyCode.Q))
+            {
+                is_build_totem = false;
+            }
         }
     }
     public void FixedUpdate()

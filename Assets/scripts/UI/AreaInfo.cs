@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class AreaInfo : MonoBehaviour {
 	public Text areaTitle;
+	public Image L, R;
 	public Color text_color;
 	public bool EventOn;
 	public float speed = 0.01f;
@@ -49,6 +50,8 @@ public class AreaInfo : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		areaTitle.color = text_color;
+		L.color = text_color;
+		R.color = text_color;
 	}
 	IEnumerator UpDown()
 	{
@@ -60,7 +63,7 @@ public class AreaInfo : MonoBehaviour {
 	private void OnTriggerEnter(Collider other) {
 		if(other.CompareTag("Area"))
 		{	
-			areaTitle.text = "───  " + other.name + "  ───";
+			areaTitle.text =  other.name;
 			StartCoroutine(UpDown());
 		}
 	}
