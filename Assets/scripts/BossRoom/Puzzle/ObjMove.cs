@@ -71,9 +71,10 @@ public class ObjMove : Observer
             }
         }
         else
-        {
+        {            
             cnt--;
-            StartCoroutine(timer());
+            if(move_dir == Direction.Up)
+                StartCoroutine(timer());
         }
     }
 
