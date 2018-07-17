@@ -23,8 +23,9 @@ public class BossRoomManager : MonoBehaviour {
     /// ///////////////////////////////////////////////////
     /// 
 
-    BossRoomRelocation reloc;
+    //BossRoomRelocation reloc;
     public Boss_Worm boss;
+    Boss_State boss_state;
 
     public enum Phase
     {
@@ -37,7 +38,9 @@ public class BossRoomManager : MonoBehaviour {
 
     void Start()
     {
-        reloc = GetComponent<BossRoomRelocation>();
+        boss_state = boss.gameObject.GetComponent<Boss_State>();
+        
+        player_enter_bossroom();
     }
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
@@ -55,34 +58,41 @@ public class BossRoomManager : MonoBehaviour {
     public void Map_Initialization()
     {
         //스위치, 기둥, 다리등의 초기화 리로케이션 클래스에서 함수를 실행
-        reloc.relocation((int)phase);
+        BossRoomRelocation.get_instance().relocation((int)phase);
+
     }
 
     //페이즈 증가 함수 (페이즈 증가 -> 새로운 페이즈 시작)
-    public void increase_pahse()
+    public void increase_pahse(bool _add)
     {
-        //페이즈 증가
-        phase = (Phase)((int)phase++);  //이런식으로 쓰는게 옳은가?
+        if (_add)   //페이즈가 넘어가지 않고 스위치만 초기화되는 경우가 있으므로...
+        {
+            //페이즈 증가
+            phase = (Phase)((int)phase++);  //이런식으로 쓰는게 옳은가?
+        }
 
         //페이즈 증가에 따른 스위치 끄기
-
-        for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
-        {
-            reloc.get_reloc((int)phase).switch_object[i].set_switch(false);
-            reloc.get_reloc((int)phase).switch_object[i].off_switch_set();
-        }
+        //
+        //for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
+        //{
+        //    reloc.get_reloc((int)phase).switch_object[i].set_switch(false);
+        //    reloc.get_reloc((int)phase).switch_object[i].off_switch_set();
+        //}
 
         //hit스위치 끄기 (다리 내리기) 추가
-
-        for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
-        {
-            reloc.hit_switch[i].set_switch(false);
-            reloc.hit_switch[i].off_switch_set();
-        }
+        //
+        //for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
+        //{
+        //    reloc.hit_switch[i].set_switch(false);
+        //    reloc.hit_switch[i].off_switch_set();
+        //}
 
     }
 
-
+    public void send_boss_state(Boss_State.State _state)
+    {
+        boss_state.set_state(_state);
+    }
 
 
 

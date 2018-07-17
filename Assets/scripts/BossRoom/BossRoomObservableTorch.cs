@@ -9,7 +9,7 @@ public class BossRoomObservableTorch : ObservableTorch {
     {
         //ObservableTorch의 on_light를 실행하고 보스에게 보스의 상태를 변환시켜주는 함수를 호출!
         base.on_light();
-        BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Rush_Attack);
+        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Rush_Attack);
     }
 
 }

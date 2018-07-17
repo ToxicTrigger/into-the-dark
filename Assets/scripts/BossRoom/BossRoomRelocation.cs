@@ -47,7 +47,8 @@ public class BossRoomRelocation : MonoBehaviour {
     //재배치 시작!
     public void relocation(int phase)
     {
-        int[] random_Array = new int[reloc_set[phase-1].switch_position.Length];
+        int[] random_Array = new int[reloc_set[phase].switch_position.Length];
+
         int num = -1;
 
         for (int i = 0; i < random_Array.Length; i++)
@@ -57,7 +58,7 @@ public class BossRoomRelocation : MonoBehaviour {
 
         for (int i = 0; i < random_Array.Length; i++)
         {
-            num = Random.Range(0, reloc_set[phase-1].switch_position.Length);
+            num = Random.Range(0, reloc_set[phase].switch_position.Length);
 
             for (int z = 0; z < random_Array.Length; z++)
             {
@@ -74,13 +75,13 @@ public class BossRoomRelocation : MonoBehaviour {
             }
 
             if(random_Array[i] != -1)
-                reloc_set[phase-1].switch_object[i].transform.position = reloc_set[phase-1].switch_position[random_Array[i]].transform.position;
+                reloc_set[phase].switch_object[i].transform.position = reloc_set[phase].switch_position[random_Array[i]].transform.position;
 
         }
 
-        for (int i = 0; i < reloc_set[phase-1].enemy_position.Length; i++)
+        for (int i = 0; i < reloc_set[phase].enemy_position.Length; i++)
         {
-            GameObject _enemy = (GameObject)Instantiate(enemy, reloc_set[phase-1].enemy_position[i].position, Quaternion.identity);
+            GameObject _enemy = (GameObject)Instantiate(enemy, reloc_set[phase].enemy_position[i].position, Quaternion.identity);
         }
 
         for (int i = 0; i < water_list.Count; i++)
@@ -90,18 +91,18 @@ public class BossRoomRelocation : MonoBehaviour {
 
         water_list.Clear();
 
-        for (int i = 0; i < reloc_set[phase-1].water_position.Length; i++)
+        for (int i = 0; i < reloc_set[phase].water_position.Length; i++)
         {
-            GameObject _water = (GameObject)Instantiate(reloc_set[phase-1].water_object[i],
-                                                        reloc_set[phase-1].water_position[i].position, Quaternion.identity);
+            GameObject _water = (GameObject)Instantiate(reloc_set[phase].water_object[i],
+                                                        reloc_set[phase].water_position[i].position, Quaternion.identity);
 
             water_list.Add(_water);
         }
 
-        if (reloc_set[phase-1].c_pillar.Length > 0)
+        if (reloc_set[phase].c_pillar.Length > 0)
         {
-            for (int i = 0; i < reloc_set[phase - 1].c_pillar.Length; i++)
-                reloc_set[phase - 1].c_pillar[i].crumbling_all();
+            for (int i = 0; i < reloc_set[phase ].c_pillar.Length; i++)
+                reloc_set[phase ].c_pillar[i].crumbling_all();
         }
 
     }

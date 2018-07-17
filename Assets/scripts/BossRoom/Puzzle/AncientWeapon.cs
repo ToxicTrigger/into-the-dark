@@ -70,7 +70,7 @@ public class AncientWeapon : Observer
         _timer = activate_timer();  //새로운 코루틴 할당 
         //weapon_light.gameObject.SetActive(true);
         state = State.Activated;
-        BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Groggy); //weapon_activation() : 보스 그로기상태 전환 
+        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy); //weapon_activation() : 보스 그로기상태 전환 
         StartCoroutine(_timer);
     }
 
@@ -90,8 +90,8 @@ public class AncientWeapon : Observer
         animator.SetBool("activate", false);
         //weapon_light.gameObject.SetActive(false);
         state = State.Deactivated;
-        BossRoomManager.get_instance().send_boss_state(Boss_Worm.Action.Idle);
-        BossRoomManager.get_instance().off_switch();
+        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Idle);
+        BossRoomManager.get_instance().increase_pahse(false);
     }
 
     //외부 요인으로 인하여 고대병기 비활성화 _ 고대병기에 대한 처리만 해준다.

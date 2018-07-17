@@ -12,26 +12,9 @@ public class Boss_Worm : MonoBehaviour
 
     Boss_State state;
 
-    public Boss_Tail[] tail;
-    Vector3 tail_dir;
-
     void Start()
     {
         state = GetComponent<Boss_State>();
-    }
-
-    private void LateUpdate()
-    {
-
-        for (int i = 0; i < tail.Length; i++)
-        {
-            tail[i].move_update(tail_dir);
-        }
-    }
-
-    private void Update()
-    {
-        
     }
 
     //약점공격을 받으면 (머리) -> 대화해봐야함
@@ -43,7 +26,7 @@ public class Boss_Worm : MonoBehaviour
         }
     }
 
-    void add_damage()
+    public void add_damage()
     {
         hp -= 1;
 
@@ -51,9 +34,12 @@ public class Boss_Worm : MonoBehaviour
         {
             state.set_state(Boss_State.State.Death);
         }
+
+        if(state.get_state() == Boss_State.State.Groggy)
+        {
+            state.set_state(Boss_State.State.Soar_Attack);
+        }
     }
-
-
 
 
 

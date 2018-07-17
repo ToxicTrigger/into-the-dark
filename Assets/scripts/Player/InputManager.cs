@@ -29,9 +29,9 @@ public class InputManager : MonoBehaviour{
 		for(int i = 0; i < list.Length ; i++)
 		{
 			listeners.Add(list[i]);
-			Debug.Log("input Handler : " + listeners[i].name);
+			//Debug.Log("input Handler : " + listeners[i].name);
 		}
-		Debug.Log("Input Handler : " + listeners.Count);
+		//Debug.Log("Input Handler : " + listeners.Count);
 	}
 
 	public float get_Dash(){ return dash; }

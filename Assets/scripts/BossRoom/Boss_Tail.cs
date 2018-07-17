@@ -4,37 +4,6 @@ using UnityEngine;
 
 public class Boss_Tail : MonoBehaviour
 {
-    //보스 꼬리 _ 애니메이션(?) 부분만 담당하는 스크립트임
-
-    //public bool boss_head;
-    //Quaternion parent_tail_rot; //부모 tail의 Rotation정보를 받아올 변수
-    //Quaternion this_tail_rot_temp;    //보관용
-    //Quaternion this_tail_rot;     //자신 tail의 Rotation정보를 저장할 변수 (목표값)
-
-    //Transform parent_tr;
-    //Vector3 target_pos;
-    //float bone_distance;
-
-    //Boss_Tail head_tail;
-
-    //public float rot_speed_min;    //꼬리의 회전지연
-    //public float rot_speed;
-    //public float rot_delay;
-
-    //public float speed;
-    //public float delay;
-
-    //public bool move_on;
-
-
-
-
-
-
-
-
-
-
     public Transform child;
 
     public Vector3 boneAxis = new Vector3(0.0f, -1.0f, 0.0f);
@@ -54,6 +23,7 @@ public class Boss_Tail : MonoBehaviour
     Transform tr;
 
     Boss_Worm _parent;
+    Boss_State state;
 
     void Awake()
     {
@@ -63,29 +33,24 @@ public class Boss_Tail : MonoBehaviour
     }
 
     private void Start()
-    {
+    {        
         if (child != null)
         {
             springLength = Vector3.Distance(tr.position, child.position);
             currTipPos = child.position;
             prevTipPos = child.position;
         }
-
-        //parent_tail_rot = Quaternion.identity;
-        //this_tail_rot_temp = this.transform.rotation;
-        //head_tail = head_seach(this.transform);
-        //bone_distance = Vector3.Distance(transform.parent.position, transform.position);
-        //parent_tr = transform.parent.transform;
-
+        //state = _parent.GetComponent<Boss_State>();
+        state = head_seach(this.transform)._parent.GetComponent<Boss_State>();
     }
 
+    //꼬리 충돌체크용
     private void OnTriggerEnter(Collider other)
     {
-        if (_parent.action_state == Boss_Worm.Action.Groggy)
+        if (state.get_state() == Boss_State.State.Groggy)
         {
             if (other.CompareTag("Arrow"))
             {
-                Debug.Log("dd");
                 _parent.add_damage();
                 Destroy(other.gameObject);
             }
@@ -139,85 +104,6 @@ public class Boss_Tail : MonoBehaviour
         //특정 방향에서 다른 방향으로 회전한다. FromToRotation(Vector3 from, Vector3 to)
 
         tr.rotation = targetDir * tr.rotation;
-
-
-
-        //if (transform.parent.GetComponent<Boss_Tail>() == null) boss_head = true;
-        //else
-        //{
-        //    boss_head = false;
-        //    //parent_tail_rot = transform.parent.rotation; //부모의 회전 정보를 받아옴
-        //}
-
-        ////현재 내가 머리라면
-        //if (boss_head)
-        //{
-        //    //움직임이 있을때만 회전한다.
-        //    if (_move_dir != Vector3.zero)
-        //    {
-        //        this_tail_rot = Quaternion.identity;
-
-        //        //Quaternion this_tail_rot_x = Quaternion.identity;
-        //        //float y_angle = Mathf.Atan2(_move_dir.x, _move_dir.z) * Mathf.Rad2Deg;
-        //        //float x_angle = 0;
-
-        //        //if (_move_dir.y != 0)
-        //        //{
-        //        //    x_angle = Mathf.Atan2(-_move_dir.y, _move_dir.z) * Mathf.Rad2Deg;
-        //        //}
-
-        //        //this_tail_rot.eulerAngles = new Vector3(x_angle, y_angle, 0);
-
-        //        this_tail_rot.SetLookRotation(_move_dir);   //ㅅㅂ
-
-        //        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, this_tail_rot, rot_speed * Time.deltaTime);
-        //        move_on = true;
-        //    }
-        //    else move_on = false;
-        //}
-        //else //머리가 아니라면 앞 꼬리의 정보를 받아와 계산한다.
-        //{
-        //    //if (head_tail.move_on)
-        //    //{
-        //    //    this.transform.rotation = this_tail_rot_temp;
-        //    //    speed = rot_speed;
-        //    //    this_tail_rot = parent_tail_rot;
-        //    //}
-        //    //else
-        //    //{
-        //    //    speed = rot_speed;
-        //    //}
-
-
-        //    //this.transform.rotation = Quaternion.Slerp(this.transform.rotation, this_tail_rot, speed * Time.deltaTime);
-
-        //    //this_tail_rot_temp = this.transform.rotation;
-        //    //parent_tail_rot = transform.parent.rotation;
-
-        //    //부모의 바로 뒤, 이동 방향의 반대에 위치한 곳으로 하지만 이동 방향을 바라보는 
-
-        //    Vector3 target_dis = (parent_tr.TransformDirection(Vector3.forward) * -bone_distance) + parent_tr.position;
-
-        //    Debug.Log("parent_pos = \"" + parent_tr.position + "\" || target_pos = \"" + target_pos + "\" || parent_pos - target_pos = \"" + (parent_tr.position - target_pos) + "\"");
-
-        //    target_pos = target_dis;
-
-        //    Debug.DrawLine(target_pos, parent_tr.position, Color.red);
-
-        //    Vector3 originAxis = transform.TransformDirection(Vector3.back);
-        //    Quaternion targetDir = Quaternion.identity;
-        //    targetDir = Quaternion.FromToRotation(originAxis, transform.position - target_pos);
-        //    //targetDir.SetLookRotation(parent_tr.TransformDirection(Vector3.forward));
-
-
-        //    // Debug.Log("my_forward = \"" + transform.TransformDirection(transform.forward) + "\" target_forward = \"" + (target_pos - transform.position) + "\"" + " Angle = \"" + Quaternion.FromToRotation(originAxis, transform.TransformDirection(target_pos)) + "\"");
-        //    //Debug.Log("my_forward = \"" + transform.TransformDirection(transform.forward) + "\" target_forward = \"" + transform.TransformDirection(target_pos - transform.position).normalized + "\"");
-
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * targetDir, rot_speed * Time.deltaTime);
-
-        //    this_tail_rot_temp = this.transform.rotation;
-
-        //}
     }
 
     IEnumerator rot_set_timer()

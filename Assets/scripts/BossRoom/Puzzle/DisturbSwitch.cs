@@ -20,17 +20,17 @@ public class DisturbSwitch : BasicSwitch {
     {
         if(other.CompareTag("Boss"))
         {
-            BossStemWorm boss = other.gameObject.GetComponent<BossStemWorm>();
+           // Boss_Worm boss = other.gameObject.GetComponent<Boss_Worm>();
 
             //솟아오르기 공격에만 해당되나 테스트를 위해 RushAttack에도 적용함
-            if((boss.get_action_state() == BossStemWorm.Action.Move_Up 
-                || boss.get_action_state() == BossStemWorm.Action.Move_Attack)&&!destroy_switch)
-            {
-                Debug.Log("충돌! = " + this.name);
-                this_model.switch_destroy();
-                destroy_switch = true;
-                set_switch(true);
-            }
+           //if((boss.get_action_state() == BossStemWorm.Action.Move_Up 
+           //    || boss.get_action_state() == BossStemWorm.Action.Move_Attack)&&!destroy_switch)
+           //{
+           //    Debug.Log("충돌! = " + this.name);
+           //    this_model.switch_destroy();
+           //    destroy_switch = true;
+           //    set_switch(true);
+           //}
         }
     }
 

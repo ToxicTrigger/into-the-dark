@@ -33,8 +33,8 @@ public class EntranceTrigger : MonoBehaviour {
             if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Idle")
             {
                 ongoing = false;
-                boss.action_ready(Boss_Worm.Action.Rush_Attack);
-                boss.edge_attack = false;
+                //boss.action_ready(Boss_Worm.Action.Rush_Attack);
+                //boss.edge_attack = false;
                 EventManager.get_instance().off_event();
                 Destroy(gameObject);
             }
@@ -45,14 +45,14 @@ public class EntranceTrigger : MonoBehaviour {
     {
         if(other.CompareTag("Player"))
         {
-            boss.action_ready(Boss_Worm.Action.Ready);
+            //boss.action_ready(Boss_Worm.Action.Ready);
             boss.transform.position = boss_pos.position;
             Quaternion quat = Quaternion.identity;
             //quat.SetLookRotation(Vector3.right);
             quat = Quaternion.Euler(new Vector3(0, 90, 0));
             boss.transform.rotation = quat;
 
-            boss.edge_attack = true;
+            //boss.edge_attack = true;
             animator.SetBool("howling", true);
             StartCoroutine(timer());
             EventManager.get_instance().event_setting(gameObject.GetComponent<EventPlot>());
