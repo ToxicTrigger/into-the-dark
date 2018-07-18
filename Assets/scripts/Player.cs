@@ -224,7 +224,7 @@ public class Player : MonoBehaviour{
     }
     public void FixedUpdate()
     {
-                if(Input.GetButton("Dodge"))
+        if(Input.GetButton("Dodge"))
         {
             ani.SetFloat("Forward", 0.0f);
             ani.SetFloat("Turn", 0.0f);
@@ -264,10 +264,6 @@ public class Player : MonoBehaviour{
     
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit) {
-        
-    }
-
     void Update_Y_pos()
     {
         if(!character.isGrounded)
@@ -294,11 +290,19 @@ public class Player : MonoBehaviour{
             click_tick = 0;
             attack_click = false;
             is_fighting_something = false;
-            weapon.type = Weapon.Type.Idle;
+            //weapon.type = Weapon.Type.Idle;
             is_attack = false;
             line.gameObject.SetActive(false);
         }else{
             click_tick += Time.deltaTime;
+        }
+    }
+
+    void change_weapon_type()
+    {
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            weapon.type = weapon.type != Weapon.Type.Bow ? Weapon.Type.Bow : Weapon.Type.Sword;
         }
     }
 
@@ -310,31 +314,30 @@ public class Player : MonoBehaviour{
         gen_totem();
         cur_ani = ani.GetCurrentAnimatorClipInfo(0)[0].clip.name;
         step_ani();
-
+        ani.SetFloat("Bow_Fire", bow_time);
+        change_weapon_type();
+        Click_Attack();
 
         if (Input.GetButtonDown("Fire1"))
         {
-            attack_click = true;
-            click_tick =0;
-        }
-        
-        Click_Attack();
-
-        if (Input.GetButton("Fire2"))
-        {
-            weapon.type = Weapon.Type.Bow;
-            bow_time += Time.deltaTime;
-            if(!bow_fullback.isPlaying)
+            if(weapon.type.Equals(Weapon.Type.Sword))
             {
-                bow_fullback.Play();
+                attack_click = true;
+                click_tick =0;
             }
-            is_fighting_something = true;
-            //tpc.m_MoveSpeedMultiplier = 0;
-            calc_click_pos(false);
         }
-        ani.SetFloat("Bow_Fire", bow_time);
+        else if(Input.GetButton("Fire1"))
+        {
+            if(!weapon.type.Equals(Weapon.Type.Sword))
+            {
+                bow_time += Time.deltaTime;
+                if(!bow_fullback.isPlaying) bow_fullback.Play();
+                is_fighting_something = true;
+                calc_click_pos(false);
+            }
+        }
 
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(0))
         {
             is_fighting_something = false;
             if (weapon.isUsing)
@@ -345,7 +348,6 @@ public class Player : MonoBehaviour{
                     gen_arrow();
 
                     bow_time = 0f;
-                    weapon.type = Weapon.Type.Idle;
                     line.gameObject.SetActive(false);
                     if (!bow_release.isPlaying)
                     {
@@ -356,7 +358,6 @@ public class Player : MonoBehaviour{
                 else
                 {
                     bow_time = 0f;
-                    weapon.type = Weapon.Type.Idle;
                     line.gameObject.SetActive(false);
                     if (!bow_release.isPlaying)
                     {

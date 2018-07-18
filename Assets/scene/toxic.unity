@@ -3557,7 +3557,6 @@ GameObject:
   - component: {fileID: 1307289938}
   - component: {fileID: 1307289937}
   - component: {fileID: 1307289936}
-  - component: {fileID: 1307289935}
   - component: {fileID: 1307289934}
   - component: {fileID: 1307289933}
   m_Layer: 0
@@ -3595,13 +3594,6 @@ MonoBehaviour:
   offset: {x: 0, y: 15, z: -10}
   move_speed: 5
   shake: 0
---- !u!81 &1307289935
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1307289932}
-  m_Enabled: 1
 --- !u!124 &1307289936
 Behaviour:
   m_ObjectHideFlags: 0
@@ -4580,6 +4572,11 @@ Prefab:
     - target: {fileID: 4845859309430552, guid: eec5f9072107099419123d965aa502af, type: 2}
       propertyPath: m_LocalPosition.y
       value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114723617350208606, guid: eec5f9072107099419123d965aa502af,
+        type: 2}
+      propertyPath: type
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eec5f9072107099419123d965aa502af, type: 2}
@@ -6875,7 +6872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUsing: 0
-  type: 0
+  type: 1
   arrow: {fileID: 114456937094974874, guid: 33b4a0099b1a9574dbfb633af167069e, type: 2}
   fire_point: {fileID: 1660155833}
 --- !u!95 &2105121488

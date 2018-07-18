@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour{
 	public float get_Dodge(){ return dodge; }
 	public float get_Horizontal(){return horizontal;}
 	public float get_Vertical(){return vertical;}
-	public bool has_not_anyting_input() { return no_input;} 
+	public bool has_not_anything_input() { return no_input;} 
 
 	IEnumerator update_dash()
 	{
@@ -67,7 +67,6 @@ public class InputManager : MonoBehaviour{
 		if(horizontal != 0 || vertical != 0)
 		{
 			in_dash_one = true;
-			
 		}
 
 		if(horizontal == 0 & vertical == 0 & dodge == 0 & dash == 0)

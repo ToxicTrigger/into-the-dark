@@ -12,19 +12,19 @@ public class PlayerMove : InputHandler {
 
     public override void Work(InputManager im)
     {
-        if(!im.has_not_anyting_input() & (player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle")))
+        if(!im.has_not_anything_input() & (player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle")))
 		{
 			movement.x = im.get_Horizontal();
 			movement.z = im.get_Vertical();	
 			player.ani.SetFloat("Forward", movement.normalized.magnitude );
 			movement = movement.normalized * moveSpeed;
 
-
 			Quaternion q = Quaternion.LookRotation(movement);
 			transform.rotation = Quaternion.Slerp(transform.rotation, q, moveSpeed);
-            //transform.LookAt(transform.position + movement);
+        
+			cc.Move(movement);
 
-            if (foot_step_tick >= 0.25f)
+			if (foot_step_tick >= 0.25f)
             {
                 foot_step_tick = 0;
                 player.Foot_Step.PlayOneShot(player.Foot_Step.clip);
@@ -33,10 +33,7 @@ public class PlayerMove : InputHandler {
             {
                 foot_step_tick += Time.deltaTime;
             }
-           
-
-			cc.Move(movement);
-		}else if(!im.has_not_anyting_input() & (player.cur_ani.Contains("Stand") || player.cur_ani.Contains("Jump"))){
+		}else if(!im.has_not_anything_input() & (player.cur_ani.Contains("Stand") || player.cur_ani.Contains("Jump"))){
 			movement.x = im.get_Horizontal();
 			movement.z = im.get_Vertical();	
 			movement = movement.normalized * moveSpeed;
