@@ -26,6 +26,7 @@ public class BossRoomManager : MonoBehaviour {
     //BossRoomRelocation reloc;
     public Boss_Worm boss;
     Boss_State boss_state;
+    Vector3 cross_point = Vector3.zero;
 
     public enum Phase
     {
@@ -94,7 +95,15 @@ public class BossRoomManager : MonoBehaviour {
         boss_state.set_state(_state);
     }
 
+    public void set_cross_point(Vector3 _pos)
+    {
+        cross_point = _pos;
+    }
 
+    public Vector3 get_cross_point()
+    {
+        return cross_point;
+    }
 
 
 

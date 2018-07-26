@@ -98,6 +98,7 @@ public class Player : MonoBehaviour{
         if (bow_time >= 3.2f & bow_time < 4f)
         {
             //강공격 여부 ㅇㅇ 
+            arrow.GetComponent<Element>().type = Element.Type.Light;
         }
         Destroy(arrow, 5.0f);
         AggroManager.get_instance().gen_aggro(transform.position, 10 + bow_time, 3);
