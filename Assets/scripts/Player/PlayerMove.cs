@@ -7,8 +7,11 @@ public class PlayerMove : InputHandler {
 	public CharacterController cc;
 	public float moveSpeed = 0.01f;
 	public Vector3 movement;
-
     float foot_step_tick;
+	public bool has_ground;
+	public bool is_falling_out;
+	public float fall_tick;
+	public Transform spawn_point;
 
     public override void Work(InputManager im)
     {
@@ -46,8 +49,43 @@ public class PlayerMove : InputHandler {
 		}
     }
 
+	
+	void update_fall()
+	{	
+		if(!has_ground)
+		{
+			//추락 확정
+			if(fall_tick >= 1.5f)
+			{
+				fall_tick = 0;
+				is_falling_out = true;
+			}else{
+				fall_tick += Time.deltaTime;
+			}
+		}else{
+			fall_tick = 0;
+		}
+	}
+
+	void update_move_player_checkPoint()
+	{
+		if(is_falling_out)
+		{
+			transform.position = spawn_point.position;
+			is_falling_out = false;
+		}
+	}
+
+	private void FixedUpdate() 
+	{
+		has_ground = cc.isGrounded;
+		update_fall();
+		update_move_player_checkPoint();
+	}
+
     // Use this for initialization
-    void Start () {
+    void Start () 
+	{
         foot_step_tick = 0;
         player = GetComponent<Player>();
 		cc = GetComponent<CharacterController>();

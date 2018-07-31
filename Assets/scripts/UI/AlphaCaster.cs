@@ -15,7 +15,9 @@ public class AlphaCaster : MonoBehaviour {
 	public List<Image> uis;
 	public List<Text> texts;
 
-	private void Start() {
+	private void Start() 
+	{
+		player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 		uis = new List<Image>();
 		texts = new List<Text>();
 

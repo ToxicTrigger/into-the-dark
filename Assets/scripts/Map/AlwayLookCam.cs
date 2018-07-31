@@ -24,6 +24,7 @@ public class AlwayLookCam : MonoBehaviour {
 	public SpriteRenderer img;
 
 	private void Start() {
+		Target = GameObject.FindGameObjectWithTag("Player").transform;
 		img = GetComponent<SpriteRenderer>();	
 		color = img.color;
 		origin_y = transform.position.y;

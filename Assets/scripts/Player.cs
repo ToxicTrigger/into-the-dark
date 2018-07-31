@@ -28,7 +28,7 @@ public class Player : MonoBehaviour{
     public Text totem_cnt;
     public Damageable damageable;
     [Tooltip("검 모델을 넣으세요. 플레이어의 모델링 안에 들어있습니다.")]
-    public BoxCollider Sword;
+    public GameObject Sword;
 
     [Tooltip("무언가에게 겨냥 당하고 있음?")]
     public int is_target_something;
@@ -72,12 +72,12 @@ public class Player : MonoBehaviour{
         if (val == 0)
         {
             //sword_Effect.SetActive(false);
-            Sword.enabled = false;
+            Sword.SetActive(false);
         }
         else
         {
             //sword_Effect.SetActive(true);
-            Sword.enabled = true;
+            Sword.SetActive(true);
             Sword_Sound.PlayOneShot(Sword_Sound.clip);
         }
     }
