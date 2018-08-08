@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 4978815475305872}
   - component: {fileID: 95490760645635312}
   - component: {fileID: 114195025691937546}
+  - component: {fileID: 114639292207700626}
   - component: {fileID: 114078653179450724}
   - component: {fileID: 114172246325718038}
   - component: {fileID: 114410679748798924}
@@ -1949,7 +1950,7 @@ BoxCollider:
   m_GameObject: {fileID: 1882523640746518}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.19518806, y: 0.22886038, z: 0.64}
   m_Center: {x: -0.046401232, y: -0.0033803799, z: 0.24}
@@ -2577,7 +2578,7 @@ MonoBehaviour:
   has_targeting_totem: 0
   totem_cnt: {fileID: 0}
   damageable: {fileID: 114410679748798924}
-  Sword: {fileID: 65168658260208414}
+  Sword: {fileID: 1882523640746518}
   is_target_something: 0
   is_fighting_something: 0
   is_build_totem: 0
@@ -2621,6 +2622,21 @@ MonoBehaviour:
   t: 0
   up_scale: 6.94
   delta: 0.1
+--- !u!114 &114639292207700626
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1294915098394412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff11436830b19254f8bad913cc11d97f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MAX_ITEM: 6
+  Items: []
+  Live: {fileID: 0}
+  Drop: 0
 --- !u!114 &114660895584341880
 MonoBehaviour:
   m_ObjectHideFlags: 1
