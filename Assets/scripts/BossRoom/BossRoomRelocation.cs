@@ -47,37 +47,37 @@ public class BossRoomRelocation : MonoBehaviour {
     //재배치 시작!
     public void relocation(int phase)
     {
-        int[] random_Array = new int[reloc_set[phase].switch_position.Length];
-
-        int num = -1;
-
-        for (int i = 0; i < random_Array.Length; i++)
-        {
-            random_Array[i] = num;
-        }
-
-        for (int i = 0; i < random_Array.Length; i++)
-        {
-            num = Random.Range(0, reloc_set[phase].switch_position.Length);
-
-            for (int z = 0; z < random_Array.Length; z++)
-            {
-                if (random_Array[z] == num)
-                {
-                    --i;
-                    break;
-                }
-
-                if (z == random_Array.Length - 1)
-                {
-                    random_Array[i] = num;
-                }
-            }
-
-            if(random_Array[i] != -1)
-                reloc_set[phase].switch_object[i].transform.position = reloc_set[phase].switch_position[random_Array[i]].transform.position;
-
-        }
+        //int[] random_Array = new int[reloc_set[phase].switch_position.Length];
+        //
+        //int num = -1;
+        //
+        //for (int i = 0; i < random_Array.Length; i++)
+        //{
+        //    random_Array[i] = num;
+        //}
+        //
+        //for (int i = 0; i < random_Array.Length; i++)
+        //{
+        //    num = Random.Range(0, reloc_set[phase].switch_position.Length);
+        //
+        //    for (int z = 0; z < random_Array.Length; z++)
+        //    {
+        //        if (random_Array[z] == num)
+        //        {
+        //            --i;
+        //            break;
+        //        }
+        //
+        //        if (z == random_Array.Length - 1)
+        //        {
+        //            random_Array[i] = num;
+        //        }
+        //    }
+        //
+        //    if(random_Array[i] != -1)
+        //        reloc_set[phase].switch_object[i].transform.position = reloc_set[phase].switch_position[random_Array[i]].transform.position;
+        //
+        //}
 
         for (int i = 0; i < reloc_set[phase].enemy_position.Length; i++)
         {
@@ -109,7 +109,7 @@ public class BossRoomRelocation : MonoBehaviour {
 
     public Relocation_set get_reloc(int phase)
     {
-        return reloc_set[phase - 1];
+        return reloc_set[phase];
     }
 
 }

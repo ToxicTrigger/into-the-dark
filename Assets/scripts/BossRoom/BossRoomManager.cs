@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossRoomManager : MonoBehaviour {
-    
+public class BossRoomManager : MonoBehaviour {  
 
     private static BossRoomManager instance = null;
 
@@ -26,6 +25,8 @@ public class BossRoomManager : MonoBehaviour {
     //BossRoomRelocation reloc;
     public Boss_Worm boss;
     Boss_State boss_state;
+    Boss_Action boss_action;
+    public Player player;
     Vector3 cross_point = Vector3.zero;
 
     public enum Phase
@@ -36,12 +37,43 @@ public class BossRoomManager : MonoBehaviour {
     }
 
     public Phase phase;
+    public SendCollisionMessage.Field field;
+    public GameObject player_coll;
+    public BossRoomRelocation reloc;
+    public BossHpUI boss_hp_ui;
+    public UiGroggyPoint boss_groggy_ui;
+    public AWTimerUI ancient_timer_ui;
 
-    void Start()
+    public TimeSelector time_selector;
+
+    public AudioSource sound;
+    public AudioSource idle_sound;
+    public AudioSource[] back_sound;  
+    
+
+    void Awake()
     {
+        field = SendCollisionMessage.Field.NULL;
+        //reloc = GetComponent<BossRoomRelocation>();
+        idle_sound.Play();
+        for(int i =0; i < back_sound.Length; i++)
+        {
+            if (i != 0)
+                back_sound[i].mute = true;
+            else
+                back_sound[i].mute = false;
+            back_sound[i].Play();
+        }
         boss_state = boss.gameObject.GetComponent<Boss_State>();
-        
+        boss_action = boss.gameObject.GetComponent<Boss_Action>();
+
         player_enter_bossroom();
+
+        GameObject _player_coll = (GameObject)Instantiate(player_coll.gameObject,
+                                                        player.transform.position, Quaternion.identity);
+
+        _player_coll.transform.SetParent(player.gameObject.transform);
+        _player_coll.transform.position = player.transform.position;
     }
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
@@ -66,19 +98,27 @@ public class BossRoomManager : MonoBehaviour {
     //페이즈 증가 함수 (페이즈 증가 -> 새로운 페이즈 시작)
     public void increase_pahse(bool _add)
     {
+        //페이즈 증가에 따른 스위치 끄기
+        
+        for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
+        {
+            reloc.get_reloc((int)phase).switch_object[i].set_switch(false);
+            reloc.get_reloc((int)phase).switch_object[i].off_switch_set();
+        }
+
+        for (int i = 0; i < time_selector.get_active_switch_cnt((int)phase); i++)
+        {
+            time_selector.get_active_switch_list(i).set_switch(false);
+            time_selector.get_active_switch_list(i).off_switch_set();
+        }
+
         if (_add)   //페이즈가 넘어가지 않고 스위치만 초기화되는 경우가 있으므로...
         {
             //페이즈 증가
-            phase = (Phase)((int)phase++);  //이런식으로 쓰는게 옳은가?
+            phase++;  
+            Map_Initialization();
+            time_selector.select_switch();
         }
-
-        //페이즈 증가에 따른 스위치 끄기
-        //
-        //for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
-        //{
-        //    reloc.get_reloc((int)phase).switch_object[i].set_switch(false);
-        //    reloc.get_reloc((int)phase).switch_object[i].off_switch_set();
-        //}
 
         //hit스위치 끄기 (다리 내리기) 추가
         //
@@ -105,8 +145,63 @@ public class BossRoomManager : MonoBehaviour {
         return cross_point;
     }
 
+    public Boss_Worm get_boss()
+    {
+        return boss;
+    }
 
+    public Boss_State.State get_boss_state()
+    {
+        return boss_state.get_state();
+    }
 
+    public void set_hp_ui(BossHpUI hp_ui)
+    {
+        boss_hp_ui = hp_ui;
+    }
+
+    public BossHpUI get_hp_ui()
+    {
+        return boss_hp_ui;
+    }
+
+    public void set_groggy_ui(UiGroggyPoint _ui)
+    {
+        boss_groggy_ui = _ui;
+    }
+
+    public UiGroggyPoint get_groggy_ui()
+    {
+        return boss_groggy_ui;
+    }
+
+    public Vector3 get_groggy_point()
+    {
+        return boss_action.get_groggy_point();
+    }
+
+    public AWTimerUI get_ancient_ui()
+    {
+        return ancient_timer_ui;
+    }
+
+    public void set_ancient_ui(AWTimerUI _ui)
+    {
+        ancient_timer_ui = _ui;
+    }
+
+    public void set_field_info(SendCollisionMessage.Field _field)
+    {
+        field = _field;
+
+        for(int i =0; i< back_sound.Length; i++)
+        {
+            if (i == (int)field)
+                back_sound[i].mute = false;
+            else
+                back_sound[i].mute = true;
+        }
+    }
 
     //public Boss_Worm boss;
     //public Player player;

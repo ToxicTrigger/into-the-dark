@@ -146,14 +146,14 @@ public class ObjMove : Observer
             cnt++;
             if(cnt >= clear_cnt)
             {
-                StartCoroutine(timer(obj_switch.get_strong_hit()));
+                //StartCoroutine(timer(obj_switch.get_strong_hit()));
             }
         }
         else
         {            
             cnt--;
-            if(move_dir == Direction.Up)
-                StartCoroutine(timer(obj_switch.get_strong_hit()));
+            //if(move_dir == Direction.Up)
+                //StartCoroutine(timer(obj_switch.get_strong_hit()));
         }
     }
 

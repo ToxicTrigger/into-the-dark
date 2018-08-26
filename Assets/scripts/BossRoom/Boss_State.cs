@@ -20,7 +20,16 @@ public class Boss_State : MonoBehaviour
         Up
     }
 
+    State back_state;
     public State state;
+    Boss_Action boss_action;
+    BossRoomManager manager;
+
+    void Start()
+    {
+        manager = BossRoomManager.get_instance();
+        boss_action = this.GetComponent<Boss_Action>();
+    }
 
     public State get_state()
     {
@@ -30,6 +39,28 @@ public class Boss_State : MonoBehaviour
     public void set_state(State _state)
     {
         state = _state;
+        this.GetComponent<Boss_Action>().action_phase = 1;
+
+        if (_state == State.Idle)
+            boss_action.set_idle_state(true);
+        else boss_action.set_idle_state(false);
+
+        if (_state == State.Groggy)
+        {
+            manager.get_hp_ui().switching_ui(true);
+            manager.get_groggy_ui().set_boss_groggy(true,boss_action.get_groggy_point());
+        }
+        else if (back_state == State.Groggy)
+        {
+            manager.get_hp_ui().switching_ui(false);
+            manager.get_groggy_ui().set_boss_groggy(false, Vector3.zero);
+        }
+
+        if (_state != State.Move && _state != State.Rush_Attack)
+            manager.set_field_info(SendCollisionMessage.Field.NULL);
+
+        back_state = state;
+        //상태가 바뀔 때 항상 action_phase를 1로 만W들어준다.
     }
 
 }

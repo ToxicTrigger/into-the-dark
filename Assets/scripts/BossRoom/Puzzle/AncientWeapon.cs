@@ -14,6 +14,7 @@ public class AncientWeapon : Observer
     //public Light weapon_light;
 
     BossRoomManager manager;
+    public Boss_State boss_state;
 
     public Animator animator;
 
@@ -27,25 +28,37 @@ public class AncientWeapon : Observer
 
     State state;
     IEnumerator _timer;
+    IEnumerator ready_timer;
 
     void Start()
-    {
+    {        
         //weapon_light.gameObject.SetActive(false);
         state = State.Deactivated;  //초기 상태는 비활성화된 상태
+        //if (ready_timer == null)
+        //{
+        //    ready_timer = ready_action();
+        //    StartCoroutine(ready_timer);
+        //}
+        //boss_state = manager.get_boss().gameObject.GetComponent<Boss_State>();
     }
 
     public override void notify(Observable observable)
     {
         //throw new System.NotImplementedException();
-        ObservableTorch torch = observable as ObservableTorch;
-        Debug.Log(torch.get_state());
+        BasicSwitch torch = observable as BasicSwitch;
+        //Debug.Log(torch.get_state());
         //Debug.Log("AncientWeapon __ torch.name = \"" + torch.name + " || torch.get_switch() = \"" + torch.get_state());
-        if (torch.get_state() == ObservableTorch.State.On)
+        if (torch.get_switch())
         {
             if(activate_torch_count <max_count ) activate_torch_count++;
 
             if (activate_torch_count >= max_count)
             {
+                //if(ready_timer == null)
+                //{
+                //    ready_timer = ready_action();
+                //    StartCoroutine(ready_timer);
+                //}
                 activate(); //활성화!
             }
         }
@@ -57,7 +70,12 @@ public class AncientWeapon : Observer
             }
             if (state == State.Activated)
             {
-                torch_deactivate();
+                //if (ready_timer == null)
+                //{
+                //    ready_timer = ready_action();
+                //    StartCoroutine(ready_timer);
+                //}
+                deactivate();
             }
         }
     }
@@ -71,37 +89,106 @@ public class AncientWeapon : Observer
         //weapon_light.gameObject.SetActive(true);
         state = State.Activated;
         BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy); //weapon_activation() : 보스 그로기상태 전환 
+        
         StartCoroutine(_timer);
     }
 
     //활성화 타이머
     IEnumerator activate_timer()
     {
-        if (activate_count < time_list.Length - 1)
-            activate_count++;   //활성화 횟수를 증가시킨다.
-        yield return new WaitForSeconds(time_list[activate_count]);
+        //if (activate_count < time_list.Length - 1)
+        //    activate_count++;   //활성화 횟수를 증가시킨다.
+        BossRoomManager.get_instance().get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
+        yield return new WaitForSeconds(time_list[(int)BossRoomManager.get_instance().phase]);
+
+        //if (ready_timer == null)
+        //{
+        //    ready_timer = ready_action();
+        //    StartCoroutine(ready_timer);
+        //}
         deactivate();   //일정 시간이 지나면 비활성화 시키는 함수를 호출한다.
+    }
+
+
+    public float move_y;
+    public int ready_time;
+    //활성화, 비활성화가 되기 전 준비하는 코루틴 (올라가거나 내려감)
+    IEnumerator ready_action()
+    {
+        Vector3 move_dir;
+        if(state == State.Activated)
+        {            
+            //내려가야함 
+            move_dir = Vector3.down;
+        }
+        else
+        {
+            move_dir = Vector3.up;
+        }
+
+        move_dir.y *= move_y / ready_time;
+
+        for (int i = 0; i < ready_time; i++)
+        {
+            transform.position += move_dir;
+
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        if (state == State.Activated)
+        {
+            deactivate();
+        }
+        else
+        {
+            activate();
+        }
+
+        move_dir = Vector3.zero;
+        ready_timer = null;
     }
 
     //고대병기의 "활성화 유지시간이 끝나며" 일괄처리 _ 퍼즐과 보스움직임에대한 처리를 해준다.
     void deactivate()
     {
-        Debug.Log("비활성화");
         animator.SetBool("activate", false);
         //weapon_light.gameObject.SetActive(false);
         state = State.Deactivated;
-        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Idle);
+        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Soar_Attack);
         BossRoomManager.get_instance().increase_pahse(false);
+        BossRoomManager.get_instance().get_ancient_ui().switching_ui(false,0.0f);
     }
 
     //외부 요인으로 인하여 고대병기 비활성화 _ 고대병기에 대한 처리만 해준다.
     void torch_deactivate()
     {
-        Debug.Log("비활성화");
         animator.SetBool("activate", false);
         //외부 요인으로 인해 비활성화됨
         //weapon_light.gameObject.SetActive(false);
         state = State.Deactivated;
         StopCoroutine(_timer);    //타이머가 정상적으로 종료되기 전에 외부요인으로 인해 비활성화 되었으므로 임의로 종료시킨다.
+        BossRoomManager.get_instance().get_ancient_ui().switching_ui(false, 0.0f);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            if(Input.GetKeyDown(KeyCode.E) && state == State.Activated)
+            {
+                torch_deactivate();
+                boss_state.set_state(Boss_State.State.Groggy);
+            }
+        }
+    }
+
+    public float get_activate_time()
+    {
+        return time_list[activate_count];
+    }
+
+    public void set_active_count(int _count)
+    {
+        max_count = _count;
     }
 }

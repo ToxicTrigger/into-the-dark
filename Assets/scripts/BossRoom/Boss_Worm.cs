@@ -6,15 +6,25 @@ public class Boss_Worm : MonoBehaviour
 {
     //
 
+    public int max_hp;
     public int hp;
 
     //
 
+    BossRoomManager manager;
     Boss_State state;
 
     void Start()
     {
+        hp = max_hp;
         state = GetComponent<Boss_State>();
+        manager = BossRoomManager.get_instance();
+    }
+    
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+            hp -= 1;
     }
 
     //약점공격을 받으면 (머리) -> 대화해봐야함
@@ -24,30 +34,52 @@ public class Boss_Worm : MonoBehaviour
         {
             add_damage();
         }
+        if(other.CompareTag("Sword"))
+        {
+            add_damage();
+        }
     }
 
     public void add_damage()
     {
-        hp -= 1;
+        hp -= 100;
 
-        if (hp <= 0)
+        switch (manager.phase)
         {
-            state.set_state(Boss_State.State.Death);
+            case BossRoomManager.Phase.one:
+                if (hp < max_hp * 0.8 && state.get_state() == Boss_State.State.Groggy)
+                {
+                    state.set_state(Boss_State.State.Soar_Attack);
+                    BossRoomManager.get_instance().increase_pahse(true);
+                }
+                break;
+            case BossRoomManager.Phase.two:
+                if (hp < max_hp * 0.4 && state.get_state() == Boss_State.State.Groggy)
+                {
+                    state.set_state(Boss_State.State.Soar_Attack);
+                    BossRoomManager.get_instance().increase_pahse(true);
+                }
+                break;
+            case BossRoomManager.Phase.three:
+                if (hp <= 0)
+                {
+                    state.set_state(Boss_State.State.Death);
+                }
+                break;
+            default:
+                break;
         }
 
-        if(state.get_state() == Boss_State.State.Groggy)
-        {
-            state.set_state(Boss_State.State.Soar_Attack);
-        }
     }
 
-
-
-
-
-
-
-
+    public int get_hp()
+    {
+        return hp;
+    }
+    public int get_max_hp()
+    {
+        return max_hp;
+    }
 
     //Animator animator;
 

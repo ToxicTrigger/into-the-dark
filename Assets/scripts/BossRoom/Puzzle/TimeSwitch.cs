@@ -13,10 +13,10 @@ public class TimeSwitch : BasicSwitch {
     public float wait_time; //켜진 후 기다리는 시간
     public bool clear_puzzle = false;
 
+
     private void Start()
     {
         _light.gameObject.SetActive(false);
-        use_enable = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -73,6 +73,26 @@ public class TimeSwitch : BasicSwitch {
     {
         _light.gameObject.SetActive(false);
         clear_puzzle = false;
+    }
+
+    public void set_wait_time(int _time)
+    {
+        wait_time = _time;
+    }
+    
+    public void set_switch_set(int i , TimeSwitch _switch)
+    {
+        time_switch_list[i] = _switch;
+    }
+
+    public TimeSwitch get_switch_set(int i)
+    {
+        return time_switch_list[i];
+    }
+    
+    public void new_switch_set(int i)
+    {
+        time_switch_list = new TimeSwitch[i];
     }
 
 }

@@ -8,6 +8,19 @@ public class Boss_Action : MonoBehaviour {
     Boss_State state;
     Boss_Worm boss;
 
+    Animator animator;
+
+    public AudioSource rush_attack_sound;
+
+    enum Rotate_Cnt
+    {
+        one = 0,
+        two,
+        three,
+        four
+    }
+    Rotate_Cnt rot_cnt;
+
     public Boss_Tail[] tail;
 
     public Transform player;
@@ -19,12 +32,27 @@ public class Boss_Action : MonoBehaviour {
 
     IEnumerator c_timer;
 
+    //idle
+    public Transform rotate_center;
+    public float map_width;
+    public float map_height;
+    public Vector3[] rotate_pos;
+    public float idle_speed;
+
     public Transform around_transform;
 
+    public float recognize_distance;    //인식 거리
+    public float proximity_distance;    //가까운 거리 (가까운 것으로 인정하는 거리)
+    //
+    //soar
     int soar_count;
-    public Transform [] soar_target;
-    public Transform groggy_point;
-
+    public Transform soar_target;
+    public float y_dis;
+    public float soar_speed;
+    //groggy
+    public Transform [] groggy_point;
+    public Vector3 g_point;
+    public int groggy_cnt;
 
     //wipping attack
     Transform attack_point;
@@ -45,6 +73,8 @@ public class Boss_Action : MonoBehaviour {
     public float move_speed;
 
     void Start () {
+        animator = this.GetComponent<Animator>();
+        rot_cnt = Rotate_Cnt.one;
         line = GetComponent<LineRenderer>();
         line.SetVertexCount(segments + 1);
         line.useWorldSpace = false;
@@ -52,8 +82,13 @@ public class Boss_Action : MonoBehaviour {
         boss = GetComponent<Boss_Worm>();
         state = GetComponent<Boss_State>();
         action_phase = 1;
-        around_transform.position = new Vector3(player.position.x + idle_radius, player.position.y - idle_y_pos, player.position.z);
-        
+        //around_transform.position = new Vector3(rotate_center.position.x - map_width, player.position.y - idle_y_pos, player.position.z);
+
+        rotate_pos = new Vector3[4];
+        rotate_pos[0] = new Vector3 (rotate_center.position.x - map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z);
+        rotate_pos[1] = new Vector3(rotate_center.position.x , rotate_center.position.y - idle_y_pos, rotate_center.position.z + map_height);
+        rotate_pos[2] = new Vector3(rotate_center.position.x + map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z );
+        rotate_pos[3] = new Vector3(rotate_center.position.x, rotate_center.position.y - idle_y_pos, rotate_center.position.z - map_height);
     }
 
     private void LateUpdate()
@@ -76,26 +111,77 @@ public class Boss_Action : MonoBehaviour {
     Vector3 cross_end;
     public float cross_height;
     Vector3 up_point;
+
+    bool idle_state;
+
     void Update () {
 
         //테스트용
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //state.set_state(Boss_State.State.Rush_Attack);
-            state.set_state(Boss_State.State.Move);
-        }
+       //if (Input.GetKeyDown(KeyCode.Space))
+       //{
+       //    //state.set_state(Boss_State.State.Rush_Attack);
+       //    state.set_state(Boss_State.State.Move);
+       //}
+
         if(rush_attack)
             create_point();
 
-        around_transform.RotateAround(player.transform.position, Vector3.up, 2f);
+        //around_transform의 위치를 변경시켜주는 코드
+        if (idle_state)
+        {
+            switch (rot_cnt)
+            {
+                case Rotate_Cnt.one:
+                    around_transform.position += (rotate_pos[(int)Rotate_Cnt.two] - around_transform.position).normalized * idle_speed * Time.deltaTime;
+                    if (Vector3.Distance(around_transform.position, rotate_pos[(int)Rotate_Cnt.two]) < 1.0f)
+                    {
+                        rot_cnt++;
+                    }
+                    break;
+                case Rotate_Cnt.two:
+                    around_transform.position += (rotate_pos[(int)Rotate_Cnt.three] - around_transform.position).normalized * idle_speed * Time.deltaTime;
+                    if (Vector3.Distance(around_transform.position, rotate_pos[(int)Rotate_Cnt.three]) < 1.0f)
+                    {
+                        rot_cnt++;
+                    }
+                    break;
+                case Rotate_Cnt.three:
+                    around_transform.position += (rotate_pos[(int)Rotate_Cnt.four] - around_transform.position).normalized * idle_speed * Time.deltaTime;
+                    if (Vector3.Distance(around_transform.position, rotate_pos[(int)Rotate_Cnt.four]) < 1.0f)
+                    {
+                        rot_cnt++;
+                    }
+                    break;
+                case Rotate_Cnt.four:
+                    around_transform.position += (rotate_pos[(int)Rotate_Cnt.one] - around_transform.position).normalized * idle_speed * Time.deltaTime;
+                    if (Vector3.Distance(around_transform.position, rotate_pos[(int)Rotate_Cnt.one]) < 1.0f)
+                    {
+                        rot_cnt = Rotate_Cnt.one;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+               
+
+        //around_transform.RotateAround(player.transform.position, Vector3.up, 2f);
 
         switch (state.get_state())
         {
             case Boss_State.State.Idle:
-
-                    move_dir = (around_transform.position - this.transform.position).normalized;
+                if (action_phase == 1)
+                {
+                    BossRoomManager.get_instance().set_field_info(SendCollisionMessage.Field.NULL);
+                    animator.SetBool("groggy", false);
+                    action_phase = 2;
+                }
+                else if (action_phase == 2)
+                {
+                    //move_dir = (around_transform.position - this.transform.position).normalized;
                     transform.position = around_transform.position;
-
+                }
                 break;
 
             case Boss_State.State.Move:
@@ -105,33 +191,19 @@ public class Boss_Action : MonoBehaviour {
 
                 if(action_phase ==1)
                 {
-                    move_dir = (move_pos.position - transform.position).normalized;
+                    if(c_timer == null)
+                    {
+                        c_timer = Normal_Timer(3,Boss_State.State.Rush_Attack);
+                        StartCoroutine(c_timer);
+                    }
+                    move_dir = (player.transform.position - transform.position).normalized;
                     move_dir.y = 0;
-                    action_phase = 2;
+
+                    transform.position += move_dir * move_speed * Time.deltaTime;
                 }
                 else if(action_phase == 2)
                 {
-                    transform.position += move_dir * move_speed * Time.deltaTime;
-
-                    //통로를 지나오면
-                    if(Vector2.Distance(new Vector2(move_pos.position.x, move_pos.position.z), new Vector2(transform.position.x, transform.position.z)) < 5.0f)
-                    {
-                        action_phase = 3;                        
-                    }
-                }
-                else if(action_phase ==3)
-                {
-                    move_dir = (player.position - transform.position).normalized;    //플레이어 쫓기 시작
-                    move_dir.y = 0;
-
-                    transform.position += move_dir * move_speed * Time.deltaTime;
-
-                    //플레이어에 근접하면
-                    if (Vector2.Distance(new Vector2(player.position.x, player.position.z), new Vector2(transform.position.x, transform.position.z)) < 5.0f)
-                    {
-                        action_phase = 1;
-                        state.set_state(Boss_State.State.Whipping_Attack);
-                    }
+                    c_timer = null;
                 }
                 break;
 
@@ -143,7 +215,7 @@ public class Boss_Action : MonoBehaviour {
                     //타이머를 1회만 실행하기 위함
                     if (c_timer == null)
                     {
-                        jump_power = 1;
+                        //jump_power = 15;
                         c_timer = Rush_Attack_Timer();
                         StartCoroutine(c_timer);
                     }
@@ -157,12 +229,12 @@ public class Boss_Action : MonoBehaviour {
                     move_dir = (move_target - transform.position).normalized;  //이동 방향        
                     float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
 
-                    move_dir.y = Mathf.Lerp(1.0f, -1.0f, (origin_dis - cur_dis) / origin_dis - 0.3f);
+                    move_dir.y = Mathf.Lerp(2.0f, -1.0f, (origin_dis - cur_dis) / origin_dis - 0.2f);
                     if (move_dir.y < 0) move_dir.y *= jump_power;
 
                     transform.position += move_dir * rush_speed * Time.deltaTime;
 
-                    if(cur_dis < 1.5 )//&& transform.position.y < move_target.y+5)
+                    if(cur_dis < 2.0f )//&& transform.position.y < move_target.y+5)
                     {
                         //EventManager.get_instance().camera_shake(c_shake_power_rush, c_shake_cnt_rush, c_shake_speed_rush, EventManager.Direction.Up_Down, c_shake_minus_rush);
                         //카메라 쉐이크
@@ -171,17 +243,17 @@ public class Boss_Action : MonoBehaviour {
                 }
                 else if(action_phase == 3)
                 {
+                    Debug.Log( "3  -- " + action_phase);
                     //Vector3 _dir = (around_transform.position - transform.position).normalized;
                     move_dir.y = -1;//_dir.y-10;
                     transform.position += move_dir * rush_speed * Time.deltaTime;
                     if (rush_attack && Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.z), new Vector2(transform.position.x, transform.position.z)) <= x_radius)
                     {
                         Debug.Log(" !맞았음! 플레이어와의 거리 >> "+Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.z), new Vector2(transform.position.x, transform.position.z)));
-                        attack_player(1);
+                        attack_player(10);
                     }
-
-                    if (rush_attack)
-                    {
+                    else if (rush_attack)
+                    {                        
                         rush_attack = false;
                         line.SetVertexCount(0);
                         line.SetVertexCount(segments + 1);
@@ -189,7 +261,8 @@ public class Boss_Action : MonoBehaviour {
 
                     if(tail[tail.Length-1].transform.position.y < around_transform.position.y-10)
                     {
-                        action_phase = 1;
+                        Debug.Log("rush_end");        
+                        //action_phase = 1;
                         state.set_state(Boss_State.State.Idle);
                         c_timer = null;
                     }
@@ -352,26 +425,42 @@ public class Boss_Action : MonoBehaviour {
 
                 if (action_phase == 1)
                 {
-                    if (transform.position.y > move_target.y)
+                    for (int i = 0; i < 5; i++)
                     {
-                        action_phase = 2;
-                        move_target = new Vector3(soar_target[soar_count].position.x, transform.position.y, soar_target[soar_count].position.z);
-                        origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
-                                           
+                        tail[i].GetComponent<Collider>().isTrigger = true;
                     }
+
+                    animator.SetBool("groggy", false);
+                    move_target = transform.position + new Vector3(0, y_dis, 0);
+                    move_dir = move_target - transform.position;
+                    action_phase = 2;
                 }
                 else if (action_phase == 2)
                 {
-                    float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
+                    transform.position += move_dir * soar_speed * Time.deltaTime;
 
-                    if (cur_dis < 0.5)
+                    if (transform.position.y > move_target.y)
                     {
                         action_phase = 3;
-                        move_target = new Vector3(soar_target[soar_count].position.x, around_transform.position.y, soar_target[soar_count].position.z);
+                        move_target = new Vector3(soar_target.position.x, transform.position.y, soar_target.position.z);
+                        origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
+                        move_dir = (move_target - transform.position).normalized;
                     }
                 }
                 else if (action_phase == 3)
                 {
+                    transform.position += move_dir * soar_speed * Time.deltaTime;
+                    if (Vector3.Distance(transform.position, move_target) < 2.0f)
+                    {
+                        action_phase = 4;
+                        move_target = new Vector3(soar_target.position.x, around_transform.position.y, soar_target.position.z);
+                        move_dir = (move_target - transform.position).normalized;
+                    }
+                }
+                else if(action_phase == 4)
+                {
+                    transform.position += move_dir * soar_speed * Time.deltaTime;
+
                     if (tail[0].transform.position.y <= move_target.y)
                     {
                         //soar_count++;
@@ -384,19 +473,43 @@ public class Boss_Action : MonoBehaviour {
                     }
                 }
 
-                move_dir = (move_target - transform.position).normalized;
+                //move_dir = (move_target - transform.position).normalized;
 
                 break;
             case Boss_State.State.Groggy:
                 if(action_phase == 1)
                 {
-                    transform.position = groggy_point.position;
+                    for (int i = 0; i < 5; i++)
+                        tail[i].GetComponent<Collider>().isTrigger = false;
+
+                    Vector3 temp = Vector3.zero;
+                    if (groggy_point[groggy_cnt].position.x < rotate_center.position.x)
+                        temp.x = -1;
+                    else temp.x = 1;
+
+                    if (groggy_point[groggy_cnt].position.z < rotate_center.position.z)
+                        temp.z = -1;
+                    else temp.z = 1;
+
+                    temp = new Vector3(g_point.x , - g_point.y, g_point.z * temp.z);
+
+                    transform.position = groggy_point[groggy_cnt].position + temp;
                     Quaternion quat = Quaternion.identity;
-                    quat = Quaternion.Euler(new Vector3(0, 140, 0));
+                    //quat = Quaternion.Euler(new Vector3(0, 140, 0));
+                    quat = Quaternion.LookRotation((rotate_center.position - groggy_point[groggy_cnt].position).normalized);
+                    transform.rotation = quat;
+
+                    animator.SetBool("groggy", true);
+                    //action_state = Action.Groggy;
+                    //boss_groggy.Play();
 
                     //애니메이션 재생이 제대로 이루어질 장소와 회전값을 찾아 넣는다.
                     //그로기 상태로 변화하는 곳의 위치가 고정되어 있다면 그대로 사용이 가능하지만 추후 변한다면....
                     action_phase = 2;
+                    if (groggy_cnt == 2)
+                        groggy_cnt = 0;
+                    else
+                        groggy_cnt++;
                 }
                 else if(action_phase ==2)
                 {
@@ -428,7 +541,7 @@ public class Boss_Action : MonoBehaviour {
     Vector3 move_target;
     float rush_timer_cnt =3.0f;
     float origin_dis;
-    float jump_power;
+    public float jump_power;
     public float rush_speed;
     public float cross_speed;
 
@@ -444,7 +557,6 @@ public class Boss_Action : MonoBehaviour {
         //else action_state = Action.Ready;
 
         rush_attack_start_pos = transform.position;
-
         yield return new WaitForSeconds(rush_timer_cnt); // 공격 대기시간
         
         move_target = new Vector3(player.position.x, player.position.y + 2, player.position.z); //내위치 + ((반지름*2) * 이동방향) _ x,z || around_transform의 y위치 
@@ -467,6 +579,13 @@ public class Boss_Action : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         action_phase = 3;
         move_dir = (player.transform.position - transform.position).normalized;
+    }
+
+    IEnumerator Normal_Timer(float _time, Boss_State.State _state)
+    {
+        yield return new WaitForSeconds(_time);
+        state.set_state(_state);
+        action_phase = 2;
     }
 
     void create_point()
@@ -494,6 +613,16 @@ public class Boss_Action : MonoBehaviour {
     void attack_player(int _damage)
     {
         player.gameObject.GetComponent<Damageable>().Damaged(_damage, 1.0f);
+    }
+
+    public void set_idle_state(bool _state)
+    {
+        idle_state = _state;
+    }
+
+    public Vector3 get_groggy_point()
+    {
+        return groggy_point[groggy_cnt].position;
     }
 
 }
