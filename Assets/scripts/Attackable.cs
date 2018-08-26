@@ -60,7 +60,6 @@ public class Attackable : MonoBehaviour {
                 Damageable dam = other.GetComponent<Damageable>();
                 dam.Hp -= Damage;
            }
-
         }
     }
 

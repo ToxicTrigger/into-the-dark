@@ -13,10 +13,13 @@ public class PlayerMove : InputHandler {
 	public float fall_tick;
 	public Transform spawn_point;
 
+	public float dash_timer;
+	public bool is_dash, dash_start;
+	
     public override void Work(InputManager im)
     {
-        if(!im.has_not_anything_input() & (player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle")))
-		{
+		if(!im.has_not_anything_input() & (player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle")))
+        {
 			movement.x = im.get_Horizontal();
 			movement.z = im.get_Vertical();	
 			player.ani.SetFloat("Forward", movement.normalized.magnitude );
@@ -24,8 +27,28 @@ public class PlayerMove : InputHandler {
 
 			Quaternion q = Quaternion.LookRotation(movement);
 			transform.rotation = Quaternion.Slerp(transform.rotation, q, moveSpeed);
-        
-			cc.Move(movement);
+
+			
+			if(Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
+			{
+				dash_timer = Time.time;
+				//cc.Move(movement);
+				Debug.Log("work");
+			}
+			if((Time.time < dash_timer + 0.4f) && (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical")))
+			{
+				dash_start = true;
+				//cc.Move(movement * 1.5f);
+				Debug.Log("run");
+			}
+
+			if(dash_start)
+			{
+				cc.Move(movement * 1.5f);
+			}else{
+				cc.Move(movement);
+			}
+			
 
 			if (foot_step_tick >= 0.25f)
             {
@@ -46,7 +69,10 @@ public class PlayerMove : InputHandler {
 		}else{
 			movement = Vector3.zero;
 			player.ani.SetFloat("Forward", movement.z);
+			dash_start = false;
+			dash_timer = 0;
 		}
+		//dash_timer = 0;
     }
 
 	

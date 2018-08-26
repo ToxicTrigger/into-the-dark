@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -902,6 +902,7 @@ GameObject:
   - component: {fileID: 771548588}
   - component: {fileID: 771548587}
   - component: {fileID: 771548591}
+  - component: {fileID: 771548592}
   m_Layer: 0
   m_Name: MagicBox
   m_TagString: Untagged
@@ -1004,6 +1005,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   info: "\uB084\uB084\uB084"
   icon: {fileID: 21300000, guid: a3983c59ebf804b4abba687bd7c9e92f, type: 3}
+--- !u!114 &771548592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 771548585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3bf2e237e92ec74bb587e2dbec7d720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp: 10
+  has_hit: 0
+  Dead: 0
 --- !u!4 &811149559 stripped
 Transform:
   m_PrefabParentObject: {fileID: 405516, guid: 535dd65518aff9d45bfee418a05a7673, type: 2}

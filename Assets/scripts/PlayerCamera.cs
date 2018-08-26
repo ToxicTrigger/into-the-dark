@@ -11,7 +11,9 @@ public class PlayerCamera : MonoBehaviour
         Follow, //플레이어 따라감
         Fixed,   //특정 구간에 고정
         Event,   //연출 카메라 
-        Active
+        Active,
+        Dodge,
+        Sword_Attack
     }
     public State cam_state;
 
@@ -26,7 +28,6 @@ public class PlayerCamera : MonoBehaviour
     float speed;
     public bool shake;
     IEnumerator timer;
-
     Transform origin;
 
     void Start()
@@ -58,6 +59,21 @@ public class PlayerCamera : MonoBehaviour
             {
                 tr.position = Vector3.Lerp(tr.position, origin.position + _offset, Time.deltaTime * speed);
                 Debug.Log(_offset);
+            }
+        }
+        else if (cam_state == State.Dodge)
+        {
+            tr.position = Vector3.Lerp(tr.position, player.position + _offset * 0.95f, Time.deltaTime * speed * 0.7f);
+        }
+        else if(cam_state == State.Sword_Attack)
+        {
+            if(player.GetComponent<Player>().Sword.GetComponent<Attackable>().has_out)
+            {
+                tr.position = Vector3.Lerp(tr.position, player.position + _offset * 0.95f, Time.deltaTime * speed * 1.5f);
+            }
+            else
+            {
+                tr.position = Vector3.Lerp(tr.position, player.position + _offset * 1.7f, Time.deltaTime * speed * 2.0f);
             }
         }
     }

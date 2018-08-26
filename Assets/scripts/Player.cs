@@ -47,12 +47,12 @@ public class Player : MonoBehaviour{
     public float step_three = 0.3f;
     [Range(-1, 1)]
     public float step_Dodge = 0.15f;
+    PlayerCamera ActionCam;
 
     float bow_time;
     [Tooltip("현재 진행중인 애니메이션 이름")]
     public string cur_ani;
     public CharacterController character;
-
     public AudioSource Foot_Step, Sword_Sound;
 
 
@@ -65,6 +65,7 @@ public class Player : MonoBehaviour{
         totems = new List<GameObject>(3);
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
+        ActionCam = cam.GetComponent<PlayerCamera>();
     }
 
     public void setSwordEnable(int val)
@@ -229,6 +230,7 @@ public class Player : MonoBehaviour{
             ani.SetFloat("Forward", 0.0f);
             ani.SetFloat("Turn", 0.0f);
             ani.SetBool("Dodge", true);
+            ActionCam.set_state(PlayerCamera.State.Dodge);
             //Input.ResetInputAxes();
         }    
         if (!is_attack)
@@ -255,6 +257,7 @@ public class Player : MonoBehaviour{
                 break;
             case "wakeUp":
                 ani.SetBool("Dodge", false);
+                ActionCam.set_state(PlayerCamera.State.Follow);
                 break;
             case "Dodge":
                 character.Move(transform.forward.normalized * step_Dodge);
@@ -283,6 +286,7 @@ public class Player : MonoBehaviour{
             ani.SetBool("Attack", true);
             weapon.type = Weapon.Type.Sword;
             is_fighting_something = true;
+            ActionCam.set_state(PlayerCamera.State.Sword_Attack);
         }
 
         if(click_tick >= 0.3f)
@@ -290,9 +294,10 @@ public class Player : MonoBehaviour{
             click_tick = 0;
             attack_click = false;
             is_fighting_something = false;
-            //weapon.type = Weapon.Type.Idle;
             is_attack = false;
             line.gameObject.SetActive(false);
+
+            ActionCam.set_state(PlayerCamera.State.Follow);
         }else{
             click_tick += Time.deltaTime;
         }
