@@ -40,6 +40,7 @@ public class Damageable : MonoBehaviour {
         float dam = damage * armor_power;
         Hp -= dam;
         has_hit = true;
+        
         yield return new WaitForSeconds(tick);
         if(Hp <= 0) Dead = true;
         has_hit = false;

@@ -28,27 +28,14 @@ public class PlayerMove : InputHandler {
 			Quaternion q = Quaternion.LookRotation(movement);
 			transform.rotation = Quaternion.Slerp(transform.rotation, q, moveSpeed);
 
-			
-			if(Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
-			{
-				dash_timer = Time.time;
-				//cc.Move(movement);
-				Debug.Log("work");
-			}
-			if((Time.time < dash_timer + 0.4f) && (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical")))
-			{
-				dash_start = true;
-				//cc.Move(movement * 1.5f);
-				Debug.Log("run");
-			}
-
-			if(dash_start)
+			if(Input.GetButton("Dash"))
 			{
 				cc.Move(movement * 1.5f);
+                player.ActionCam.set_state(PlayerCamera.State.Dash);
 			}else{
 				cc.Move(movement);
+                player.ActionCam.set_state(PlayerCamera.State.Follow);
 			}
-			
 
 			if (foot_step_tick >= 0.25f)
             {
@@ -69,12 +56,9 @@ public class PlayerMove : InputHandler {
 		}else{
 			movement = Vector3.zero;
 			player.ani.SetFloat("Forward", movement.z);
-			dash_start = false;
-			dash_timer = 0;
 		}
-		//dash_timer = 0;
+		
     }
-
 	
 	void update_fall()
 	{	
@@ -108,8 +92,7 @@ public class PlayerMove : InputHandler {
 		update_fall();
 		update_move_player_checkPoint();
 	}
-
-    // Use this for initialization
+    
     void Start () 
 	{
         foot_step_tick = 0;

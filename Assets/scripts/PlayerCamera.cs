@@ -13,7 +13,8 @@ public class PlayerCamera : MonoBehaviour
         Event,   //연출 카메라 
         Active,
         Dodge,
-        Sword_Attack
+        Sword_Attack,
+        Dash
     }
     public State cam_state;
 
@@ -29,6 +30,7 @@ public class PlayerCamera : MonoBehaviour
     public bool shake;
     IEnumerator timer;
     Transform origin;
+    public Vector2 default_fov, dash_fov, cur_fov;
 
     void Start()
     {
@@ -36,6 +38,9 @@ public class PlayerCamera : MonoBehaviour
         cam_state = State.Follow;
         speed = move_speed;
         _offset = offset;
+        default_fov = new Vector2(Camera.main.fieldOfView, 0);
+        dash_fov = new Vector2(55.0f, 0);
+        cur_fov = default_fov;
     }
 
     void Update()
@@ -76,6 +81,18 @@ public class PlayerCamera : MonoBehaviour
                 tr.position = Vector3.Lerp(tr.position, player.position + _offset * 1.7f, Time.deltaTime * speed * 2.0f);
             }
         }
+        if (cam_state == State.Dash)
+        {
+            cur_fov = Vector2.Lerp(cur_fov, dash_fov, Time.deltaTime);
+            tr.position = Vector3.Lerp(tr.position, player.position + _offset, Time.deltaTime * speed);
+        }
+        else
+        {
+            cur_fov = Vector2.Lerp(cur_fov, default_fov, Time.deltaTime);
+            tr.position = Vector3.Lerp(tr.position, player.position + _offset, Time.deltaTime * speed);
+        }
+
+        Camera.main.fieldOfView = cur_fov.x;
     }
 
     private void OnTriggerEnter(Collider other)

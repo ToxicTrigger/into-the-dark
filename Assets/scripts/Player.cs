@@ -47,15 +47,13 @@ public class Player : MonoBehaviour{
     public float step_three = 0.3f;
     [Range(-1, 1)]
     public float step_Dodge = 0.15f;
-    PlayerCamera ActionCam;
+    public PlayerCamera ActionCam;
 
     float bow_time;
     [Tooltip("현재 진행중인 애니메이션 이름")]
     public string cur_ani;
     public CharacterController character;
     public AudioSource Foot_Step, Sword_Sound;
-
-
 
     public void Start()
     {
@@ -72,12 +70,10 @@ public class Player : MonoBehaviour{
     {
         if (val == 0)
         {
-            //sword_Effect.SetActive(false);
             Sword.SetActive(false);
         }
         else
         {
-            //sword_Effect.SetActive(true);
             Sword.SetActive(true);
             Sword_Sound.PlayOneShot(Sword_Sound.clip);
         }
@@ -90,12 +86,12 @@ public class Player : MonoBehaviour{
         Vector3 nor = transform.forward.normalized;
         GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
         arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
+
         if(has_targeting_totem)
         {
             arrow.GetComponent<Arrow>().has_targeting_totem = true;
         }
         
-
         if (bow_time >= 3.2f & bow_time < 4f)
         {
             //강공격 여부 ㅇㅇ 
@@ -159,6 +155,7 @@ public class Player : MonoBehaviour{
             transform.LookAt(click_pos);
         }
     }
+
     int totem_size;
     void gen_totem()
     {
@@ -214,8 +211,6 @@ public class Player : MonoBehaviour{
                     ParticleSystem trigger = it.Current as ParticleSystem;
                     trigger.trigger.SetCollider(1 + totems.Count + 1, t.transform.GetChild(0));
                 }
-
-                //ParticleCollider.instance.ps.trigger.SetCollider(1 + totems.Count + 1, t.transform.GetChild(0));
             }
             if(Input.GetKeyUp(KeyCode.Q))
             {
@@ -223,6 +218,7 @@ public class Player : MonoBehaviour{
             }
         }
     }
+
     public void FixedUpdate()
     {
         if(Input.GetButton("Dodge"))
@@ -238,22 +234,19 @@ public class Player : MonoBehaviour{
             ani.SetBool("Attack", false);
         }
     }
-    //넌 조만간 죽는다.
+
     void step_ani()
     {
         switch (cur_ani)
         {
             case "Swing_0":
                 character.Move(transform.forward.normalized * step_one);
-                //transform.position += transform.forward.normalized * step_one;
                 break;
             case "Swing_1":
                 character.Move(transform.forward.normalized * step_two);
-                //transform.position += (transform.forward.normalized * step_two);
                 break;
             case "Jump":
                 character.Move(transform.forward.normalized * step_three);
-                //transform.position += (transform.forward.normalized * step_three);
                 break;
             case "wakeUp":
                 ani.SetBool("Dodge", false);
@@ -261,7 +254,6 @@ public class Player : MonoBehaviour{
                 break;
             case "Dodge":
                 character.Move(transform.forward.normalized * step_Dodge);
-                //transform.position += (transform.forward.normalized * step_Dodge);
                 break;
         }
     
@@ -272,7 +264,6 @@ public class Player : MonoBehaviour{
         if(!character.isGrounded)
         {
             character.Move(Vector3.up * Physics.gravity.y * Time.deltaTime);
-            //Debug.Log("Fly");
         }
     }
 
