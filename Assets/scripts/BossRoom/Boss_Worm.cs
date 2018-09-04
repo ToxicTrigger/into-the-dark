@@ -42,7 +42,7 @@ public class Boss_Worm : MonoBehaviour
 
     public void add_damage()
     {
-        hp -= 100;
+        hp -= 50;
 
         switch (manager.phase)
         {

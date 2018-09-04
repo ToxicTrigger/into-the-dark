@@ -10,7 +10,7 @@ public class TimeSelector : MonoBehaviour {
     public int[] active_switch_cnt;
 
     BossRoomManager manager;
-    public AncientWeapon ancient_weapon;
+    // public AncientWeapon ancient_weapon;
 
     void Start()
     {
@@ -57,7 +57,7 @@ public class TimeSelector : MonoBehaviour {
             if (num[i] == -1) --i;
             else
             {
-                Debug.Log(num[i]);
+                //Debug.Log(num[i]);
                 active_switch_list[i] = all_switch_list[num[i]];
                 active_switch_list[i].set_use_enable(true);
                 active_switch_list[i].set_wait_time(time);
@@ -85,7 +85,7 @@ public class TimeSelector : MonoBehaviour {
             }
         }
 
-        ancient_weapon.set_active_count(active_switch_cnt[(int)manager.phase]);
+        //ancient_weapon.set_active_count(active_switch_cnt[(int)manager.phase]);
 
     }
 

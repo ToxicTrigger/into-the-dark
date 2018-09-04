@@ -28,6 +28,7 @@ public class BossRoomManager : MonoBehaviour {
     Boss_Action boss_action;
     public Player player;
     Vector3 cross_point = Vector3.zero;
+    public AncientWeapon ancient_weapon;
 
     public enum Phase
     {
@@ -99,18 +100,21 @@ public class BossRoomManager : MonoBehaviour {
     public void increase_pahse(bool _add)
     {
         //페이즈 증가에 따른 스위치 끄기
-        
-        for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
+
+        for (int i = 0; i < reloc.get_reloc((int)phase).torch_set.Length; i++)
         {
-            reloc.get_reloc((int)phase).switch_object[i].set_switch(false);
-            reloc.get_reloc((int)phase).switch_object[i].off_switch_set();
+            for (int z = 0; z < reloc.get_reloc((int)phase).torch_set[i].switch_object.Length; z++)
+            {
+                reloc.get_reloc((int)phase).torch_set[i].switch_object[z].set_switch(false);
+                reloc.get_reloc((int)phase).torch_set[i].switch_object[z].off_switch_set();
+            }
         }
 
-        for (int i = 0; i < time_selector.get_active_switch_cnt((int)phase); i++)
-        {
-            time_selector.get_active_switch_list(i).set_switch(false);
-            time_selector.get_active_switch_list(i).off_switch_set();
-        }
+        //for (int i = 0; i < time_selector.get_active_switch_cnt((int)phase); i++)
+        //{
+        //    time_selector.get_active_switch_list(i).set_switch(false);
+        //    time_selector.get_active_switch_list(i).off_switch_set();
+        //}
 
         if (_add)   //페이즈가 넘어가지 않고 스위치만 초기화되는 경우가 있으므로...
         {
@@ -188,6 +192,11 @@ public class BossRoomManager : MonoBehaviour {
     public void set_ancient_ui(AWTimerUI _ui)
     {
         ancient_timer_ui = _ui;
+    }
+
+    public AncientWeapon get_ancient_weapon()
+    {
+        return ancient_weapon;
     }
 
     public void set_field_info(SendCollisionMessage.Field _field)

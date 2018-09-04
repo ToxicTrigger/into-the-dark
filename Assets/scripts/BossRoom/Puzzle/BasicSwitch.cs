@@ -12,11 +12,6 @@ public class BasicSwitch : Observable {
 
     AudioSource hit_sound;
 
-    public void Start()
-    {
-        use_enable = false;
-    }
-
     public void notify_all()
     {
         for (int i = 0; i < this.observers.Count; i++)

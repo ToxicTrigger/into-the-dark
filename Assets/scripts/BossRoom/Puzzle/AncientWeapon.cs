@@ -22,7 +22,7 @@ public class AncientWeapon : Observer
     [Tooltip("고대병기의 활성화 횟수에 따른 유지시간 지정")]
     public float[] time_list;   //엔진에서 횟수에 따른 시간을 지정해줄거임
     [Tooltip("고대병기에 할당된 스위치의 최대 개수")]
-    public int max_count = 2;
+    public int max_count;
     public int activate_torch_count = 0;
     float timer;    //활성화 유지 시간
 
@@ -31,35 +31,44 @@ public class AncientWeapon : Observer
     IEnumerator ready_timer;
 
     void Start()
-    {        
+    {
+        _timer = activate_timer();
         //weapon_light.gameObject.SetActive(false);
-        state = State.Deactivated;  //초기 상태는 비활성화된 상태
-        //if (ready_timer == null)
-        //{
-        //    ready_timer = ready_action();
-        //    StartCoroutine(ready_timer);
-        //}
+        state = State.Activated;  //초기 상태는 비활성화된 상태
+        if (ready_timer == null)
+        {
+            ready_timer = ready_action();
+            StartCoroutine(ready_timer);
+        }
         //boss_state = manager.get_boss().gameObject.GetComponent<Boss_State>();
+    }
+
+    void Update()
+    {
+        Debug.Log("max_count = " + max_count);
     }
 
     public override void notify(Observable observable)
     {
         //throw new System.NotImplementedException();
-        BasicSwitch torch = observable as BasicSwitch;
+        //BasicSwitch torch = observable as BasicSwitch;
+        ObservableTorch torch = observable as ObservableTorch;
         //Debug.Log(torch.get_state());
         //Debug.Log("AncientWeapon __ torch.name = \"" + torch.name + " || torch.get_switch() = \"" + torch.get_state());
-        if (torch.get_switch())
+        //if (torch.get_switch())
+        if(torch.get_state() == ObservableTorch.State.On)
         {
             if(activate_torch_count <max_count ) activate_torch_count++;
 
             if (activate_torch_count >= max_count)
             {
-                //if(ready_timer == null)
-                //{
-                //    ready_timer = ready_action();
-                //    StartCoroutine(ready_timer);
-                //}
-                activate(); //활성화!
+                if(ready_timer == null)
+                {
+                    ready_timer = ready_action();
+                    StartCoroutine(ready_timer);
+                }
+
+                //activate(); //활성화!
             }
         }
         else
@@ -70,12 +79,12 @@ public class AncientWeapon : Observer
             }
             if (state == State.Activated)
             {
-                //if (ready_timer == null)
-                //{
-                //    ready_timer = ready_action();
-                //    StartCoroutine(ready_timer);
-                //}
-                deactivate();
+                if (ready_timer == null)
+                {
+                    ready_timer = ready_action();
+                    StartCoroutine(ready_timer);
+                }
+                //deactivate();
             }
         }
     }
@@ -84,12 +93,12 @@ public class AncientWeapon : Observer
     void activate()
     {
         animator.SetBool("activate", true);
-        if (_timer != null)StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
-        _timer = activate_timer();  //새로운 코루틴 할당 
         //weapon_light.gameObject.SetActive(true);
         state = State.Activated;
         BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy); //weapon_activation() : 보스 그로기상태 전환 
-        
+
+        StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
+        //_timer = activate_timer();  //새로운 코루틴 할당 
         StartCoroutine(_timer);
     }
 
@@ -101,12 +110,12 @@ public class AncientWeapon : Observer
         BossRoomManager.get_instance().get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
         yield return new WaitForSeconds(time_list[(int)BossRoomManager.get_instance().phase]);
 
-        //if (ready_timer == null)
-        //{
-        //    ready_timer = ready_action();
-        //    StartCoroutine(ready_timer);
-        //}
-        deactivate();   //일정 시간이 지나면 비활성화 시키는 함수를 호출한다.
+        if (ready_timer == null)
+        {
+            ready_timer = ready_action();
+            StartCoroutine(ready_timer);
+        }
+        //deactivate();   //일정 시간이 지나면 비활성화 시키는 함수를 호출한다.
     }
 
 
@@ -157,6 +166,10 @@ public class AncientWeapon : Observer
         BossRoomManager.get_instance().send_boss_state(Boss_State.State.Soar_Attack);
         BossRoomManager.get_instance().increase_pahse(false);
         BossRoomManager.get_instance().get_ancient_ui().switching_ui(false,0.0f);
+        //현재 고대병기가 비활성화되는 때는 완벽히 스위치를 초기화했을 때 이므로 여기서 임의로 카운트를0으로 만들어줌
+        activate_torch_count = 0;
+        StopCoroutine(_timer);
+
     }
 
     //외부 요인으로 인하여 고대병기 비활성화 _ 고대병기에 대한 처리만 해준다.

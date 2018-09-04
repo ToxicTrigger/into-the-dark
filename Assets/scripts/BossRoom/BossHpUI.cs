@@ -76,7 +76,7 @@ public class BossHpUI : MonoBehaviour {
             {
                 if(this_rt.position.y >= ui_up_pos.y)
                 {
-                    Debug.Log("올라옴 완료");
+                    //Debug.Log("올라옴 완료");
                     this_rt.position = ui_up_pos;
                     break;
                 }
@@ -85,7 +85,7 @@ public class BossHpUI : MonoBehaviour {
             {
                 if(this_rt.position.y <= ui_down_pos.y)
                 {
-                    Debug.Log("내려감 완료");
+                    //Debug.Log("내려감 완료");
                     this_rt.position = ui_down_pos;
                     break;
                 }
