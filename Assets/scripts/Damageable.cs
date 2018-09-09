@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Damageable : MonoBehaviour {
-    public float Hp;
+    public float Hp, Max_Hp;
     public bool has_hit;
     public bool Dead;
     Transform origin;
@@ -12,11 +12,14 @@ public class Damageable : MonoBehaviour {
     //간단히 AttackDamage * ArmorPower 의 연산임.
     //중요한 것은 해당 방어 수치나 공격력이 소수로 보이면 플레이 입장에서 흥미가 생기지 않기 때문에
     //표시할 땐 무조건 result * 10 하기를 권장함
-    public float armor_power = 1.0f;
+    [Tooltip("해당 값은 0일 때 받는 데미지를 100% 받아들입니다.")]
+    [Range(-1, 1)]
+    public float armor_power;
 
     public void Start() 
     {
         origin = this.transform;
+        Hp = Max_Hp;
     }
 
     public void OnCollisionEnter(Collision other) 
@@ -24,7 +27,8 @@ public class Damageable : MonoBehaviour {
         Attackable attack = other.gameObject.GetComponent<Attackable>();
         if(attack != null)
         {
-            if(Hp > 0)
+            Debug.Log("this : " + gameObject.name + " | actor : " + other.gameObject.name);
+            if (Hp > 0)
             {
                 Dead = false;
                 Damaged(attack.Damage, attack.attackTick);
@@ -33,11 +37,18 @@ public class Damageable : MonoBehaviour {
             }
         }
     }
-
+    public float per;
+    public void FixedUpdate()
+    {
+        per = armor_power == 0 ? 1 : armor_power + 1;
+        per = armor_power < 0 ? armor_power-1 : per;
+        if (Hp > Max_Hp) Hp = Max_Hp;
+    }
 
     IEnumerator attack_this(float damage, float tick)
     {
-        float dam = damage * armor_power;
+        float dam = per != 1 ? damage * armor_power : damage;
+
         Hp -= dam;
         has_hit = true;
         

@@ -9,7 +9,7 @@ public class Pot : Damageable {
 	// 기본적인 Damageable 기능만 사용하실려면 이렇게 하지 않아도 기본 로직이 움직이고 있기 때문에!
 	// 필요한 변수만 끌어다 쓰세요.
 	// 다 읽으셨다면 아래 코드도 지워주세욧!
-	public void OnCollisionEnter(Collision other) 
+	public new void OnCollisionEnter(Collision other) 
 	{
 		// 상속된 부모의 함수를 호출 하기 위해 base 예약어를 사용 합니다.
 		base.OnCollisionEnter(other);	
@@ -18,6 +18,7 @@ public class Pot : Damageable {
 	//요기 까지만 지워주세용
 
 	void Update () {
+        
 		if(this.Dead)
 		{
             if(!ok)
@@ -29,6 +30,9 @@ public class Pot : Damageable {
                     mc.enabled = true;
                     Rigidbody rig = mc.GetComponent<Rigidbody>();
                     rig.constraints = RigidbodyConstraints.None;
+                    mc.transform.parent = null;
+
+                    Destroy(mc.gameObject, 1.0f);
                 }
                 ok = true;
                 GetComponent<BoxCollider>().enabled = false;
@@ -36,10 +40,10 @@ public class Pot : Damageable {
 
 			if(transform.localScale.x >= 0)
 			{
-				//Vector3 scale = transform.localScale;
-				//scale *= 0.97f;
-				//transform.localScale = scale;
-				//Destroy(gameObject, 1.5f);
+				Vector3 scale = transform.localScale;
+				scale *= 0.97f;
+				transform.localScale = scale;
+				Destroy(gameObject);
 			}
 		}
 	}

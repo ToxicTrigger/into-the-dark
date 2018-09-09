@@ -44,7 +44,7 @@ public class Attackable : MonoBehaviour {
             else
             {
                 GetComponent<ParticleSystem>().Stop(true, ParticleSystemStopBehavior.StopEmitting);
-                Destroy(gameObject, 10);
+                //Destroy(gameObject, 10);
             }
         }
 

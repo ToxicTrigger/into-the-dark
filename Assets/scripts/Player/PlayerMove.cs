@@ -10,6 +10,7 @@ public class PlayerMove : InputHandler {
     float foot_step_tick;
 	public bool has_ground;
 	public bool is_falling_out;
+    public bool check_falling;
 	public float fall_tick;
 	public Transform spawn_point;
 
@@ -89,8 +90,12 @@ public class PlayerMove : InputHandler {
 	private void FixedUpdate() 
 	{
 		has_ground = cc.isGrounded;
-		update_fall();
-		update_move_player_checkPoint();
+        if(check_falling)
+        {
+            update_fall();
+            update_move_player_checkPoint();
+        }
+
 	}
     
     void Start () 

@@ -12,7 +12,9 @@ public class Bonfire : Interactable
 		if(this.hasTalking)
 		{
 			this.target.GetComponent<PlayerMove>().spawn_point = this.transform;
-			inventory.SetActive(true);
+            this.target.GetComponent<Damageable>().Hp = this.target.GetComponent<Damageable>().Max_Hp;
+
+            inventory.SetActive(true);
 		}else{
 			inventory.SetActive(false);
 		}

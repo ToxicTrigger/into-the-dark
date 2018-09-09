@@ -5,16 +5,6 @@ using UnityEngine;
 public class HunterAI : AggroAI {
     public float tick = 0;
 
-
-    public void FixedUpdate()
-    {
-         
-        if(has_Dead)
-        {
-
-        }
-    }
-
     public override void FSM(AggroAI ai)
     {
         switch (cur_ani)

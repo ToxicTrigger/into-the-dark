@@ -5,8 +5,9 @@ using UnityEngine;
 public enum EventState
 {
 	Off,
-	Press,
+	Press_On,
 	On,
+    Press_Off,
 }
 
 //플레이 중 일정한 조건을 충족하였을 경우 일반 지형이 나타나는 변동
@@ -16,11 +17,28 @@ public class Platform : MonoBehaviour
 	bool on_off;
 	float pressing_time;
 	public float MAX_PRESS_TIME = 3.0f;
-	bool only_player;
+	public bool only_player;
 	bool is_pressing;
 	public EventState state;
 
-	private void OnTriggerStay(Collider other) 
+    private void OnCollisionStay(Collision collision)
+    {
+        this.OnTriggerStay(collision.collider);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        this.OnTriggerExit(collision.collider);
+    }
+
+    EventState cur;
+    void change_state(EventState evn)
+    {
+            cur = state;
+            state = evn;
+    }
+
+    private void OnTriggerStay(Collider other) 
 	{
 		if(only_player)
 		{
@@ -31,24 +49,54 @@ public class Platform : MonoBehaviour
 				{
 					pressing_time += Time.deltaTime;
 					is_pressing = true;
-					state = EventState.Press;
+                    if(cur == EventState.Off)
+                    {
+                        change_state(EventState.Press_On);
+                    }
+                    else if(cur == EventState.On)
+                    {
+                        change_state(EventState.Press_Off);
+                    }
 				}else{
 					is_pressing = false;
 					on_off = true;
-					state = EventState.On;
+                    if(state == EventState.Press_On)
+                    {
+                        change_state(EventState.On);
+                    }
+                    else if(state == EventState.Press_Off)
+                    {
+                        change_state(EventState.Off);
+                    }
 				}
 			}
 		}else{
 			if(pressing_time <= MAX_PRESS_TIME)
 			{
-				pressing_time += Time.deltaTime;
-				is_pressing = true;
-				state = EventState.Press;
-			}else{
-				is_pressing = false;
-				on_off = true;
-				state = EventState.On;
-			}
+                pressing_time += Time.deltaTime;
+                is_pressing = true;
+                if (cur == EventState.Off)
+                {
+                    change_state(EventState.Press_On);
+                }
+                else if (cur == EventState.On)
+                {
+                    change_state(EventState.Press_Off);
+                }
+            }
+            else
+            {
+                is_pressing = false;
+                on_off = true;
+                if (state == EventState.Press_On)
+                {
+                    change_state(EventState.On);
+                }
+                else if (state == EventState.Press_Off)
+                {
+                    change_state(EventState.Off);
+                }
+            }
 		}
 	}
 
@@ -62,13 +110,27 @@ public class Platform : MonoBehaviour
 				on_off = false;
 				pressing_time = 0;
 				is_pressing = false;
-				state = EventState.Off;
+                if(state == EventState.Press_Off || state == EventState.On)
+                {
+                    change_state(EventState.On);
+                }
+                else if(state == EventState.Press_On || state == EventState.Off)
+                {
+                    change_state(EventState.Off);
+                }
 			}
 		}else{
 			on_off = false;
 			pressing_time = 0;
 			is_pressing = false;
-			state = EventState.Off;
-		}
+            if (state == EventState.Press_Off || state == EventState.On)
+            {
+                change_state(EventState.On);
+            }
+            else if (state == EventState.Press_On || state == EventState.Off)
+            {
+                change_state(EventState.Off);
+            }
+        }
 	}
 }

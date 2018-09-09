@@ -26,6 +26,7 @@ public abstract class AggroAI : Observable {
     public Rigidbody rig;
     public GameObject DeadParticle;
     public AudioSource HitSound;
+    public Item Drop_Item;
 
     //구현은 HunterAI 참조
     public abstract void FSM(AggroAI ai);
@@ -72,6 +73,7 @@ public abstract class AggroAI : Observable {
 
         }
     }
+
     bool has_registered;
     void update_move()
     {
@@ -177,13 +179,14 @@ public abstract class AggroAI : Observable {
     void Make_DeadEffect()
     {
         //yield return new WaitForSeconds(0.5f);
-                if(DeadParticle != null)
-            {
-                GameObject tmp = Instantiate(DeadParticle, transform.position, Quaternion.identity, null);
-                Destroy(tmp, 4.0f);
-            }
+        if (DeadParticle != null)
+        {
+            GameObject tmp = Instantiate(DeadParticle, transform.position, Quaternion.identity, null);
+            GameObject item = Instantiate(Drop_Item.gameObject, transform.position, Quaternion.identity, null);
+            Destroy(tmp, 4.0f);
+        }
     }
-    
+
     void Update () {
         //현재 FSM 이 가리키는 노드 이름
         cur_ani = ani.GetCurrentAnimatorClipInfo(0)[0].clip.name;
@@ -238,7 +241,7 @@ public abstract class AggroAI : Observable {
             //HitSound.PlayOneShot(HitSound.clip);
             Destroy(sound, 1.0f);
 
-            Debug.Log( other.name + " " + other.tag);
+            
             damage.Damaged(1, 0.2f);
             //has_Hit = true;
         }

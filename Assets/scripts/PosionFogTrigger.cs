@@ -28,7 +28,7 @@ public class PosionFogTrigger : MonoBehaviour {
         if(Hp <= 0)
         {
             on = true;
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
         else
         {

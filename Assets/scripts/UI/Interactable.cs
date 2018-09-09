@@ -16,7 +16,7 @@ public class Interactable : MonoBehaviour {
 	public List<GameObject> events;
 	public EButton e;
 	// 대상이 거리안에 있나?
-	bool get_capture_area;
+	public bool get_capture_area;
 
 	private void Awake() 
 	{
@@ -29,7 +29,7 @@ public class Interactable : MonoBehaviour {
 		if(get_capture_area)
 		{
 			if(e != null & !hasTalking) e.Up();
-			if(Input.GetKeyDown(KeyCode.E))
+			if(Input.GetButtonDown("Submit"))
 			{
 				if(e != null) e.Down(); 
 				hasTalking = true;

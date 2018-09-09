@@ -25,9 +25,6 @@ public class TestPlatform : Platform
 			case EventState.On:
 				this.GetComponent<MeshRenderer>().materials[0].color = On;
 				break;
-			case EventState.Press:
-				this.GetComponent<MeshRenderer>().materials[0].color = Press;
-				break;
 		}
 	}
 }
