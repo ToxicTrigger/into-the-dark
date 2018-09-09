@@ -40,28 +40,45 @@ public class UpperSwitch : Platform {
         }
     }
 
+    bool has_played;
+
     void Update () {
         if(_switch == null)
         {
             if (inTrigger)
             {
-                if (Door.position.y <= Up_Pos.y)
+                if (Door.position.y < Up_Pos.y)
                 {
                     Door.Translate((Door.up * -1) * speed * 1.3f);
+                    if (!sound.isPlaying)
+                    {
+                        sound.Play();
+                    }
                 }
-                else if(Door.position.y >= Up_Pos.y)
+                else if(Door.position.y > Up_Pos.y)
                 {
-
+                    Door.position = Up_Pos;
+                    sound2.Play();
+                    if(sound.isPlaying)
+                    sound.Stop();
                 }
             }
             else
             {
-                if (Door.position.y >= Def_pos.y)
+                if (Door.position.y > Def_pos.y)
                 {
                     Door.Translate(Door.up * speed * 0.5f);
+
+                    if (!sound.isPlaying)
+                    {
+                        sound.Play();
+                    }
                 }
-                else
+                else if(Door.position.y < Def_pos.y)
                 {
+                    Door.position = Def_pos;
+                    if (sound.isPlaying)
+                        sound.Stop();
                 }
             }
         }
