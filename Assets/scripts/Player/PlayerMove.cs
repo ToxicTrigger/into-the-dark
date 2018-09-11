@@ -78,6 +78,11 @@ public class PlayerMove : InputHandler {
 		}
 	}
 
+    void update_ray()
+    {
+        Ray down = new Ray(transform.position, transform.forward);
+    }
+
 	void update_move_player_checkPoint()
 	{
 		if(is_falling_out)

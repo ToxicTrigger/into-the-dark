@@ -315,6 +315,8 @@ public class Player : MonoBehaviour{
         }
     }
 
+
+    public bool has_on_ladder;
     float end_tick;
     void Update () {
         if(damageable.Dead)
@@ -334,6 +336,7 @@ public class Player : MonoBehaviour{
                 end_tick = 0;
             }
 
+            if(!has_on_ladder)
             Update_Y_pos();
 
             Vector3 tmp = transform.position;
