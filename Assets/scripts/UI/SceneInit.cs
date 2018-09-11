@@ -8,7 +8,8 @@ public class SceneInit : MonoBehaviour {
 
     public void init_scene()
     {
-        SceneManager.UnloadSceneAsync(0);
-        SceneManager.LoadSceneAsync(0);
+        Debug.Log("안돼!");
+        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
 }
