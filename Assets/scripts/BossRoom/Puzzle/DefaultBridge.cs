@@ -16,7 +16,7 @@ public class DefaultBridge : Observer
 	void Start () {
         is_up = false;
         start_y_pos = transform.position.y;
-        up_bridge(Vector3.down);
+        //up_bridge(Vector3.down);
 	}
 
     //신호가 들어오면 무조건 올라온다.

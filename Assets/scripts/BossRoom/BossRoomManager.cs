@@ -107,6 +107,7 @@ public class BossRoomManager : MonoBehaviour {
             {
                 reloc.get_reloc((int)phase).torch_set[i].switch_object[z].set_switch(false);
                 reloc.get_reloc((int)phase).torch_set[i].switch_object[z].off_switch_set();
+                reloc.get_reloc((int)phase).torch_set[i].foot_switch[z].ground_move_ctrl(Vector3.down);
             }
         }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class AncientWeapon : Observer
 {
     //고대병기 
-    enum State
+    public enum State
     {
         Activated = 0,    //활성화된
         Deactivated     //비활성화된
@@ -33,30 +33,24 @@ public class AncientWeapon : Observer
     void Start()
     {
         _timer = activate_timer();
-        //weapon_light.gameObject.SetActive(false);
         state = State.Activated;  //초기 상태는 비활성화된 상태
         if (ready_timer == null)
         {
-            ready_timer = ready_action();
+            ready_timer = ready_action(true);
             StartCoroutine(ready_timer);
         }
-        //boss_state = manager.get_boss().gameObject.GetComponent<Boss_State>();
     }
 
     void Update()
     {
-        Debug.Log("max_count = " + max_count);
     }
 
     public override void notify(Observable observable)
     {
-        //throw new System.NotImplementedException();
-        //BasicSwitch torch = observable as BasicSwitch;
-        ObservableTorch torch = observable as ObservableTorch;
-        //Debug.Log(torch.get_state());
-        //Debug.Log("AncientWeapon __ torch.name = \"" + torch.name + " || torch.get_switch() = \"" + torch.get_state());
-        //if (torch.get_switch())
-        if(torch.get_state() == ObservableTorch.State.On)
+        BasicSwitch torch = observable as BasicSwitch;
+        //ObservableTorch torch = observable as ObservableTorch;
+        if (torch.get_switch())
+        //if(torch.get_state() == ObservableTorch.State.On)
         {
             if(activate_torch_count <max_count ) activate_torch_count++;
 
@@ -64,11 +58,9 @@ public class AncientWeapon : Observer
             {
                 if(ready_timer == null)
                 {
-                    ready_timer = ready_action();
+                    ready_timer = ready_action(false);
                     StartCoroutine(ready_timer);
                 }
-
-                //activate(); //활성화!
             }
         }
         else
@@ -81,7 +73,7 @@ public class AncientWeapon : Observer
             {
                 if (ready_timer == null)
                 {
-                    ready_timer = ready_action();
+                    ready_timer = ready_action(false);
                     StartCoroutine(ready_timer);
                 }
                 //deactivate();
@@ -112,7 +104,7 @@ public class AncientWeapon : Observer
 
         if (ready_timer == null)
         {
-            ready_timer = ready_action();
+            ready_timer = ready_action(false);
             StartCoroutine(ready_timer);
         }
         //deactivate();   //일정 시간이 지나면 비활성화 시키는 함수를 호출한다.
@@ -122,16 +114,19 @@ public class AncientWeapon : Observer
     public float move_y;
     public int ready_time;
     //활성화, 비활성화가 되기 전 준비하는 코루틴 (올라가거나 내려감)
-    IEnumerator ready_action()
+    IEnumerator ready_action(bool init)
     {
         Vector3 move_dir;
         if(state == State.Activated)
-        {            
+        {
             //내려가야함 
+            if(!init)deactivate();
+            else state = State.Deactivated; 
             move_dir = Vector3.down;
         }
         else
         {
+            activate();
             move_dir = Vector3.up;
         }
 
@@ -142,15 +137,6 @@ public class AncientWeapon : Observer
             transform.position += move_dir;
 
             yield return new WaitForSeconds(0.01f);
-        }
-
-        if (state == State.Activated)
-        {
-            deactivate();
-        }
-        else
-        {
-            activate();
         }
 
         move_dir = Vector3.zero;
@@ -183,18 +169,6 @@ public class AncientWeapon : Observer
         BossRoomManager.get_instance().get_ancient_ui().switching_ui(false, 0.0f);
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Player"))
-        {
-            if(Input.GetKeyDown(KeyCode.E) && state == State.Activated)
-            {
-                torch_deactivate();
-                boss_state.set_state(Boss_State.State.Groggy);
-            }
-        }
-    }
-
     public float get_activate_time()
     {
         return time_list[activate_count];
@@ -203,5 +177,10 @@ public class AncientWeapon : Observer
     public void set_active_count(int _count)
     {
         max_count = _count;
+    }
+
+    public State get_state()
+    {
+        return state;
     }
 }

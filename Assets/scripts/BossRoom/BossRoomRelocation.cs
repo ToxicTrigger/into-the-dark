@@ -34,10 +34,13 @@ public class BossRoomRelocation : MonoBehaviour {
         public TimeSwitch[] switch_object;
         public Transform[] switch_position;
         public int[] switch_time;
+        public FootSwitch[] foot_switch;
+        public Transform[] foot_switch_position;
         public DefaultBridge[] bridge;
     }
     public ObserverTorch torch;
     public TimeSwitch Time_switch;
+    public FootSwitch Foot_switch;
 
     [System.Serializable]
     public class Relocation_set
@@ -76,6 +79,7 @@ public class BossRoomRelocation : MonoBehaviour {
                 for(int z= 0; z<reloc_set[phase-1].torch_set[i].switch_object.Length; z++)
                 {
                     Destroy(reloc_set[phase - 1].torch_set[i].switch_object[z].gameObject);
+                    Destroy(reloc_set[phase - 1].torch_set[i].foot_switch[z].gameObject);
                 }
             }
         }
@@ -83,25 +87,32 @@ public class BossRoomRelocation : MonoBehaviour {
         //페이즈 정보에 따라 새로운 스위치와 횃불을 동적으로 생성한다.
         for(int i=0; i<reloc_set[phase].torch_set.Length; i++)
         {
-            ObserverTorch _torch = (ObserverTorch)Instantiate(torch, reloc_set[phase].torch_set[i].torch_position.position, Quaternion.identity);
-            _torch.switch_num_for_clear = reloc_set[phase].torch_set[i].switch_object.Length;
-            reloc_set[phase].torch_set[i].torch_object = _torch;
+            //ObserverTorch _torch = (ObserverTorch)Instantiate(torch, reloc_set[phase].torch_set[i].torch_position.position, Quaternion.identity);
+            //_torch.switch_num_for_clear = reloc_set[phase].torch_set[i].switch_object.Length;
+            //reloc_set[phase].torch_set[i].torch_object = _torch;
 
-            if (phase == 0 && reloc_set[phase].torch_set[i].bridge != null)
-            {
-                for (int x = 0; x < reloc_set[phase].torch_set[i].bridge.Length; x++)
-                    _torch.GetComponent<BossRoomObservableTorch>().add_observer(reloc_set[phase].torch_set[i].bridge[x]);
-            }
+            //if (phase == 0 && reloc_set[phase].torch_set[i].bridge != null)
+            //{
+            //    for (int x = 0; x < reloc_set[phase].torch_set[i].bridge.Length; x++)
+            //        _torch.GetComponent<BossRoomObservableTorch>().add_observer(reloc_set[phase].torch_set[i].bridge[x]);
+            //}
             //_torch.GetComponent<BossRoomObservableTorch>().add_observer(BossRoomManager.get_instance().get_ancient_weapon());
 
             for (int z = 0; z < reloc_set[phase].torch_set[i].switch_object.Length; z++)
             {
                 TimeSwitch _switch = (TimeSwitch)Instantiate(Time_switch, reloc_set[phase].torch_set[i].switch_position[z].position, Quaternion.identity);
+                FootSwitch _f_switch = (FootSwitch)Instantiate(Foot_switch, reloc_set[phase].torch_set[i].foot_switch_position[z].position, Quaternion.identity);
+
                 reloc_set[phase].torch_set[i].switch_object[z] = _switch;
+                reloc_set[phase].torch_set[i].foot_switch[z] = _f_switch;
+
                 _switch.set_wait_time(reloc_set[phase].torch_set[i].switch_time[z]);
                 _switch.set_use_enable(true);
-                _switch.add_observer(_torch);
+                _switch.add_observer(BossRoomManager.get_instance().get_ancient_weapon());
                 _switch.new_switch_set(reloc_set[phase].torch_set[i].switch_object.Length - 1);
+                _switch.set_foot_switch(_f_switch);
+
+                _f_switch.set_ground(_switch);
             }
 
 
@@ -124,46 +135,9 @@ public class BossRoomRelocation : MonoBehaviour {
                     }
                 }
             }
-
+            //고대병기 클리어 조건을 스위치 개수로함
+            BossRoomManager.get_instance().get_ancient_weapon().set_active_count(reloc_set[phase].torch_set[i].switch_object.Length);
         }
-
-
-        //고대병기의 클리어 개수를 현재 페이즈의 횃불세트 개수로 함.
-        BossRoomManager.get_instance().get_ancient_weapon().set_active_count(reloc_set[phase].torch_set.Length);
-        //Debug.Log(BossRoomManager.get_instance().get_ancient_weapon().name + " 고대병기의 클리어 조건 = " + BossRoomManager.get_instance().get_ancient_weapon().max_count +
-        //          "이번 페이즈의 횃불 세트 개수 = " + reloc_set[phase].torch_set.Length);
-
-        //int[] random_Array = new int[reloc_set[phase].torch_set[phase].switch_position.Length];
-
-        //int num = -1;
-
-        //for (int i = 0; i < random_Array.Length; i++)
-        //{
-        //    random_Array[i] = num;
-        //}
-
-        //for (int i = 0; i < random_Array.Length; i++)
-        //{
-        //    num = Random.Range(0, reloc_set[phase].torch_set[phase].switch_position.Length);
-
-        //    for (int z = 0; z < random_Array.Length; z++)
-        //    {
-        //        if (random_Array[z] == num)
-        //        {
-        //            --i;
-        //            break;
-        //        }
-
-        //        if (z == random_Array.Length - 1)
-        //        {
-        //            random_Array[i] = num;
-        //        }
-        //    }
-
-        //    if(random_Array[i] != -1)
-        //        reloc_set[phase].torch_set[phase].switch_object[i].transform.position = reloc_set[phase].torch_set[phase].switch_position[random_Array[i]].transform.position;
-
-        //}
 
         for (int i = 0; i < reloc_set[phase].enemy_position.Length; i++)
         {

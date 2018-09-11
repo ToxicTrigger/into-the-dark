@@ -6,6 +6,8 @@ public class TimeSwitch : BasicSwitch {
     //시간에 따라 유지되는 스위치
     //
 
+    FootSwitch foot_switch;
+
     public TimeSwitch [] time_switch_list;
 
     public Light _light;
@@ -65,6 +67,7 @@ public class TimeSwitch : BasicSwitch {
         {
             _light.gameObject.SetActive(false);
             set_switch(false);
+            //foot_switch.ground_move_ctrl(Vector3.down);//시간이 다하면 강제로 내려줌
         }
 
     }
@@ -95,4 +98,15 @@ public class TimeSwitch : BasicSwitch {
         time_switch_list = new TimeSwitch[i];
     }
 
+    public void set_foot_switch(FootSwitch _fs)
+    {
+        foot_switch = _fs;
+    }
+
+    //발판용
+    public void off_switch()
+    {
+        _light.gameObject.SetActive(false);
+        set_switch(false);
+    }
 }
