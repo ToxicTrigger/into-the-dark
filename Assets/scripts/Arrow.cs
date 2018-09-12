@@ -16,7 +16,13 @@ public class Arrow : MonoBehaviour {
     private void OnTriggerEnter(Collider collision)
     {
         bool is_player = false;
-        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2 || collision.gameObject.layer == 9 || collision.CompareTag("Area")) is_player = true;
+        if (collision.gameObject.tag.Equals("Player") 
+            || collision.gameObject.layer == 2 
+            || collision.gameObject.layer == 9 
+            || collision.CompareTag("Area"))
+        {
+            is_player = true;
+        }
 
         Element element = collision.gameObject.GetComponent<Element>();
         if (element != null)
@@ -53,7 +59,12 @@ public class Arrow : MonoBehaviour {
     private void OnCollisionEnter(Collision collision)
     {
         bool is_player = false;
-        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2 || collision.gameObject.layer == 9) is_player = true;
+        if (collision.gameObject.tag.Equals("Player")
+            || collision.gameObject.layer == 2
+            || collision.gameObject.layer == 9)
+        {
+            is_player = true;
+        }
 
         Element element = collision.gameObject.GetComponent<Element>();
 
@@ -80,7 +91,7 @@ public class Arrow : MonoBehaviour {
             {
                 AS = arrow_hit_rub;
             }
-            //Debug.Log(collision.gameObject.name);
+
             GameObject tmp = Instantiate(AS.gameObject, transform.position, Quaternion.identity, null);
             tmp.GetComponent<AudioSource>().Play();
             Destroy(tmp, 2.0f);
@@ -91,10 +102,6 @@ public class Arrow : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
     }
 
     private void Awake()

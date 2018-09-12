@@ -5,12 +5,11 @@ using UnityEngine;
 public class EButton : MonoBehaviour {
 	public SpriteRenderer text;
 	public Color color;
-	// Use this for initialization
 	public float speed;
-
 	public bool EventOn;
 
-	void Start () {
+	public void Start ()
+    {
 		text = GetComponent<SpriteRenderer>();
 		color = text.color;
 	}
@@ -29,13 +28,17 @@ public class EButton : MonoBehaviour {
 	public void Up()
 	{
 		if(!EventOn)
-		StartCoroutine(up());
+        {
+            StartCoroutine(up());
+        }
 	}
 
 	public void Down()
 	{
 		if(!EventOn)
-		StartCoroutine(down());
+        {
+            StartCoroutine(down());
+        }
 	}
 
 	IEnumerator down()
@@ -49,8 +52,8 @@ public class EButton : MonoBehaviour {
 		EventOn = false;
 	}
 	
-	void Update () {
-		//color.a = 1;
+	public void Update ()
+    {
 		text.color = color;
 		transform.LookAt(Camera.main.transform);
 	}
