@@ -23,7 +23,9 @@ public class BossHpUI : MonoBehaviour {
     Boss_Worm boss;
     public Vector3 ui_up_pos;
     public float slide_speed;
-    Vector3 ui_down_pos; 
+    Vector3 ui_down_pos;
+
+    IEnumerator corutine;
 
 	void Start () {
         boss = BossRoomManager.get_instance().get_boss();
@@ -37,6 +39,7 @@ public class BossHpUI : MonoBehaviour {
         onoff = false;
         ui_down_pos = this_rt.position;
         ui_up_pos = new Vector3(ui_down_pos.x, ui_up_pos.y, ui_down_pos.z);
+        corutine = slide_ui(Vector3.up);
     }
 
     void Update()
@@ -56,11 +59,15 @@ public class BossHpUI : MonoBehaviour {
         onoff = _onoff;
         if (onoff)
         {
-            StartCoroutine(slide_ui(Vector3.up));
+            StopCoroutine(corutine);
+            corutine = slide_ui(Vector3.up);
+            StartCoroutine(corutine);
         }
         else
         {
-            StartCoroutine(slide_ui(Vector3.down));
+            StopCoroutine(corutine);
+            corutine = slide_ui(Vector3.down);
+            StartCoroutine(corutine);
         }
     }
 

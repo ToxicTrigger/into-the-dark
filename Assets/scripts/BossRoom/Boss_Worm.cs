@@ -47,23 +47,27 @@ public class Boss_Worm : MonoBehaviour
         switch (manager.phase)
         {
             case BossRoomManager.Phase.one:
-                if (hp < max_hp * 0.8 && state.get_state() == Boss_State.State.Groggy)
+                if (hp < max_hp * 0.5 && state.get_state() == Boss_State.State.Groggy)
                 {
-                    state.set_state(Boss_State.State.Soar_Attack);
-                    BossRoomManager.get_instance().increase_pahse(true);
+                    //manager.send_boss_state(Boss_State.State.Soar_Attack, manager.center);
+                    manager.increase_pahse(true);
                 }
                 break;
             case BossRoomManager.Phase.two:
-                if (hp < max_hp * 0.4 && state.get_state() == Boss_State.State.Groggy)
+                //if (hp < max_hp * 0.4 && state.get_state() == Boss_State.State.Groggy)
+                //{
+                //    //state.set_state(Boss_State.State.Soar_Attack, manager.center);
+                //    manager.increase_pahse(true);
+                //}
+                if (hp <= 0)
                 {
-                    state.set_state(Boss_State.State.Soar_Attack);
-                    BossRoomManager.get_instance().increase_pahse(true);
+                    state.set_state(Boss_State.State.Death, null);
                 }
                 break;
             case BossRoomManager.Phase.three:
                 if (hp <= 0)
                 {
-                    state.set_state(Boss_State.State.Death);
+                    state.set_state(Boss_State.State.Death,null);
                 }
                 break;
             default:
@@ -80,7 +84,10 @@ public class Boss_Worm : MonoBehaviour
     {
         return max_hp;
     }
-
+    public void set_hp(int _hp)
+    {
+        hp = _hp;
+    }
     //Animator animator;
 
     //public AudioSource boss_cry;

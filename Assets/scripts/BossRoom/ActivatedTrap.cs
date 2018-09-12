@@ -31,8 +31,8 @@ public class ActivatedTrap : MonoBehaviour {
             water_color.color = new Vector4(1, 0, 0, 1);
             if (BossRoomManager.get_instance().get_boss_state() == Boss_State.State.Idle)
             {
-                BossRoomManager.get_instance().send_boss_state(Boss_State.State.Rush_Attack);
-                BossRoomManager.get_instance().set_field_info(SendCollisionMessage.Field.B);
+                BossRoomManager.get_instance().send_boss_state(Boss_State.State.Rush_Attack,null);
+                //BossRoomManager.get_instance().set_field_info(SendCollisionMessage.Field.B);
             }
 
         }

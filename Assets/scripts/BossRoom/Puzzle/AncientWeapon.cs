@@ -26,9 +26,9 @@ public class AncientWeapon : Observer
     public int activate_torch_count = 0;
     float timer;    //활성화 유지 시간
 
-    State state;
+    public State state;
     IEnumerator _timer;
-    IEnumerator ready_timer;
+    public IEnumerator ready_timer;
 
     void Start()
     {
@@ -65,6 +65,7 @@ public class AncientWeapon : Observer
         }
         else
         {
+            Debug.Log("asdfaaasdddee");
             if (activate_torch_count > 0)
             {
                 activate_torch_count--;
@@ -87,7 +88,7 @@ public class AncientWeapon : Observer
         animator.SetBool("activate", true);
         //weapon_light.gameObject.SetActive(true);
         state = State.Activated;
-        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy); //weapon_activation() : 보스 그로기상태 전환 
+        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy,BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
 
         StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
         //_timer = activate_timer();  //새로운 코루틴 할당 
@@ -119,10 +120,16 @@ public class AncientWeapon : Observer
         Vector3 move_dir;
         if(state == State.Activated)
         {
-            //내려가야함 
-            if(!init)deactivate();
-            else state = State.Deactivated; 
             move_dir = Vector3.down;
+            //내려가야함 
+            if (!init)
+            {
+                deactivate();
+            }
+            else
+            {
+                state = State.Deactivated;
+            }
         }
         else
         {
@@ -149,7 +156,7 @@ public class AncientWeapon : Observer
         animator.SetBool("activate", false);
         //weapon_light.gameObject.SetActive(false);
         state = State.Deactivated;
-        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Soar_Attack);
+        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Soar_Attack, BossRoomManager.get_instance().center);
         BossRoomManager.get_instance().increase_pahse(false);
         BossRoomManager.get_instance().get_ancient_ui().switching_ui(false,0.0f);
         //현재 고대병기가 비활성화되는 때는 완벽히 스위치를 초기화했을 때 이므로 여기서 임의로 카운트를0으로 만들어줌

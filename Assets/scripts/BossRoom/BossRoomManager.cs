@@ -28,7 +28,13 @@ public class BossRoomManager : MonoBehaviour {
     Boss_Action boss_action;
     public Player player;
     Vector3 cross_point = Vector3.zero;
+    public Transform start_point;
     public AncientWeapon ancient_weapon;
+
+    public GameObject enemy;
+    public DestroyCheck destroy_check;
+
+    public GroundCheck center;
 
     public enum Phase
     {
@@ -49,32 +55,34 @@ public class BossRoomManager : MonoBehaviour {
 
     public AudioSource sound;
     public AudioSource idle_sound;
-    public AudioSource[] back_sound;  
-    
+    public AudioSource[] back_sound;
+
+    public List<GameObject> enemy_list;
+
+    struct InitialValue
+    {
+        public int boss_hp;
+        public Phase phase;
+    };
+    InitialValue init_val;
 
     void Awake()
     {
+        init_val.boss_hp = get_boss().get_max_hp();
+        init_val.phase = Phase.one;
+
         field = SendCollisionMessage.Field.NULL;
-        //reloc = GetComponent<BossRoomRelocation>();
-        idle_sound.Play();
-        for(int i =0; i < back_sound.Length; i++)
-        {
-            if (i != 0)
-                back_sound[i].mute = true;
-            else
-                back_sound[i].mute = false;
-            back_sound[i].Play();
-        }
+        //idle_sound.Play();
         boss_state = boss.gameObject.GetComponent<Boss_State>();
         boss_action = boss.gameObject.GetComponent<Boss_Action>();
 
         player_enter_bossroom();
 
-        GameObject _player_coll = (GameObject)Instantiate(player_coll.gameObject,
-                                                        player.transform.position, Quaternion.identity);
+        //GameObject _player_coll = (GameObject)Instantiate(player_coll.gameObject,
+        //                                                player.transform.position, Quaternion.identity);
 
-        _player_coll.transform.SetParent(player.gameObject.transform);
-        _player_coll.transform.position = player.transform.position;
+        //_player_coll.transform.SetParent(player.gameObject.transform);
+        //_player_coll.transform.position = player.transform.position;
     }
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
@@ -132,12 +140,11 @@ public class BossRoomManager : MonoBehaviour {
         //    reloc.hit_switch[i].set_switch(false);
         //    reloc.hit_switch[i].off_switch_set();
         //}
-
     }
 
-    public void send_boss_state(Boss_State.State _state)
+    public void send_boss_state(Boss_State.State _state, GroundCheck _gameobj)
     {
-        boss_state.set_state(_state);
+        boss_state.set_state(_state, _gameobj);
     }
 
     public void set_cross_point(Vector3 _pos)
@@ -200,18 +207,42 @@ public class BossRoomManager : MonoBehaviour {
         return ancient_weapon;
     }
 
-    public void set_field_info(SendCollisionMessage.Field _field)
+    public void init_bossroom()
     {
-        field = _field;
-
-        for(int i =0; i< back_sound.Length; i++)
+        for(int i=0; i<enemy_list.Count;  i++)
         {
-            if (i == (int)field)
-                back_sound[i].mute = false;
-            else
-                back_sound[i].mute = true;
+            Destroy(enemy_list[i]);
         }
+        get_boss().set_hp(init_val.boss_hp);
+        phase = init_val.phase;
+        Map_Initialization();
+        player.transform.position = start_point.position;
     }
+
+    public void create_enemy(Vector3 _pos, Observer _observer)
+    {
+        GameObject _enemy = (GameObject)Instantiate(enemy,
+                                                _pos, Quaternion.identity);
+        DestroyCheck _destroy_check = (DestroyCheck)Instantiate(destroy_check, 
+                                                _pos, Quaternion.identity);
+        _destroy_check.transform.SetParent(_enemy.transform);
+        _destroy_check.add_observer(_observer);
+
+        enemy_list.Add(_enemy);
+    }
+
+    //public void set_field_info(SendCollisionMessage.Field _field)
+    //{
+    //    field = _field;
+
+    //    for(int i =0; i< back_sound.Length; i++)
+    //    {
+    //        if (i == (int)field)
+    //            back_sound[i].mute = false;
+    //        else
+    //            back_sound[i].mute = true;
+    //    }
+    //}
 
     //public Boss_Worm boss;
     //public Player player;

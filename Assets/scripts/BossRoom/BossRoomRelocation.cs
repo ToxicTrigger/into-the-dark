@@ -49,8 +49,9 @@ public class BossRoomRelocation : MonoBehaviour {
         //public BasicSwitch[] switch_object;
         public Torch_set[] torch_set;
         public Transform[] water_position;
-        public GameObject[] water_object; 
-        public Transform[] enemy_position;
+        public GameObject[] water_object;
+        public GroundCheck[] ground_list;
+        //public Transform[] enemy_position;
         public CrumblingPillar[] c_pillar;
     }
 
@@ -74,7 +75,7 @@ public class BossRoomRelocation : MonoBehaviour {
         {
             for (int i = 0; i < reloc_set[phase - 1].torch_set.Length; i++)
             {
-                Destroy(reloc_set[phase - 1].torch_set[i].torch_object.gameObject);
+                //Destroy(reloc_set[phase - 1].torch_set[i].torch_object.gameObject);
 
                 for(int z= 0; z<reloc_set[phase-1].torch_set[i].switch_object.Length; z++)
                 {
@@ -87,17 +88,6 @@ public class BossRoomRelocation : MonoBehaviour {
         //페이즈 정보에 따라 새로운 스위치와 횃불을 동적으로 생성한다.
         for(int i=0; i<reloc_set[phase].torch_set.Length; i++)
         {
-            //ObserverTorch _torch = (ObserverTorch)Instantiate(torch, reloc_set[phase].torch_set[i].torch_position.position, Quaternion.identity);
-            //_torch.switch_num_for_clear = reloc_set[phase].torch_set[i].switch_object.Length;
-            //reloc_set[phase].torch_set[i].torch_object = _torch;
-
-            //if (phase == 0 && reloc_set[phase].torch_set[i].bridge != null)
-            //{
-            //    for (int x = 0; x < reloc_set[phase].torch_set[i].bridge.Length; x++)
-            //        _torch.GetComponent<BossRoomObservableTorch>().add_observer(reloc_set[phase].torch_set[i].bridge[x]);
-            //}
-            //_torch.GetComponent<BossRoomObservableTorch>().add_observer(BossRoomManager.get_instance().get_ancient_weapon());
-
             for (int z = 0; z < reloc_set[phase].torch_set[i].switch_object.Length; z++)
             {
                 TimeSwitch _switch = (TimeSwitch)Instantiate(Time_switch, reloc_set[phase].torch_set[i].switch_position[z].position, Quaternion.identity);
@@ -139,10 +129,19 @@ public class BossRoomRelocation : MonoBehaviour {
             BossRoomManager.get_instance().get_ancient_weapon().set_active_count(reloc_set[phase].torch_set[i].switch_object.Length);
         }
 
-        for (int i = 0; i < reloc_set[phase].enemy_position.Length; i++)
+        for(int i =0; i<reloc_set[phase].ground_list.Length; i++)
         {
-            GameObject _enemy = (GameObject)Instantiate(enemy, reloc_set[phase].enemy_position[i].position, Quaternion.identity);
+            for (int z = 0; z < 4; z++)
+            {
+                if (reloc_set[phase].ground_list[i].enemy_count > 8)
+                    break;
+
+                BossRoomManager.get_instance().create_enemy(reloc_set[phase].ground_list[i].enemy_position[z].position,
+                                                            reloc_set[phase].ground_list[i].gameObject.GetComponent<Observer>());
+                reloc_set[phase].ground_list[i].enemy_count++;
+            }
         }
+
 
         for (int i = 0; i < water_list.Count; i++)
         {

@@ -24,6 +24,7 @@ public class Boss_State : MonoBehaviour
     public State state;
     Boss_Action boss_action;
     BossRoomManager manager;
+    GroundCheck soar_target;
 
     void Start()
     {
@@ -36,14 +37,16 @@ public class Boss_State : MonoBehaviour
         return state;
     }
 
-    public void set_state(State _state)
+    public void set_state(State _state, GroundCheck _soar_target)
     {
         state = _state;
+        soar_target = _soar_target;
+        //Debug.Log("목표상태 => " + state + ", soar_target => " + _soar_target.name);
         this.GetComponent<Boss_Action>().action_phase = 1;
 
-        if (_state == State.Idle)
-            boss_action.set_idle_state(true);
-        else boss_action.set_idle_state(false);
+        //if (_state == State.Idle)
+        //    boss_action.set_idle_state(true);
+        //else boss_action.set_idle_state(false);
 
         if (_state == State.Groggy)
         {
@@ -56,8 +59,10 @@ public class Boss_State : MonoBehaviour
             manager.get_groggy_ui().set_boss_groggy(false, Vector3.zero);
         }
 
-        if (_state != State.Move && _state != State.Rush_Attack)
-            manager.set_field_info(SendCollisionMessage.Field.NULL);
+        if(_state == State.Soar_Attack)
+        {
+            boss_action.set_soar_target(soar_target);
+        }
 
         back_state = state;
         //상태가 바뀔 때 항상 action_phase를 1로 만W들어준다.
