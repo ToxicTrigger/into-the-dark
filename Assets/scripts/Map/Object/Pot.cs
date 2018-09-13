@@ -31,6 +31,7 @@ public class Pot : Damageable {
                     Rigidbody rig = mc.GetComponent<Rigidbody>();
                     rig.constraints = RigidbodyConstraints.None;
                     mc.transform.parent = null;
+                    transform.GetChild(0).parent = null;
 
                     Destroy(mc.gameObject, 1.0f);
                 }
