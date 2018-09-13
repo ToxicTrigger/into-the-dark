@@ -2917,7 +2917,7 @@ Transform:
   - {fileID: 115348318}
   - {fileID: 15666188}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &308653108
 GameObject:
@@ -3163,6 +3163,48 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 311631449}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &316914059
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4332982030644238, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -524.43994
+      objectReference: {fileID: 0}
+    - target: {fileID: 4332982030644238, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -824.23914
+      objectReference: {fileID: 0}
+    - target: {fileID: 4332982030644238, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -26.728727
+      objectReference: {fileID: 0}
+    - target: {fileID: 4332982030644238, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4332982030644238, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4332982030644238, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4332982030644238, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4332982030644238, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ce8866187a919da4ea03b93486e2f2a2, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &329188027
 GameObject:
   m_ObjectHideFlags: 0
@@ -9746,7 +9788,7 @@ Transform:
   - {fileID: 72234173}
   - {fileID: 259232453}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1001 &659354559
 Prefab:
@@ -10951,7 +10993,7 @@ Transform:
   - {fileID: 1927306617}
   - {fileID: 1285686214}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &812419923
 GameObject:
@@ -12781,7 +12823,7 @@ GameObject:
   - component: {fileID: 992000901}
   - component: {fileID: 992000900}
   - component: {fileID: 992000899}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13908,7 +13950,7 @@ Transform:
   - {fileID: 592230702}
   - {fileID: 623918126}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1193243223
 GameObject:
@@ -14579,7 +14621,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1293413603
 GameObject:
@@ -22302,7 +22344,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1718567180}
   m_LocalRotation: {x: -0, y: -0.7071062, z: -0, w: 0.7071075}
-  m_LocalPosition: {x: 28.8, y: 9.1, z: 54}
+  m_LocalPosition: {x: 24.11, y: 2.07, z: -28.82}
   m_LocalScale: {x: 1.6854492, y: 1.6854491, z: 1.6854491}
   m_Children:
   - {fileID: 1472954535}
@@ -22359,16 +22401,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   cc: {fileID: 0}
-  moveSpeed: 0.12
+  _moveSpeed: 0.12
   movement: {x: 0, y: 0, z: 0}
-  has_ground: 0
-  is_falling_out: 0
   check_falling: 0
-  fall_tick: 0
   spawn_point: {fileID: 1927306617}
-  dash_timer: 0
-  is_dash: 0
-  dash_start: 0
 --- !u!136 &1718567185
 CapsuleCollider:
   m_ObjectHideFlags: 0

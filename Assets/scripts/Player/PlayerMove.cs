@@ -5,17 +5,29 @@ using UnityEngine;
 public class PlayerMove : InputHandler {
 	public Player player;
 	public CharacterController cc;
-	public float moveSpeed = 0.01f;
-	public Vector3 movement;
-    float foot_step_tick;
-	public bool has_ground;
-	public bool is_falling_out;
-    public bool check_falling;
-	public float fall_tick;
-	public Transform spawn_point;
 
-	public float dash_timer;
-	public bool is_dash, dash_start;
+    [SerializeField]
+	private float _moveSpeed = 0.12f;
+    public float moveSpeed
+    {
+        get { return _moveSpeed; }
+        set { _moveSpeed = value; }
+    }
+
+    [SerializeField]
+    private Vector3 movement;
+
+    float foot_step_tick;
+	bool has_ground;
+	bool is_falling_out;
+
+    [SerializeField]
+    private bool check_falling;
+	float fall_tick;
+	public Transform spawn_point;
+	float dash_timer;
+	bool is_dash, dash_start;
+
 	
     public override void Work(InputManager im)
     {
@@ -33,7 +45,9 @@ public class PlayerMove : InputHandler {
 			{
 				cc.Move(movement * 1.5f);
                 player.ActionCam.set_state(PlayerCamera.State.Dash);
-			}else{
+			}
+            else
+            {
 				cc.Move(movement);
                 player.ActionCam.set_state(PlayerCamera.State.Follow);
 			}
@@ -47,14 +61,17 @@ public class PlayerMove : InputHandler {
             {
                 foot_step_tick += Time.deltaTime;
             }
-		}else if(!im.has_not_anything_input() & (player.cur_ani.Contains("Stand") || player.cur_ani.Contains("Jump"))){
+		}
+        else if(!im.has_not_anything_input() & (player.cur_ani.Contains("Stand") || player.cur_ani.Contains("Jump"))){
 			movement.x = im.get_Horizontal();
 			movement.z = im.get_Vertical();	
 			movement = movement.normalized * moveSpeed;
 
 			Quaternion q = Quaternion.LookRotation(movement);
 			transform.rotation = Quaternion.Slerp(transform.rotation, q, moveSpeed);
-		}else{
+		}
+        else
+        {
 			movement = Vector3.zero;
 			player.ani.SetFloat("Forward", movement.z);
 		}
@@ -70,18 +87,15 @@ public class PlayerMove : InputHandler {
 			{
 				fall_tick = 0;
 				is_falling_out = true;
-			}else{
+			}
+            else
+            {
 				fall_tick += Time.deltaTime;
 			}
 		}else{
 			fall_tick = 0;
 		}
 	}
-
-    void update_ray()
-    {
-        Ray down = new Ray(transform.position, transform.forward);
-    }
 
 	void update_move_player_checkPoint()
 	{
@@ -92,7 +106,7 @@ public class PlayerMove : InputHandler {
 		}
 	}
 
-	private void FixedUpdate() 
+	public void FixedUpdate() 
 	{
 		has_ground = cc.isGrounded;
         if(check_falling)
@@ -100,10 +114,9 @@ public class PlayerMove : InputHandler {
             update_fall();
             update_move_player_checkPoint();
         }
-
 	}
     
-    void Start () 
+    public void Start () 
 	{
         foot_step_tick = 0;
         player = GetComponent<Player>();

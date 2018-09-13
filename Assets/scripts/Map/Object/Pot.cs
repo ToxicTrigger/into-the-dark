@@ -17,22 +17,24 @@ public class Pot : Damageable {
 	}
 	//요기 까지만 지워주세용
 
-	void Update () {
+	public void Update () {
         
 		if(this.Dead)
 		{
             if(!ok)
             {
+                transform.GetChild(0).parent = null;
                 IEnumerator enumerator = particles.GetEnumerator();
                 while(enumerator.MoveNext())
                 {
                     MeshCollider mc = enumerator.Current as MeshCollider;
-                    mc.enabled = true;
-                    Rigidbody rig = mc.GetComponent<Rigidbody>();
-                    rig.constraints = RigidbodyConstraints.None;
-                    mc.transform.parent = null;
-                    transform.GetChild(0).parent = null;
-
+                    if(mc != null)
+                    {
+                        mc.enabled = true;
+                        Rigidbody rig = mc.GetComponent<Rigidbody>();
+                        rig.constraints = RigidbodyConstraints.None;
+                        mc.transform.parent = null;
+                    }
                     Destroy(mc.gameObject, 1.0f);
                 }
                 ok = true;

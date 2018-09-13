@@ -84,8 +84,7 @@ public class Player : MonoBehaviour{
     void gen_arrow()
     {
         Vector3 mouse = Input.mousePosition;
-
-        Vector3 nor = transform.forward.normalized;
+        
         GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
         arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
 
@@ -315,17 +314,17 @@ public class Player : MonoBehaviour{
         }
     }
 
-
     public bool has_on_ladder;
     float end_tick;
-    void Update () {
+
+    public void Update ()
+    {
         if(damageable.Dead)
         {
             Fail_UI.SetActive(true);
         }
         else
         {
-
             if (end_tick <= 1.0f)
             {
                 end_tick += Time.deltaTime;

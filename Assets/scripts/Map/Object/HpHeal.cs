@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class HpHeal : Item
 {
-    public float heal_point;
+    [SerializeField]
+    private float heal_point = 20;
+
     public override void do_work()
     {
         Player.GetComponent<Damageable>().Hp += heal_point;
