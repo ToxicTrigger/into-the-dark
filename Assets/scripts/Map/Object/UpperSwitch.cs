@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpperSwitch : Platform {
+public class UpperSwitch : Platform
+{
     public Transform Door;
     public Vector3 Up_Pos, Def_pos, cur_pos;
     public float speed;
@@ -20,7 +21,7 @@ public class UpperSwitch : Platform {
 
     private void OnTriggerStay(Collider other)
     {
-        if(_switch ==null)
+        if (_switch == null)
         {
             if (other.CompareTag("Player"))
             {
@@ -42,8 +43,9 @@ public class UpperSwitch : Platform {
 
     bool has_played;
 
-    void Update () {
-        if(_switch == null)
+    void Update()
+    {
+        if (_switch == null)
         {
             if (inTrigger)
             {
@@ -55,12 +57,12 @@ public class UpperSwitch : Platform {
                         sound.Play();
                     }
                 }
-                else if(Door.position.y > Up_Pos.y)
+                else if (Door.position.y > Up_Pos.y)
                 {
                     Door.position = Up_Pos;
                     sound2.Play();
-                    if(sound.isPlaying)
-                    sound.Stop();
+                    if (sound.isPlaying)
+                        sound.Stop();
                 }
             }
             else
@@ -74,7 +76,7 @@ public class UpperSwitch : Platform {
                         sound.Play();
                     }
                 }
-                else if(Door.position.y < Def_pos.y)
+                else if (Door.position.y < Def_pos.y)
                 {
                     Door.position = Def_pos;
                     if (sound.isPlaying)
@@ -84,11 +86,11 @@ public class UpperSwitch : Platform {
         }
         else
         {
-            if(!_switch.OnOff)
+            if (!_switch.OnOff)
             {
                 if (Door.position.y >= Up_Pos.y)
                 {
-                    Door.Translate((Door.position - Up_Pos).normalized * -1 * speed );
+                    Door.Translate((Door.position - Up_Pos).normalized * -1 * speed);
                 }
             }
             else
@@ -99,5 +101,5 @@ public class UpperSwitch : Platform {
                 }
             }
         }
-	}
+    }
 }

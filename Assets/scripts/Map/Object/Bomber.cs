@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bomber : Damageable {
+public class Bomber : Damageable
+{
     [SerializeField]
     private float explosion_range = 2f;
     [SerializeField]
@@ -18,28 +19,28 @@ public class Bomber : Damageable {
     }
 
 
-    public void Update ()
+    public void Update()
     {
-		if(this.Dead)
+        if (this.Dead)
         {
             Collider[] targets = Physics.OverlapSphere(this.transform.position, explosion_range);
 
-            foreach(Collider coll in targets)
+            foreach (Collider coll in targets)
             {
                 Rigidbody r = coll.GetComponent<Rigidbody>();
                 Damageable d = coll.GetComponent<Damageable>();
 
-                if(d != null)
+                if (d != null)
                 {
-                    if(!d.Equals(this))
+                    if (!d.Equals(this))
                     {
                         d.Damaged(Damage, 1);
                     }
                 }
 
-                if(r != null)
+                if (r != null)
                 {
-                    if(!r.Equals(this))
+                    if (!r.Equals(this))
                     {
                         r.AddExplosionForce(explosion_power * 20, this.transform.position, explosion_range, 2400.0f);
 
@@ -47,7 +48,7 @@ public class Bomber : Damageable {
                     }
                 }
             }
-            if(particle != null)
+            if (particle != null)
             {
                 GameObject tmp = Instantiate(particle, this.transform.position, Quaternion.identity, null);
                 Destroy(tmp, 5f);
@@ -58,5 +59,5 @@ public class Bomber : Damageable {
 
             Destroy(gameObject);
         }
-	}
+    }
 }

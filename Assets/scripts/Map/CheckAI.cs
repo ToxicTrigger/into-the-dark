@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CheckAI : Switch
 {
-    public List<GameObject> AIs;
-    public bool Empty;
+    private List<GameObject> AIs;
+    private bool Empty;
 
     public void OnTriggerEnter(Collider collision)
     {

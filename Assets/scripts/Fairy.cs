@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PostProcessing;
 
-public class Fairy : MonoBehaviour {
+public class Fairy : MonoBehaviour
+{
     Vector3 pos, cur;
     public Transform target;
     public Damageable PlayerHp, Hp;
@@ -25,11 +26,11 @@ public class Fairy : MonoBehaviour {
         cur_color = particle_color.color;
     }
 
-    void Update ()
+    void Update()
     {
         calc_pos();
         calc_range();
-	}
+    }
     float down_tick;
     float up_tick;
     public bool vignette_done, v_off;
@@ -41,7 +42,7 @@ public class Fairy : MonoBehaviour {
         Hp_per = PlayerHp.Hp / 100;
 
         //50per down?
-        if(Hp_per <= 0.5f)
+        if (Hp_per <= 0.5f)
         {
             down_tick += Time.deltaTime;
             cur_color = ggg.Evaluate(down_tick % 1.0f);
@@ -51,7 +52,7 @@ public class Fairy : MonoBehaviour {
             {
                 vignette_done = true;
             }
-            else if( smoothness <= 0.2f)
+            else if (smoothness <= 0.2f)
             {
                 vignette_done = false;
             }
@@ -74,9 +75,9 @@ public class Fairy : MonoBehaviour {
         {
             cur_color = ggg.Evaluate(0);
         }
-        
+
         particle_color.SetColor("_EmissionColor", cur_color);
-        
+
 
         Range_per = Hp_per / 2 * 4f;
         Range.radius = Range_per;

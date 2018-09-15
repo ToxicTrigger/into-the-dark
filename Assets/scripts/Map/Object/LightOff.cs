@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightOff : MonoBehaviour {
+public class LightOff : MonoBehaviour
+{
     public new Light light;
     public float power;
     public void Start()
@@ -11,8 +12,9 @@ public class LightOff : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-		if(light.intensity > 0)
+    void Update()
+    {
+        if (light.intensity > 0)
         {
             light.intensity -= power;
         }
@@ -20,5 +22,5 @@ public class LightOff : MonoBehaviour {
         {
             light.enabled = false;
         }
-	}
+    }
 }

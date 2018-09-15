@@ -27,7 +27,7 @@ public class Ladder : MonoBehaviour
 
     private void OnTriggerStay(Collider collision)
     {
-        if(player.has_on_ladder)
+        if (player.has_on_ladder)
         {
             float h = Input.GetAxisRaw("Vertical");
             Vector3 up = Vector3.zero;
