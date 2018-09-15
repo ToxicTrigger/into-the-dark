@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Bomber : Damageable {
-    public float explosion_range = 2f;
-    public float explosion_power = 10f;
-    public float Damage = 2;
+    [SerializeField]
+    private float explosion_range = 2f;
+    [SerializeField]
+    private float explosion_power = 10f;
+    [SerializeField]
+    private float Damage = 2;
     public GameObject particle;
-
     public PlayerCamera cam;
 
+    public void Awake()
+    {
+        cam = FindObjectOfType<PlayerCamera>();
+    }
 
-    void Update ()
+
+    public void Update ()
     {
 		if(this.Dead)
         {

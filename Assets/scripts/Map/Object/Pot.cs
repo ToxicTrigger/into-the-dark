@@ -23,7 +23,11 @@ public class Pot : Damageable {
 		{
             if(!ok)
             {
-                transform.GetChild(0).parent = null;
+                if(transform.GetChild(0).parent != null)
+                {
+                    transform.GetChild(0).parent = null;
+                }
+               
                 IEnumerator enumerator = particles.GetEnumerator();
                 while(enumerator.MoveNext())
                 {
