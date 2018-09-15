@@ -6,7 +6,7 @@ public class ArrowSwitch : Switch
 {
     [SerializeField]
     private float timer = 5;
-    private float now = 0;
+    private float now;
 
     public void OnCollisionEnter(Collision collision)
     {
@@ -21,11 +21,6 @@ public class ArrowSwitch : Switch
                 this.OnOff = true;
             }
         }
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-
     }
 
     public new void Update()

@@ -26,8 +26,7 @@ public class PlayerMove : InputHandler
     private bool check_falling;
     float fall_tick;
     public Transform spawn_point;
-    float dash_timer;
-    bool is_dash, dash_start;
+    bool dash_start;
 
 
     public override void Work(InputManager im)
