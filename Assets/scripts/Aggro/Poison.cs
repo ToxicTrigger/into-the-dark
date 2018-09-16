@@ -31,29 +31,25 @@ public class Poison : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(!Players)
+        if(other.CompareTag("Switch"))
         {
-            if( other.CompareTag("Switch") )
-            {
-                Vector3 pos = boss.position;
-                pos.y += 30f;
-                GameObject drop = Instantiate(prefab , pos , Quaternion.identity , null);
-                drop.GetComponent<Rigidbody>().useGravity = true;
-                drop.GetComponent<Poison>().Players = true;
-                drop.GetComponent<Collider>().isTrigger = false;
-                Destroy(gameObject);
-                Destroy(other.gameObject);
-            }
-            if( other.CompareTag("Player") )
-            {
-                Player.Hp -= Damage;
-            }
-            if( !other.CompareTag("Enemy") && other.CompareTag("Player") )
-            {
-                Destroy(gameObject);
-            }
+            Vector3 pos = boss.position;
+            pos.y += 30f;
+            GameObject drop = Instantiate(prefab , pos , Quaternion.identity , null);
+            drop.GetComponent<Rigidbody>().useGravity = true;
+            drop.GetComponent<Poison>().Players = true;
+            drop.GetComponent<Collider>().isTrigger = false;
+            Destroy(gameObject);
+            Destroy(other.gameObject);
         }
-
+        if(other.CompareTag("Player"))
+        {
+            Player.Hp -= Damage;
+        }
+        if(!other.CompareTag("Enemy") && other.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
         if( other.CompareTag("Enemy") )
         {
             if(Players)
