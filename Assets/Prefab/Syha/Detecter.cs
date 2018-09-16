@@ -8,7 +8,7 @@ public class Detecter : MonoBehaviour {
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.name.Equals("Heejin") || other.tag.Equals("Totem"))
+        if (other.name.Equals("Player") || other.tag.Equals("Totem"))
         {
             if (gameObject.tag.Equals("Cam pos"))
             {
@@ -24,7 +24,7 @@ public class Detecter : MonoBehaviour {
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.name.Equals("Heejin") || other.tag.Equals("Totem"))
+        if (other.name.Equals("Player") || other.tag.Equals("Totem"))
         {
             is_find = false;
             target = null;
