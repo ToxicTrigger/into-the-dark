@@ -21,7 +21,7 @@ public class EButton : MonoBehaviour
         while (color.a <= 1)
         {
             color.a += speed;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForFixedUpdate();
         }
         EventOn = false;
     }
@@ -48,7 +48,7 @@ public class EButton : MonoBehaviour
         while (color.a >= 0)
         {
             color.a -= speed;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForFixedUpdate();
         }
         EventOn = false;
     }

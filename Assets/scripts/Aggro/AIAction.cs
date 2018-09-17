@@ -58,7 +58,7 @@ public class AIAction : MonoBehaviour
                 case State.Action:
                     ani.applyRootMotion = false;
                     ani.SetBool("isAction" , true);
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(6);
                     ani.SetBool("isAction" , false);
                     state = State.Attack;
                     ani.applyRootMotion = true;
@@ -66,7 +66,7 @@ public class AIAction : MonoBehaviour
 
                 case State.Attack:
                     transform.LookAt(Player.transform);
-                    if( attack_tick <= 2.0f )
+                    if( attack_tick <= 1.4f )
                     {
                         attack_tick += Time.deltaTime;
                         ani.SetBool("isAttack" , false);
@@ -76,7 +76,6 @@ public class AIAction : MonoBehaviour
                         ani.SetBool("isAttack" , true);
                         //yield return new WaitForSeconds(0.3f);
                         Vector3 pos = transform.position;
-                        pos.y = Player.transform.position.y + 1.0f;
                         GameObject poison = Instantiate(Poison , pos , Quaternion.identity , null);
                         poison.transform.position = transform.position;
                         poison.GetComponent<Rigidbody>().useGravity = false;

@@ -25,45 +25,71 @@ public class Interactable : MonoBehaviour
         e = GameObject.FindGameObjectWithTag("E").GetComponent<EButton>();
     }
 
+    bool up_push_button, down_push_button;
+
     void Talk()
     {
-        if (get_capture_area)
+        if( get_capture_area )
         {
-            if (e != null & !hasTalking) e.Up();
-            if (Input.GetButtonDown("Submit"))
+            if( e != null )
             {
-                if (e != null) e.Down();
-                hasTalking = true;
+                if(!up_push_button)
+                {
+                    e.Up();
+                    up_push_button = true;
+                }
+                
+                if( Input.GetButtonDown("Submit") )
+                {
+                    if(!down_push_button)
+                    {
+                        e.Down();
+                        down_push_button = true;
+                    }
+                    
+                    if( !hasTalking )
+                    {
+                        hasTalking = true;
+                    }
+                    else
+                    {
+                        hasTalking = false;
+                    }
+                }
             }
         }
         else
         {
+            up_push_button = false;
+            down_push_button = false;
             hasTalking = false;
         }
     }
 
     void update_()
     {
-        if (Vector3.Distance(target.position, transform.position) <= talk_distance)
+        float dis = Vector3.Distance(target.position , transform.position);
+        if( dis <= talk_distance )
         {
-
             get_capture_area = true;
             Talk();
         }
-        else
+        else if(dis <= 8)
         {
+            up_push_button = false;
+            down_push_button = false;
             get_capture_area = false;
             hasTalking = false;
-            if (e != null) e.Down();
+            if( e != null ) e.Down();
         }
     }
 
     void update_event()
     {
-        if (hasTalking)
+        if( hasTalking )
         {
             IEnumerator iter = events.GetEnumerator();
-            while (iter.MoveNext())
+            while( iter.MoveNext() )
             {
                 GameObject tmp = iter.Current as GameObject;
                 tmp.SetActive(true);
@@ -72,15 +98,14 @@ public class Interactable : MonoBehaviour
         else
         {
             IEnumerator iter = events.GetEnumerator();
-            while (iter.MoveNext())
+            while( iter.MoveNext() )
             {
                 GameObject tmp = iter.Current as GameObject;
                 tmp.SetActive(false);
             }
         }
     }
-
-    // Update is called once per frame
+    
     public void Update()
     {
         update_();

@@ -23,7 +23,7 @@ public class Poison : MonoBehaviour
         {
             if( Players )
             {
-                other.gameObject.GetComponent<Damageable>().Hp -= 50;
+                other.gameObject.GetComponent<Damageable>().Hp -= 20;
                 Destroy(gameObject);
             }
         }
@@ -40,7 +40,7 @@ public class Poison : MonoBehaviour
             drop.GetComponent<Poison>().Players = true;
             drop.GetComponent<Collider>().isTrigger = false;
             Destroy(gameObject);
-            Destroy(other.gameObject);
+
         }
         if(other.CompareTag("Player"))
         {

@@ -6,12 +6,12 @@ public class Switch : Interactable
 {
     public bool OnOff;
 
-    void Update()
+    public new void Update()
     {
         base.Update();
         if (this.get_capture_area)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetButtonDown("Submit"))
             {
                 if (OnOff)
                 {

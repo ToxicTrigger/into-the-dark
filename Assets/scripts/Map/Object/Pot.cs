@@ -21,12 +21,11 @@ public class Pot : Damageable
 
     public void Update()
     {
-
         if (this.Dead)
         {
             if (!ok)
             {
-                if (transform.GetChild(0).parent != null)
+                if (transform.childCount != 0)
                 {
                     transform.GetChild(0).parent = null;
                 }
