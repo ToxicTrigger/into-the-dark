@@ -209,20 +209,12 @@ public class BossRoomManager : MonoBehaviour {
 
     public void init_bossroom()
     {
-        for (int i = 0; i < reloc.get_reloc((int)phase).torch_set[0].foot_switch.Length; i++)
-        {
-            Destroy(reloc.get_reloc((int)phase).torch_set[0].foot_switch[i].gameObject);
-            Destroy(reloc.get_reloc((int)phase).torch_set[0].switch_object[i].gameObject);
-        }
-
         for(int i=0; i<enemy_list.Count;  i++)
         {
             Destroy(enemy_list[i]);
         }
         get_boss().set_hp(init_val.boss_hp);
         phase = init_val.phase;
-
-
         Map_Initialization();
         player.transform.position = start_point.position;
     }

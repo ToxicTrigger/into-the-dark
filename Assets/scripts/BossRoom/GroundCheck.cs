@@ -38,11 +38,6 @@ public class GroundCheck : Observer {
 
     public int enemy_count;
 
-    [Tooltip("몇걸음부터 인식할지")]
-    public int cognition_step_count;
-    [Tooltip("인식 후 보스의 상태 변화 시간")]
-    public int [] cognition_time_list;
-
     void Start () {
         if (type != Type.Null)
         {
@@ -83,7 +78,7 @@ public class GroundCheck : Observer {
                         if (!is_cognition)
                             step_cnt++;
 
-                        if (step_cnt >= cognition_step_count)
+                        if (step_cnt >= 3)
                         {
                             is_cognition = true;
                             sound_manager.mute_sound(SoundManager.SoundList.heartbeat_1, false);
@@ -110,7 +105,7 @@ public class GroundCheck : Observer {
                         ui_state_text.on_text_ui(UiStateText.TextName.cognation);
                         cognition_text = true;
                     }
-                    if (cognition_time >= cognition_time_list[1])
+                    if (cognition_time >= 30)
                     {
                         sound_manager.mute_sound(SoundManager.SoundList.heartbeat_2, true);
                         //보스의 솟아오르기 공격 실행
@@ -118,7 +113,7 @@ public class GroundCheck : Observer {
                         //clear_guard();
                         is_cognition = false;
                     }
-                    else if (cognition_time >= cognition_time_list[0])
+                    else if (cognition_time >= 20)
                     {
                         sound_manager.mute_sound(SoundManager.SoundList.heartbeat_1, true);
                         sound_manager.mute_sound(SoundManager.SoundList.heartbeat_2, false);
