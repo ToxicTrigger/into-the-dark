@@ -274,7 +274,10 @@ public class Boss_Action : MonoBehaviour {
                 
                 if(action_phase ==1)
                 {
-                    cross_point = BossRoomManager.get_instance().get_cross_point();
+                    //cross_point = BossRoomManager.get_instance().get_cross_point();
+
+                    cross_point = soar_target.transform.position;
+
                     //시작위치에 세팅
 
                     Vector3 dir = (cross_center.position - cross_point).normalized;
@@ -282,7 +285,7 @@ public class Boss_Action : MonoBehaviour {
                     dir.y = 0;
 
                     cross_start = cross_point + (-dir * cross_distance);
-                    cross_end = cross_point + (dir * cross_distance);
+                    cross_end = cross_center.position;//cross_point + (dir * cross_distance);
 
                     transform.position = new Vector3(cross_start.x, transform.position.y, cross_start.z);
                     action_phase = 2;
@@ -297,16 +300,19 @@ public class Boss_Action : MonoBehaviour {
                     move_dir = (move_target - transform.position).normalized;  //이동 방향        
                     float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
 
-                    move_dir.y = Mathf.Lerp(cross_height, -1.0f, (origin_dis - cur_dis) / origin_dis - 0.3f);
+                    move_dir.y = Mathf.Lerp(cross_height, -1.5f, (origin_dis - cur_dis) / origin_dis - 0.3f);
+                    move_dir.y *= jump_power;
                     //if (move_dir.y < 0) move_dir.y *= jump_power;
 
                     transform.position += move_dir * cross_speed * Time.deltaTime;
 
-                    if (cur_dis < 1.5)//&& transform.position.y < move_target.y+5)
+                    if (cur_dis < 1.0f && tail[tail.Length - 1].transform.position.y < around_transform.position.y -10)//&& transform.position.y < move_target.y+5)
                     {
                         //EventManager.get_instance().camera_shake(c_shake_power_rush, c_shake_cnt_rush, c_shake_speed_rush, EventManager.Direction.Up_Down, c_shake_minus_rush);
                         //카메라 쉐이크
-                        action_phase = 3;
+                        action_phase = 1;
+                        Debug.Log("asdfasfd!!@##");
+                        state.set_state(Boss_State.State.Move, null);
                     }
                 }
                 else if(action_phase ==3)

@@ -59,7 +59,7 @@ public class Boss_State : MonoBehaviour
             manager.get_groggy_ui().set_boss_groggy(false, Vector3.zero);
         }
 
-        if(_state == State.Soar_Attack)
+        if(_state == State.Soar_Attack || _state == State.Cross_Attack)
         {
             boss_action.set_soar_target(soar_target);
         }

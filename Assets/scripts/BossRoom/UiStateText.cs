@@ -9,7 +9,8 @@ public class UiStateText : MonoBehaviour {
     public enum TextName
     {
         cognation,
-        attack_ready
+        attack_ready,
+        wood_cognition
     };
 
     public Text text;
