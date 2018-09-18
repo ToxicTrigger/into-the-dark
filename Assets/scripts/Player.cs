@@ -48,6 +48,7 @@ public class Player : MonoBehaviour{
     [Range(-1, 1)]
     public float step_Dodge = 0.15f;
     public PlayerCamera ActionCam;
+    public ActionCamera ac;
 
     float bow_time;
     [Tooltip("현재 진행중인 애니메이션 이름")]
@@ -66,6 +67,11 @@ public class Player : MonoBehaviour{
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
         ActionCam = cam.GetComponent<PlayerCamera>();
+        
+        ac = FindObjectOfType<ActionCamera>();
+        
+        ac.SetStateTarget(this.transform , ActionCamera.State.Follow);
+
     }
 
     public void setSwordEnable(int val)
