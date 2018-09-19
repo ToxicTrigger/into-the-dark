@@ -65,7 +65,6 @@ public class AncientWeapon : Observer
         }
         else
         {
-            Debug.Log("asdfaaasdddee");
             if (activate_torch_count > 0)
             {
                 activate_torch_count--;
@@ -141,13 +140,15 @@ public class AncientWeapon : Observer
 
         for (int i = 0; i < ready_time; i++)
         {
+            if (!SoundManager.get_instance().sound_list[(int)SoundManager.SoundList.rumble].isPlaying)
+                SoundManager.get_instance().play_sound(SoundManager.SoundList.rumble);
             transform.position += move_dir;
-
             yield return new WaitForSeconds(0.01f);
         }
 
         move_dir = Vector3.zero;
         ready_timer = null;
+        SoundManager.get_instance().stop_sound(SoundManager.SoundList.rumble,true);
     }
 
     //고대병기의 "활성화 유지시간이 끝나며" 일괄처리 _ 퍼즐과 보스움직임에대한 처리를 해준다.

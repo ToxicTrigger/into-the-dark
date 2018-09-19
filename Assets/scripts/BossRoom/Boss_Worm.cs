@@ -44,6 +44,12 @@ public class Boss_Worm : MonoBehaviour
     {
         hp -= 50;
 
+        int num = Random.Range((int)SoundManager.SoundList.hit_boss_one, (int)SoundManager.SoundList.hit_boss_two + 1);
+        SoundManager.get_instance().play_sound((SoundManager.SoundList)num);
+
+        Debug.Log(num);
+
+        //SoundManager.get_instance().play_sound(SoundManager.SoundList.heartbeat_1);
         switch (manager.phase)
         {
             case BossRoomManager.Phase.one:

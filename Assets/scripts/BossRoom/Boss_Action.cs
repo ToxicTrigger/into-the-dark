@@ -311,7 +311,7 @@ public class Boss_Action : MonoBehaviour {
                         //EventManager.get_instance().camera_shake(c_shake_power_rush, c_shake_cnt_rush, c_shake_speed_rush, EventManager.Direction.Up_Down, c_shake_minus_rush);
                         //카메라 쉐이크
                         action_phase = 1;
-                        Debug.Log("asdfasfd!!@##");
+
                         state.set_state(Boss_State.State.Move, null);
                     }
                 }

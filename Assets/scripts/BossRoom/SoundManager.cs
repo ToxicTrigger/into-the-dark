@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour {
+public class SoundManager : MonoBehaviour
+{
 
     private static SoundManager instance = null;
 
@@ -28,7 +29,13 @@ public class SoundManager : MonoBehaviour {
         heartbeat_2,
         step_stone,
         step_wood,
-        time_ticktock
+        time_ticktock,
+        rumble,
+        boss_ready_real,
+        boss_attack_up,
+        boss_attack_down,
+        hit_boss_one,
+        hit_boss_two
     };
     public SoundList sound_number;
 
@@ -37,7 +44,7 @@ public class SoundManager : MonoBehaviour {
 
     private void Start()
     {
-        sound_list[(int)SoundList.bossroom_idle].Play();
+        //sound_list[(int)SoundList.bossroom_idle].Play();
         sound_list[(int)SoundList.heartbeat_1].Play();
         sound_list[(int)SoundList.heartbeat_2].Play();
     }
@@ -47,13 +54,37 @@ public class SoundManager : MonoBehaviour {
         sound_list[(int)_sound_number].Play();
     }
 
-    public void stop_sound(SoundList _sound_number)
+    public void stop_sound(SoundList _sound_number, bool is_immediately)
     {
-        sound_list[(int)_sound_number].Stop();
+
+        if(!is_immediately)
+            StartCoroutine(volume_ctrl(_sound_number));
+        else
+        {
+            sound_list[(int)_sound_number].Stop();
+        }
     }
 
     public void mute_sound(SoundList _sound_number, bool _is_mute)
     {
         sound_list[(int)_sound_number].mute = _is_mute;
+    }
+
+    IEnumerator volume_ctrl(SoundList _sound_number)
+    {
+        while (true)
+        {
+            sound_list[(int)_sound_number].volume -= 0.05f;
+
+            yield return new WaitForSeconds(0.01f);
+
+            if (sound_list[(int)_sound_number].volume <= 0)
+            {
+                sound_list[(int)_sound_number].Stop();
+                sound_list[(int)_sound_number].volume = 1;
+                break;
+            }
+        }
+
     }
 }

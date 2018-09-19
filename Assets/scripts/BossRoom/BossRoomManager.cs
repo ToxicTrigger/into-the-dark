@@ -66,6 +66,8 @@ public class BossRoomManager : MonoBehaviour {
     };
     InitialValue init_val;
 
+    public GroundCheck []wood_bridge;
+
     void Awake()
     {
         init_val.boss_hp = get_boss().get_max_hp();
@@ -222,6 +224,10 @@ public class BossRoomManager : MonoBehaviour {
         get_boss().set_hp(init_val.boss_hp);
         phase = init_val.phase;
 
+        for(int i=0; i<wood_bridge.Length; i++)
+        {
+            wood_bridge[i].initialize_bridge();
+        }
 
         Map_Initialization();
         player.transform.position = start_point.position;
