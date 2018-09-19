@@ -45,6 +45,7 @@ public class Poison : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             Player.Hp -= Damage;
+            Player.GetComponent<Player>().ac.Shake(3 , 0.2f , Time.deltaTime);
         }
         if(!other.CompareTag("Enemy") && other.CompareTag("Player"))
         {

@@ -11,7 +11,9 @@ public class WaterSound : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            BossRoomManager.get_instance().send_boss_state(Boss_State.State.Rush_Attack);
+            //BossRoomManager.get_instance().send_boss_state(Boss_State.State.Rush_Attack);
+            BossRoomManager.get_instance().set_cross_point(this.transform.position);
+            BossRoomManager.get_instance().send_boss_state(Boss_State.State.Cross_Attack, null);
         }
     }
 }

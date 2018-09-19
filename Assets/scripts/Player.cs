@@ -102,6 +102,7 @@ public class Player : MonoBehaviour{
         if (bow_time >= 3.2f & bow_time < 4f)
         {
             //강공격 여부 ㅇㅇ 
+            arrow.GetComponent<Element>().type = Element.Type.Light;
         }
         Destroy(arrow, 5.0f);
         AggroManager.get_instance().gen_aggro(transform.position, 10 + bow_time, 3);
@@ -114,6 +115,7 @@ public class Player : MonoBehaviour{
         Vector3 mouse = Input.mousePosition;
         if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
         {
+            //Debug.Log(hit.transform.gameObject.name);
             click_pos = hit.point;
             click_pos.y = transform.position.y + 0.1f;
 
@@ -243,7 +245,6 @@ public class Player : MonoBehaviour{
                 break;
             case "wakeUp":
                 ani.SetBool("Dodge", false);
-                ActionCam.set_state(PlayerCamera.State.Follow);
                 break;
             case "Dodge":
                 character.Move(transform.forward.normalized * step_Dodge);
@@ -275,7 +276,6 @@ public class Player : MonoBehaviour{
             ani.SetBool("Attack", true);
             weapon.type = Weapon.Type.Sword;
             is_fighting_something = true;
-            ActionCam.set_state(PlayerCamera.State.Sword_Attack);
         }
 
         if(click_tick >= 0.3f)
@@ -285,8 +285,7 @@ public class Player : MonoBehaviour{
             is_fighting_something = false;
             is_attack = false;
             line.gameObject.SetActive(false);
-
-            ActionCam.set_state(PlayerCamera.State.Follow);
+            
         }else{
             click_tick += Time.deltaTime;
         }
@@ -310,7 +309,6 @@ public class Player : MonoBehaviour{
                 ani.SetFloat("Forward", 0.0f);
                 ani.SetFloat("Turn", 0.0f);
                 ani.SetBool("Dodge", true);
-                ActionCam.set_state(PlayerCamera.State.Dodge);
                 //Input.ResetInputAxes();
             }
             if (!is_attack)

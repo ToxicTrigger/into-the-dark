@@ -72,7 +72,7 @@ public class ObservableTorch : Observable {
         torch_state = State.Off;
         notify_all();    //불이 꺼졌으면 꺼짐을 알리기위해 ancientweapon에게 알림            
         torch_light.gameObject.SetActive(false);
-        Debug.Log(this.name + " : off_light() 호출");
+        //Debug.Log(this.name + " : off_light() 호출");
     }
 
     public virtual void on_light()
