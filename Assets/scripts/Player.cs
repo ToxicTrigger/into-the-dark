@@ -245,7 +245,6 @@ public class Player : MonoBehaviour{
                 break;
             case "wakeUp":
                 ani.SetBool("Dodge", false);
-                ActionCam.set_state(PlayerCamera.State.Follow);
                 break;
             case "Dodge":
                 character.Move(transform.forward.normalized * step_Dodge);
@@ -277,7 +276,6 @@ public class Player : MonoBehaviour{
             ani.SetBool("Attack", true);
             weapon.type = Weapon.Type.Sword;
             is_fighting_something = true;
-            ActionCam.set_state(PlayerCamera.State.Sword_Attack);
         }
 
         if(click_tick >= 0.3f)
@@ -287,8 +285,7 @@ public class Player : MonoBehaviour{
             is_fighting_something = false;
             is_attack = false;
             line.gameObject.SetActive(false);
-
-            ActionCam.set_state(PlayerCamera.State.Follow);
+            
         }else{
             click_tick += Time.deltaTime;
         }
@@ -312,7 +309,6 @@ public class Player : MonoBehaviour{
                 ani.SetFloat("Forward", 0.0f);
                 ani.SetFloat("Turn", 0.0f);
                 ani.SetBool("Dodge", true);
-                ActionCam.set_state(PlayerCamera.State.Dodge);
                 //Input.ResetInputAxes();
             }
             if (!is_attack)

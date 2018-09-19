@@ -27,12 +27,12 @@ public class ActionCamera : MonoBehaviour
 
     public Queue<State> command;
 
-    public List<Vector3> Angles;
+    public float default_fov;
     public List<Transform> Pins;
     public List<Vector3> Offsets;
 
-    public Vector3 Angle;
-    public Vector3 Offset;
+    public Vector3 Angle, default_angle;
+    public Vector3 Offset, default_offset;
 
     IEnumerator Zoom(float fov , bool zoom_in , float speed)
     {
@@ -62,14 +62,17 @@ public class ActionCamera : MonoBehaviour
 
     public void SetState(State state)
     {
-        if(!has_camera_using)
+        if( !has_camera_using )
         {
             cur_state = now_state;
             now_state = state;
         }
         else
         {
-            command.Enqueue(state);
+            if( state != now_state )
+            {
+                command.Enqueue(state);
+            }
         }
     }
 
@@ -87,18 +90,24 @@ public class ActionCamera : MonoBehaviour
 
     public void SetTarget(Transform target)
     {
-        cur_target = now_target;
-        now_target = target;
+        if( !target.Equals(now_target) )
+        {
+            cur_target = now_target;
+            now_target = target;
+        }
     }
 
     public void SetTarget(int number)
     {
-        cur_target = now_target;
-        now_target = this.Pins[ number ];
+        if( !Pins[ number ].Equals(now_target) )
+        {
+            cur_target = now_target;
+            now_target = this.Pins[ number ];
+        }
     }
-
     IEnumerator calc_fsm()
     {
+
         while( true )
         {
             switch( now_state )
@@ -108,16 +117,19 @@ public class ActionCamera : MonoBehaviour
                     break;
 
                 case State.Follow:
-                    Vector3 pos = Vector3.Lerp(transform.position , now_target.position + Offset, Time.time * action_speed);
+                    Vector3 pos = Vector3.Lerp(transform.position , now_target.position + Offset , action_speed);
                     transform.position = pos;
                     has_camera_using = false;
+                    transform.eulerAngles = Angle;
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation , Quaternion.Euler(Angle) , action_speed * 10f);
                     break;
 
                 case State.Move_Pin:
-                    pos = Vector3.Lerp(transform.position , now_target.position , Time.time * action_speed);
+                    pos = Vector3.Lerp(transform.position , now_target.position , action_speed);
                     transform.position = pos;
 
-                    if(Vector3.Distance(pos, now_target.position) >= 0.2f)
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation , Quaternion.Euler(Angle) , action_speed * 10f);
+                    if( Vector3.Distance(pos , now_target.position) >= 0.2f )
                     {
                         has_camera_using = true;
                     }
@@ -126,30 +138,52 @@ public class ActionCamera : MonoBehaviour
                         has_camera_using = false;
                     }
                     break;
-                    
             }
 
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
         }
     }
 
     public void Update()
     {
-        if(!has_camera_using)
+        if( !has_camera_using )
         {
-            if(command.Count != 0)
+            if( command.Count != 0 )
             {
                 SetState(command.Dequeue());
             }
         }
     }
 
+    IEnumerator ShakeCam(int tick , float power , float tick_by_tick_time)
+    {
+        for( int i = 0 ; i < tick ; ++i )
+        {
+            float v = Random.Range(-power , power);
+            float h = Random.Range(-power , power);
+            Vector3 shake = new Vector3(v , h, -v);
+            transform.position += shake;
+
+            yield return new WaitForSeconds(tick_by_tick_time);
+        }
+    }
+
+    public void Shake(int tick , float power , float tick_by_tick_time)
+    {
+        StartCoroutine(ShakeCam(tick , power , tick_by_tick_time));
+    }
 
     // Use this for initialization
     void Start()
     {
         command = new Queue<State>();
+
         cam = Camera.main;
+
+        default_angle = transform.eulerAngles;
+        default_offset = Offset;
+        default_fov = cam.fieldOfView;
+
         StartCoroutine(calc_fsm());
     }
 }

@@ -12,11 +12,11 @@ public class Bomber : Damageable
     private float Damage = 2;
     [SerializeField]
     private GameObject particle;
-    private PlayerCamera cam;
+    private ActionCamera cam;
 
     public void Awake()
     {
-        cam = FindObjectOfType<PlayerCamera>();
+        cam = FindObjectOfType<ActionCamera>();
     }
 
 
@@ -54,7 +54,7 @@ public class Bomber : Damageable
                 GameObject tmp = Instantiate(particle, this.transform.position, Quaternion.identity, null);
                 Destroy(tmp, 5f);
             }
-            cam.up_down_move(0.2f, 2, 0.08f, 0);
+            cam.Shake(4 , 1 , Time.deltaTime);
             Destroy(gameObject);
         }
     }
