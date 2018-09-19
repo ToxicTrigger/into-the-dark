@@ -102,6 +102,7 @@ public class Player : MonoBehaviour{
         if (bow_time >= 3.2f & bow_time < 4f)
         {
             //강공격 여부 ㅇㅇ 
+            arrow.GetComponent<Element>().type = Element.Type.Light;
         }
         Destroy(arrow, 5.0f);
         AggroManager.get_instance().gen_aggro(transform.position, 10 + bow_time, 3);
@@ -114,6 +115,7 @@ public class Player : MonoBehaviour{
         Vector3 mouse = Input.mousePosition;
         if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
         {
+            //Debug.Log(hit.transform.gameObject.name);
             click_pos = hit.point;
             click_pos.y = transform.position.y + 0.1f;
 

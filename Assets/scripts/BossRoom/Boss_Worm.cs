@@ -6,15 +6,25 @@ public class Boss_Worm : MonoBehaviour
 {
     //
 
+    public int max_hp;
     public int hp;
 
     //
 
+    BossRoomManager manager;
     Boss_State state;
 
     void Start()
     {
+        hp = max_hp;
         state = GetComponent<Boss_State>();
+        manager = BossRoomManager.get_instance();
+    }
+    
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+            hp -= 1;
     }
 
     //약점공격을 받으면 (머리) -> 대화해봐야함
@@ -24,31 +34,66 @@ public class Boss_Worm : MonoBehaviour
         {
             add_damage();
         }
+        if(other.CompareTag("Sword"))
+        {
+            add_damage();
+        }
     }
 
     public void add_damage()
     {
-        hp -= 1;
+        hp -= 50;
 
-        if (hp <= 0)
+        int num = Random.Range((int)SoundManager.SoundList.hit_boss_one, (int)SoundManager.SoundList.hit_boss_two + 1);
+        SoundManager.get_instance().play_sound((SoundManager.SoundList)num);
+
+        Debug.Log(num);
+
+        //SoundManager.get_instance().play_sound(SoundManager.SoundList.heartbeat_1);
+        switch (manager.phase)
         {
-            state.set_state(Boss_State.State.Death);
+            case BossRoomManager.Phase.one:
+                if (hp < max_hp * 0.5 && state.get_state() == Boss_State.State.Groggy)
+                {
+                    //manager.send_boss_state(Boss_State.State.Soar_Attack, manager.center);
+                    manager.increase_pahse(true);
+                }
+                break;
+            case BossRoomManager.Phase.two:
+                //if (hp < max_hp * 0.4 && state.get_state() == Boss_State.State.Groggy)
+                //{
+                //    //state.set_state(Boss_State.State.Soar_Attack, manager.center);
+                //    manager.increase_pahse(true);
+                //}
+                if (hp <= 0)
+                {
+                    state.set_state(Boss_State.State.Death, null);
+                }
+                break;
+            case BossRoomManager.Phase.three:
+                if (hp <= 0)
+                {
+                    state.set_state(Boss_State.State.Death,null);
+                }
+                break;
+            default:
+                break;
         }
 
-        if(state.get_state() == Boss_State.State.Groggy)
-        {
-            state.set_state(Boss_State.State.Soar_Attack);
-        }
     }
 
-
-
-
-
-
-
-
-
+    public int get_hp()
+    {
+        return hp;
+    }
+    public int get_max_hp()
+    {
+        return max_hp;
+    }
+    public void set_hp(int _hp)
+    {
+        hp = _hp;
+    }
     //Animator animator;
 
     //public AudioSource boss_cry;
