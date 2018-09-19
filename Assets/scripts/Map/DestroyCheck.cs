@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroyCheck : Switch
+namespace Toxic
 {
-    [SerializeField]
-    private GameObject check_target;
-    
-    public new void Update()
+    public class DestroyCheck : Switch
     {
-        this.OnOff = check_target == null ? true : false;
+        [SerializeField]
+        private GameObject check_target;
+
+        public new void Update()
+        {
+            this.OnOff = check_target == null ? true : false;
+        }
     }
 }
+
+
