@@ -47,8 +47,8 @@ public class Player : MonoBehaviour{
     public float step_three = 0.3f;
     [Range(-1, 1)]
     public float step_Dodge = 0.15f;
-    public PlayerCamera ActionCam;
     public ActionCamera ac;
+    public PlayerMove move;
 
     float bow_time;
     [Tooltip("현재 진행중인 애니메이션 이름")]
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour{
         totems = new List<GameObject>(3);
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
-        ActionCam = cam.GetComponent<PlayerCamera>();
+        move = GetComponent<PlayerMove>();
         
         ac = FindObjectOfType<ActionCamera>();
         
@@ -110,6 +110,7 @@ public class Player : MonoBehaviour{
 
     void calc_click_pos(bool sword)
     {
+        move.set_movement_zero();
         has_targeting_totem = false;
         RaycastHit hit, coll;
         Vector3 mouse = Input.mousePosition;
@@ -235,9 +236,11 @@ public class Player : MonoBehaviour{
         switch (cur_ani)
         {
             case "Swing_0":
+                move.set_movement_zero();
                 character.Move(transform.forward.normalized * step_one);
                 break;
             case "Swing_1":
+                move.set_movement_zero();
                 character.Move(transform.forward.normalized * step_two);
                 break;
             case "Jump":

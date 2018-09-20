@@ -29,6 +29,7 @@ public class Ladder : MonoBehaviour
     {
         if (player.has_on_ladder)
         {
+            pm.set_movement_zero();
             float h = Input.GetAxisRaw("Vertical");
             Vector3 up = Vector3.zero;
             up.y = h;

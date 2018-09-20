@@ -33,15 +33,15 @@ public class PlayerMove : InputHandler
     {
         if( !im.has_not_anything_input() & ( player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle") ) )
         {
-            movement.x = im.get_Horizontal();
-            movement.z = im.get_Vertical();
-            player.ani.SetFloat("Forward" , movement.normalized.magnitude);
+            movement.x = Mathf.Lerp(movement.x , im.get_Horizontal(), moveSpeed);
+            movement.z = Mathf.Lerp(movement.z , im.get_Vertical(), moveSpeed);
+            player.ani.SetFloat("Forward" , movement.magnitude);
 
             y = Mathf.Sin(player.ac.cam.transform.eulerAngles.y);
             
             if( y == 0 )
             {
-                movement = movement.normalized;
+                //movement = movement.normalized;
             }
             else if( y > 0 )
             {
@@ -50,7 +50,7 @@ public class PlayerMove : InputHandler
 
                 movement.x = zx;
                 movement.z = xz;
-                movement = movement.normalized;
+                //movement = movement.normalized;
             }
             else if( y < 0 )
             {
@@ -59,50 +59,52 @@ public class PlayerMove : InputHandler
 
                 movement.x = zx;
                 movement.z = xz;
-                movement = movement.normalized;
+                //movement = movement.normalized;
             }
 
-            Quaternion q = Quaternion.LookRotation(movement);
-            transform.rotation = Quaternion.Slerp(transform.rotation , q , moveSpeed);
+            Quaternion q = Quaternion.LookRotation(movement * 3);
+            transform.rotation = Quaternion.Slerp(transform.rotation , q , moveSpeed * 1.5f);
 
             if( Input.GetButton("Dash") )
             {
                 if( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
                 {
-                    cc.Move(player.ac.cam.transform.right.normalized * moveSpeed * 1.5f);
+                    movement = Vector3.Lerp(movement, player.ac.cam.transform.right.normalized * moveSpeed * 5f, moveSpeed);
                 }
                 else if( im.get_Horizontal() != 0 && im.get_Horizontal() < 0 )
                 {
-                    cc.Move(-player.ac.cam.transform.right.normalized * moveSpeed * 1.5f);
+                    movement = Vector3.Lerp(movement , -player.ac.cam.transform.right.normalized * moveSpeed * 5f , moveSpeed);
                 }
 
                 if( im.get_Vertical() != 0 && im.get_Vertical() > 0 )
                 {
-                    cc.Move(player.ac.cam.transform.forward.normalized * moveSpeed * 1.5f);
+                    movement = Vector3.Lerp(movement , player.ac.cam.transform.forward.normalized * moveSpeed *5f , moveSpeed);
+                    
                 }
                 else if( im.get_Vertical() != 0 && im.get_Vertical() < 0 )
                 {
-                    cc.Move(-player.ac.cam.transform.forward.normalized * moveSpeed * 1.5f);
+                    movement = Vector3.Lerp(movement , -player.ac.cam.transform.forward.normalized * moveSpeed * 5f , moveSpeed);
+
                 }
             }
             else
             {
                 if( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
                 {
-                    cc.Move(player.ac.cam.transform.right.normalized * moveSpeed);
+                    movement = Vector3.Lerp(movement , player.ac.cam.transform.right.normalized * moveSpeed, moveSpeed);
                 }
                 else if( im.get_Horizontal() != 0 && im.get_Horizontal() < 0 )
                 {
-                    cc.Move(-player.ac.cam.transform.right.normalized * moveSpeed);
+                    movement = Vector3.Lerp(movement , -player.ac.cam.transform.right.normalized * moveSpeed , moveSpeed);
                 }
 
                 if( im.get_Vertical() != 0 && im.get_Vertical() > 0 )
                 {
-                    cc.Move(player.ac.cam.transform.forward.normalized * moveSpeed);
+                    movement = Vector3.Lerp(movement , player.ac.cam.transform.forward.normalized * moveSpeed , moveSpeed);
                 }
                 else if( im.get_Vertical() != 0 && im.get_Vertical() < 0 )
                 {
-                    cc.Move(-player.ac.cam.transform.forward.normalized * moveSpeed);
+                    movement = Vector3.Lerp(movement , -player.ac.cam.transform.forward.normalized * moveSpeed , moveSpeed);
                 }
             }
 
@@ -119,19 +121,24 @@ public class PlayerMove : InputHandler
         }
         else if( !im.has_not_anything_input() & ( player.cur_ani.Contains("Stand") || player.cur_ani.Contains("Jump") ) )
         {
-            movement.x = im.get_Horizontal();
-            movement.z = im.get_Vertical();
-            movement = movement.normalized * moveSpeed;
+            //movement.x = im.get_Horizontal();
+            //movement.z = im.get_Vertical();
+            //movement = movement.normalized * moveSpeed;
 
             Quaternion q = Quaternion.LookRotation(movement);
             transform.rotation = Quaternion.Slerp(transform.rotation , q , moveSpeed);
         }
         else
         {
-            movement = Vector3.zero;
-            player.ani.SetFloat("Forward" , movement.z);
+            movement = Vector3.Lerp(movement , Vector3.zero , moveSpeed);
+            player.ani.SetFloat("Forward" , movement.magnitude);
         }
+        cc.Move(movement * 0.35f);
+    }
 
+    public void set_movement_zero()
+    {
+        movement = Vector3.zero;
     }
 
     void update_fall()
@@ -154,6 +161,7 @@ public class PlayerMove : InputHandler
             fall_tick = 0;
         }
     }
+
 
     void update_move_player_checkPoint()
     {
