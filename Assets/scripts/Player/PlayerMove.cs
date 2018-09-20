@@ -118,6 +118,7 @@ public class PlayerMove : InputHandler
             {
                 foot_step_tick += Time.deltaTime;
             }
+            cc.Move(movement * 0.35f);
         }
         else if( !im.has_not_anything_input() & ( player.cur_ani.Contains("Stand") || player.cur_ani.Contains("Jump") ) )
         {
@@ -132,8 +133,8 @@ public class PlayerMove : InputHandler
         {
             movement = Vector3.Lerp(movement , Vector3.zero , moveSpeed);
             player.ani.SetFloat("Forward" , movement.magnitude);
+            cc.Move(movement * 0.35f);
         }
-        cc.Move(movement * 0.35f);
     }
 
     public void set_movement_zero()

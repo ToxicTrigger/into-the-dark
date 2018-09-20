@@ -695,6 +695,11 @@ Prefab:
       propertyPath: Pins.Array.data[1]
       value: 
       objectReference: {fileID: 1518598569}
+    - target: {fileID: 224885289842332186, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
   m_IsPrefabAsset: 0
@@ -3522,6 +3527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ac: {fileID: 0}
+  pm: {fileID: 0}
   time: 1
   TransformNum: 0
   UseZoomInOut: 1
@@ -5590,6 +5596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ac: {fileID: 0}
+  pm: {fileID: 0}
   time: 1
   TransformNum: 1
   UseZoomInOut: 0
@@ -11704,7 +11711,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1652974887}
   m_LocalRotation: {x: -0, y: -0.7071062, z: -0, w: 0.7071075}
-  m_LocalPosition: {x: 15.81, y: -73.54, z: 109.78}
+  m_LocalPosition: {x: 15.81, y: -73.87, z: 109.78}
   m_LocalScale: {x: 3.959972, y: 2.0354984, z: 1.1183963}
   m_Children: []
   m_Father: {fileID: 1160906609}

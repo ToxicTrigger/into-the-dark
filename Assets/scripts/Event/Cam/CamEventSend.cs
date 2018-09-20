@@ -5,6 +5,7 @@ using UnityEngine;
 public class CamEventSend : MonoBehaviour
 {
     public ActionCamera ac;
+    public PlayerMove pm;
     public float time = 1;
     public int TransformNum;
 
@@ -15,19 +16,22 @@ public class CamEventSend : MonoBehaviour
     public void Start()
     {
         ac = FindObjectOfType<ActionCamera>();
+        pm = FindObjectOfType<PlayerMove>();
     }
 
     IEnumerator Stop_PlayerMove()
     {
         CharacterController cc = FindObjectOfType<CharacterController>();
-        cc.enabled = false;
+        //cc.enabled = false;
+
         yield return new WaitForSeconds(time);
-        cc.enabled = true;
+        //cc.enabled = true;
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if( other.gameObject.name.Equals("PlayerAggro") )
+        if( other.gameObject.name.Equals("Player") )
         {
             if(UseZoomInOut)
             {
@@ -42,7 +46,7 @@ public class CamEventSend : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if( other.gameObject.name.Equals("PlayerAggro") )
+        if( other.gameObject.name.Equals("Player") )
         {
             if(fov >= ac.default_fov)
             {
