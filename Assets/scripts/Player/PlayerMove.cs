@@ -31,45 +31,43 @@ public class PlayerMove : InputHandler
 
     public override void Work(InputManager im)
     {
-        if( !im.has_not_anything_input() & ( player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle") ) )
+        if( !im.has_not_anything_input() && ( player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle") ) )
         {
-            movement.x = Mathf.Lerp(movement.x , im.get_Horizontal(), moveSpeed);
-            movement.z = Mathf.Lerp(movement.z , im.get_Vertical(), moveSpeed);
+            y = player.ac.cam.transform.eulerAngles.y;
+            float cx = Mathf.Cos(Mathf.Deg2Rad * y);
+            float sy = Mathf.Sin(Mathf.Deg2Rad * y);
+            if( cx >= 0 && sy >= 0 )
+            {
+                movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() , moveSpeed);
+                movement.z = Mathf.Lerp(movement.z , im.get_Vertical() , moveSpeed);
+            }
+            else if( cx < 0 && sy >= 0 )
+            {
+                movement.x = Mathf.Lerp(movement.x , im.get_Vertical() , moveSpeed);
+                movement.z = Mathf.Lerp(movement.z , im.get_Horizontal() * -1 , moveSpeed);
+            }
+            else if( cx < 0 && sy < 0 )
+            {
+                movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() * -1 , moveSpeed);
+                movement.z = Mathf.Lerp(movement.z , im.get_Vertical() * -1 , moveSpeed);
+            }
+            else if( cx >= 0 && sy < 0 )
+            {
+                movement.x = Mathf.Lerp(movement.x , im.get_Vertical() * -1 , moveSpeed);
+                movement.z = Mathf.Lerp(movement.z , im.get_Horizontal() , moveSpeed);
+            }
+
             player.ani.SetFloat("Forward" , movement.magnitude);
-
-            y = Mathf.Sin(player.ac.cam.transform.eulerAngles.y);
-            
-            if( y == 0 )
-            {
-                //movement = movement.normalized;
-            }
-            else if( y > 0 )
-            {
-                float xz = movement.x * -1;
-                float zx = movement.z;
-
-                movement.x = zx;
-                movement.z = xz;
-                //movement = movement.normalized;
-            }
-            else if( y < 0 )
-            {
-                float xz = movement.x;
-                float zx = movement.z * -1;
-
-                movement.x = zx;
-                movement.z = xz;
-                //movement = movement.normalized;
-            }
-
-            Quaternion q = Quaternion.LookRotation(movement * 3);
+            Vector3 t = movement * 3;
+            t.y = 0;
+            Quaternion q = Quaternion.LookRotation(t);
             transform.rotation = Quaternion.Slerp(transform.rotation , q , moveSpeed * 1.5f);
 
             if( Input.GetButton("Dash") )
             {
                 if( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
                 {
-                    movement = Vector3.Lerp(movement, player.ac.cam.transform.right.normalized * moveSpeed * 5f, moveSpeed);
+                    movement = Vector3.Lerp(movement , player.ac.cam.transform.right.normalized * moveSpeed * 5f , moveSpeed);
                 }
                 else if( im.get_Horizontal() != 0 && im.get_Horizontal() < 0 )
                 {
@@ -78,20 +76,20 @@ public class PlayerMove : InputHandler
 
                 if( im.get_Vertical() != 0 && im.get_Vertical() > 0 )
                 {
-                    movement = Vector3.Lerp(movement , player.ac.cam.transform.forward.normalized * moveSpeed *5f , moveSpeed);
-                    
+                    movement = Vector3.Lerp(movement , player.ac.cam.transform.forward.normalized * moveSpeed * 5f , moveSpeed);
+
                 }
                 else if( im.get_Vertical() != 0 && im.get_Vertical() < 0 )
                 {
                     movement = Vector3.Lerp(movement , -player.ac.cam.transform.forward.normalized * moveSpeed * 5f , moveSpeed);
-
                 }
             }
             else
             {
+
                 if( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
                 {
-                    movement = Vector3.Lerp(movement , player.ac.cam.transform.right.normalized * moveSpeed, moveSpeed);
+                    movement = Vector3.Lerp(movement , player.ac.cam.transform.right.normalized * moveSpeed , moveSpeed);
                 }
                 else if( im.get_Horizontal() != 0 && im.get_Horizontal() < 0 )
                 {
@@ -108,33 +106,38 @@ public class PlayerMove : InputHandler
                 }
             }
 
-
-            if( foot_step_tick >= 0.25f )
+            if( Input.GetButton("Dash") )
             {
-                foot_step_tick = 0;
-                player.Foot_Step.PlayOneShot(player.Foot_Step.clip);
+                if( foot_step_tick >= 0.18f )
+                {
+                    foot_step_tick = 0;
+                    player.Foot_Step.PlayOneShot(player.Foot_Step.clip);
+                }
+                else
+                {
+                    foot_step_tick += Time.deltaTime;
+                }
             }
             else
             {
-                foot_step_tick += Time.deltaTime;
+                if( foot_step_tick >= 0.25f )
+                {
+                    foot_step_tick = 0;
+                    player.Foot_Step.PlayOneShot(player.Foot_Step.clip);
+                }
+                else
+                {
+                    foot_step_tick += Time.deltaTime;
+                }
             }
-            cc.Move(movement * 0.35f);
         }
-        else if( !im.has_not_anything_input() & ( player.cur_ani.Contains("Stand") || player.cur_ani.Contains("Jump") ) )
-        {
-            //movement.x = im.get_Horizontal();
-            //movement.z = im.get_Vertical();
-            //movement = movement.normalized * moveSpeed;
 
-            Quaternion q = Quaternion.LookRotation(movement);
-            transform.rotation = Quaternion.Slerp(transform.rotation , q , moveSpeed);
-        }
         else
         {
             movement = Vector3.Lerp(movement , Vector3.zero , moveSpeed);
             player.ani.SetFloat("Forward" , movement.magnitude);
-            cc.Move(movement * 0.35f);
         }
+        cc.Move(movement * 0.4f);
     }
 
     public void set_movement_zero()

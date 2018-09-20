@@ -8,6 +8,7 @@ public class CamEventSend : MonoBehaviour
     public PlayerMove pm;
     public float time = 1;
     public int TransformNum;
+    Player player;
 
     public bool UseZoomInOut;
     public bool zoomIn;
@@ -17,6 +18,7 @@ public class CamEventSend : MonoBehaviour
     {
         ac = FindObjectOfType<ActionCamera>();
         pm = FindObjectOfType<PlayerMove>();
+        player = FindObjectOfType<Player>();
     }
 
     IEnumerator Stop_PlayerMove()
@@ -59,7 +61,7 @@ public class CamEventSend : MonoBehaviour
             
             ac.Angle = ac.default_angle;
             //ac.transform.eulerAngles = ac.default_angle;
-            ac.SetStateTarget(ac.cur_target , ActionCamera.State.Follow);
+            ac.SetStateTarget(player.transform , ActionCamera.State.Follow);
         }
     }
 
