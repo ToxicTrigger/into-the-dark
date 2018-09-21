@@ -222,6 +222,7 @@ public class BossRoomManager : MonoBehaviour {
             Destroy(enemy_list[i]);
         }
         get_boss().set_hp(init_val.boss_hp);
+        boss_state.set_state(Boss_State.State.Idle,null);
         phase = init_val.phase;
 
         for(int i=0; i<wood_bridge.Length; i++)

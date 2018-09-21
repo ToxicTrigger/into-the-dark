@@ -279,7 +279,10 @@ public class GroundCheck : Observer {
     {
         //Debug.Log("다리 재생성");
         //이전 다리의 삭제와 새로운 다리의 생성,
-        Destroy(active_bridge.gameObject);
+        if (active_bridge != null)
+        {
+            Destroy(active_bridge.gameObject);
+        }
         GameObject active_wood_bridge = (GameObject)Instantiate(wood_bridge, wood_bridge.transform.position, wood_bridge.transform.rotation, this.transform.parent);
         active_wood_bridge.transform.localScale = new Vector3(1, 1, 1);
         //active_wood_bridge.transform.SetParent(this.transform.parent);
