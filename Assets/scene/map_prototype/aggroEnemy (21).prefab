@@ -764,7 +764,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1113644823327348}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -31.149998, y: 3.5100012, z: 7.79}
+  m_LocalPosition: {x: -18.265244, y: 17.876108, z: -143.3927}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 4076938750970198}
@@ -1063,7 +1063,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1063775441880150}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.22610408, y: 0.48632538, z: 0.16752335}
@@ -1075,7 +1075,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1113644823327348}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -1341,7 +1341,9 @@ MonoBehaviour:
   Damage: 5
   has_out: 1
   player: {fileID: 0}
+  tick: 0
   trigger: {fileID: 0}
+  Attack_distance: 2
 --- !u!114 &114797150727448454
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1357,6 +1359,7 @@ MonoBehaviour:
   Max_Hp: 5
   has_hit: 0
   Dead: 0
+  only_player: 0
   armor_power: 0
   per: 0
 --- !u!114 &114950260566760412

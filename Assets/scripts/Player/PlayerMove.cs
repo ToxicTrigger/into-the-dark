@@ -29,6 +29,8 @@ public class PlayerMove : InputHandler
     bool dash_start;
     public float y;
 
+    float step;
+
     public override void Work(InputManager im)
     {
         if( !im.has_not_anything_input() && ( player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle") ) )
@@ -137,7 +139,7 @@ public class PlayerMove : InputHandler
             movement = Vector3.Lerp(movement , Vector3.zero , moveSpeed);
             player.ani.SetFloat("Forward" , movement.magnitude);
         }
-        cc.Move(movement * 0.4f);
+        cc.Move(movement * 0.2f);
     }
 
     public void set_movement_zero()
@@ -191,5 +193,7 @@ public class PlayerMove : InputHandler
         foot_step_tick = 0;
         player = GetComponent<Player>();
         cc = GetComponent<CharacterController>();
+
+        step = cc.stepOffset;
     }
 }

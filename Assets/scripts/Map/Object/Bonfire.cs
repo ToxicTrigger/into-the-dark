@@ -15,11 +15,13 @@ public class Bonfire : Interactable
             this.target.GetComponent<PlayerMove>().spawn_point = this.transform;
             this.target.GetComponent<Damageable>().Hp = this.target.GetComponent<Damageable>().Max_Hp;
 
+            if( inventory != null )
             inventory.SetActive(true);
         }
         else
         {
-            inventory.SetActive(false);
+            if( inventory != null )
+                inventory.SetActive(false);
         }
     }
 }

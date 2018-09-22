@@ -19,7 +19,7 @@ public class Interactable : MonoBehaviour
     // 대상이 거리안에 있나?
     public bool get_capture_area;
 
-    private void Awake()
+    protected void Awake()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
         e = GameObject.FindGameObjectWithTag("E").GetComponent<EButton>();
@@ -63,24 +63,27 @@ public class Interactable : MonoBehaviour
             up_push_button = false;
             down_push_button = false;
             hasTalking = false;
+            if( e != null ) e.Down();
         }
     }
+    
 
     void update_()
     {
+        
         float dis = Vector3.Distance(target.position , transform.position);
         if( dis <= talk_distance )
         {
             get_capture_area = true;
             Talk();
         }
-        else if(dis <= 8)
+        else if(dis > talk_distance)
         {
             up_push_button = false;
             down_push_button = false;
             get_capture_area = false;
             hasTalking = false;
-            if( e != null ) e.Down();
+            
         }
     }
 

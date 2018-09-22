@@ -173,7 +173,7 @@ public class Player : MonoBehaviour{
         {
             cur_totems = totems.Count;
             installable_totems = 3 - cur_totems;
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.R))
             {
                 is_build_totem = true;
 
@@ -326,6 +326,11 @@ public class Player : MonoBehaviour{
 
     public void Update ()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+            
+        }
         if(damageable.Dead)
         {
             Fail_UI.SetActive(true);
