@@ -73,6 +73,9 @@ public class Boss_Action : MonoBehaviour {
     public Transform move_pos;
     public float move_speed;
 
+    //cross
+    public Transform water_pos;
+
     void Start () {
         animator = this.GetComponent<Animator>();
         rot_cnt = Rotate_Cnt.one;
@@ -305,6 +308,18 @@ public class Boss_Action : MonoBehaviour {
                     //if (move_dir.y < 0) move_dir.y *= jump_power;
 
                     transform.position += move_dir * cross_speed * Time.deltaTime;
+
+                    if(tail[0].transform.position.y > water_pos.position.y && SoundManager.get_instance().sound_list[(int)SoundManager.SoundList.boss_attack_up].mute == true)
+                    {
+                        SoundManager.get_instance().mute_sound(SoundManager.SoundList.boss_attack_up, false);
+                        SoundManager.get_instance().play_sound(SoundManager.SoundList.boss_attack_up);
+                    }
+                    else if(tail[0].transform.position.y < water_pos.position.y && SoundManager.get_instance().sound_list[(int)SoundManager.SoundList.boss_attack_up].mute == false)
+                    {
+                        SoundManager.get_instance().mute_sound(SoundManager.SoundList.boss_attack_up, true);
+                        SoundManager.get_instance().play_sound(SoundManager.SoundList.boss_attack_down);
+                    }
+                    
 
                     if (cur_dis < 1.0f && tail[tail.Length - 1].transform.position.y < around_transform.position.y -10)//&& transform.position.y < move_target.y+5)
                     {
