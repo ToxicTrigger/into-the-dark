@@ -18,15 +18,19 @@ public abstract class Item : MonoBehaviour
     {
         if (detected)
         {
+            Vector3 ppos = Player.position;
+            ppos.y += 1;
             Vector3 pos = transform.position;
             pos.y += Mathf.Abs(Mathf.Sin(Time.time) * 0.1f);
-            transform.position = Vector3.Lerp(pos, Player.position, Time.time * 0.005f);
+            transform.position = Vector3.Lerp(pos, ppos, Time.time * 0.005f);
         }
     }
 
     void Update()
     {
-        if (Vector3.Distance(transform.position, Player.position) <= detective_range)
+        Vector3 pos = Player.position;
+        pos.y += 1;
+        if (Vector3.Distance(transform.position, pos) <= detective_range)
         {
             detected = true;
         }
