@@ -22,12 +22,12 @@ public class Boss_Tail : MonoBehaviour
     Transform originTr;
     Transform tr;
 
-    Boss_Worm _parent;
-    Boss_State state;
+    public Boss_Worm boss;
+    public Boss_State state;
 
     void Awake()
     {
-        if(transform.parent.GetComponent<Boss_Worm>()) _parent = transform.parent.GetComponent<Boss_Worm>();
+        //if(transform.parent.GetComponent<Boss_Worm>()) _parent = transform.parent.GetComponent<Boss_Worm>();
         tr = transform;
         localRotation = transform.localRotation;
     }
@@ -41,21 +41,25 @@ public class Boss_Tail : MonoBehaviour
             prevTipPos = child.position;
         }
         //state = _parent.GetComponent<Boss_State>();
-        state = head_seach(this.transform)._parent.GetComponent<Boss_State>();
+        //state = head_seach(this.transform)._parent.GetComponent<Boss_State>();
     }
 
     //꼬리 충돌체크용
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (state.get_state() == Boss_State.State.Groggy)
         {
             if (other.CompareTag("Arrow"))
             {
-                _parent.add_damage();
+                Debug.Log("활에 맞았어!");
+                boss.add_damage();
                 Destroy(other.gameObject);
             }
-            _parent.add_damage();
-            Destroy(other.gameObject);
+            if (other.CompareTag("Sword"))
+            {
+                Debug.Log("칼에 맞았어!");
+                boss.add_damage();
+            }
         }
     }
 

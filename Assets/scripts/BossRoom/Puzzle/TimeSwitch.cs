@@ -6,6 +6,8 @@ public class TimeSwitch : BasicSwitch {
     //시간에 따라 유지되는 스위치
     //
 
+    FootSwitch foot_switch;
+
     public TimeSwitch [] time_switch_list;
 
     public Light _light;
@@ -13,10 +15,10 @@ public class TimeSwitch : BasicSwitch {
     public float wait_time; //켜진 후 기다리는 시간
     public bool clear_puzzle = false;
 
+
     private void Start()
     {
         _light.gameObject.SetActive(false);
-        use_enable = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -65,6 +67,7 @@ public class TimeSwitch : BasicSwitch {
         {
             _light.gameObject.SetActive(false);
             set_switch(false);
+            //foot_switch.ground_move_ctrl(Vector3.down);//시간이 다하면 강제로 내려줌
         }
 
     }
@@ -75,4 +78,35 @@ public class TimeSwitch : BasicSwitch {
         clear_puzzle = false;
     }
 
+    public void set_wait_time(int _time)
+    {
+        wait_time = _time;
+    }
+    
+    public void set_switch_set(int i , TimeSwitch _switch)
+    {
+        time_switch_list[i] = _switch;
+    }
+
+    public TimeSwitch get_switch_set(int i)
+    {
+        return time_switch_list[i];
+    }
+    
+    public void new_switch_set(int i)
+    {
+        time_switch_list = new TimeSwitch[i];
+    }
+
+    public void set_foot_switch(FootSwitch _fs)
+    {
+        foot_switch = _fs;
+    }
+
+    //발판용
+    public void off_switch()
+    {
+        _light.gameObject.SetActive(false);
+        set_switch(false);
+    }
 }

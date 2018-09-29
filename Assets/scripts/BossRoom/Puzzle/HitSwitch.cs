@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class HitSwitch : BasicSwitch {
     //때리면 작동 -> 메세지 전달의 단순한 작업만 실행
+    
 
+    void Start()
+    {
+
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Sword") && !get_switch())
+        if(other.CompareTag("Sword"))
         {
             Destroy(other.gameObject);
             set_switch(true);
         }
-        if (other.CompareTag("Arrow") && !get_switch())
+        if (other.CompareTag("Arrow"))
         {
             Destroy(other.gameObject);
             set_switch(true);
@@ -22,11 +27,11 @@ public class HitSwitch : BasicSwitch {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.CompareTag("Arrow") && !get_switch())
+        if (collision.transform.CompareTag("Arrow"))
         {
             Destroy(collision.gameObject);
             set_switch(true);
         }
     }
-
+    
 }

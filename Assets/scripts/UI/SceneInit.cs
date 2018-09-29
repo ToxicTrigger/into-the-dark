@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class SceneInit : MonoBehaviour {
-
-
+public class SceneInit : MonoBehaviour
+{
     public void init_scene()
     {
-        SceneManager.UnloadSceneAsync(0);
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            init_scene();
+        }
     }
 }

@@ -47,7 +47,8 @@ public class Player : MonoBehaviour{
     public float step_three = 0.3f;
     [Range(-1, 1)]
     public float step_Dodge = 0.15f;
-    public PlayerCamera ActionCam;
+    public ActionCamera ac;
+    public PlayerMove move;
 
     float bow_time;
     [Tooltip("현재 진행중인 애니메이션 이름")]
@@ -65,7 +66,12 @@ public class Player : MonoBehaviour{
         totems = new List<GameObject>(3);
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
-        ActionCam = cam.GetComponent<PlayerCamera>();
+        move = GetComponent<PlayerMove>();
+        
+        ac = FindObjectOfType<ActionCamera>();
+        
+        ac.SetStateTarget(this.transform , ActionCamera.State.Follow);
+
     }
 
     public void setSwordEnable(int val)
@@ -84,8 +90,7 @@ public class Player : MonoBehaviour{
     void gen_arrow()
     {
         Vector3 mouse = Input.mousePosition;
-
-        Vector3 nor = transform.forward.normalized;
+        
         GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
         arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
 
@@ -97,6 +102,7 @@ public class Player : MonoBehaviour{
         if (bow_time >= 3.2f & bow_time < 4f)
         {
             //강공격 여부 ㅇㅇ 
+            arrow.GetComponent<Element>().type = Element.Type.Light;
         }
         Destroy(arrow, 5.0f);
         AggroManager.get_instance().gen_aggro(transform.position, 10 + bow_time, 3);
@@ -104,11 +110,13 @@ public class Player : MonoBehaviour{
 
     void calc_click_pos(bool sword)
     {
+        move.set_movement_zero();
         has_targeting_totem = false;
         RaycastHit hit, coll;
         Vector3 mouse = Input.mousePosition;
         if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
         {
+            //Debug.Log(hit.transform.gameObject.name);
             click_pos = hit.point;
             click_pos.y = transform.position.y + 0.1f;
 
@@ -165,7 +173,7 @@ public class Player : MonoBehaviour{
         {
             cur_totems = totems.Count;
             installable_totems = 3 - cur_totems;
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.R))
             {
                 is_build_totem = true;
 
@@ -228,9 +236,11 @@ public class Player : MonoBehaviour{
         switch (cur_ani)
         {
             case "Swing_0":
+                move.set_movement_zero();
                 character.Move(transform.forward.normalized * step_one);
                 break;
             case "Swing_1":
+                move.set_movement_zero();
                 character.Move(transform.forward.normalized * step_two);
                 break;
             case "Jump":
@@ -238,7 +248,6 @@ public class Player : MonoBehaviour{
                 break;
             case "wakeUp":
                 ani.SetBool("Dodge", false);
-                ActionCam.set_state(PlayerCamera.State.Follow);
                 break;
             case "Dodge":
                 character.Move(transform.forward.normalized * step_Dodge);
@@ -270,7 +279,6 @@ public class Player : MonoBehaviour{
             ani.SetBool("Attack", true);
             weapon.type = Weapon.Type.Sword;
             is_fighting_something = true;
-            ActionCam.set_state(PlayerCamera.State.Sword_Attack);
         }
 
         if(click_tick >= 0.3f)
@@ -280,8 +288,7 @@ public class Player : MonoBehaviour{
             is_fighting_something = false;
             is_attack = false;
             line.gameObject.SetActive(false);
-
-            ActionCam.set_state(PlayerCamera.State.Follow);
+            
         }else{
             click_tick += Time.deltaTime;
         }
@@ -305,7 +312,6 @@ public class Player : MonoBehaviour{
                 ani.SetFloat("Forward", 0.0f);
                 ani.SetFloat("Turn", 0.0f);
                 ani.SetBool("Dodge", true);
-                ActionCam.set_state(PlayerCamera.State.Dodge);
                 //Input.ResetInputAxes();
             }
             if (!is_attack)
@@ -315,15 +321,22 @@ public class Player : MonoBehaviour{
         }
     }
 
+    public bool has_on_ladder;
     float end_tick;
-    void Update () {
+
+    public void Update ()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+            
+        }
         if(damageable.Dead)
         {
             Fail_UI.SetActive(true);
         }
         else
         {
-
             if (end_tick <= 1.0f)
             {
                 end_tick += Time.deltaTime;
@@ -334,6 +347,7 @@ public class Player : MonoBehaviour{
                 end_tick = 0;
             }
 
+            if(!has_on_ladder)
             Update_Y_pos();
 
             Vector3 tmp = transform.position;

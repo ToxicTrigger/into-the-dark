@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpperSwitch : Platform {
+public class UpperSwitch : Platform
+{
     public Transform Door;
     public Vector3 Up_Pos, Def_pos, cur_pos;
     public float speed;
@@ -20,7 +21,7 @@ public class UpperSwitch : Platform {
 
     private void OnTriggerStay(Collider other)
     {
-        if(_switch ==null)
+        if (_switch == null)
         {
             if (other.CompareTag("Player"))
             {
@@ -42,39 +43,42 @@ public class UpperSwitch : Platform {
 
     bool has_played;
 
-    void Update () {
-        if(_switch == null)
+    void Update()
+    {
+        if (_switch == null)
         {
             if (inTrigger)
             {
                 if (Door.position.y < Up_Pos.y)
                 {
-                    Door.Translate((Door.up * -1) * speed * 1.3f);
+                    Vector3 tmp = Vector3.up * -1 * speed * 0.5f;
+                    Door.position = tmp + Door.position;
                     if (!sound.isPlaying)
                     {
                         sound.Play();
                     }
                 }
-                else if(Door.position.y > Up_Pos.y)
+                else if (Door.position.y > Up_Pos.y)
                 {
                     Door.position = Up_Pos;
                     sound2.Play();
-                    if(sound.isPlaying)
-                    sound.Stop();
+                    if (sound.isPlaying)
+                        sound.Stop();
                 }
             }
             else
             {
                 if (Door.position.y > Def_pos.y)
                 {
-                    Door.Translate(Door.up * speed * 0.5f);
+                    Vector3 tmp = Vector3.up * speed * 0.5f;
+                    Door.position = tmp + Door.position;
 
                     if (!sound.isPlaying)
                     {
                         sound.Play();
                     }
                 }
-                else if(Door.position.y < Def_pos.y)
+                else if (Door.position.y < Def_pos.y)
                 {
                     Door.position = Def_pos;
                     if (sound.isPlaying)
@@ -84,20 +88,22 @@ public class UpperSwitch : Platform {
         }
         else
         {
-            if(!_switch.OnOff)
+            if (!_switch.OnOff)
             {
                 if (Door.position.y >= Up_Pos.y)
                 {
-                    Door.Translate((Door.position - Up_Pos).normalized * -1 * speed );
+                    Vector3 tmp = Vector3.up * -1 * speed * 0.5f;
+                    Door.position = tmp + Door.position;
                 }
             }
             else
             {
                 if (Door.position.y <= Def_pos.y)
                 {
-                    Door.Translate((Def_pos - Door.position).normalized * speed);
+                    Vector3 tmp = Vector3.up * speed * 0.5f;
+                    Door.position = tmp + Door.position;
                 }
             }
         }
-	}
+    }
 }

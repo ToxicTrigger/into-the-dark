@@ -13,10 +13,16 @@ public class Arrow : MonoBehaviour {
     public AudioSource arrow_hit_rub, arrow_hit_stone,arrow_fire_start,arrow_water_start;
     public bool has_targeting_totem;
 
-    private void OnTriggerEnter(Collider collision)
+    public void OnTriggerEnter(Collider collision)
     {
         bool is_player = false;
-        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2 || collision.gameObject.layer == 9 || collision.CompareTag("Area")) is_player = true;
+        if (collision.gameObject.tag.Equals("Player") 
+            || collision.gameObject.layer == 2 
+            || collision.gameObject.layer == 9 
+            || collision.CompareTag("Area"))
+        {
+            is_player = true;
+        }
 
         Element element = collision.gameObject.GetComponent<Element>();
         if (element != null)
@@ -35,7 +41,6 @@ public class Arrow : MonoBehaviour {
                     case Element.Type.None: AS = arrow_hit_rub; break;
                     case Element.Type.Fire: AS = arrow_hit_stone; break;
                     case Element.Type.Water: AS = arrow_hit_stone; break;
-                    default: break;
                 }
             }
             else
@@ -50,10 +55,15 @@ public class Arrow : MonoBehaviour {
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         bool is_player = false;
-        if(collision.gameObject.tag.Equals("Player") || collision.gameObject.layer == 2 || collision.gameObject.layer == 9) is_player = true;
+        if (collision.gameObject.tag.Equals("Player")
+            || collision.gameObject.layer == 2
+            || collision.gameObject.layer == 9)
+        {
+            is_player = true;
+        }
 
         Element element = collision.gameObject.GetComponent<Element>();
 
@@ -73,14 +83,13 @@ public class Arrow : MonoBehaviour {
                     case Element.Type.None: AS = arrow_hit_rub; break;
                     case Element.Type.Fire: AS = arrow_hit_stone; break;
                     case Element.Type.Water: AS = arrow_hit_stone; break;
-                    default: break;
                 }
             }
             else
             {
                 AS = arrow_hit_rub;
             }
-            //Debug.Log(collision.gameObject.name);
+
             GameObject tmp = Instantiate(AS.gameObject, transform.position, Quaternion.identity, null);
             tmp.GetComponent<AudioSource>().Play();
             Destroy(tmp, 2.0f);
@@ -93,16 +102,12 @@ public class Arrow : MonoBehaviour {
         }
     }
 
-    private void Start()
-    {
-    }
-
-    private void Awake()
+    public void Awake()
     {
         rig = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
         rig.velocity = look * speed;
     }

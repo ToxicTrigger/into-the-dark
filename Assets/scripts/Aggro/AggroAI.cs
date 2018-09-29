@@ -240,8 +240,7 @@ public abstract class AggroAI : Observable {
             sound.GetComponent<AudioSource>().PlayOneShot(sound.GetComponent<AudioSource>().clip);
             //HitSound.PlayOneShot(HitSound.clip);
             Destroy(sound, 1.0f);
-
-            
+            this.player.ac.Shake(1,0.2f,Time.deltaTime);
             damage.Damaged(1, 0.2f);
             //has_Hit = true;
         }

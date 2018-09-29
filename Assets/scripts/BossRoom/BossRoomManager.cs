@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossRoomManager : MonoBehaviour {
-    
+public class BossRoomManager : MonoBehaviour {  
 
     private static BossRoomManager instance = null;
 
@@ -26,6 +25,16 @@ public class BossRoomManager : MonoBehaviour {
     //BossRoomRelocation reloc;
     public Boss_Worm boss;
     Boss_State boss_state;
+    Boss_Action boss_action;
+    public Player player;
+    Vector3 cross_point = Vector3.zero;
+    public Transform start_point;
+    public AncientWeapon ancient_weapon;
+
+    public GameObject enemy;
+    public DestroyCheck destroy_check;
+
+    public GroundCheck center;
 
     public enum Phase
     {
@@ -35,12 +44,47 @@ public class BossRoomManager : MonoBehaviour {
     }
 
     public Phase phase;
+    public SendCollisionMessage.Field field;
+    public GameObject player_coll;
+    public BossRoomRelocation reloc;
+    public BossHpUI boss_hp_ui;
+    public UiGroggyPoint boss_groggy_ui;
+    public AWTimerUI ancient_timer_ui;
 
-    void Start()
+    public TimeSelector time_selector;
+
+    public AudioSource sound;
+    public AudioSource idle_sound;
+    public AudioSource[] back_sound;
+
+    public List<GameObject> enemy_list;
+
+    struct InitialValue
     {
+        public int boss_hp;
+        public Phase phase;
+    };
+    InitialValue init_val;
+
+    public GroundCheck []wood_bridge;
+
+    void Awake()
+    {
+        init_val.boss_hp = get_boss().get_max_hp();
+        init_val.phase = Phase.one;
+
+        field = SendCollisionMessage.Field.NULL;
+        //idle_sound.Play();
         boss_state = boss.gameObject.GetComponent<Boss_State>();
-        
+        boss_action = boss.gameObject.GetComponent<Boss_Action>();
+
         player_enter_bossroom();
+
+        //GameObject _player_coll = (GameObject)Instantiate(player_coll.gameObject,
+        //                                                player.transform.position, Quaternion.identity);
+
+        //_player_coll.transform.SetParent(player.gameObject.transform);
+        //_player_coll.transform.position = player.transform.position;
     }
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
@@ -65,19 +109,31 @@ public class BossRoomManager : MonoBehaviour {
     //페이즈 증가 함수 (페이즈 증가 -> 새로운 페이즈 시작)
     public void increase_pahse(bool _add)
     {
+        //페이즈 증가에 따른 스위치 끄기
+
+        for (int i = 0; i < reloc.get_reloc((int)phase).torch_set.Length; i++)
+        {
+            for (int z = 0; z < reloc.get_reloc((int)phase).torch_set[i].switch_object.Length; z++)
+            {
+                reloc.get_reloc((int)phase).torch_set[i].switch_object[z].set_switch(false);
+                reloc.get_reloc((int)phase).torch_set[i].switch_object[z].off_switch_set();
+                reloc.get_reloc((int)phase).torch_set[i].foot_switch[z].ground_move_ctrl(Vector3.down);
+            }
+        }
+
+        //for (int i = 0; i < time_selector.get_active_switch_cnt((int)phase); i++)
+        //{
+        //    time_selector.get_active_switch_list(i).set_switch(false);
+        //    time_selector.get_active_switch_list(i).off_switch_set();
+        //}
+
         if (_add)   //페이즈가 넘어가지 않고 스위치만 초기화되는 경우가 있으므로...
         {
             //페이즈 증가
-            phase = (Phase)((int)phase++);  //이런식으로 쓰는게 옳은가?
+            phase++;  
+            Map_Initialization();
+            time_selector.select_switch();
         }
-
-        //페이즈 증가에 따른 스위치 끄기
-        //
-        //for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
-        //{
-        //    reloc.get_reloc((int)phase).switch_object[i].set_switch(false);
-        //    reloc.get_reloc((int)phase).switch_object[i].off_switch_set();
-        //}
 
         //hit스위치 끄기 (다리 내리기) 추가
         //
@@ -86,18 +142,121 @@ public class BossRoomManager : MonoBehaviour {
         //    reloc.hit_switch[i].set_switch(false);
         //    reloc.hit_switch[i].off_switch_set();
         //}
-
     }
 
-    public void send_boss_state(Boss_State.State _state)
+    public void send_boss_state(Boss_State.State _state, GroundCheck _gameobj)
     {
-        boss_state.set_state(_state);
+        boss_state.set_state(_state, _gameobj);
     }
 
+    public void set_cross_point(Vector3 _pos)
+    {
+        cross_point = _pos;
+    }
 
+    public Vector3 get_cross_point()
+    {
+        return cross_point;
+    }
 
+    public Boss_Worm get_boss()
+    {
+        return boss;
+    }
 
+    public Boss_State.State get_boss_state()
+    {
+        return boss_state.get_state();
+    }
 
+    public void set_hp_ui(BossHpUI hp_ui)
+    {
+        boss_hp_ui = hp_ui;
+    }
+
+    public BossHpUI get_hp_ui()
+    {
+        return boss_hp_ui;
+    }
+
+    public void set_groggy_ui(UiGroggyPoint _ui)
+    {
+        boss_groggy_ui = _ui;
+    }
+
+    public UiGroggyPoint get_groggy_ui()
+    {
+        return boss_groggy_ui;
+    }
+
+    public Vector3 get_groggy_point()
+    {
+        return boss_action.get_groggy_point();
+    }
+
+    public AWTimerUI get_ancient_ui()
+    {
+        return ancient_timer_ui;
+    }
+
+    public void set_ancient_ui(AWTimerUI _ui)
+    {
+        ancient_timer_ui = _ui;
+    }
+
+    public AncientWeapon get_ancient_weapon()
+    {
+        return ancient_weapon;
+    }
+
+    public void init_bossroom()
+    {
+        for (int i = 0; i < reloc.get_reloc((int)phase).torch_set[0].foot_switch.Length; i++)
+        {
+            Destroy(reloc.get_reloc((int)phase).torch_set[0].foot_switch[i].gameObject);
+            Destroy(reloc.get_reloc((int)phase).torch_set[0].switch_object[i].gameObject);
+        }
+
+        for(int i=0; i<enemy_list.Count;  i++)
+        {
+            Destroy(enemy_list[i]);
+        }
+        get_boss().set_hp(init_val.boss_hp);
+        phase = init_val.phase;
+
+        for(int i=0; i<wood_bridge.Length; i++)
+        {
+            wood_bridge[i].initialize_bridge();
+        }
+
+        Map_Initialization();
+        player.transform.position = start_point.position;
+    }
+
+    public void create_enemy(Vector3 _pos, Observer _observer)
+    {
+        GameObject _enemy = (GameObject)Instantiate(enemy,
+                                                _pos, Quaternion.identity);
+        DestroyCheck _destroy_check = (DestroyCheck)Instantiate(destroy_check, 
+                                                _pos, Quaternion.identity);
+        _destroy_check.transform.SetParent(_enemy.transform);
+        _destroy_check.add_observer(_observer);
+
+        enemy_list.Add(_enemy);
+    }
+
+    //public void set_field_info(SendCollisionMessage.Field _field)
+    //{
+    //    field = _field;
+
+    //    for(int i =0; i< back_sound.Length; i++)
+    //    {
+    //        if (i == (int)field)
+    //            back_sound[i].mute = false;
+    //        else
+    //            back_sound[i].mute = true;
+    //    }
+    //}
 
     //public Boss_Worm boss;
     //public Player player;
