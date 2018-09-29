@@ -83,9 +83,9 @@ public class Fairy : MonoBehaviour
     void calc_pos()
     {
         cur = transform.position;
-        cur.x += Mathf.Sin(Time.time) * 0.15f;
+        cur.x += Mathf.Sin(Time.time) * 0.45f;
         cur.z += Mathf.Cos(Time.time) * 0.165f;
-        cur.y += Mathf.Sin(Time.time) * 0.1f;
+        cur.y += Mathf.Sin(Time.time) * 0.4f;
         pos = Vector3.Lerp(cur, target.position, Time.time * 0.01f);
         this.transform.position = pos;
     }

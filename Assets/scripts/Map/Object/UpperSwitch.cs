@@ -51,7 +51,8 @@ public class UpperSwitch : Platform
             {
                 if (Door.position.y < Up_Pos.y)
                 {
-                    Door.Translate((Door.up * -1) * speed * 1.3f);
+                    Vector3 tmp = Vector3.up * -1 * speed * 0.5f;
+                    Door.position = tmp + Door.position;
                     if (!sound.isPlaying)
                     {
                         sound.Play();
@@ -69,7 +70,8 @@ public class UpperSwitch : Platform
             {
                 if (Door.position.y > Def_pos.y)
                 {
-                    Door.Translate(Door.up * speed * 0.5f);
+                    Vector3 tmp = Vector3.up * speed * 0.5f;
+                    Door.position = tmp + Door.position;
 
                     if (!sound.isPlaying)
                     {
@@ -90,14 +92,16 @@ public class UpperSwitch : Platform
             {
                 if (Door.position.y >= Up_Pos.y)
                 {
-                    Door.Translate((Door.position - Up_Pos).normalized * -1 * speed);
+                    Vector3 tmp = Vector3.up * -1 * speed * 0.5f;
+                    Door.position = tmp + Door.position;
                 }
             }
             else
             {
                 if (Door.position.y <= Def_pos.y)
                 {
-                    Door.Translate((Def_pos - Door.position).normalized * speed);
+                    Vector3 tmp = Vector3.up * speed * 0.5f;
+                    Door.position = tmp + Door.position;
                 }
             }
         }

@@ -13,6 +13,7 @@ public class ActionCamera : MonoBehaviour
         Move_Pin_AND_Rotate,
         Shake,
         Look,
+        
     }
 
     public Camera cam;
@@ -29,7 +30,6 @@ public class ActionCamera : MonoBehaviour
 
     public float default_fov;
     public List<Transform> Pins;
-    public List<Vector3> Offsets;
 
     public Vector3 Angle, default_angle;
     public Vector3 Offset, default_offset;
@@ -138,6 +138,7 @@ public class ActionCamera : MonoBehaviour
                         has_camera_using = false;
                     }
                     break;
+
             }
 
             yield return new WaitForEndOfFrame();

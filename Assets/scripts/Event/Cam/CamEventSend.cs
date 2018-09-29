@@ -26,7 +26,7 @@ public class CamEventSend : MonoBehaviour
         CharacterController cc = FindObjectOfType<CharacterController>();
         //cc.enabled = false;
 
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(time + 1.2f);
         //cc.enabled = true;
 
     }

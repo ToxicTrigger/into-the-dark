@@ -17,7 +17,7 @@ public class Ladder : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground"))
         {
             player.has_on_ladder = true;
             pm.enabled = false;
@@ -40,7 +40,7 @@ public class Ladder : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") )
         {
             player.has_on_ladder = false;
             pm.enabled = true;
