@@ -21,7 +21,6 @@ public class Ladder : MonoBehaviour
         {
             player.has_on_ladder = true;
             pm.enabled = false;
-            cc.enabled = false;
         }
     }
 
@@ -34,7 +33,7 @@ public class Ladder : MonoBehaviour
             Vector3 up = Vector3.zero;
             up.y = h;
             up *= pm.moveSpeed * 0.5f;
-            player.transform.Translate(up);
+            cc.Move(up);
         }
     }
 
@@ -44,7 +43,6 @@ public class Ladder : MonoBehaviour
         {
             player.has_on_ladder = false;
             pm.enabled = true;
-            cc.enabled = true;
         }
     }
 }
