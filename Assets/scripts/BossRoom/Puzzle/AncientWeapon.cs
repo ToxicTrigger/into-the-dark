@@ -32,6 +32,8 @@ public class AncientWeapon : Observer
 
     void Start()
     {
+        manager = BossRoomManager.get_instance();
+
         _timer = activate_timer();
         state = State.Activated;  //초기 상태는 비활성화된 상태
         if (ready_timer == null)
@@ -97,8 +99,6 @@ public class AncientWeapon : Observer
     //활성화 타이머
     IEnumerator activate_timer()
     {
-        //if (activate_count < time_list.Length - 1)
-        //    activate_count++;   //활성화 횟수를 증가시킨다.
         BossRoomManager.get_instance().get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
         yield return new WaitForSeconds(time_list[(int)BossRoomManager.get_instance().phase]);
 
@@ -107,7 +107,6 @@ public class AncientWeapon : Observer
             ready_timer = ready_action(false);
             StartCoroutine(ready_timer);
         }
-        //deactivate();   //일정 시간이 지나면 비활성화 시키는 함수를 호출한다.
     }
 
 
@@ -134,6 +133,14 @@ public class AncientWeapon : Observer
         {
             activate();
             move_dir = Vector3.up;
+            if(!manager.get_is_puzzle_clear())
+            {
+                //퍼즐 클리어 연출 추가
+
+
+
+                manager.set_is_puzzle_clear(true);
+            }
         }
 
         move_dir.y *= move_y / ready_time;

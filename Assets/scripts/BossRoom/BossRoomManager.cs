@@ -68,34 +68,33 @@ public class BossRoomManager : MonoBehaviour {
 
     public GroundCheck []wood_bridge;
 
+    public bool is_entrance;
+    public bool is_puzzle_clear;
+    public bool is_stage_clear;
+    
+
     void Awake()
     {
         init_val.boss_hp = get_boss().get_max_hp();
         init_val.phase = Phase.one;
 
         field = SendCollisionMessage.Field.NULL;
-        //idle_sound.Play();
         boss_state = boss.gameObject.GetComponent<Boss_State>();
         boss_action = boss.gameObject.GetComponent<Boss_Action>();
 
         player_enter_bossroom();
 
-        //GameObject _player_coll = (GameObject)Instantiate(player_coll.gameObject,
-        //                                                player.transform.position, Quaternion.identity);
-
-        //_player_coll.transform.SetParent(player.gameObject.transform);
-        //_player_coll.transform.position = player.transform.position;
     }
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
     public void player_enter_bossroom()
     {
-        //아무것도 하지 않고있던 보스를 Idle상태로 변화시킨다.
-        //페이즈를 1로 변화시킨다. 
-        //페이즈1에 해당하는 정보로 맵을 초기화시킨다.
         phase = Phase.one;
         Map_Initialization();
-        
+        if(!is_entrance)
+        {
+            //입장 연출 추가
+        }
     }
 
     //페이즈 정보에 따라 맵을 초기화한다.
@@ -207,6 +206,16 @@ public class BossRoomManager : MonoBehaviour {
     public AncientWeapon get_ancient_weapon()
     {
         return ancient_weapon;
+    }
+
+    public bool get_is_puzzle_clear()
+    {
+        return is_puzzle_clear;
+    }
+
+    public void set_is_puzzle_clear(bool _is_clear)
+    {
+        is_puzzle_clear = _is_clear;
     }
 
     public void init_bossroom()

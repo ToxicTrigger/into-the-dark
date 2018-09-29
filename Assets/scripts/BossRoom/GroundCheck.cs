@@ -193,7 +193,7 @@ public class GroundCheck : Observer {
         if (other.CompareTag("Boss"))
         {
             //Debug.Log("충돌!" + this.name + " || " + other.name);
-            if (type == Type.Wood)
+            if (type == Type.Wood && manager.phase == BossRoomManager.Phase.two)
             {
                 type = Type.Null;
                 for (int i = 0; i < wood_bridge_piece.Length; i++)

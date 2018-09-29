@@ -55,7 +55,7 @@ public class Player : MonoBehaviour{
 
     public AudioSource Foot_Step, Sword_Sound;
 
-
+    ActionCamera ac;
 
     public void Start()
     {
@@ -65,6 +65,9 @@ public class Player : MonoBehaviour{
         totems = new List<GameObject>(3);
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
+
+        ac = FindObjectOfType<ActionCamera>();
+        ac.SetStateTarget(this.transform,ActionCamera.State.Follow);
     }
 
     public void setSwordEnable(int val)

@@ -55,6 +55,9 @@ public class Boss_Action : MonoBehaviour {
     public Vector3 g_point;
     public int groggy_cnt;
 
+    public int shake_tick;
+    public float shake_power;
+
     //wipping attack
     Transform attack_point;
     public float y_up_point;
@@ -76,6 +79,8 @@ public class Boss_Action : MonoBehaviour {
     //cross
     public Transform water_pos;
 
+    ActionCamera ac;
+
     void Start () {
         animator = this.GetComponent<Animator>();
         rot_cnt = Rotate_Cnt.one;
@@ -87,6 +92,8 @@ public class Boss_Action : MonoBehaviour {
         state = GetComponent<Boss_State>();
         action_phase = 1;
         //around_transform.position = new Vector3(rotate_center.position.x - map_width, player.position.y - idle_y_pos, player.position.z);
+
+        ac = FindObjectOfType<ActionCamera>();
 
         rotate_pos = new Vector3[4];
         rotate_pos[0] = new Vector3 (rotate_center.position.x - map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z);
@@ -105,7 +112,7 @@ public class Boss_Action : MonoBehaviour {
             {
                 tail[i].move_update(tail_dir);
             }
-        }
+        } 
     }
 
     Vector3 cross_point;
@@ -177,7 +184,7 @@ public class Boss_Action : MonoBehaviour {
                 else if (action_phase == 2)
                 {
                     //move_dir = (around_transform.position - this.transform.position).normalized;
-                    transform.position = around_transform.position;
+                    transform.parent.position = around_transform.position;
                 }
                 break;
 
@@ -193,16 +200,16 @@ public class Boss_Action : MonoBehaviour {
                     //move_dir = (player.transform.position - transform.position).normalized;
                     //move_dir.y = 0;
 
-                    move_dir = (around_transform.position - transform.position).normalized;
+                    move_dir = (around_transform.position - transform.parent.position).normalized;
 
                     action_phase = 2;
                     
                 }
                 else if(action_phase == 2)
                 {
-                    transform.position += move_dir * move_speed * Time.deltaTime;
+                    transform.parent.position += move_dir * move_speed * Time.deltaTime;
                     //c_timer = null;
-                    if(Vector3.Distance(around_transform.position, transform.position) < 1.0f)
+                    if(Vector3.Distance(around_transform.position, transform.parent.position) < 1.0f)
                     {
                         state.set_state(Boss_State.State.Idle,null);
                     }
@@ -229,14 +236,14 @@ public class Boss_Action : MonoBehaviour {
                     origin_dis = Vector2.Distance(new Vector2(rush_attack_start_pos.x, rush_attack_start_pos.z), new Vector2(move_target.x, move_target.z));
 
                     move_dir = (move_target - transform.position).normalized;  //이동 방향        
-                    float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
+                    float cur_dis = Vector2.Distance(new Vector2(transform.parent.position.x, transform.parent.position.z), new Vector2(move_target.x, move_target.z));
 
                     move_dir.y = Mathf.Lerp(2.0f, -1.0f, (origin_dis - cur_dis) / origin_dis - 0.2f);
                     if (move_dir.y < 0) move_dir.y *= jump_power;
 
-                    transform.position += move_dir * rush_speed * Time.deltaTime;
+                    transform.parent.position += move_dir * rush_speed * Time.deltaTime;
 
-                    if(cur_dis < 2.0f )//&& transform.position.y < move_target.y+5)
+                    if(cur_dis < 2.0f )//&& transform.parent.position.y < move_target.y+5)
                     {
                         //EventManager.get_instance().camera_shake(c_shake_power_rush, c_shake_cnt_rush, c_shake_speed_rush, EventManager.Direction.Up_Down, c_shake_minus_rush);
                         //카메라 쉐이크
@@ -246,12 +253,13 @@ public class Boss_Action : MonoBehaviour {
                 else if(action_phase == 3)
                 {
                     Debug.Log( "3  -- " + action_phase);
-                    //Vector3 _dir = (around_transform.position - transform.position).normalized;
+                    //Vector3 _dir = (around_transform.position - transform.parent.position).normalized;
+                    //Vector3 _dir = (around_transform.position - transform.parent.position).normalized;
                     move_dir.y = -1;//_dir.y-10;
-                    transform.position += move_dir * rush_speed * Time.deltaTime;
-                    if (rush_attack && Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.z), new Vector2(transform.position.x, transform.position.z)) <= x_radius)
+                    transform.parent.position += move_dir * rush_speed * Time.deltaTime;
+                    if (rush_attack && Vector2.Distance(new Vector2(player.transform.parent.position.x, player.transform.parent.position.z), new Vector2(transform.parent.position.x, transform.parent.position.z)) <= x_radius)
                     {
-                        Debug.Log(" !맞았음! 플레이어와의 거리 >> "+Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.z), new Vector2(transform.position.x, transform.position.z)));
+                        Debug.Log(" !맞았음! 플레이어와의 거리 >> "+Vector2.Distance(new Vector2(player.transform.parent.position.x, player.transform.parent.position.z), new Vector2(transform.parent.position.x, transform.parent.position.z)));
                         attack_player(10);
                     }
                     else if (rush_attack)
@@ -261,7 +269,7 @@ public class Boss_Action : MonoBehaviour {
                         line.SetVertexCount(segments + 1);
                     }
 
-                    if(tail[tail.Length-1].transform.position.y < around_transform.position.y-10)
+                    if(tail[tail.Length-1].transform.parent.position.y < around_transform.position.y-10)
                     {
                         Debug.Log("rush_end");        
                         //action_phase = 1;
@@ -290,7 +298,7 @@ public class Boss_Action : MonoBehaviour {
                     cross_start = cross_point + (-dir * cross_distance);
                     cross_end = cross_center.position;//cross_point + (dir * cross_distance);
 
-                    transform.position = new Vector3(cross_start.x, transform.position.y, cross_start.z);
+                    transform.parent.position = new Vector3(cross_start.x, transform.parent.position.y, cross_start.z);
                     action_phase = 2;
 
                     jump_power = 1;
@@ -300,28 +308,28 @@ public class Boss_Action : MonoBehaviour {
                     move_target = new Vector3(cross_end.x, cross_end.y, cross_end.z);
                     origin_dis = Vector2.Distance(new Vector2(cross_start.x, cross_start.z), new Vector2(cross_end.x, cross_end.z));
 
-                    move_dir = (move_target - transform.position).normalized;  //이동 방향        
-                    float cur_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
+                    move_dir = (move_target - transform.parent.position).normalized;  //이동 방향        
+                    float cur_dis = Vector2.Distance(new Vector2(transform.parent.position.x, transform.parent.position.z), new Vector2(move_target.x, move_target.z));
 
                     move_dir.y = Mathf.Lerp(cross_height, -1.5f, (origin_dis - cur_dis) / origin_dis - 0.3f);
                     move_dir.y *= jump_power;
                     //if (move_dir.y < 0) move_dir.y *= jump_power;
 
-                    transform.position += move_dir * cross_speed * Time.deltaTime;
+                    transform.parent.position += move_dir * cross_speed * Time.deltaTime;
 
-                    if(tail[0].transform.position.y > water_pos.position.y && SoundManager.get_instance().sound_list[(int)SoundManager.SoundList.boss_attack_up].mute == true)
+                    if(tail[0].transform.parent.position.y > water_pos.position.y && SoundManager.get_instance().sound_list[(int)SoundManager.SoundList.boss_attack_up].mute == true)
                     {
                         SoundManager.get_instance().mute_sound(SoundManager.SoundList.boss_attack_up, false);
                         SoundManager.get_instance().play_sound(SoundManager.SoundList.boss_attack_up);
                     }
-                    else if(tail[0].transform.position.y < water_pos.position.y && SoundManager.get_instance().sound_list[(int)SoundManager.SoundList.boss_attack_up].mute == false)
+                    else if(tail[0].transform.parent.position.y < water_pos.position.y && SoundManager.get_instance().sound_list[(int)SoundManager.SoundList.boss_attack_up].mute == false)
                     {
                         SoundManager.get_instance().mute_sound(SoundManager.SoundList.boss_attack_up, true);
                         SoundManager.get_instance().play_sound(SoundManager.SoundList.boss_attack_down);
                     }
                     
 
-                    if (cur_dis < 1.0f && tail[tail.Length - 1].transform.position.y < around_transform.position.y -10)//&& transform.position.y < move_target.y+5)
+                    if (cur_dis < 1.0f && tail[tail.Length - 1].transform.parent.position.y < around_transform.position.y -10)//&& transform.position.y < move_target.y+5)
                     {
                         //EventManager.get_instance().camera_shake(c_shake_power_rush, c_shake_cnt_rush, c_shake_speed_rush, EventManager.Direction.Up_Down, c_shake_minus_rush);
                         //카메라 쉐이크
@@ -336,9 +344,9 @@ public class Boss_Action : MonoBehaviour {
                     move_dir = Vector3.zero;
                     move_dir.y = -1;
 
-                    transform.position += move_dir * cross_speed * Time.deltaTime;
+                    transform.parent.position += move_dir * cross_speed * Time.deltaTime;
                     
-                    if (tail[tail.Length - 1].transform.position.y < around_transform.position.y - 10)
+                    if (tail[tail.Length - 1].transform.parent.position.y < around_transform.position.y - 10)
                     {
                         action_phase = 1;
                         state.set_state(Boss_State.State.Idle,null);
@@ -434,7 +442,7 @@ public class Boss_Action : MonoBehaviour {
                 {
                     //transform.position += move_dir * attack_speed * Time.deltaTime;
                     //
-                    //if (transform.position.y < attack_point.position.y)
+                    //if (transform.parent.position.y < attack_point.position.y)
                     //{
                     //    action_phase = 1;
                     //    state.set_state(Boss_State.State.Idle);
@@ -450,40 +458,40 @@ public class Boss_Action : MonoBehaviour {
                         tail[i].GetComponent<Collider>().isTrigger = true;
                     }
                     animator.SetBool("groggy", false);
-                    move_target = transform.position + new Vector3(0, y_dis, 0);
-                    move_dir = (move_target - transform.position).normalized;
+                    move_target = transform.parent.position + new Vector3(0, y_dis, 0);
+                    move_dir = (move_target - transform.parent.position).normalized;
                 }
                 else if (action_phase == 2)
                 {
-                    transform.position += move_dir * soar_speed * Time.deltaTime;
-                    if (transform.position.y > move_target.y)
+                    transform.parent.position += move_dir * soar_speed * Time.deltaTime;
+                    if (transform.parent.position.y > move_target.y)
                     {
                         action_phase = 3;
-                        move_target = new Vector3(soar_target.transform.position.x, transform.position.y, soar_target.transform.position.z);
-                        origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));
-                        move_dir = (move_target - transform.position).normalized;
+                        move_target = new Vector3(soar_target.transform.position.x, transform.parent.position.y, soar_target.transform.position.z);
+                        origin_dis = Vector2.Distance(new Vector2(transform.parent.position.x, transform.parent.position.z), new Vector2(move_target.x, move_target.z));
+                        move_dir = (move_target - transform.parent.position).normalized;
                     }
                 }
                 else if (action_phase == 3)
                 {
-                    transform.position += move_dir * soar_speed * Time.deltaTime;
-                    if (Vector3.Distance(transform.position, move_target) < 2.0f)
+                    transform.parent.position += move_dir * soar_speed * Time.deltaTime;
+                    if (Vector3.Distance(transform.parent.position, move_target) < 2.0f)
                     {
                         action_phase = 4;
                         move_target = new Vector3(soar_target.transform.position.x, around_transform.position.y, soar_target.transform.position.z);
-                        move_dir = (move_target - transform.position).normalized;
+                        move_dir = (move_target - transform.parent.position).normalized;
                     }
                 }
                 else if(action_phase == 4)
                 {
-                    transform.position += move_dir * soar_speed * Time.deltaTime;
+                    transform.parent.position += move_dir * soar_speed * Time.deltaTime;
 
-                    if(Vector3.Distance(transform.position, move_target) < soar_attack_check)
+                    if(Vector3.Distance(transform.parent.position, move_target) < soar_attack_check)
                     {
                         soar_target.set_danger(true);
                     }
 
-                    if (tail[tail.Length-1].transform.position.y <= move_target.y)
+                    if (tail[tail.Length-1].transform.parent.position.y <= move_target.y)
                     {              
                         for(int i =0; i<soar_target.get_enemy_point().Length; i++)
                         {
@@ -524,11 +532,15 @@ public class Boss_Action : MonoBehaviour {
 
                     temp = new Vector3(g_point.x , - g_point.y, g_point.z * temp.z);
 
-                    transform.position = groggy_point[groggy_cnt].position + temp;
                     Quaternion quat = Quaternion.identity;
-                    //quat = Quaternion.Euler(new Vector3(0, 140, 0));
                     quat = Quaternion.LookRotation((rotate_center.position - groggy_point[groggy_cnt].position).normalized);
-                    transform.rotation = quat;
+                    quat.x = 0;
+                    quat.z = 0;
+                    transform.parent.rotation = quat;
+
+                    transform.parent.position = groggy_point[groggy_cnt].position;// + temp;
+                    //quat = Quaternion.Euler(new Vector3(0, 140, 0));
+
 
                     animator.SetBool("groggy", true);
                     //action_state = Action.Groggy;
@@ -587,11 +599,11 @@ public class Boss_Action : MonoBehaviour {
         //    action_state = Action.Up;    //이동을 하지 않기 위함 (이 자리를 공격시작 자리로 정한다.)
         //else action_state = Action.Ready;
 
-        rush_attack_start_pos = transform.position;
+        rush_attack_start_pos = transform.parent.position;
         yield return new WaitForSeconds(rush_timer_cnt); // 공격 대기시간
         
         move_target = new Vector3(player.position.x, player.position.y + 2, player.position.z); //내위치 + ((반지름*2) * 이동방향) _ x,z || around_transform의 y위치 
-        origin_dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(move_target.x, move_target.z));  //거리 계산 (실시간 이동 거리에 따라 상승/하락 이동의 지정을 위함)_내 위치(x,z)와 타겟(x,z) 높이는 거리에 반영하지 않으므로!
+        origin_dis = Vector2.Distance(new Vector2(transform.parent.position.x, transform.parent.position.z), new Vector2(move_target.x, move_target.z));  //거리 계산 (실시간 이동 거리에 따라 상승/하락 이동의 지정을 위함)_내 위치(x,z)와 타겟(x,z) 높이는 거리에 반영하지 않으므로!
 
         action_phase = 2; //다음 행동
 
@@ -606,10 +618,10 @@ public class Boss_Action : MonoBehaviour {
 
     IEnumerator Whipping_Timer()
     {
-        transform.position += move_dir;
+        transform.parent.position += move_dir;
         yield return new WaitForSeconds(0.5f);
         action_phase = 3;
-        move_dir = (player.transform.position - transform.position).normalized;
+        move_dir = (player.transform.parent.position - transform.parent.position).normalized;
     }
 
     IEnumerator Normal_Timer(float _time, Boss_State.State _state)
@@ -659,6 +671,12 @@ public class Boss_Action : MonoBehaviour {
     public void set_soar_target(GroundCheck _gameobj)
     {
         soar_target = _gameobj;
+    }
+
+    public void groggy_shake_cam()
+    {
+        Debug.Log("shake");
+        ac.Shake(shake_tick, shake_power, Time.deltaTime);
     }
 
 }
