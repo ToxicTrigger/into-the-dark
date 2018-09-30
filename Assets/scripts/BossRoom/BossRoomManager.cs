@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossRoomManager : MonoBehaviour {  
+public class BossRoomManager : Observer {  
 
     private static BossRoomManager instance = null;
 
@@ -27,6 +27,7 @@ public class BossRoomManager : MonoBehaviour {
     Boss_State boss_state;
     Boss_Action boss_action;
     public Player player;
+    SoundManager sound_manager;
     Vector3 cross_point = Vector3.zero;
     public Transform start_point;
     public AncientWeapon ancient_weapon;
@@ -50,6 +51,7 @@ public class BossRoomManager : MonoBehaviour {
     public BossHpUI boss_hp_ui;
     public UiGroggyPoint boss_groggy_ui;
     public AWTimerUI ancient_timer_ui;
+    public BlackScreen ui_black_screen;
 
     public TimeSelector time_selector;
 
@@ -83,6 +85,7 @@ public class BossRoomManager : MonoBehaviour {
         boss_action = boss.gameObject.GetComponent<Boss_Action>();
 
         player_enter_bossroom();
+        sound_manager = SoundManager.get_instance();
 
     }
 
@@ -141,6 +144,29 @@ public class BossRoomManager : MonoBehaviour {
         //    reloc.hit_switch[i].set_switch(false);
         //    reloc.hit_switch[i].off_switch_set();
         //}
+    }
+
+    public void game_over()
+    {
+        ui_black_screen.add_observer(this);
+        ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+    }
+
+    public override void notify(Observable observable)
+    {
+        if (observable.gameObject.GetComponent<BlackScreen>())
+        {
+            BlackScreen torch = observable as BlackScreen;
+            
+            if (torch.get_screen_state() == BlackScreen.ScreenState.Fade_Out)
+            {
+                //플ㄹ레이어 사망, 맵 재시작
+                init_bossroom();
+                ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_In);
+                ui_black_screen.remove_observer(this);
+                sound_manager.stop_sound(SoundManager.SoundList.boss_ready_real, false);
+            }
+        }
     }
 
     public void send_boss_state(Boss_State.State _state, GroundCheck _gameobj)
@@ -222,6 +248,7 @@ public class BossRoomManager : MonoBehaviour {
     {
         for (int i = 0; i < reloc.get_reloc((int)phase).torch_set[0].foot_switch.Length; i++)
         {
+            reloc.get_reloc((int)phase).torch_set[0].switch_object[i].set_switch(false);
             Destroy(reloc.get_reloc((int)phase).torch_set[0].foot_switch[i].gameObject);
             Destroy(reloc.get_reloc((int)phase).torch_set[0].switch_object[i].gameObject);
         }
@@ -230,6 +257,7 @@ public class BossRoomManager : MonoBehaviour {
         {
             Destroy(enemy_list[i]);
         }
+        enemy_list.Clear();
         get_boss().set_hp(init_val.boss_hp);
         boss_state.set_state(Boss_State.State.Idle,null);
         phase = init_val.phase;

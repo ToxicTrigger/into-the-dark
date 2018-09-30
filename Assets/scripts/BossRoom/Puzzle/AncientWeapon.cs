@@ -92,7 +92,7 @@ public class AncientWeapon : Observer
         BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy,BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
 
         StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
-        //_timer = activate_timer();  //새로운 코루틴 할당 
+        _timer = activate_timer();  //새로운 코루틴 할당 
         StartCoroutine(_timer);
     }
 

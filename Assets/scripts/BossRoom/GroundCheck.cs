@@ -72,9 +72,9 @@ public class GroundCheck : Observer {
             {
                 if (player != null)
                 {
-                    ui_black_screen.add_observer(this);
-                    ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+                    manager.game_over();
                     player = null;
+                    //is_danger = false;
                 }
             }
 
@@ -226,6 +226,7 @@ public class GroundCheck : Observer {
         cognition_text = false;
         attack_ready_text = false;
         player = null;
+        //is_danger = false;
         if (sound_manager.sound_list[(int)SoundManager.SoundList.boss_ready_real].isPlaying && type == Type.Stone)
         {
             //Debug.Log("사운드 정지");
@@ -247,25 +248,10 @@ public class GroundCheck : Observer {
 
     public override void notify(Observable observable)
     {
-        if (observable.gameObject.GetComponent<BlackScreen>())
-        {
-            BlackScreen torch = observable as BlackScreen;     
-            
-            //ObservableTorch torch = observable as ObservableTorch;
-            if (torch.get_screen_state() == BlackScreen.ScreenState.Fade_Out)
-            //if(torch.get_state() == ObservableTorch.State.On)
-            {
-                Debug.Log("플레이어 사망");
-                //플ㄹ레이어 사망, 맵 재시작
-                manager.init_bossroom();
-                ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_In);
-                ui_black_screen.remove_observer(this);
-                sound_manager.stop_sound(SoundManager.SoundList.boss_ready_real,false);
-            }
-        }
-        else if(observable.gameObject.GetComponent<DestroyCheck>())
+        if (observable.gameObject.GetComponent<DestroyCheck>())
         {
             enemy_count--;
+            //Debug.Log(this.name + "의 적 삭제 적용 단계" + enemy_count);
         }
 
     }

@@ -133,8 +133,11 @@ public class BossRoomRelocation : MonoBehaviour {
         {
             for (int z = 0; z < 4; z++)
             {
-                if (reloc_set[phase].ground_list[i].enemy_count > 8)
+                if (reloc_set[phase].ground_list[i].enemy_count >= 16)
+                {
+                   // Debug.Log(reloc_set[phase].ground_list[i].name + "의 몬스터 생성 정지 : " + z+"개 생성!! 해당 땅의 적 수 = "+ reloc_set[phase].ground_list[i].enemy_count);
                     break;
+                }
 
                 BossRoomManager.get_instance().create_enemy(reloc_set[phase].ground_list[i].enemy_position[z].position,
                                                             reloc_set[phase].ground_list[i].gameObject.GetComponent<Observer>());

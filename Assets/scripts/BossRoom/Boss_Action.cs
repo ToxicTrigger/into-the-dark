@@ -506,6 +506,7 @@ public class Boss_Action : MonoBehaviour {
                         move_target = Vector3.zero;
                         soar_target.set_danger(false);
                         state.set_state(Boss_State.State.Move, null);
+                        soar_target.set_danger(false);
                         //EventManager.get_instance().off_event();
                         //BossRoomManager.get_instance().crumbling_pillar_all();  //페이즈에 따라 기둥을 무너뜨린다. 
                         //EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Up_Down, c_shake_minus_rush);

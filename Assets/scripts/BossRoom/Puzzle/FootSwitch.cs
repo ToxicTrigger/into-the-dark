@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FootSwitch : MonoBehaviour {
+public class FootSwitch : Observer {
 
     TimeSwitch switch_ground;
     public float move_speed;
@@ -26,6 +26,10 @@ public class FootSwitch : MonoBehaviour {
 
             switch_ground.set_use_enable(true);
             ground_move_ctrl(Vector3.up);
+            if(other.CompareTag("Enemy"))
+            {
+                other.transform.Find("DestroyCheck(Clone)").GetComponent<DestroyCheck>().add_observer(this);
+            }
         }
     }
 
@@ -35,10 +39,10 @@ public class FootSwitch : MonoBehaviour {
         {
             on_count--;
             Debug.Log("발판에서 내려감");
-            if (on_count <= 0 && BossRoomManager.get_instance().get_ancient_weapon().get_state() != AncientWeapon.State.Activated )
+            off_switch();
+            if (other.CompareTag("Enemy"))  
             {
-                switch_ground.set_use_enable(false);
-                ground_move_ctrl(Vector3.down);
+                other.transform.Find("DestroyCheck(Clone)").GetComponent<DestroyCheck>().remove_observer(this);
             }
         }
     }
@@ -78,9 +82,30 @@ public class FootSwitch : MonoBehaviour {
 
     public void ground_move_ctrl(Vector3 _dir)
     {
-        StopCoroutine(move_corutine);
-        move_corutine = ground_move(_dir);
-        StartCoroutine(move_corutine);
+        if (move_corutine != null)
+        {
+            StopCoroutine(move_corutine);
+            move_corutine = ground_move(_dir);
+            StartCoroutine(move_corutine);
+        }
+    }
+
+    public override void notify(Observable observable)
+    {
+        if (observable.gameObject.GetComponent<DestroyCheck>())
+        {
+            on_count--;
+            off_switch();
+        }
+    }
+
+    void off_switch()
+    {
+        if (on_count <= 0 && BossRoomManager.get_instance().get_ancient_weapon().get_state() != AncientWeapon.State.Activated)
+        {
+            switch_ground.set_use_enable(false);
+            ground_move_ctrl(Vector3.down);
+        }
     }
 
 }
