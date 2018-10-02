@@ -35,7 +35,10 @@ public class SoundManager : MonoBehaviour
         boss_attack_up,
         boss_attack_down,
         hit_boss_one,
-        hit_boss_two
+        hit_boss_two,
+        heartbeat,
+        boss_attack_ready,
+        boss_groggy,
     };
     public SoundList sound_number;
 

@@ -50,6 +50,9 @@ public class Boss_Action : MonoBehaviour {
     public float y_dis;
     public float soar_speed;
     public float soar_attack_check;
+    public int soar_shake_tick;
+    public float soar_shake_power;
+    public float soar_tick_by_time;
     //groggy
     public Transform [] groggy_point;
     public Vector3 g_point;
@@ -360,95 +363,6 @@ public class Boss_Action : MonoBehaviour {
 
                 break;
 
-            case Boss_State.State.Whipping_Attack:
-                if (action_phase == 1)
-                {
-                    //땅 속에서 특정 위치로 이동한다.
-                    //transform.position = attack_point.position;
-
-                    //공격 위치는 딱1회 계산할 예정이므로 이곳에서 처리를 하고 넘어간다.
-                    up_point = transform.position;
-                    up_point.y += y_up_point;   //up_point(attack_point)에 y만큼 올려준다.
-                    move_dir = (up_point - transform.position).normalized;
-
-                    action_phase = 2;
-
-                }
-                else if (action_phase == 2)
-                {
-
-                    if (transform.position.y > up_point.y)
-                    {
-                        move_dir = (player.transform.position - transform.position).normalized;
-
-                        if (c_timer != null)
-                        {
-                            StopCoroutine(c_timer);
-                            c_timer = null;
-                        }
-
-                        c_timer = Whipping_Timer();
-                        StartCoroutine(c_timer);
-
-                        action_phase = -1;  //대기
-
-                        //action_phase = 3;
-                    }
-                    else
-                    {
-                        transform.position += move_dir * attack_speed * Time.deltaTime;
-
-                    }
-                }
-                else if (action_phase == 3)
-                {
-                    //위로 이동을 완료했다면 플레이어를 향해 이동한다.
-
-                    transform.position += move_dir * attack_speed * Time.deltaTime;
-
-                    if (Vector3.Distance(player.position,transform.position) < 3.0f)
-                    {
-                        action_phase = 4;
-
-                        move_dir = (up_point - transform.position).normalized;    //다만 돌아가기 때문에 회전을 한다. 회전에 제한을 걸자
-
-                        Debug.Log("action3 clear!");
-                    }
-                    Debug.Log("action_phase 3");
-                }
-                else if (action_phase == 4)
-                {
-
-                    //if (Vector3.Distance(up_point, transform.position )< 5.0f)
-                    if(transform.position.y > up_point.y)
-                    {
-                        //move_dir = (attack_point.position - transform.position).normalized;
-
-                        move_dir = (player.position - transform.position).normalized;
-                        transform.position += move_dir;
-                        action_phase = 5;
-                        Debug.Log("dasdf");
-                    }
-                    else
-                    {
-                        //플레이어를 향해 이동을 했다면 다시 돌아간다.
-                        transform.position += move_dir * attack_speed * Time.deltaTime;
-                        Debug.Log(transform.position.y + ",,,," + up_point.y);
-                    }
-                    Debug.Log("action_phase 4");
-                }
-
-                else if (action_phase == 5)
-                {
-                    //transform.position += move_dir * attack_speed * Time.deltaTime;
-                    //
-                    //if (transform.parent.position.y < attack_point.position.y)
-                    //{
-                    //    action_phase = 1;
-                    //    state.set_state(Boss_State.State.Idle);
-                    //}
-                }
-                break;
             case Boss_State.State.Soar_Attack:
                 if(action_phase == 1)
                 {
@@ -476,10 +390,11 @@ public class Boss_Action : MonoBehaviour {
                 {
                     transform.parent.position += move_dir * soar_speed * Time.deltaTime;
                     if (Vector3.Distance(transform.parent.position, move_target) < 2.0f)
-                    {
+                    {                        
                         action_phase = 4;
                         move_target = new Vector3(soar_target.transform.position.x, around_transform.position.y, soar_target.transform.position.z);
                         move_dir = (move_target - transform.parent.position).normalized;
+
                     }
                 }
                 else if(action_phase == 4)
@@ -488,6 +403,7 @@ public class Boss_Action : MonoBehaviour {
 
                     if(Vector3.Distance(transform.parent.position, move_target) < soar_attack_check)
                     {
+                        ac.Shake(soar_shake_tick, soar_shake_power, soar_tick_by_time * Time.deltaTime);
                         soar_target.set_danger(true);
                     }
 
@@ -501,19 +417,12 @@ public class Boss_Action : MonoBehaviour {
 
                             soar_target.enemy_count++;
                         }
-                        //soar_count++;
                         action_phase = 1;
                         move_target = Vector3.zero;
                         soar_target.set_danger(false);
                         state.set_state(Boss_State.State.Move, null);
-                        soar_target.set_danger(false);
-                        //EventManager.get_instance().off_event();
-                        //BossRoomManager.get_instance().crumbling_pillar_all();  //페이즈에 따라 기둥을 무너뜨린다. 
-                        //EventManager.get_instance().camera_shake(c_shake_power, c_shake_cnt, c_shake_speed, EventManager.Direction.Up_Down, c_shake_minus_rush);
                     }
                 }
-
-                //move_dir = (move_target - transform.position).normalized;
 
                 break;
             case Boss_State.State.Groggy:
@@ -544,8 +453,8 @@ public class Boss_Action : MonoBehaviour {
 
 
                     animator.SetBool("groggy", true);
-                    //action_state = Action.Groggy;
-                    //boss_groggy.Play();
+
+                    SoundManager.get_instance().play_sound(SoundManager.SoundList.boss_groggy);
 
                     //애니메이션 재생이 제대로 이루어질 장소와 회전값을 찾아 넣는다.
                     //그로기 상태로 변화하는 곳의 위치가 고정되어 있다면 그대로 사용이 가능하지만 추후 변한다면....

@@ -69,7 +69,7 @@ public class BossRoomManager : Observer {
     InitialValue init_val;
 
     public GroundCheck []wood_bridge;
-
+    public CrumblingPillar[] pillar_list;
     public bool is_entrance;
     public bool is_puzzle_clear;
     public bool is_stage_clear;
@@ -259,14 +259,17 @@ public class BossRoomManager : Observer {
         }
         enemy_list.Clear();
         get_boss().set_hp(init_val.boss_hp);
-        boss_state.set_state(Boss_State.State.Idle,null);
-        phase = init_val.phase;
+        //boss_state.set_state(Boss_State.State.Idle,null);
+        phase = init_val.phase;        
 
         for(int i=0; i<wood_bridge.Length; i++)
         {
             wood_bridge[i].initialize_bridge();
         }
-
+        for (int i = 0; i < pillar_list.Length; i++)
+        {
+            pillar_list[i].init_floor();
+        }
         Map_Initialization();
         player.transform.position = start_point.position;
     }

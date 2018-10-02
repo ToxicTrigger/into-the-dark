@@ -12,6 +12,7 @@ public class CrumblingPillar : MonoBehaviour {
     {
         [Tooltip("해당 층의 gameobject")]
         public PillarFloor pillar_model;
+        public PillarFloor pillar_clone;
         [Tooltip("해당 층이 떨어질 위치")]
         public Transform crumbling_position;
         public float speed;
@@ -21,14 +22,39 @@ public class CrumblingPillar : MonoBehaviour {
     }
 
     public FloorData[] floor_list;
+    public bool is_crumbling;
+
+    private void Start()
+    {
+        init_floor();
+    }
 
     public void crumbling_all()
     {
         for(int i =0; i< floor_list.Length; i++)
         {
-            floor_list[i].pillar_model.set_state(floor_list[i].crumbling_position.position, floor_list[i].crack, floor_list[i].speed, floor_list[i].rot_speed);
+            floor_list[i].pillar_clone.set_state(floor_list[i].crumbling_position.position, floor_list[i].crack, floor_list[i].speed, floor_list[i].rot_speed);
         }
+        is_crumbling = true;
     }
     
+    public void init_floor()
+    {
+        Debug.Log("init_floor");
+        if (is_crumbling)
+        {
+            Debug.Log("is_crumbling");
+            for (int i = 0; i < floor_list.Length; i++)
+            {
+                Debug.Log("재생성 재배치");
+                PillarFloor _pillar = Instantiate(floor_list[i].pillar_model, floor_list[i].pillar_model.transform.position, floor_list[i].pillar_model.transform.rotation, this.transform);
+                _pillar.gameObject.SetActive(true);                
+                if (floor_list[i].pillar_clone != null)
+                    Destroy(floor_list[i].pillar_clone.gameObject);
+                floor_list[i].pillar_clone = _pillar;
+            }
+            is_crumbling = false;
+        }
+    }
 
 }

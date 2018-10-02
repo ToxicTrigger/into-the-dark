@@ -163,8 +163,10 @@ public class BossRoomRelocation : MonoBehaviour {
 
         if (reloc_set[phase].c_pillar.Length > 0)
         {
-            for (int i = 0; i < reloc_set[phase ].c_pillar.Length; i++)
-                reloc_set[phase ].c_pillar[i].crumbling_all();
+            for (int i = 0; i < reloc_set[phase].c_pillar.Length; i++)
+            {
+                reloc_set[phase].c_pillar[i].crumbling_all();
+            }
         }
 
     }

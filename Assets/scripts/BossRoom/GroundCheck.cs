@@ -38,6 +38,7 @@ public class GroundCheck : Observer {
     public Transform [] enemy_position;
 
     public int enemy_count;
+    public int heartbeat_count;
 
     [Tooltip("몇걸음부터 인식할지")]
     public float cognition_step_count;
@@ -48,6 +49,8 @@ public class GroundCheck : Observer {
 
     public GameObject wood_bridge;
     public GameObject active_bridge;
+
+    public float []sound_volume_list;
 
     void Start () {
         if (type != Type.Null)
@@ -107,10 +110,9 @@ public class GroundCheck : Observer {
 
                     if (step_cnt >= cognition_step_count && !is_cognition)
                     {
-                        //Debug.Log("사운드플레이");
                         is_cognition = true;
-                        //sound_manager.mute_sound(SoundManager.SoundList.heartbeat_1, false);
-                        sound_manager.play_sound(SoundManager.SoundList.boss_ready_real);
+                        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
+                        //sound_manager.play_sound(SoundManager.SoundList.boss_ready_real);
                     }
                 }
                 else if (type == Type.Wood)
@@ -120,63 +122,78 @@ public class GroundCheck : Observer {
                     {
                         on_ground_time = 0;
                         is_cognition = true;
-                        //sound_manager.mute_sound(SoundManager.SoundList.heartbeat_1, false);
+                        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
                     }
                 }
 
                 if (is_cognition)
                 {
-                    cognition_time += Time.deltaTime;
-
-                    //if (!cognition_text && type == Type.Stone)
-                    //{
-                    //    ui_state_text.on_text_ui(UiStateText.TextName.cognation);
-                    //    cognition_text = true;
-                    //}
-                    if (!cognition_text && type == Type.Wood)
+                    if (!sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].isPlaying)
                     {
-                        ui_state_text.on_text_ui(UiStateText.TextName.wood_cognition);
-                        cognition_text = true;
+                            sound_manager.play_sound(SoundManager.SoundList.heartbeat);
+                            heartbeat_count++;
                     }
 
-                    if (cognition_time >= cognition_time_list[1])
+                    if(type == Type.Stone)
                     {
-                        //sound_manager.mute_sound(SoundManager.SoundList.heartbeat_2, true);
-                        if (type == Type.Stone)
-                        {
-                            //보스의 솟아오르기 공격 실행
-                            manager.send_boss_state(Boss_State.State.Soar_Attack, this);
-                        }
-                        else if(type == Type.Wood)
-                        {
-                            manager.send_boss_state(Boss_State.State.Cross_Attack, this);
-                        }
+                        if(heartbeat_count == 5)
+                            sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[2];
 
-                        is_cognition = false;
-                    }
-                    else if (cognition_time >= cognition_time_list[0])
-                    {
-                        if (type == Type.Stone)//돌땅에서는 10초지나면 바로 공격
-                        {
-                            //보스의 솟아오르기 공격 실행
-                            manager.send_boss_state(Boss_State.State.Soar_Attack, this);
+                        else if (heartbeat_count == 3)
+                            sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[1];
 
+                        if(heartbeat_count ==6)
+                        {
+                            StartCoroutine(attack_timer(Boss_State.State.Soar_Attack));
                             is_cognition = false;
                         }
-
-                        //sound_manager.mute_sound(SoundManager.SoundList.heartbeat_1, true);
-                        //sound_manager.mute_sound(SoundManager.SoundList.heartbeat_2, false);
-                        //if (!attack_ready_text && type == Type.Stone)
-                        //{
-                        //    ui_state_text.on_text_ui(UiStateText.TextName.attack_ready);
-                        //    attack_ready_text = true;
-                        //}
-                        //if (cognition_time > tick_count)
-                        //{
-                        //    sound_manager.play_sound(SoundManager.SoundList.time_ticktock);
-                        //    tick_count++;
-                        //} // 초침소리 뺌
                     }
+                    else if (type == Type.Wood)
+                    {
+                        if (heartbeat_count == 3)
+                            sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[2];
+
+                        else if (heartbeat_count == 2)
+                            sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[1];
+
+                        if(heartbeat_count == 3)
+                        {
+                            StartCoroutine(attack_timer(Boss_State.State.Cross_Attack));
+                            is_cognition = false;
+                        }
+                    }
+                    //cognition_time += Time.deltaTime;
+
+                    //if (!cognition_text && type == Type.Wood)
+                    //{
+                    //    ui_state_text.on_text_ui(UiStateText.TextName.wood_cognition);
+                    //    cognition_text = true;
+                    //}
+
+                    //if (cognition_time >= cognition_time_list[1])
+                    //{
+                    //    if (type == Type.Stone)
+                    //    {
+                    //        //보스의 솟아오르기 공격 실행
+                    //        manager.send_boss_state(Boss_State.State.Soar_Attack, this);
+                    //    }
+                    //    else if(type == Type.Wood)
+                    //    {
+                    //        manager.send_boss_state(Boss_State.State.Cross_Attack, this);
+                    //    }
+
+                    //    is_cognition = false;
+                    //}
+                    //else if (cognition_time >= cognition_time_list[0])
+                    //{
+                    //    if (type == Type.Stone)//돌땅에서는 10초지나면 바로 공격
+                    //    {
+                    //        //보스의 솟아오르기 공격 실행
+                    //        manager.send_boss_state(Boss_State.State.Soar_Attack, this);
+
+                    //        is_cognition = false;
+                    //    }
+                    //}
                 }
             }
         }
@@ -217,6 +234,7 @@ public class GroundCheck : Observer {
     void clear_guard()
     {
         //Debug.Log("땅 초기화" + this.name);
+        heartbeat_count = 0;
         on_ground_time = 0;
         is_ground = false;
         cognition_time = 0;
@@ -226,13 +244,8 @@ public class GroundCheck : Observer {
         cognition_text = false;
         attack_ready_text = false;
         player = null;
-        //is_danger = false;
-        if (sound_manager.sound_list[(int)SoundManager.SoundList.boss_ready_real].isPlaying && type == Type.Stone)
-        {
-            //Debug.Log("사운드 정지");
-            sound_manager.stop_sound(SoundManager.SoundList.boss_ready_real,false);
-        }
         sound_delay_init();
+        set_danger(false);
     }
 
     void sound_delay_init()
@@ -283,4 +296,10 @@ public class GroundCheck : Observer {
         }
     }
 
+    IEnumerator attack_timer(Boss_State.State _state)
+    {
+        sound_manager.play_sound(SoundManager.SoundList.boss_attack_ready);
+        manager.send_boss_state(_state, this);
+        yield return new WaitForSeconds(3.0f);
+    }
 }
