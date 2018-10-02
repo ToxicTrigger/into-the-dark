@@ -51,7 +51,7 @@ public class UpperSwitch : Platform
             {
                 if (Door.position.y < Up_Pos.y)
                 {
-                    Vector3 tmp = Vector3.up * -1 * speed * 0.5f;
+                    Vector3 tmp = Vector3.up * -1 * speed * 2.5f;
                     Door.position = tmp + Door.position;
                     if (!sound.isPlaying)
                     {
