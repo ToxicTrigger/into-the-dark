@@ -8,6 +8,7 @@ public class FootSwitch : Observer {
     public float move_speed;
     public Vector3 idle_position;
     public float y_up_pos;
+    SoundManager sound_manager;
 
     IEnumerator move_corutine;
 
@@ -15,6 +16,7 @@ public class FootSwitch : Observer {
 
 	void Start () {
         move_corutine = ground_move(Vector3.up);
+        sound_manager = SoundManager.get_instance();
     }	
 
     private void OnTriggerEnter(Collider other)
@@ -51,6 +53,8 @@ public class FootSwitch : Observer {
     {
         while (true)
         {
+            if(!sound_manager.sound_list[(int)SoundManager.SoundList.rumble].isPlaying)
+                sound_manager.play_sound(SoundManager.SoundList.rumble);
             switch_ground.transform.position += _move_dir * move_speed * Time.deltaTime;
             yield return new WaitForSeconds(0.01f);
 
@@ -71,7 +75,7 @@ public class FootSwitch : Observer {
                 break;
             }
         }
-
+        sound_manager.stop_sound(SoundManager.SoundList.rumble, true);
     }
 
     public void set_ground(TimeSwitch _ground)

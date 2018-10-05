@@ -6,7 +6,6 @@ public class BasicSwitch : Observable {
     //모든 스위치가 공통적으로 가지는 항목 
     // 스위치의 on off 여부와 모든 옵저버에게 신호전달
 
-    public AudioSource on_sound;
     public bool switch_on = false; //활성화 되어있는지 여부
     protected bool use_enable;
 
@@ -30,7 +29,7 @@ public class BasicSwitch : Observable {
         {
             //hit_sound = on_sound;
             //hit_sound.Play();
-            on_sound.Play();
+            //on_sound.Play();
             //gameObject.GetComponent<AudioSource>().Play();
         }
         notify_all();
