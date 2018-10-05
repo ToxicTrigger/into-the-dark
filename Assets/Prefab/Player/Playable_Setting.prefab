@@ -841,6 +841,7 @@ GameObject:
   - component: {fileID: 114780996248699520}
   - component: {fileID: 81975319915238906}
   - component: {fileID: 54025856867603344}
+  - component: {fileID: 114612246978713126}
   m_Layer: 17
   m_Name: Player
   m_TagString: Player
@@ -2345,9 +2346,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4879443318953506}
   - component: {fileID: 135856587777518920}
-  m_Layer: 17
+  m_Layer: 2
   m_Name: PlayerHpRange
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2677,9 +2678,9 @@ GameObject:
   - component: {fileID: 4845941624878362}
   - component: {fileID: 114523992345222540}
   - component: {fileID: 135763208799631136}
-  m_Layer: 17
+  m_Layer: 2
   m_Name: PlayerAggro
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3761,7 +3762,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1251508200931994}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.68, y: 1.77, z: -5.4}
+  m_LocalPosition: {x: 1.06, y: 3.13, z: 23.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4132918726683246}
@@ -4476,7 +4477,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1853272499816646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -63.546486, y: -13.567436, z: -74.87609}
+  m_LocalPosition: {x: 115.6, y: -54.6, z: 9.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4619943908345384}
@@ -4588,12 +4589,12 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294966271
-  m_RenderingPath: -1
+  m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 0
+  m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
@@ -5678,7 +5679,6 @@ MonoBehaviour:
   Pins:
   - {fileID: 0}
   - {fileID: 0}
-  Offsets: []
   Angle: {x: 21, y: 0, z: 0}
   default_angle: {x: 0, y: 0, z: 0}
   Offset: {x: 0, y: 8, z: -13}
@@ -6427,6 +6427,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f27dbe958933624b91fe2ef72ca2a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114612246978713126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1251508200931994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2787c2b6a08fbd4792b012b4d86571d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fogs: []
+  View_range: 40
 --- !u!114 &114625446234541748
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6792,7 +6805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: a03821a47d0b1c04db43cd87f0e04ac3, type: 2}
+  profile: {fileID: 11400000, guid: 05743441f631172478dc495205ff948c, type: 2}
 --- !u!114 &114795148401202220
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6851,6 +6864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 4571991109927436}
   cur: {fileID: 0}
+  now: {fileID: 0}
   same: 0
 --- !u!114 &114860911053515642
 MonoBehaviour:
@@ -7358,7 +7372,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1.87
   m_Radius: 0.47
-  m_SlopeLimit: 90
+  m_SlopeLimit: 60
   m_StepOffset: 1
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
