@@ -76,7 +76,7 @@ public class Fairy : MonoBehaviour
             cur_color = ggg.Evaluate(0);
         }
 
-        Range_per = Hp_per / 2 * 4f;
+        Range_per = Hp_per / 2 * 6f;
         Range.radius = Range_per;
     }
 

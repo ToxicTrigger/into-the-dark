@@ -40,6 +40,10 @@ public class Damageable : MonoBehaviour
                     if( other.gameObject.CompareTag("Arrow") || other.gameObject.CompareTag("Sword") )
                     {
                         Damaged(attack.Damage , attack.attackTick);
+                        if(other.gameObject.CompareTag("Arrow"))
+                        {
+                            Destroy(other.gameObject);
+                        }
                     }
                 }
                 else

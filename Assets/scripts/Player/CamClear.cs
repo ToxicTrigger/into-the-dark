@@ -5,7 +5,7 @@ using UnityEngine;
 public class CamClear : MonoBehaviour
 {
     public Transform Target;
-    public Collider cur;
+    public Collider cur, now;
     public bool same;
 
     void Update()
@@ -15,24 +15,50 @@ public class CamClear : MonoBehaviour
             RaycastHit ray;
             Ray r = new Ray(transform.position , ( Target.position - transform.position ).normalized);
             Debug.DrawRay(r.origin , r.direction * 100 , Color.red);
-            Physics.Raycast(r.origin , r.direction , out ray , Vector3.Distance(transform.position , Target.position));
+            Physics.Raycast(r.origin , r.direction , out ray , Vector3.Distance(transform.position , Target.position), LayerMask.NameToLayer("Player"));
+            
+
+            if(ray.collider != null)
+            {
+                Debug.Log(ray.collider.name);
+                if(!ray.collider.CompareTag("Player"))
+                {
+                    cur = now;
+                    now = ray.collider;
+                    now.GetComponent<Renderer>().enabled = false;
+                }
+            }
+            else
+            {
+                if(cur != null)
+                {
+                    cur.GetComponent<Renderer>().enabled = true;
+                    cur = null;
+                }
+            }
+
+            /*
             if( ray.collider != null )
             {
-                cur = ray.collider;
-                if( !same )
+                if(!ray.collider.CompareTag("Player"))
                 {
-                    if( cur.gameObject.layer != LayerMask.NameToLayer("Ground") & cur.Equals(ray.collider) )
+                    cur = ray.collider;
+                    if( !same )
                     {
-                        same = true;
-                        Debug.Log("가리는 놈 : " + ray.collider.name);
-                        cur.GetComponent<MeshRenderer>().enabled = false;
+                        if( cur.gameObject.layer != LayerMask.NameToLayer("Ground") && cur.Equals(ray.collider) )
+                        {
+                            same = true;
+                            Debug.Log("가리는 놈 : " + ray.collider.name);
+                            cur.GetComponent<MeshRenderer>().enabled = false;
+                        }
+                    }
+                    else if( !cur.Equals(ray.collider) )
+                    {
+                        same = false;
+                        cur.GetComponent<MeshRenderer>().enabled = true;
                     }
                 }
-                else if( !cur.Equals(ray.collider) )
-                {
-                    same = false;
-                    cur.GetComponent<MeshRenderer>().enabled = true;
-                }
+
             }
             else
             {
@@ -48,6 +74,7 @@ public class CamClear : MonoBehaviour
                 same = false;
                 cur = null;
             }
+                  */
         }
     }
 }

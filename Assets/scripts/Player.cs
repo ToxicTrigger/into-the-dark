@@ -250,7 +250,7 @@ public class Player : MonoBehaviour{
                 ani.SetBool("Dodge", false);
                 break;
             case "Dodge":
-                character.Move(transform.forward.normalized * step_Dodge);
+                character.Move(transform.forward.normalized * step_Dodge * 2f);
                 break;
         }
     

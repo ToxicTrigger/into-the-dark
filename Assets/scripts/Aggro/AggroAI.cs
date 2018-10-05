@@ -223,8 +223,21 @@ public abstract class AggroAI : Observable {
         FSM(this);
     }
 
+    float hit_tick;
     private void LateUpdate()
     {
+        if(has_Hit)
+        {
+            if(hit_tick >= 0.5f)
+            {
+                has_Hit = false;
+                hit_tick = 0;
+            }
+            else
+            {
+                hit_tick += Time.deltaTime;
+            }
+        }
         for (int i = 0; i < observers.Count; i++)
         {
             Observer o = observers[i];
@@ -242,14 +255,14 @@ public abstract class AggroAI : Observable {
             Destroy(sound, 1.0f);
             this.player.ac.Shake(1,0.2f,Time.deltaTime);
             damage.Damaged(1, 0.2f);
-            //has_Hit = true;
+            has_Hit = true;
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Sword") || other.CompareTag("Arrow"))
         {
-            has_Hit = false;
+            //has_Hit = false;
         }
     }
 
@@ -259,6 +272,7 @@ public abstract class AggroAI : Observable {
         {
             Debug.Log("Hit by Arrow");
             damage.Damaged(collision.gameObject.GetComponent<Arrow>().power, 0.1f);
+            has_Hit = true;
             Destroy(collision.gameObject);
         }else if(collision.gameObject.CompareTag("Sword"))
         {
@@ -269,7 +283,7 @@ public abstract class AggroAI : Observable {
     private void OnCollisionExit(Collision other) {
         if(other.gameObject.CompareTag("Sword"))
         {
-             has_Hit = false;
+             //has_Hit = false;
         }
     }
 

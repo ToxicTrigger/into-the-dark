@@ -40,6 +40,10 @@ public class Switch : Interactable
                 }
                 else
                 {
+                    if( sound != null )
+                    {
+                        sound.PlayOneShot(sound.clip);
+                    }
                     if( handlr )
                     {
                         ph.OnOff = true;

@@ -65,7 +65,7 @@ public class TitleAnimation : MonoBehaviour
                 {
                     case 0:
                         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-                        SceneManager.LoadSceneAsync("Scene_1_2");
+                        SceneManager.LoadSceneAsync(1);
                         break;
                     case 3:
                         Application.Quit();

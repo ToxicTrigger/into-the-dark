@@ -17,7 +17,7 @@ public class Ladder : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground"))
+        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast"))
         {
             player.has_on_ladder = true;
             pm.enabled = false;
@@ -39,7 +39,7 @@ public class Ladder : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") )
+        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast") )
         {
             player.has_on_ladder = false;
             pm.enabled = true;
