@@ -844,24 +844,6 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300162, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
---- !u!1 &30670791 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1251508200931994, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-    type: 2}
-  m_PrefabInternal: {fileID: 1592156261}
---- !u!114 &30670805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 30670791}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2787c2b6a08fbd4792b012b4d86571d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fogs: []
-  View_range: 40
 --- !u!1 &34066905
 GameObject:
   m_ObjectHideFlags: 0
@@ -37464,11 +37446,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 224885289842332186, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-        type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4940639639827524, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_LocalPosition.x
       value: 115.6
@@ -37500,70 +37477,6 @@ Prefab:
     - target: {fileID: 4940639639827524, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114785352156980120, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571991109927436, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 23.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571991109927436, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 1.06
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571991109927436, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 3.13
-      objectReference: {fileID: 0}
-    - target: {fileID: 143341955257596142, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-        type: 2}
-      propertyPath: m_SlopeLimit
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 114824684757633098, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1999718972882162, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871745819071222, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 1999718972882162, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871745819071222, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114785352156980120, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-        type: 2}
-      propertyPath: profile
-      value: 
-      objectReference: {fileID: 11400000, guid: 05743441f631172478dc495205ff948c,
-        type: 2}
-    - target: {fileID: 20140907724179100, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-        type: 2}
-      propertyPath: m_RenderingPath
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20140907724179100, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-        type: 2}
-      propertyPath: m_AllowMSAA
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114473033003166558, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
-        type: 2}
-      propertyPath: step_Dodge
-      value: 0.15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
