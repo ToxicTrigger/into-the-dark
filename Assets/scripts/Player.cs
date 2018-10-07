@@ -224,7 +224,7 @@ public class Player : MonoBehaviour{
                 while(it.MoveNext())
                 {
                     ParticleSystem trigger = it.Current as ParticleSystem;
-                    trigger.trigger.SetCollider(1 + totems.Count + 1, t.transform.GetChild(0));
+                    trigger.trigger.SetCollider(1 + totems.Count + 1, t.transform.GetChild(1));
                 }
             }
             if(Input.GetKeyUp(KeyCode.Q))

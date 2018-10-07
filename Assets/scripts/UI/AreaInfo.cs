@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class AreaInfo : MonoBehaviour
 {
-    public Text areaTitle;
+    public Text areaTitle, areaName;
     public Image L, R;
     public Color text_color;
     public bool EventOn;
@@ -47,6 +47,7 @@ public class AreaInfo : MonoBehaviour
     void Update()
     {
         areaTitle.color = text_color;
+        areaName.color = text_color;
         L.color = text_color;
         R.color = text_color;
     }
@@ -62,6 +63,7 @@ public class AreaInfo : MonoBehaviour
         if (other.CompareTag("Area"))
         {
             areaTitle.text = other.name;
+            areaName.text = other.transform.GetChild(0).name;
             StartCoroutine(UpDown());
         }
     }
