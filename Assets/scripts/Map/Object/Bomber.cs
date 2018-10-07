@@ -22,37 +22,43 @@ public class Bomber : Damageable
 
     public void Update()
     {
-        if (this.Dead)
+        if( this.Dead )
         {
-            Collider[] targets = Physics.OverlapSphere(this.transform.position, explosion_range);
+            Collider[] targets = Physics.OverlapSphere(this.transform.position , explosion_range);
 
-            foreach (Collider coll in targets)
+            for( int i = 0 ; i < transform.childCount ; ++i )
+            {
+
+            }
+
+
+            foreach( Collider coll in targets )
             {
                 Rigidbody r = coll.GetComponent<Rigidbody>();
                 Damageable d = coll.GetComponent<Damageable>();
 
-                if (d != null)
+                if( d != null )
                 {
-                    if (!d.Equals(this))
+                    if( !d.Equals(this) )
                     {
-                        d.Damaged(Damage, 1);
+                        d.Damaged(Damage , 1);
                     }
                 }
 
-                if (r != null)
+                if( r != null )
                 {
-                    if (!r.Equals(this))
+                    if( !r.Equals(this) )
                     {
-                        r.AddExplosionForce(explosion_power * 20, this.transform.position, explosion_range, 2400.0f);
+                        r.AddExplosionForce(explosion_power * 20 , this.transform.position , explosion_range , 2400.0f);
 
-                        r.AddForce((r.position - this.transform.position).normalized * explosion_power, ForceMode.Impulse);
+                        r.AddForce(( r.position - this.transform.position ).normalized * explosion_power , ForceMode.Impulse);
                     }
                 }
             }
-            if (particle != null)
+            if( particle != null )
             {
-                GameObject tmp = Instantiate(particle, this.transform.position, Quaternion.identity, null);
-                Destroy(tmp, 5f);
+                GameObject tmp = Instantiate(particle , this.transform.position , Quaternion.identity , null);
+                Destroy(tmp , 5f);
             }
             cam.Shake(4 , 1 , Time.deltaTime);
             Destroy(gameObject);

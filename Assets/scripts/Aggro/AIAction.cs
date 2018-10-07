@@ -23,8 +23,6 @@ public class AIAction : MonoBehaviour
     private Player Player;
 
     private Vector3 origin;
-    [SerializeField]
-    private Transform des;
 
     [SerializeField]
     private float Speed;
@@ -78,8 +76,9 @@ public class AIAction : MonoBehaviour
                         Vector3 pos = transform.position;
                         GameObject poison = Instantiate(Poison , pos , Quaternion.identity , null);
                         poison.transform.position = transform.position;
-                        poison.GetComponent<Rigidbody>().useGravity = false;
-                        poison.GetComponent<Rigidbody>().velocity = ( Player.transform.position - pos ).normalized * 40;
+                        poison.GetComponent<Rigidbody>().useGravity = true;
+                        poison.GetComponent<Rigidbody>().velocity = ( Player.transform.position - pos ).normalized * Vector3.Distance(transform.position , Player.transform.position) / 2;
+                        poison.GetComponent<Rigidbody>().AddForce(Vector3.up * 10 , ForceMode.Impulse);
                         attack_tick = 0;
                     }
                     break;

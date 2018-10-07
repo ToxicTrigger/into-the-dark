@@ -78,11 +78,16 @@ public class Player : MonoBehaviour{
     {
         if (val == 0)
         {
-            Sword.SetActive(false);
+            //Sword.SetActive(false);
+            sword_Effect.SetActive(false);
+            Sword.GetComponent<Collider>().enabled = false;
         }
         else
         {
-            Sword.SetActive(true);
+            Sword.GetComponent<Collider>().enabled = true;
+            //Sword.SetActive(true);
+            sword_Effect.SetActive(true);
+            sword_Effect.GetComponent<TrailRenderer>().Clear();
             Sword_Sound.PlayOneShot(Sword_Sound.clip);
         }
     }
@@ -281,7 +286,7 @@ public class Player : MonoBehaviour{
             is_fighting_something = true;
         }
 
-        if(click_tick >= 0.3f)
+        if(click_tick >= 0.5f)
         {   
             click_tick = 0;
             attack_click = false;

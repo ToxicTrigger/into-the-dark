@@ -42,12 +42,12 @@ public class Poison : MonoBehaviour
             Destroy(gameObject);
 
         }
-        if(other.CompareTag("Player"))
+        if(other.gameObject.name.Equals("Player"))
         {
             Player.Hp -= Damage;
             Player.GetComponent<Player>().ac.Shake(3 , 0.2f , Time.deltaTime);
         }
-        if(!other.CompareTag("Enemy") && other.CompareTag("Player"))
+        if(!other.CompareTag("Enemy") && other.gameObject.name.Equals("Player") )
         {
             Destroy(gameObject);
         }
@@ -59,7 +59,5 @@ public class Poison : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-
     }
-
 }
