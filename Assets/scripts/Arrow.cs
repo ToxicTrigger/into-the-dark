@@ -23,6 +23,8 @@ public class Arrow : MonoBehaviour {
             || collision.CompareTag("TotemAggro"))
         {
             is_player = true;
+
+            // issue closed test
         }
 
         Element element = collision.gameObject.GetComponent<Element>();
