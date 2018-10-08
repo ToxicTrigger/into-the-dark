@@ -19,7 +19,8 @@ public class Arrow : MonoBehaviour {
         if (collision.gameObject.tag.Equals("Player") 
             || collision.gameObject.layer == 2 
             || collision.gameObject.layer == 9 
-            || collision.CompareTag("Area"))
+            || collision.CompareTag("Area")
+            || collision.CompareTag("TotemAggro"))
         {
             is_player = true;
         }
