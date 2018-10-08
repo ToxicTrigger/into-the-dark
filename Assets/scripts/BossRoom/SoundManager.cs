@@ -43,23 +43,20 @@ public class SoundManager : MonoBehaviour
     public SoundList sound_number;
 
     public AudioSource[] sound_list;
-
+    public AudioSource audio_source;
 
     private void Start()
     {
-        //sound_list[(int)SoundList.bossroom_idle].Play();
-        sound_list[(int)SoundList.heartbeat_1].Play();
-        sound_list[(int)SoundList.heartbeat_2].Play();
     }
 
     public void play_sound(SoundList _sound_number)
     {
+        //audio_source.PlayOneShot(sound_list[(int)_sound_number].clip);
         sound_list[(int)_sound_number].Play();
     }
 
     public void stop_sound(SoundList _sound_number, bool is_immediately)
     {
-
         if(!is_immediately)
             StartCoroutine(volume_ctrl(_sound_number));
         else

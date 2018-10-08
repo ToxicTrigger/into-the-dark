@@ -152,6 +152,13 @@ public class BossRoomManager : Observer {
         ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
     }
 
+    public void game_over(GroundCheck _this)
+    {
+        ui_black_screen.add_observer(this);
+        ui_black_screen.add_observer(_this);
+        ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+    }
+
     public override void notify(Observable observable)
     {
         if (observable.gameObject.GetComponent<BlackScreen>())
@@ -272,6 +279,7 @@ public class BossRoomManager : Observer {
         }
         Map_Initialization();
         player.transform.position = start_point.position;
+        
     }
 
     public void create_enemy(Vector3 _pos, Observer _observer)

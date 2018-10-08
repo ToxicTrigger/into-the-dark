@@ -133,60 +133,16 @@ public class Boss_Action : MonoBehaviour {
         if(rush_attack)
             create_point();
 
-        //around_transform의 위치를 변경시켜주는 코드
-        //if (idle_state)
-        //{
-        //    switch (rot_cnt)
-        //    {
-        //        case Rotate_Cnt.one:
-        //            around_transform.position += (rotate_pos[(int)Rotate_Cnt.two] - around_transform.position).normalized * idle_speed * Time.deltaTime;
-        //            if (Vector3.Distance(around_transform.position, rotate_pos[(int)Rotate_Cnt.two]) < 1.0f)
-        //            {
-        //                rot_cnt++;
-        //            }
-        //            break;
-        //        case Rotate_Cnt.two:
-        //            around_transform.position += (rotate_pos[(int)Rotate_Cnt.three] - around_transform.position).normalized * idle_speed * Time.deltaTime;
-        //            if (Vector3.Distance(around_transform.position, rotate_pos[(int)Rotate_Cnt.three]) < 1.0f)
-        //            {
-        //                rot_cnt++;
-        //            }
-        //            break;
-        //        case Rotate_Cnt.three:
-        //            around_transform.position += (rotate_pos[(int)Rotate_Cnt.four] - around_transform.position).normalized * idle_speed * Time.deltaTime;
-        //            if (Vector3.Distance(around_transform.position, rotate_pos[(int)Rotate_Cnt.four]) < 1.0f)
-        //            {
-        //                rot_cnt++;
-        //            }
-        //            break;
-        //        case Rotate_Cnt.four:
-        //            around_transform.position += (rotate_pos[(int)Rotate_Cnt.one] - around_transform.position).normalized * idle_speed * Time.deltaTime;
-        //            if (Vector3.Distance(around_transform.position, rotate_pos[(int)Rotate_Cnt.one]) < 1.0f)
-        //            {
-        //                rot_cnt = Rotate_Cnt.one;
-        //            }
-        //            break;
-        //        default:
-        //            break;
-        //    }
-
-        //}
-               
-
-        //around_transform.RotateAround(player.transform.position, Vector3.up, 2f);
-
         switch (state.get_state())
         {
             case Boss_State.State.Idle:
                 if (action_phase == 1)
                 {
-                    //BossRoomManager.get_instance().set_field_info(SendCollisionMessage.Field.NULL);
                     animator.SetBool("groggy", false);
                     action_phase = 2;
                 }
                 else if (action_phase == 2)
                 {
-                    //move_dir = (around_transform.position - this.transform.position).normalized;
                     transform.parent.position = around_transform.position;
                 }
                 break;
@@ -195,13 +151,6 @@ public class Boss_Action : MonoBehaviour {
 
                 if(action_phase ==1)
                 {
-                    //if(c_timer == null)
-                    //{
-                    //    c_timer = Normal_Timer(3,Boss_State.State.Rush_Attack);
-                    //    StartCoroutine(c_timer);
-                    //}
-                    //move_dir = (player.transform.position - transform.position).normalized;
-                    //move_dir.y = 0;
 
                     move_dir = (around_transform.position - transform.parent.position).normalized;
 
@@ -256,8 +205,6 @@ public class Boss_Action : MonoBehaviour {
                 else if(action_phase == 3)
                 {
                     Debug.Log( "3  -- " + action_phase);
-                    //Vector3 _dir = (around_transform.position - transform.parent.position).normalized;
-                    //Vector3 _dir = (around_transform.position - transform.parent.position).normalized;
                     move_dir.y = -1;//_dir.y-10;
                     transform.parent.position += move_dir * rush_speed * Time.deltaTime;
                     if (rush_attack && Vector2.Distance(new Vector2(player.transform.parent.position.x, player.transform.parent.position.z), new Vector2(transform.parent.position.x, transform.parent.position.z)) <= x_radius)
@@ -304,17 +251,16 @@ public class Boss_Action : MonoBehaviour {
                     transform.parent.position = new Vector3(cross_start.x, transform.parent.position.y, cross_start.z);
                     action_phase = 2;
 
+                    move_target = new Vector3(cross_end.x, cross_end.y, cross_end.z);
+                    origin_dis = Vector2.Distance(new Vector2(cross_start.x, cross_start.z), new Vector2(cross_end.x, cross_end.z));
+
                     jump_power = 1;
                 }
                 else if(action_phase ==2)
                 {
-                    move_target = new Vector3(cross_end.x, cross_end.y, cross_end.z);
-                    origin_dis = Vector2.Distance(new Vector2(cross_start.x, cross_start.z), new Vector2(cross_end.x, cross_end.z));
-
                     move_dir = (move_target - transform.parent.position).normalized;  //이동 방향        
                     float cur_dis = Vector2.Distance(new Vector2(transform.parent.position.x, transform.parent.position.z), new Vector2(move_target.x, move_target.z));
-
-                    move_dir.y = Mathf.Lerp(cross_height, -1.5f, (origin_dis - cur_dis) / origin_dis - 0.3f);
+                    move_dir.y = Mathf.Lerp(cross_height, -2.0f, (origin_dis - cur_dis) / origin_dis - 0.3f);
                     move_dir.y *= jump_power;
                     //if (move_dir.y < 0) move_dir.y *= jump_power;
 
@@ -332,7 +278,7 @@ public class Boss_Action : MonoBehaviour {
                     }
                     
 
-                    if (cur_dis < 1.0f && tail[tail.Length - 1].transform.parent.position.y < around_transform.position.y -10)//&& transform.position.y < move_target.y+5)
+                    if (cur_dis < 2 && tail[tail.Length - 1].transform.position.y < around_transform.position.y+10)//&& transform.position.y < move_target.y+5)
                     {
                         //EventManager.get_instance().camera_shake(c_shake_power_rush, c_shake_cnt_rush, c_shake_speed_rush, EventManager.Direction.Up_Down, c_shake_minus_rush);
                         //카메라 쉐이크
@@ -587,6 +533,12 @@ public class Boss_Action : MonoBehaviour {
     {
         Debug.Log("shake");
         ac.Shake(shake_tick, shake_power, Time.deltaTime);
+    }
+
+    public void set_cross_dis(float _dis, float _height)
+    {
+        cross_distance = _dis;
+        cross_height = _height;
     }
 
 }

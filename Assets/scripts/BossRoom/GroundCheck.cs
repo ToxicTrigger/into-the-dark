@@ -19,13 +19,14 @@ public class GroundCheck : Observer {
     SoundManager sound_manager;
     BossRoomManager manager;
     ActionCamera ac;
+    Boss_Action boss_action;
     public Boss_State boss_state;
     public UiStateText ui_state_text;
     public BlackScreen ui_black_screen;
     public AudioSource step_sound;
     int step_cnt;
     float on_ground_time;
-    bool is_cognition;  //보스의 인식
+    public bool is_cognition;  //보스의 인식
     public float sound_delay;
     public float playing_time;
     bool is_play;
@@ -61,6 +62,11 @@ public class GroundCheck : Observer {
 
     public float add_force_power;
 
+    public float fly_speed;
+    public float gravity;
+
+    IEnumerator fly_timer;
+
     void Start () {
         if (type != Type.Null)
         {
@@ -74,7 +80,20 @@ public class GroundCheck : Observer {
             }
         }
         ac = FindObjectOfType<ActionCamera>();
+        boss_action = boss_state.gameObject.GetComponent<Boss_Action>();
+    }
 
+    public IEnumerator shoot_player()
+    {
+        Vector3 dir = (transform.position - player.transform.position).normalized;
+
+        while(true)
+        {
+            dir.y -= gravity;
+            player.transform.position += dir * fly_speed * Time.deltaTime;
+            yield return new WaitForSeconds(0.01f);  
+            
+        }
     }
 
     private void Update()
@@ -85,8 +104,11 @@ public class GroundCheck : Observer {
             {
                 if (player != null)
                 {
-                    Vector3 dir = (transform.position - player.transform.position).normalized;
-                    
+                    if (fly_timer == null)
+                    {
+                        fly_timer = shoot_player();
+                        StartCoroutine(fly_timer);
+                    }
                     manager.game_over();
                     player = null;
                     //is_danger = false;
@@ -123,6 +145,8 @@ public class GroundCheck : Observer {
                     if (step_cnt >= cognition_step_count && !is_cognition)
                     {
                         is_cognition = true;
+                        boss_action.set_cross_dis(50,2.0f);
+                        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Cross_Attack, this);
                         sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
                     }
                 }
@@ -139,8 +163,8 @@ public class GroundCheck : Observer {
 
                 if (is_cognition)
                 {
-                    if (!sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].isPlaying)
-                    {
+                    if (!sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].isPlaying && (boss_state.get_state() == Boss_State.State.Idle || boss_state.get_state() == Boss_State.State.Move)) 
+                    {                        
                         sound_manager.play_sound(SoundManager.SoundList.heartbeat);
                         ac.Shake(shack_tick, power, shack_tick_by_time * Time.deltaTime);
                         heartbeat_count++;
@@ -176,6 +200,7 @@ public class GroundCheck : Observer {
 
                         if(heartbeat_count == 3)
                         {
+                            boss_action.set_cross_dis(30,2.3f);
                             StartCoroutine(attack_timer(Boss_State.State.Cross_Attack));
                             is_cognition = false;
                         }
@@ -191,7 +216,7 @@ public class GroundCheck : Observer {
         {
             is_ground = true;
             CancelInvoke();
-            player = other.gameObject;
+            player = other.transform.parent.gameObject;
         }
         if (other.CompareTag("Boss"))
         {
@@ -252,6 +277,11 @@ public class GroundCheck : Observer {
         {
             enemy_count--;
             //Debug.Log(this.name + "의 적 삭제 적용 단계" + enemy_count);
+        }
+        if (observable.gameObject.GetComponent<BlackScreen>())
+        {
+            StopCoroutine(fly_timer);
+            fly_timer = null;
         }
 
     }
