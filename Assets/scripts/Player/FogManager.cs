@@ -28,10 +28,7 @@ public class FogManager : MonoBehaviour
                 {
                     t.Stop();
                 }
-                else
-                {
-                    Debug.Log("Stop");
-                }
+
                 
             }
             else

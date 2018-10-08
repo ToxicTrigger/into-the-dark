@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour{
+public class Player : MonoBehaviour
+{
     bool is_attack;
     public Animator ani;
     Vector3 click_pos;
@@ -24,8 +25,7 @@ public class Player : MonoBehaviour{
     public GameObject totem;
     [Tooltip("플레이어가 토템을 겨냥하고 있나?")]
     public bool has_targeting_totem;
-    
-    public Text totem_cnt;
+
     public Damageable damageable;
     [Tooltip("검 모델을 넣으세요. 플레이어의 모델링 안에 들어있습니다.")]
     public GameObject Sword;
@@ -39,13 +39,13 @@ public class Player : MonoBehaviour{
 
     public GameObject sword_Effect;
 
-    [Range(-1, 1)]
+    [Range(-1 , 1)]
     public float step_one = 0.04f;
-    [Range(-1, 1)]
+    [Range(-1 , 1)]
     public float step_two = 0.06f;
-    [Range(-1, 1)]
+    [Range(-1 , 1)]
     public float step_three = 0.3f;
-    [Range(-1, 1)]
+    [Range(-1 , 1)]
     public float step_Dodge = 0.15f;
     public ActionCamera ac;
     public PlayerMove move;
@@ -55,37 +55,33 @@ public class Player : MonoBehaviour{
     public string cur_ani;
     public CharacterController character;
     public AudioSource Foot_Step, Sword_Sound;
-
     public GameObject Fail_UI;
+    
 
     public void Start()
     {
         character = GetComponent<CharacterController>();
         ani = GetComponent<Animator>();
         weapon = GetComponent<Weapon>();
-        totems = new List<GameObject>(3);
+        totems = new List<GameObject>();
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
         move = GetComponent<PlayerMove>();
-        
-        ac = FindObjectOfType<ActionCamera>();
-        
-        ac.SetStateTarget(this.transform , ActionCamera.State.Follow);
 
+        ac = FindObjectOfType<ActionCamera>();
+        ac.SetStateTarget(this.transform , ActionCamera.State.Follow);
     }
 
     public void setSwordEnable(int val)
     {
-        if (val == 0)
+        if( val == 0 )
         {
-            //Sword.SetActive(false);
             sword_Effect.SetActive(false);
             Sword.GetComponent<Collider>().enabled = false;
         }
         else
         {
             Sword.GetComponent<Collider>().enabled = true;
-            //Sword.SetActive(true);
             sword_Effect.SetActive(true);
             sword_Effect.GetComponent<TrailRenderer>().Clear();
             Sword_Sound.PlayOneShot(Sword_Sound.clip);
@@ -95,22 +91,22 @@ public class Player : MonoBehaviour{
     void gen_arrow()
     {
         Vector3 mouse = Input.mousePosition;
-        
-        GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject, weapon.fire_point.position, Quaternion.LookRotation(click_pos), null);
+
+        GameObject arrow = GameObject.Instantiate(weapon.arrow.gameObject , weapon.fire_point.position , Quaternion.LookRotation(click_pos) , null);
         arrow.GetComponent<Arrow>().look = weapon.fire_point.forward;
 
-        if(has_targeting_totem)
+        if( has_targeting_totem )
         {
             arrow.GetComponent<Arrow>().has_targeting_totem = true;
         }
-        
-        if (bow_time >= 3.2f & bow_time < 4f)
+
+        if( bow_time >= 3.2f & bow_time < 4f )
         {
             //강공격 여부 ㅇㅇ 
             arrow.GetComponent<Element>().type = Element.Type.Light;
         }
-        Destroy(arrow, 5.0f);
-        AggroManager.get_instance().gen_aggro(transform.position, 10 + bow_time, 3);
+        Destroy(arrow , 5.0f);
+        AggroManager.get_instance().gen_aggro(transform.position , 10 + bow_time , 3);
     }
 
     void calc_click_pos(bool sword)
@@ -119,37 +115,39 @@ public class Player : MonoBehaviour{
         has_targeting_totem = false;
         RaycastHit hit, coll;
         Vector3 mouse = Input.mousePosition;
-        if (Physics.Raycast(cam.ScreenPointToRay(mouse), out hit, 10000))
+        if( Physics.Raycast(cam.ScreenPointToRay(mouse) , out hit , 10000) )
         {
             //Debug.Log(hit.transform.gameObject.name);
             click_pos = hit.point;
             click_pos.y = transform.position.y + 0.1f;
 
             if( !sword )
-            line.gameObject.SetActive(true);
+                line.gameObject.SetActive(true);
 
             Vector3 pos = transform.position;
             pos.y += 0.5f;
 
-            if (!sword)
+            if( !sword )
             {
-                line.SetPosition(0, pos);
+                line.SetPosition(0 , pos);
             }
-                
-            if (Physics.Linecast(pos, click_pos, out coll))
+
+            if( Physics.Linecast(pos , click_pos , out coll) )
             {
-                if(coll.collider.CompareTag("TotemAggro"))
+                if( coll.collider.CompareTag("TotemAggro") )
                 {
-                    Debug.DrawLine(pos, click_pos, Color.red);
+                    Debug.DrawLine(pos , click_pos , Color.red);
                     click_pos = coll.collider.gameObject.transform.position;
                     has_targeting_totem = true;
-                    if(sword)
+                    if( sword )
                     {
-                        line.SetPosition(0, pos);
-                        line.SetPosition(1, click_pos);
+                        line.SetPosition(0 , pos);
+                        line.SetPosition(1 , click_pos);
                         line.startColor = Color.blue;
                         line.endColor = Color.yellow;
-                    }else{
+                    }
+                    else
+                    {
                         line.startColor = Color.yellow;
                         line.endColor = Color.yellow;
                     }
@@ -160,85 +158,78 @@ public class Player : MonoBehaviour{
                 line.startColor = Color.white;
                 line.endColor = Color.white;
             }
-            Debug.DrawLine(pos, click_pos, Color.white);
+            Debug.DrawLine(pos , click_pos , Color.white);
 
-            if (!sword)
+            if( !sword )
             {
-                line.SetPosition(1, click_pos);
+                line.SetPosition(1 , click_pos);
             }
-            
+
             transform.LookAt(click_pos);
         }
     }
 
-    int totem_size;
+    const int MAX_TOTEM = 5;
     void gen_totem()
     {
-        if(totems != null)
+        if( totems != null )
         {
-            cur_totems = totems.Count;
-            installable_totems = 3 - cur_totems;
-            if (Input.GetKeyDown(KeyCode.R))
+            if( Input.GetKeyDown(KeyCode.R) )
             {
-                is_build_totem = true;
-
-                IEnumerator iter = totems.GetEnumerator();
-                int i = 0;
-                while(iter.MoveNext())
+                // 먼저 제거할 것을 찾고 있다면 삭제 후 함수를 끝냄
+                foreach( var tt in totems )
                 {
-                    Debug.Log("Totem:" + i);
-                    GameObject tmp = iter.Current as GameObject;
-                    if (Vector3.Distance(tmp.transform.position, transform.position) <= 1.4f)
-                    {   
-                        Destroy(totems[i].gameObject);
-                        totems.RemoveAt(i);
-                        Debug.Log("Totem:" + i + " is Over");
-                    }
-                    i+=1;
-                }
-
-                if (totems.Count > 2)
-                {
-                    Destroy(totems[0].gameObject);
-                    totems.RemoveAt(0);
-                }
-
-                if( totem_size > 2)
-                {
-                    totem_size = 0;
-                }
-
-                GameObject t = Instantiate(totem, transform.position, Quaternion.identity, null);
-                totems.Insert(totems.Count , t);
-                ParticleSystem[] fogs = FindObjectsOfType<ParticleSystem>();
-                List<ParticleSystem> tmpFog = new List<ParticleSystem>();
-                foreach(var tmp in fogs)
-                {
-                    if(tmp.CompareTag("Fog"))
+                    if( Vector3.Distance(tt.transform.position , transform.position) <= 1.4f )
                     {
-                        tmpFog.Add(tmp);
+                        GameObject del = tt;
+                        totems.Remove(del);
+                        Destroy(del);
+                        ++installable_totems;
+                        return;
                     }
-                }
-
-                IEnumerator it = tmpFog.GetEnumerator();
-                while(it.MoveNext())
-                {
-                    ParticleSystem trigger = it.Current as ParticleSystem;
-                    trigger.trigger.SetCollider(1 + totems.Count + 1, t.transform.GetChild(1));
                 }
             }
-            if(Input.GetKeyUp(KeyCode.Q))
+
+            if( totems.Count < MAX_TOTEM && installable_totems > 0 )
             {
-                is_build_totem = false;
+                if( Input.GetKeyDown(KeyCode.R) )
+                {
+                    is_build_totem = true;
+                    // 토템 생성
+                    GameObject t = Instantiate(totem , transform.position , Quaternion.identity , null);
+                    totems.Add(t);
+                    --installable_totems;
+
+                    // 해당 씬에서 모든 파티클들의 ParticleSystem 을 가져옴
+                    ParticleSystem[] fogs = FindObjectsOfType<ParticleSystem>();
+                    // 가져온 파티클들 중 Fog 인 것을 골라 담음
+                    List<ParticleSystem> tmpFog = new List<ParticleSystem>();
+                    foreach( var tmp in fogs )
+                    {
+                        if( tmp.CompareTag("Fog") )
+                        {
+                            tmpFog.Add(tmp);
+                        }
+                    }
+
+                    // 가져온 안개들의 Trigger 에 해당 토템을 추가함
+                    foreach( var i in tmpFog )
+                    {
+                        ParticleSystem trigger = i;
+                        trigger.trigger.SetCollider(1 + totems.Count + 1 , t.transform.GetChild(1));
+                    }
+                }
+                if( Input.GetKeyUp(KeyCode.R) )
+                {
+                    is_build_totem = false;
+                }
             }
         }
     }
 
-
-
     void step_ani()
     {
-        switch (cur_ani)
+        switch( cur_ani )
         {
             case "Swing_0":
                 move.set_movement_zero();
@@ -252,20 +243,20 @@ public class Player : MonoBehaviour{
                 character.Move(transform.forward.normalized * step_three);
                 break;
             case "wakeUp":
-                ani.SetBool("Dodge", false);
+                ani.SetBool("Dodge" , false);
                 break;
             case "Dodge":
                 character.Move(transform.forward.normalized * step_Dodge * 2f);
                 break;
         }
-    
+
     }
     Vector3 g;
     void Update_Y_pos()
     {
-        if(!character.isGrounded)
+        if( !character.isGrounded )
         {
-            g += Vector3.up * (Physics.gravity.y * 0.1f) * Time.deltaTime;
+            g += Vector3.up * ( Physics.gravity.y * 0.1f ) * Time.deltaTime;
             character.Move(g);
         }
         else
@@ -279,29 +270,31 @@ public class Player : MonoBehaviour{
 
     void Click_Attack()
     {
-        if(attack_click)
+        if( attack_click )
         {
-            ani.SetBool("Attack", true);
+            ani.SetBool("Attack" , true);
             weapon.type = Weapon.Type.Sword;
             is_fighting_something = true;
         }
 
-        if(click_tick >= 0.5f)
-        {   
+        if( click_tick >= 0.5f )
+        {
             click_tick = 0;
             attack_click = false;
             is_fighting_something = false;
             is_attack = false;
             line.gameObject.SetActive(false);
-            
-        }else{
+
+        }
+        else
+        {
             click_tick += Time.deltaTime;
         }
     }
 
     void change_weapon_type()
     {
-        if(Input.GetKeyDown(KeyCode.Tab))
+        if( Input.GetKeyDown(KeyCode.Tab) )
         {
             weapon.type = weapon.type != Weapon.Type.Bow ? Weapon.Type.Bow : Weapon.Type.Sword;
         }
@@ -310,18 +303,18 @@ public class Player : MonoBehaviour{
 
     public void FixedUpdate()
     {
-        if(!damageable.Dead)
+        if( !damageable.Dead )
         {
-            if (Input.GetButton("Dodge"))
+            if( Input.GetButton("Dodge") )
             {
-                ani.SetFloat("Forward", 0.0f);
-                ani.SetFloat("Turn", 0.0f);
-                ani.SetBool("Dodge", true);
+                ani.SetFloat("Forward" , 0.0f);
+                ani.SetFloat("Turn" , 0.0f);
+                ani.SetBool("Dodge" , true);
                 //Input.ResetInputAxes();
             }
-            if (!is_attack)
+            if( !is_attack )
             {
-                ani.SetBool("Attack", false);
+                ani.SetBool("Attack" , false);
             }
         }
     }
@@ -329,73 +322,73 @@ public class Player : MonoBehaviour{
     public bool has_on_ladder;
     float end_tick;
 
-    public void Update ()
+    public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if( Input.GetKeyDown(KeyCode.Escape) )
         {
             Application.Quit();
-            
+
         }
-        if(damageable.Dead)
+        if( damageable.Dead )
         {
             Fail_UI.SetActive(true);
         }
         else
         {
-            if (end_tick <= 1.0f)
+            if( end_tick <= 1.0f )
             {
                 end_tick += Time.deltaTime;
             }
             else
             {
-                damageable.Damaged(2, 0);
+                damageable.Damaged(2 , 0);
                 end_tick = 0;
             }
 
-            if(!has_on_ladder)
-            Update_Y_pos();
+            if( !has_on_ladder )
+                Update_Y_pos();
 
             Vector3 tmp = transform.position;
             tmp.y = 10f;
             gen_totem();
-            cur_ani = ani.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+            cur_ani = ani.GetCurrentAnimatorClipInfo(0)[ 0 ].clip.name;
             step_ani();
-            ani.SetFloat("Bow_Fire", bow_time);
+            ani.SetFloat("Bow_Fire" , bow_time);
             change_weapon_type();
             Click_Attack();
 
-            if (Input.GetButtonDown("Fire1"))
+            if( Input.GetButtonDown("Fire1") )
             {
-                if (weapon.type.Equals(Weapon.Type.Sword))
+                if( weapon.type.Equals(Weapon.Type.Sword) )
                 {
                     attack_click = true;
                     click_tick = 0;
                 }
             }
-            else if (Input.GetButton("Fire1"))
+            else if( Input.GetButton("Fire1") )
             {
-                if (!weapon.type.Equals(Weapon.Type.Sword))
+                if( !weapon.type.Equals(Weapon.Type.Sword) )
                 {
                     bow_time += Time.deltaTime;
-                    if (!bow_fullback.isPlaying) bow_fullback.Play();
+                    if( !bow_fullback.isPlaying ) bow_fullback.Play();
                     is_fighting_something = true;
                     calc_click_pos(false);
                 }
             }
 
-            if (Input.GetMouseButtonUp(0))
+            if( Input.GetMouseButtonUp(0) )
             {
                 is_fighting_something = false;
-                if (weapon.isUsing)
+                if( weapon.isUsing )
                 {
-                    if (bow_time >= 0.5f)
+                    if( bow_time >= 0.5f )
                     {
                         calc_click_pos(false);
                         gen_arrow();
 
                         bow_time = 0f;
                         line.gameObject.SetActive(false);
-                        if (!bow_release.isPlaying)
+                        if( !bow_release.isPlaying )
                         {
                             bow_fullback.Stop();
                             bow_release.Play();
@@ -405,7 +398,7 @@ public class Player : MonoBehaviour{
                     {
                         bow_time = 0f;
                         line.gameObject.SetActive(false);
-                        if (!bow_release.isPlaying)
+                        if( !bow_release.isPlaying )
                         {
                             bow_fullback.Stop();
                         }

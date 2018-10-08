@@ -21,7 +21,7 @@ public class CamClear : MonoBehaviour
             if(ray.collider != null)
             {
                 Debug.Log(ray.collider.name);
-                if(!ray.collider.CompareTag("Player"))
+                if(!ray.collider.CompareTag("Player") && !ray.collider.CompareTag("TotemAggro"))
                 {
                     cur = now;
                     now = ray.collider;
