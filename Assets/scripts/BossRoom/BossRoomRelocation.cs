@@ -102,7 +102,7 @@ public class BossRoomRelocation : MonoBehaviour {
                 _switch.new_switch_set(reloc_set[phase].torch_set[i].switch_object.Length - 1);
                 _switch.set_foot_switch(_f_switch);
 
-                _f_switch.set_ground(_switch);
+                _f_switch.set_ground(_switch.gameObject);
             }
 
 
@@ -133,8 +133,11 @@ public class BossRoomRelocation : MonoBehaviour {
         {
             for (int z = 0; z < 4; z++)
             {
-                if (reloc_set[phase].ground_list[i].enemy_count > 8)
+                if (reloc_set[phase].ground_list[i].enemy_count >= 16)
+                {
+                   // Debug.Log(reloc_set[phase].ground_list[i].name + "의 몬스터 생성 정지 : " + z+"개 생성!! 해당 땅의 적 수 = "+ reloc_set[phase].ground_list[i].enemy_count);
                     break;
+                }
 
                 BossRoomManager.get_instance().create_enemy(reloc_set[phase].ground_list[i].enemy_position[z].position,
                                                             reloc_set[phase].ground_list[i].gameObject.GetComponent<Observer>());
@@ -160,8 +163,10 @@ public class BossRoomRelocation : MonoBehaviour {
 
         if (reloc_set[phase].c_pillar.Length > 0)
         {
-            for (int i = 0; i < reloc_set[phase ].c_pillar.Length; i++)
-                reloc_set[phase ].c_pillar[i].crumbling_all();
+            for (int i = 0; i < reloc_set[phase].c_pillar.Length; i++)
+            {
+                reloc_set[phase].c_pillar[i].crumbling_all();
+            }
         }
 
     }

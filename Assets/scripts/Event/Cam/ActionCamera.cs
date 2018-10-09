@@ -175,7 +175,7 @@ public class ActionCamera : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         command = new Queue<State>();
 

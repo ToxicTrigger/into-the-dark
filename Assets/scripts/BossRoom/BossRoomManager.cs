@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossRoomManager : MonoBehaviour {  
+public class BossRoomManager : Observer {  
 
     private static BossRoomManager instance = null;
 
@@ -27,6 +27,7 @@ public class BossRoomManager : MonoBehaviour {
     Boss_State boss_state;
     Boss_Action boss_action;
     public Player player;
+    SoundManager sound_manager;
     Vector3 cross_point = Vector3.zero;
     public Transform start_point;
     public AncientWeapon ancient_weapon;
@@ -50,6 +51,7 @@ public class BossRoomManager : MonoBehaviour {
     public BossHpUI boss_hp_ui;
     public UiGroggyPoint boss_groggy_ui;
     public AWTimerUI ancient_timer_ui;
+    public BlackScreen ui_black_screen;
 
     public TimeSelector time_selector;
 
@@ -67,6 +69,12 @@ public class BossRoomManager : MonoBehaviour {
     InitialValue init_val;
 
     public GroundCheck []wood_bridge;
+    public CrumblingPillar[] pillar_list;
+    public bool is_entrance;
+    public bool is_puzzle_clear;
+    public bool is_stage_clear;
+
+    public bool is_game_over;
 
     void Awake()
     {
@@ -74,28 +82,23 @@ public class BossRoomManager : MonoBehaviour {
         init_val.phase = Phase.one;
 
         field = SendCollisionMessage.Field.NULL;
-        //idle_sound.Play();
         boss_state = boss.gameObject.GetComponent<Boss_State>();
         boss_action = boss.gameObject.GetComponent<Boss_Action>();
 
         player_enter_bossroom();
+        sound_manager = SoundManager.get_instance();
 
-        //GameObject _player_coll = (GameObject)Instantiate(player_coll.gameObject,
-        //                                                player.transform.position, Quaternion.identity);
-
-        //_player_coll.transform.SetParent(player.gameObject.transform);
-        //_player_coll.transform.position = player.transform.position;
     }
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
     public void player_enter_bossroom()
     {
-        //아무것도 하지 않고있던 보스를 Idle상태로 변화시킨다.
-        //페이즈를 1로 변화시킨다. 
-        //페이즈1에 해당하는 정보로 맵을 초기화시킨다.
         phase = Phase.one;
         Map_Initialization();
-        
+        if(!is_entrance)
+        {
+            //입장 연출 추가
+        }
     }
 
     //페이즈 정보에 따라 맵을 초기화한다.
@@ -142,6 +145,44 @@ public class BossRoomManager : MonoBehaviour {
         //    reloc.hit_switch[i].set_switch(false);
         //    reloc.hit_switch[i].off_switch_set();
         //}
+    }
+
+    public void game_over()
+    {
+        if (!is_game_over)
+        {
+            is_game_over = true;
+            ui_black_screen.add_observer(this);
+            ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+        }
+    }
+
+    public void game_over(GroundCheck _this)
+    {
+        if (!is_game_over)
+        {
+            is_game_over = true;
+            ui_black_screen.add_observer(this);
+            ui_black_screen.add_observer(_this);
+            ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+        }
+    }
+
+    public override void notify(Observable observable)
+    {
+        if (observable.gameObject.GetComponent<BlackScreen>())
+        {
+            BlackScreen torch = observable as BlackScreen;
+            
+            if (torch.get_screen_state() == BlackScreen.ScreenState.Fade_Out)
+            {
+                //플ㄹ레이어 사망, 맵 재시작
+                init_bossroom();
+                ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_In);
+                sound_manager.stop_sound(SoundManager.SoundList.boss_ready_real, false);
+                is_game_over = false;
+            }
+        }
     }
 
     public void send_boss_state(Boss_State.State _state, GroundCheck _gameobj)
@@ -209,10 +250,21 @@ public class BossRoomManager : MonoBehaviour {
         return ancient_weapon;
     }
 
+    public bool get_is_puzzle_clear()
+    {
+        return is_puzzle_clear;
+    }
+
+    public void set_is_puzzle_clear(bool _is_clear)
+    {
+        is_puzzle_clear = _is_clear;
+    }
+
     public void init_bossroom()
     {
         for (int i = 0; i < reloc.get_reloc((int)phase).torch_set[0].foot_switch.Length; i++)
         {
+            reloc.get_reloc((int)phase).torch_set[0].switch_object[i].set_switch(false);
             Destroy(reloc.get_reloc((int)phase).torch_set[0].foot_switch[i].gameObject);
             Destroy(reloc.get_reloc((int)phase).torch_set[0].switch_object[i].gameObject);
         }
@@ -221,16 +273,22 @@ public class BossRoomManager : MonoBehaviour {
         {
             Destroy(enemy_list[i]);
         }
+        enemy_list.Clear();
         get_boss().set_hp(init_val.boss_hp);
-        phase = init_val.phase;
+        //boss_state.set_state(Boss_State.State.Idle,null);
+        phase = init_val.phase;        
 
         for(int i=0; i<wood_bridge.Length; i++)
         {
             wood_bridge[i].initialize_bridge();
         }
-
+        for (int i = 0; i < pillar_list.Length; i++)
+        {
+            pillar_list[i].init_floor();
+        }
         Map_Initialization();
         player.transform.position = start_point.position;
+        
     }
 
     public void create_enemy(Vector3 _pos, Observer _observer)

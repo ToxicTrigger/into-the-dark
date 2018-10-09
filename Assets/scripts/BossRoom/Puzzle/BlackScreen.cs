@@ -78,6 +78,7 @@ public class BlackScreen : Observable
             Observer _observers = this.observers[i] as Observer;
             _observers.notify(this);
         }
+        observers.Clear();
     }
 
     public ScreenState get_screen_state()

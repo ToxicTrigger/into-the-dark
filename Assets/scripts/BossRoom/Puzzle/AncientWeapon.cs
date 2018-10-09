@@ -32,6 +32,8 @@ public class AncientWeapon : Observer
 
     void Start()
     {
+        manager = BossRoomManager.get_instance();
+
         _timer = activate_timer();
         state = State.Activated;  //초기 상태는 비활성화된 상태
         if (ready_timer == null)
@@ -87,18 +89,15 @@ public class AncientWeapon : Observer
         animator.SetBool("activate", true);
         //weapon_light.gameObject.SetActive(true);
         state = State.Activated;
-        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy,BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
 
-        StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
+        //StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
         //_timer = activate_timer();  //새로운 코루틴 할당 
-        StartCoroutine(_timer);
+        //StartCoroutine(_timer);
     }
 
     //활성화 타이머
     IEnumerator activate_timer()
     {
-        //if (activate_count < time_list.Length - 1)
-        //    activate_count++;   //활성화 횟수를 증가시킨다.
         BossRoomManager.get_instance().get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
         yield return new WaitForSeconds(time_list[(int)BossRoomManager.get_instance().phase]);
 
@@ -107,7 +106,6 @@ public class AncientWeapon : Observer
             ready_timer = ready_action(false);
             StartCoroutine(ready_timer);
         }
-        //deactivate();   //일정 시간이 지나면 비활성화 시키는 함수를 호출한다.
     }
 
 
@@ -134,6 +132,12 @@ public class AncientWeapon : Observer
         {
             activate();
             move_dir = Vector3.up;
+            if(!manager.get_is_puzzle_clear())
+            {
+                //퍼즐 클리어 연출 추가
+
+                manager.set_is_puzzle_clear(true);
+            }
         }
 
         move_dir.y *= move_y / ready_time;
@@ -145,7 +149,13 @@ public class AncientWeapon : Observer
             transform.position += move_dir;
             yield return new WaitForSeconds(0.01f);
         }
-
+        if (state == State.Activated)
+        {
+            BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy, BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
+            StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
+            _timer = activate_timer();  //새로운 코루틴 할당 
+            StartCoroutine(_timer);
+        }
         move_dir = Vector3.zero;
         ready_timer = null;
         SoundManager.get_instance().stop_sound(SoundManager.SoundList.rumble,true);

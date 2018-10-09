@@ -14,12 +14,12 @@ public class PillarFloor : MonoBehaviour {
     public GameObject piece;
     public GameObject[] damage_obj; 
 
-    bool crack;        //균열이 있는지?
-    bool crumbling; //무너지는 중?
-    Vector3 target_position;
-    float speed;
-    float rot_speed;
-
+    public bool crack;        //균열이 있는지?
+    public bool crumbling; //무너지는 중?
+    public Vector3 target_position;
+    public float speed;
+    public float rot_speed;
+    public float piece_scale;
     float origin_dis;
     Quaternion target_rot = Quaternion.identity;
 
@@ -80,6 +80,7 @@ public class PillarFloor : MonoBehaviour {
                     for (int i = 0; i < piece.transform.childCount; i++)
                     {
                         GameObject c_piece = (GameObject)Instantiate(piece.transform.GetChild(i).gameObject , transform.position, Quaternion.identity);
+                        c_piece.transform.localScale = new Vector3(piece_scale, piece_scale, piece_scale);
                     }
 
                     Destroy(gameObject);
