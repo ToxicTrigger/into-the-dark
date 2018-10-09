@@ -102,7 +102,7 @@ public class BossRoomRelocation : MonoBehaviour {
                 _switch.new_switch_set(reloc_set[phase].torch_set[i].switch_object.Length - 1);
                 _switch.set_foot_switch(_f_switch);
 
-                _f_switch.set_ground(_switch);
+                _f_switch.set_ground(_switch.gameObject);
             }
 
 

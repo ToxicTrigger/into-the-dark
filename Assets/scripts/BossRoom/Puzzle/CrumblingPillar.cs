@@ -40,13 +40,10 @@ public class CrumblingPillar : MonoBehaviour {
     
     public void init_floor()
     {
-        Debug.Log("init_floor");
         if (is_crumbling)
         {
-            Debug.Log("is_crumbling");
             for (int i = 0; i < floor_list.Length; i++)
             {
-                Debug.Log("재생성 재배치");
                 PillarFloor _pillar = Instantiate(floor_list[i].pillar_model, floor_list[i].pillar_model.transform.position, floor_list[i].pillar_model.transform.rotation, this.transform);
                 _pillar.gameObject.SetActive(true);                
                 if (floor_list[i].pillar_clone != null)

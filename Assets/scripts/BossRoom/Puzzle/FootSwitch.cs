@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FootSwitch : Observer {
 
-    TimeSwitch switch_ground;
+    public GameObject switch_ground;
     public float move_speed;
     public Vector3 idle_position;
     public float y_up_pos;
@@ -26,7 +26,7 @@ public class FootSwitch : Observer {
             on_count++;
             Debug.Log("발판에 올라옴");
 
-            switch_ground.set_use_enable(true);
+            switch_ground.GetComponent<TimeSwitch>().set_use_enable(true);
             ground_move_ctrl(Vector3.up);
             if(other.CompareTag("Enemy"))
             {
@@ -68,9 +68,9 @@ public class FootSwitch : Observer {
                 switch_ground.transform.position.y < idle_position.y)
             {
                 switch_ground.transform.position = idle_position;
-                if (switch_ground.get_switch())
+                if (switch_ground.GetComponent<TimeSwitch>().get_switch())
                 {
-                    switch_ground.off_switch();
+                    switch_ground.GetComponent<TimeSwitch>().off_switch();
                 }
                 break;
             }
@@ -78,7 +78,7 @@ public class FootSwitch : Observer {
         sound_manager.stop_sound(SoundManager.SoundList.rumble, true);
     }
 
-    public void set_ground(TimeSwitch _ground)
+    public void set_ground(GameObject _ground)
     {
         switch_ground = _ground;
         idle_position = switch_ground.transform.position;
@@ -107,7 +107,7 @@ public class FootSwitch : Observer {
     {
         if (on_count <= 0 && BossRoomManager.get_instance().get_ancient_weapon().get_state() != AncientWeapon.State.Activated)
         {
-            switch_ground.set_use_enable(false);
+            switch_ground.GetComponent<TimeSwitch>().set_use_enable(false);
             ground_move_ctrl(Vector3.down);
         }
     }

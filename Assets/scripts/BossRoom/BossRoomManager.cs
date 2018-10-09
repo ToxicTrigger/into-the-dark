@@ -73,7 +73,8 @@ public class BossRoomManager : Observer {
     public bool is_entrance;
     public bool is_puzzle_clear;
     public bool is_stage_clear;
-    
+
+    public bool is_game_over;
 
     void Awake()
     {
@@ -148,15 +149,23 @@ public class BossRoomManager : Observer {
 
     public void game_over()
     {
-        ui_black_screen.add_observer(this);
-        ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+        if (!is_game_over)
+        {
+            is_game_over = true;
+            ui_black_screen.add_observer(this);
+            ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+        }
     }
 
     public void game_over(GroundCheck _this)
     {
-        ui_black_screen.add_observer(this);
-        ui_black_screen.add_observer(_this);
-        ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+        if (!is_game_over)
+        {
+            is_game_over = true;
+            ui_black_screen.add_observer(this);
+            ui_black_screen.add_observer(_this);
+            ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+        }
     }
 
     public override void notify(Observable observable)
@@ -170,8 +179,8 @@ public class BossRoomManager : Observer {
                 //플ㄹ레이어 사망, 맵 재시작
                 init_bossroom();
                 ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_In);
-                ui_black_screen.remove_observer(this);
                 sound_manager.stop_sound(SoundManager.SoundList.boss_ready_real, false);
+                is_game_over = false;
             }
         }
     }

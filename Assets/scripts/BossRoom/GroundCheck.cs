@@ -36,6 +36,7 @@ public class GroundCheck : Observer {
 
     public bool is_danger;
     public GameObject player;
+    public GameObject _player;
 
     public Transform [] enemy_position;
 
@@ -67,6 +68,8 @@ public class GroundCheck : Observer {
 
     IEnumerator fly_timer;
 
+    public bool re_start;
+
     void Start () {
         if (type != Type.Null)
         {
@@ -86,14 +89,17 @@ public class GroundCheck : Observer {
     public IEnumerator shoot_player()
     {
         Vector3 dir = (transform.position - player.transform.position).normalized;
-
+        _player = player;
         while(true)
         {
             dir.y -= gravity;
-            player.transform.position += dir * fly_speed * Time.deltaTime;
-            yield return new WaitForSeconds(0.01f);  
-            
+            _player.transform.position += dir * fly_speed * Time.deltaTime;
+            yield return new WaitForSeconds(0.01f);
+            if (re_start)
+                break;
         }
+        _player = null;
+        fly_timer = null;
     }
 
     private void Update()
@@ -106,10 +112,11 @@ public class GroundCheck : Observer {
                 {
                     if (fly_timer == null)
                     {
+                        re_start = false;
                         fly_timer = shoot_player();
                         StartCoroutine(fly_timer);
                     }
-                    manager.game_over();
+                    manager.game_over(this);
                     player = null;
                     //is_danger = false;
                 }
@@ -245,7 +252,6 @@ public class GroundCheck : Observer {
     void clear_guard()
     {
         power = shack_power;
-        //Debug.Log("땅 초기화" + this.name);
         heartbeat_count = 0;
         on_ground_time = 0;
         is_ground = false;
@@ -255,9 +261,9 @@ public class GroundCheck : Observer {
         tick_count = cognition_time_list[0];
         cognition_text = false;
         attack_ready_text = false;
-        player = null;
         sound_delay_init();
         set_danger(false);
+        player = null;
     }
 
     void sound_delay_init()
@@ -273,6 +279,7 @@ public class GroundCheck : Observer {
 
     public override void notify(Observable observable)
     {
+        Debug.Log(observable.name);
         if (observable.gameObject.GetComponent<DestroyCheck>())
         {
             enemy_count--;
@@ -280,8 +287,7 @@ public class GroundCheck : Observer {
         }
         if (observable.gameObject.GetComponent<BlackScreen>())
         {
-            StopCoroutine(fly_timer);
-            fly_timer = null;
+            re_start = true;
         }
 
     }
