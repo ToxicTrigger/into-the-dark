@@ -20,35 +20,26 @@ public class HpUi : MonoBehaviour
 
     void Update()
     {
-        for( int i = 0 ; i < (int)( player_hp.Max_Hp / 100 ) ; ++i )
+        for( int i = 0 ; i < (int)( player_hp.Max_Hp / 100 ); ++i )
         {
             Hp_bars[ i ].enabled = true;
             Hp_Reds[ i ].enabled = true;
             Hps[ i ].SetActive(true);
             Vector3 des;
+            int hp = (int)( player_hp.Max_Hp / 100 );
 
-            //End 옮기는 코드 문제 있는 듯.
-            if( i == 0 )
+            des = new Vector3(196 + ( ( i + 2 ) * 185 ) , -1.6f , 0);
+            Hp_bars[ i ].fillAmount =  ( (player_hp.Hp - i * 100) * 0.01f );
+            End.anchoredPosition3D = Vector3.Lerp(End.anchoredPosition3D , des , Time.deltaTime * 2);
+
+            if( Hp_bars[i].fillAmount == 0)
             {
-                Hp_bars[ i ].fillAmount = ( player_hp.Hp * 0.01f );
-                des = new Vector3(196 , -1.6f , 0);
-                End.anchoredPosition3D = Vector3.Lerp(End.anchoredPosition3D , des , Time.deltaTime * 2);
+                Hp_Reds[ i ].fillAmount = 0;
             }
             else
             {
-                des = new Vector3(196 + ((i+1) * 256) , -1.6f , 0);
-                End.anchoredPosition3D = Vector3.Lerp(End.anchoredPosition3D , des , Time.deltaTime * 2);
-                Hp_bars[ i ].fillAmount = ( ( player_hp.Max_Hp / 100 ) - ( i ) ) * ( ( player_hp.Hp * 0.01f ) - i );
+                Hp_Reds[ i ].fillAmount = Mathf.Lerp(Hp_Reds[ i ].fillAmount , Hp_bars[ i ].fillAmount , Time.deltaTime * 2);
             }
-
-            if( i == 2)
-            {
-                des = new Vector3(196 + ( ( i + 2 ) * 185 ) , -1.6f , 0);
-                End.anchoredPosition3D = Vector3.Lerp(End.anchoredPosition3D , des , Time.deltaTime * 2);
-
-            }
-
-            Hp_Reds[ i ].fillAmount = Mathf.Lerp(Hp_Reds[ i ].fillAmount , Hp_bars[ i ].fillAmount , Time.deltaTime);
         }
 
         for( int i = 2 ; i > (int)( player_hp.Max_Hp / 100 ) - 1 ; --i )

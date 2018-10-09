@@ -14,9 +14,8 @@ public class PlayerMove : InputHandler
         get { return _moveSpeed; }
         set { _moveSpeed = value; }
     }
-
-    [SerializeField]
-    private Vector3 movement;
+    
+    public Vector3 movement;
 
     float foot_step_tick;
     bool has_ground;

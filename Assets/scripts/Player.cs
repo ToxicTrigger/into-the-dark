@@ -245,6 +245,9 @@ public class Player : MonoBehaviour
             case "wakeUp":
                 ani.SetBool("Dodge" , false);
                 break;
+            case "stand":
+                character.Move(transform.forward.normalized * step_Dodge * 1.6f);
+                break;
             case "Dodge":
                 character.Move(transform.forward.normalized * step_Dodge * 2f);
                 break;
@@ -296,22 +299,42 @@ public class Player : MonoBehaviour
     {
         if( Input.GetKeyDown(KeyCode.Tab) )
         {
+            FindObjectOfType<WeaponUI>().changed = false;
             weapon.type = weapon.type != Weapon.Type.Bow ? Weapon.Type.Bow : Weapon.Type.Sword;
         }
     }
     public float num;
 
+    public float dodge_tick;
+    bool dodged;
     public void FixedUpdate()
     {
         if( !damageable.Dead )
         {
-            if( Input.GetButton("Dodge") )
+            if( !dodged )
             {
-                ani.SetFloat("Forward" , 0.0f);
-                ani.SetFloat("Turn" , 0.0f);
-                ani.SetBool("Dodge" , true);
-                //Input.ResetInputAxes();
+                if( Input.GetButton("Dodge") )
+                {
+                    //TODO :: 회피 코드 수정하기
+                    //        현재 바라보는 방향이 아닌 입력되고 있는 방향으로의 회피
+                    ani.SetBool("Dodge" , true);
+                    dodged = true;
+                }
             }
+            else
+            {
+                if(dodge_tick >= 1f)
+                {
+                    dodged = false;
+                    dodge_tick = 0;
+                }
+                else
+                {
+                    dodge_tick += Time.deltaTime;
+                }
+            }
+
+
             if( !is_attack )
             {
                 ani.SetBool("Attack" , false);

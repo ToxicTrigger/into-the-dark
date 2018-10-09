@@ -2011,7 +2011,7 @@ MonoBehaviour:
   step_one: 0.02
   step_two: 0.04
   step_three: 0.08
-  step_Dodge: 0.15
+  step_Dodge: 0.1
   ac: {fileID: 129536414}
   move: {fileID: 195155688}
   cur_ani: Player_Idle
@@ -2022,6 +2022,7 @@ MonoBehaviour:
   attack_click: 0
   click_tick: 0.23344576
   num: 0
+  dodge_tick: 0
   has_on_ladder: 0
 --- !u!143 &195155687
 CharacterController:
@@ -2073,7 +2074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Hp: 100
-  Max_Hp: 300
+  Max_Hp: 200
   has_hit: 0
   Dead: 0
   only_player: 0
@@ -9554,7 +9555,7 @@ GameObject:
   - component: {fileID: 481960701}
   - component: {fileID: 481959870}
   - component: {fileID: 481960874}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Stage 3
   m_TagString: Area
   m_Icon: {fileID: 0}
@@ -46982,7 +46983,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.571
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
 --- !u!222 &904220346
@@ -49367,15 +49368,15 @@ RectTransform:
   m_GameObject: {fileID: 1171759998}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.36098433, y: 0.36098433, z: 0.36098433}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2090978088}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 34.7, y: -35}
-  m_SizeDelta: {x: 68, y: 102}
+  m_AnchoredPosition: {x: 32.8, y: -32.9}
+  m_SizeDelta: {x: 31, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1171760000
 MonoBehaviour:
@@ -63165,7 +63166,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.306
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
 --- !u!222 &1613503846
@@ -63490,7 +63491,7 @@ RectTransform:
   m_GameObject: {fileID: 1639196353}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5969454, y: 0.5969454, z: 0.5969454}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2090978088}
   m_RootOrder: 2
@@ -63498,7 +63499,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -4.4, y: 1.5}
-  m_SizeDelta: {x: 34, y: 102}
+  m_SizeDelta: {x: 51, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1639196355
 MonoBehaviour:
@@ -65709,7 +65710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -67688,6 +67689,7 @@ GameObject:
   - component: {fileID: 2090978088}
   - component: {fileID: 2090978090}
   - component: {fileID: 2090978089}
+  - component: {fileID: 2090978091}
   m_Layer: 2
   m_Name: Weapon_Title
   m_TagString: Untagged
@@ -67751,6 +67753,28 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2090978087}
   m_CullTransparentMesh: 0
+--- !u!114 &2090978091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2090978087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dddfb5bdb9a8ab429dfb9de351adb37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Main: {fileID: 1639196355}
+  Sub: {fileID: 1171760000}
+  player: {fileID: 0}
+  use_sword: {fileID: 21300000, guid: 6004cba4789802e48a4353aee8aa0d8d, type: 3}
+  unuse_sword: {fileID: 21300000, guid: 772870e5f13b34c4d98bb216064f7e95, type: 3}
+  use_bow: {fileID: 21300000, guid: b37cfce4f9f4ed744972f9fb6fbd9243, type: 3}
+  unuse_bow: {fileID: 21300000, guid: 864ebf4ade17d9347a99e6a6c635b493, type: 3}
+  alpha: {fileID: 1876775214}
+  a: {r: 1, g: 1, b: 1, a: 0}
+  aa: 0
+  changed: 0
 --- !u!1 &2096862656
 GameObject:
   m_ObjectHideFlags: 0
