@@ -14,7 +14,7 @@ public class PlayerMove : InputHandler
         get { return _moveSpeed; }
         set { _moveSpeed = value; }
     }
-    
+
     public Vector3 movement;
 
     float foot_step_tick;
@@ -66,43 +66,34 @@ public class PlayerMove : InputHandler
             transform.rotation = Quaternion.Slerp(transform.rotation , q , moveSpeed * 1.5f);
 
 
-            if( Input.GetButton("Dash") )
+            if( Input.GetButton("Dash") && stamina.GetFloat("_Amount") < 0 )
             {
-                if (stamina.GetFloat("_Amount") < 0)
+
+                if( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
                 {
-                    if (im.get_Horizontal() != 0 && im.get_Horizontal() > 0)
-                    {
-                        movement = Vector3.Lerp(movement, player.ac.cam.transform.right.normalized * moveSpeed * 5f, moveSpeed);
-                    }
-                    else if (im.get_Horizontal() != 0 && im.get_Horizontal() < 0)
-                    {
-                        movement = Vector3.Lerp(movement, -player.ac.cam.transform.right.normalized * moveSpeed * 5f, moveSpeed);
-                    }
-
-                    if (im.get_Vertical() != 0 && im.get_Vertical() > 0)
-                    {
-                        movement = Vector3.Lerp(movement, player.ac.cam.transform.forward.normalized * moveSpeed * 5f, moveSpeed);
-
-                    }
-                    else if (im.get_Vertical() != 0 && im.get_Vertical() < 0)
-                    {
-                        movement = Vector3.Lerp(movement, -player.ac.cam.transform.forward.normalized * moveSpeed * 5f, moveSpeed);
-                    }
-                    stamina.SetFloat("_Amount", stamina.GetFloat("_Amount") + 0.01f);
+                    movement = Vector3.Lerp(movement , player.ac.cam.transform.right.normalized * moveSpeed * 5f , moveSpeed);
                 }
+                else if( im.get_Horizontal() != 0 && im.get_Horizontal() < 0 )
+                {
+                    movement = Vector3.Lerp(movement , -player.ac.cam.transform.right.normalized * moveSpeed * 5f , moveSpeed);
+                }
+
+                if( im.get_Vertical() != 0 && im.get_Vertical() > 0 )
+                {
+                    movement = Vector3.Lerp(movement , player.ac.cam.transform.forward.normalized * moveSpeed * 5f , moveSpeed);
+
+                }
+                else if( im.get_Vertical() != 0 && im.get_Vertical() < 0 )
+                {
+                    movement = Vector3.Lerp(movement , -player.ac.cam.transform.forward.normalized * moveSpeed * 5f , moveSpeed);
+                }
+                stamina.SetFloat("_Amount" , stamina.GetFloat("_Amount") + 0.005f);
+
             }
             else
             {
-                if(stamina.GetFloat("_Amount") < -1)
-                {
-                    stamina.SetFloat("_Amount", -1);
-                }
-                else
-                {
-                    stamina.SetFloat("_Amount", stamina.GetFloat("_Amount") - 0.012f);
-                }
 
-                if ( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
+                if( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
                 {
                     movement = Vector3.Lerp(movement , player.ac.cam.transform.right.normalized * moveSpeed , moveSpeed);
                 }
@@ -198,6 +189,14 @@ public class PlayerMove : InputHandler
         {
             update_fall();
             update_move_player_checkPoint();
+        }
+        if( stamina.GetFloat("_Amount") < -1 )
+        {
+            stamina.SetFloat("_Amount" , -1);
+        }
+        else if( stamina.GetFloat("_Amount") != -1 )
+        {
+            stamina.SetFloat("_Amount" , stamina.GetFloat("_Amount") - 0.003f);
         }
     }
 
