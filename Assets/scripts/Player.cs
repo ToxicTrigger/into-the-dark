@@ -364,7 +364,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                damageable.Damaged(2 , 0);
+                damageable.Damaged(0.5f , 0);
                 end_tick = 0;
             }
 

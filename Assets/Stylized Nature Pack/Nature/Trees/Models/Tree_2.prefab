@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 19388122}
   - component: {fileID: 3373892}
   - component: {fileID: 2309914}
-  m_Layer: 0
+  - component: {fileID: 64520223627761540}
+  m_Layer: 8
   m_Name: Tree_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,13 +25,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155120}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.53, y: 0, z: 2.77}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0.94505525, z: -0, w: -0.32691064}
+  m_LocalPosition: {x: 12.872696, y: 6.870735, z: -35.429535}
+  m_LocalScale: {x: 2.0664043, y: 2.066401, z: 2.0664046}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 51.837, y: -90.00001, z: -90.00001}
 --- !u!21 &2167218
 Material:
   serializedVersion: 6
@@ -129,7 +130,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2167218}
+  - {fileID: 2100000, guid: 6d53c08e3fb3f8c4dbac8cd3f4df9d71, type: 2}
   - {fileID: 2181844}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -37897,3 +37898,17 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 155120}
   m_IsPrefabAsset: 1
+--- !u!64 &64520223627761540
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 155120}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4344442}

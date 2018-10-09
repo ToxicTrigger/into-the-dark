@@ -34,7 +34,6 @@ public class ParticleCollider : MonoBehaviour {
     private void OnEnable()
     {
         ps = GetComponent<ParticleSystem>();
-        ps.trigger.SetCollider(0, GameObject.Find("PlayerHpRange").GetComponent<SphereCollider>());
     }
 
     private void OnParticleTrigger()

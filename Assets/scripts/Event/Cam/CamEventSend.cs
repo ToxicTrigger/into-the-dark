@@ -13,6 +13,9 @@ public class CamEventSend : MonoBehaviour
     public bool UseZoomInOut;
     public bool zoomIn;
     public float fov, zoom_speed;
+    public bool Change_angle;
+    public Vector3 euler_angle;
+    public Vector3 offset;
 
     public void Start()
     {
@@ -21,15 +24,6 @@ public class CamEventSend : MonoBehaviour
         player = FindObjectOfType<Player>();
     }
 
-    IEnumerator Stop_PlayerMove()
-    {
-        CharacterController cc = FindObjectOfType<CharacterController>();
-        //cc.enabled = false;
-
-        yield return new WaitForSeconds(time + 1.2f);
-        //cc.enabled = true;
-
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -39,10 +33,19 @@ public class CamEventSend : MonoBehaviour
             {
                 ac.ZoomInOut(fov, zoomIn, zoom_speed );
             }
+            if(!Change_angle)
+            {
+                ac.Angle = ac.Pins[ TransformNum ].eulerAngles;
+                ac.SetStateTarget(ac.Pins[ TransformNum ] , ActionCamera.State.Move_Pin);
+            }
+            else
+            {
+                ac.Angle = euler_angle;
+                ac.Offset = offset;
+                ac.SetStateTarget(player.transform , ActionCamera.State.Follow);
+            }
             
-            ac.Angle = ac.Pins[TransformNum].eulerAngles;
-            ac.SetStateTarget(ac.Pins[TransformNum] , ActionCamera.State.Move_Pin);
-            StartCoroutine(Stop_PlayerMove());
+           
         }
     }
 
@@ -58,7 +61,10 @@ public class CamEventSend : MonoBehaviour
             {
                 ac.ZoomInOut(ac.default_fov , false , zoom_speed);
             }
-            
+            if(Change_angle)
+            {
+                ac.Offset = ac.default_offset;
+            }
             ac.Angle = ac.default_angle;
             //ac.transform.eulerAngles = ac.default_angle;
             ac.SetStateTarget(player.transform , ActionCamera.State.Follow);
