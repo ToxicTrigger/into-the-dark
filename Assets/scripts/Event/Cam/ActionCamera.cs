@@ -107,7 +107,6 @@ public class ActionCamera : MonoBehaviour
     }
     IEnumerator calc_fsm()
     {
-
         while( true )
         {
             switch( now_state )
@@ -131,7 +130,7 @@ public class ActionCamera : MonoBehaviour
                     transform.rotation = Quaternion.RotateTowards(transform.rotation , Quaternion.Euler(Angle) , action_speed * 10f);
                     if( Vector3.Distance(pos , now_target.position) >= 0.2f )
                     {
-                        has_camera_using = true;
+                        has_camera_using = false;
                     }
                     else
                     {

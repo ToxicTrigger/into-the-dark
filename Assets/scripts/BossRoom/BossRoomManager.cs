@@ -76,6 +76,9 @@ public class BossRoomManager : Observer {
 
     public bool is_game_over;
 
+    public GameObject tuto_enemy;
+    public Transform tuto_enemy_pos;
+
     void Awake()
     {
         init_val.boss_hp = get_boss().get_max_hp();
@@ -87,6 +90,11 @@ public class BossRoomManager : Observer {
 
         player_enter_bossroom();
         sound_manager = SoundManager.get_instance();
+
+        GameObject _tuto_enemy = (GameObject)Instantiate(enemy, tuto_enemy_pos.position, Quaternion.identity, this.transform);
+        DestroyCheck _destroy_check = (DestroyCheck)Instantiate(destroy_check,
+                                        Vector3.zero , Quaternion.identity, _tuto_enemy.transform);
+        _destroy_check.add_observer(this);
 
     }
 
@@ -123,13 +131,6 @@ public class BossRoomManager : Observer {
                 reloc.get_reloc((int)phase).torch_set[i].foot_switch[z].ground_move_ctrl(Vector3.down);
             }
         }
-
-        //for (int i = 0; i < time_selector.get_active_switch_cnt((int)phase); i++)
-        //{
-        //    time_selector.get_active_switch_list(i).set_switch(false);
-        //    time_selector.get_active_switch_list(i).off_switch_set();
-        //}
-
         if (_add)   //페이즈가 넘어가지 않고 스위치만 초기화되는 경우가 있으므로...
         {
             //페이즈 증가
@@ -138,13 +139,6 @@ public class BossRoomManager : Observer {
             time_selector.select_switch();
         }
 
-        //hit스위치 끄기 (다리 내리기) 추가
-        //
-        //for (int i = 0; i < reloc.get_reloc((int)phase).switch_object.Length; i++)
-        //{
-        //    reloc.hit_switch[i].set_switch(false);
-        //    reloc.hit_switch[i].off_switch_set();
-        //}
     }
 
     public void game_over()
@@ -182,6 +176,13 @@ public class BossRoomManager : Observer {
                 sound_manager.stop_sound(SoundManager.SoundList.boss_ready_real, false);
                 is_game_over = false;
             }
+        }
+        if(observable.gameObject.GetComponent<DestroyCheck>())
+        {
+            GameObject _tuto_enemy = (GameObject)Instantiate(enemy, tuto_enemy_pos.position, Quaternion.identity);
+            DestroyCheck _destroy_check = (DestroyCheck)Instantiate(destroy_check,
+                                            Vector3.zero, Quaternion.identity, _tuto_enemy.transform);
+            _destroy_check.add_observer(this);
         }
     }
 

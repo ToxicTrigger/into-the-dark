@@ -24,7 +24,7 @@ public class TimeSwitch : BasicSwitch {
     private void OnTriggerEnter(Collider other)
     {
         //현재 활만 (근거리공격 추후 추가 어딨는지몰겠음ㅠㅜ) 모든 공격에 상호작용 하므로 속성체크안함
-        if(other.CompareTag("Arrow") && !get_switch() && use_enable)
+        if (other.CompareTag("Arrow") && !get_switch() && use_enable)
         {
             StartCoroutine(switch_on_timer());            
         }
@@ -32,6 +32,7 @@ public class TimeSwitch : BasicSwitch {
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(this.name + " 충돌 =" + collision.gameObject.name + "//" + collision.gameObject.tag);
         if (collision.transform.CompareTag("Arrow") && !get_switch() && use_enable)
         {
             StartCoroutine(switch_on_timer());
