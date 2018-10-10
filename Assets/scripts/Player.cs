@@ -243,13 +243,17 @@ public class Player : MonoBehaviour
                 character.Move(transform.forward.normalized * step_three);
                 break;
             case "wakeUp":
+                character.Move(transform.forward.normalized * step_Dodge * 1.6f);
                 ani.SetBool("Dodge" , false);
                 break;
-            case "stand":
+            case "Ready":
                 character.Move(transform.forward.normalized * step_Dodge * 1.6f);
                 break;
             case "Dodge":
                 character.Move(transform.forward.normalized * step_Dodge * 2f);
+                break;
+            case "Dodge1":
+                character.Move(transform.forward.normalized * step_Dodge * 1f);
                 break;
         }
 
@@ -323,7 +327,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                if(dodge_tick >= 1f)
+                if(dodge_tick >= 0.05f)
                 {
                     dodged = false;
                     dodge_tick = 0;
