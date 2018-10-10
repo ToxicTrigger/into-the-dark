@@ -31,10 +31,12 @@ public class FootSwitch : Observer {
             on_count++;
             Debug.Log("발판에 올라옴");
 
-            if(is_time_switch)
+            ground_move_ctrl(Vector3.up);
+
+            if (is_time_switch)
                 switch_ground.GetComponent<TimeSwitch>().set_use_enable(true);
 
-            ground_move_ctrl(Vector3.up);
+
             if(other.CompareTag("Enemy"))
             {
                 other.transform.Find("DestroyCheck(Clone)").GetComponent<DestroyCheck>().add_observer(this);
@@ -60,17 +62,20 @@ public class FootSwitch : Observer {
 
     IEnumerator ground_move(Vector3 _move_dir)
     {
+        Debug.Log("move : " + _move_dir);
         while (true)
         {
             if(!sound_manager.sound_list[(int)SoundManager.SoundList.rumble].isPlaying)
                 sound_manager.play_sound(SoundManager.SoundList.rumble);
             switch_ground.transform.position += _move_dir * move_speed * Time.deltaTime;
+
             yield return new WaitForSeconds(0.01f);
 
             if (_move_dir == Vector3.up &&
                 switch_ground.transform.position.y > idle_position.y + y_up_pos)
             {
                 switch_ground.transform.position = new Vector3(idle_position.x, idle_position.y + y_up_pos, idle_position.z);
+                Debug.Log("break");
                 break;
             }
             else if (_move_dir == Vector3.down &&
@@ -119,7 +124,7 @@ public class FootSwitch : Observer {
             switch_ground.GetComponent<TimeSwitch>().set_use_enable(false);
             ground_move_ctrl(Vector3.down);
         }
-        else if(!is_time_switch)
+        else if(!is_time_switch && on_count <=0)
         {
             ground_move_ctrl(Vector3.down);
         }

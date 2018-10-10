@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
         move = GetComponent<PlayerMove>();
 
         ac = FindObjectOfType<ActionCamera>();
-        ac.SetStateTarget(this.transform , ActionCamera.State.Follow);
+        ac.SetStateTarget(this.transform , ActionCamera.State.Follow,ac.default_speed);
     }
 
     public void setSwordEnable(int val)

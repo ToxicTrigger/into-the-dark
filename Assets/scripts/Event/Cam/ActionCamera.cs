@@ -24,7 +24,7 @@ public class ActionCamera : MonoBehaviour
     public Transform now_target, cur_target;
     public bool has_camera_using;
 
-    public float action_speed = 1;
+    public float action_speed = 1, default_speed;
 
     public Queue<State> command;
 
@@ -76,16 +76,18 @@ public class ActionCamera : MonoBehaviour
         }
     }
 
-    public void SetStateTarget(int num , State state)
+    public void SetStateTarget(int num , State state , float _action_speed)
     {
         SetTarget(Pins[ num ]);
         SetState(state);
+        action_speed = _action_speed;
     }
 
-    public void SetStateTarget(Transform transform , State state)
+    public void SetStateTarget(Transform transform , State state , float _action_speed)
     {
         SetTarget(transform);
         SetState(state);
+        action_speed = _action_speed;
     }
 
     public void SetTarget(Transform target)
@@ -183,6 +185,7 @@ public class ActionCamera : MonoBehaviour
         default_angle = transform.eulerAngles;
         default_offset = Offset;
         default_fov = cam.fieldOfView;
+        default_speed = action_speed;
 
         StartCoroutine(calc_fsm());
     }

@@ -14,6 +14,9 @@ public class CamEventSend : MonoBehaviour
     public bool zoomIn;
     public float fov, zoom_speed;
 
+    [Tooltip("기본 속도(1) * action_speed")]
+    public float action_speed;
+
     public void Start()
     {
         ac = FindObjectOfType<ActionCamera>();
@@ -41,7 +44,7 @@ public class CamEventSend : MonoBehaviour
             }
             
             ac.Angle = ac.Pins[TransformNum].eulerAngles;
-            ac.SetStateTarget(ac.Pins[TransformNum] , ActionCamera.State.Move_Pin);
+            ac.SetStateTarget(ac.Pins[TransformNum] , ActionCamera.State.Move_Pin, ac.default_speed * action_speed);
             StartCoroutine(Stop_PlayerMove());
         }
     }
@@ -64,7 +67,7 @@ public class CamEventSend : MonoBehaviour
             
             ac.Angle = ac.default_angle;
             //ac.transform.eulerAngles = ac.default_angle;
-            ac.SetStateTarget(player.transform , ActionCamera.State.Follow);
+            ac.SetStateTarget(player.transform , ActionCamera.State.Follow, ac.default_speed);
         }
     }
 

@@ -64,7 +64,7 @@ public class BossRoomEvent : MonoBehaviour {
         for(int i =0; i<event_scene.Length; i++)
         {
             ac.Angle = ac.Pins[event_scene[count].pin_num].eulerAngles;
-            ac.SetStateTarget(ac.Pins[event_scene[count].pin_num], ActionCamera.State.Move_Pin);
+            ac.SetStateTarget(ac.Pins[event_scene[count].pin_num], ActionCamera.State.Move_Pin,ac.default_speed);
 
             if(event_scene[i].zoom_info.is_use)
             {
@@ -94,7 +94,7 @@ public class BossRoomEvent : MonoBehaviour {
         if(trigger_event && other.name == "Player")
         {
             ac.Angle = ac.default_angle;
-            ac.SetStateTarget(player.transform ,ActionCamera.State.Follow);
+            ac.SetStateTarget(player.transform ,ActionCamera.State.Follow,ac.default_speed);
         }
     }
 

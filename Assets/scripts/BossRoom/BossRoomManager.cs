@@ -61,12 +61,13 @@ public class BossRoomManager : Observer {
 
     public List<GameObject> enemy_list;
 
-    struct InitialValue
+    [System.Serializable]
+    public struct InitialValue
     {
         public int boss_hp;
         public Phase phase;
     };
-    InitialValue init_val;
+    public InitialValue[] init_val;
 
     public GroundCheck []wood_bridge;
     public CrumblingPillar[] pillar_list;
@@ -81,8 +82,9 @@ public class BossRoomManager : Observer {
 
     void Awake()
     {
-        init_val.boss_hp = get_boss().get_max_hp();
-        init_val.phase = Phase.one;
+        init_val[(int)phase].phase = Phase.one;
+        phase = Phase.one;
+        init_val[(int)phase].boss_hp = get_boss().get_max_hp();
 
         field = SendCollisionMessage.Field.NULL;
         boss_state = boss.gameObject.GetComponent<Boss_State>();
@@ -121,22 +123,18 @@ public class BossRoomManager : Observer {
     public void increase_pahse(bool _add)
     {
         //페이즈 증가에 따른 스위치 끄기
-
-        for (int i = 0; i < reloc.get_reloc((int)phase).torch_set.Length; i++)
+        for (int i = 0; i < reloc.get_reloc((int)phase).torch_set[0].foot_switch.Length; i++)
         {
-            for (int z = 0; z < reloc.get_reloc((int)phase).torch_set[i].switch_object.Length; z++)
-            {
-                reloc.get_reloc((int)phase).torch_set[i].switch_object[z].set_switch(false);
-                reloc.get_reloc((int)phase).torch_set[i].switch_object[z].off_switch_set();
-                reloc.get_reloc((int)phase).torch_set[i].foot_switch[z].ground_move_ctrl(Vector3.down);
-            }
+            reloc.get_reloc((int)phase).torch_set[0].switch_object[i].set_switch(false);
+            Destroy(reloc.get_reloc((int)phase).torch_set[0].foot_switch[i].gameObject);
+            Destroy(reloc.get_reloc((int)phase).torch_set[0].switch_object[i].gameObject);
         }
         if (_add)   //페이즈가 넘어가지 않고 스위치만 초기화되는 경우가 있으므로...
         {
             //페이즈 증가
             phase++;  
             Map_Initialization();
-            time_selector.select_switch();
+            //time_selector.select_switch();
         }
 
     }
@@ -173,7 +171,6 @@ public class BossRoomManager : Observer {
                 //플ㄹ레이어 사망, 맵 재시작
                 init_bossroom();
                 ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_In);
-                sound_manager.stop_sound(SoundManager.SoundList.boss_ready_real, false);
                 is_game_over = false;
             }
         }
@@ -275,9 +272,9 @@ public class BossRoomManager : Observer {
             Destroy(enemy_list[i]);
         }
         enemy_list.Clear();
-        get_boss().set_hp(init_val.boss_hp);
+        get_boss().set_hp(init_val[(int)phase].boss_hp);
         //boss_state.set_state(Boss_State.State.Idle,null);
-        phase = init_val.phase;        
+        //phase = init_val[(int)phase].phase;        
 
         for(int i=0; i<wood_bridge.Length; i++)
         {
@@ -289,7 +286,7 @@ public class BossRoomManager : Observer {
         }
         Map_Initialization();
         player.transform.position = start_point.position;
-        
+        player.gameObject.GetComponent<Damageable>().Hp = player.gameObject.GetComponent<Damageable>().Max_Hp;
     }
 
     public void create_enemy(Vector3 _pos, Observer _observer)

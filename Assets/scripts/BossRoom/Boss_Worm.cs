@@ -23,8 +23,6 @@ public class Boss_Worm : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
-            hp -= 1;
     }
 
     //약점공격을 받으면 (머리) -> 대화해봐야함

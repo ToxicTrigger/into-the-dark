@@ -199,13 +199,13 @@ public class GroundCheck : Observer {
                     }
                     else if (type == Type.Wood)
                     {
-                        if (heartbeat_count == 3)
+                        if (heartbeat_count == 5)
                             sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[2];
 
-                        else if (heartbeat_count == 2)
+                        else if (heartbeat_count == 3)
                             sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[1];
 
-                        if(heartbeat_count == 3)
+                        if(heartbeat_count == 6)
                         {
                             boss_action.set_cross_dis(30,2.3f);
                             StartCoroutine(attack_timer(Boss_State.State.Cross_Attack));
@@ -219,11 +219,14 @@ public class GroundCheck : Observer {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.name.Equals("Player"))
         {
-            is_ground = true;
-            CancelInvoke();
-            player = other.transform.parent.gameObject;
+            if (type == Type.Stone || (type == Type.Wood && manager.phase == BossRoomManager.Phase.two))
+            {
+                is_ground = true;
+                CancelInvoke();
+                player = other.transform.parent.gameObject;
+            }
         }
         if (other.CompareTag("Boss"))
         {
