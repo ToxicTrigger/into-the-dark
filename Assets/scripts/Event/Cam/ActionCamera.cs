@@ -107,8 +107,8 @@ public class ActionCamera : MonoBehaviour
     }
     IEnumerator calc_fsm()
     {
-
-        while( true )
+        bool has_use_Zone = FindObjectOfType<CalcPinDist>() == null ? false : true;
+        while( !has_use_Zone )
         {
             switch( now_state )
             {

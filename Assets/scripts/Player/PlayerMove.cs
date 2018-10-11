@@ -31,13 +31,18 @@ public class PlayerMove : InputHandler
     float step;
     public Material stamina;
 
+    public CalcPinDist cpd;
+
     public override void Work(InputManager im)
     {
         if( !im.has_not_anything_input() && ( player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle") ) )
         {
             y = player.ac.cam.transform.eulerAngles.y;
-            float cx = Mathf.Cos(Mathf.Deg2Rad * y);
-            float sy = Mathf.Sin(Mathf.Deg2Rad * y);
+            Quaternion look = Quaternion.LookRotation(Camera.main.transform.position , cpd.near_pin.position);
+
+            movement.x = Mathf.Lerp(movement.x , im.get_Horizontal()  , moveSpeed);
+            movement.z = Mathf.Lerp(movement.z , im.get_Vertical() , moveSpeed);
+            /*
             if( cx >= 0 && sy >= 0 )
             {
                 movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() , moveSpeed);
@@ -58,6 +63,7 @@ public class PlayerMove : InputHandler
                 movement.x = Mathf.Lerp(movement.x , im.get_Vertical() * -1 , moveSpeed);
                 movement.z = Mathf.Lerp(movement.z , im.get_Horizontal() , moveSpeed);
             }
+            */
 
             player.ani.SetFloat("Forward" , movement.magnitude);
             Vector3 t = movement * 3;
@@ -205,7 +211,7 @@ public class PlayerMove : InputHandler
         foot_step_tick = 0;
         player = GetComponent<Player>();
         cc = GetComponent<CharacterController>();
-
+        cpd = FindObjectOfType<CalcPinDist>();
         step = cc.stepOffset;
     }
 }

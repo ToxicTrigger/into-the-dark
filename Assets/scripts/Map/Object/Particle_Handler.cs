@@ -8,13 +8,16 @@ public class Particle_Handler : MonoBehaviour
     public ParticleSystem particle;
     private void Update()
     {
-        if (OnOff)
+        if(particle != null)
         {
-            particle.Play();
-        }
-        else
-        {
-            particle.Stop();
+            if( OnOff )
+            {
+                particle.Play();
+            }
+            else
+            {
+                particle.Stop();
+            }
         }
     }
 }
