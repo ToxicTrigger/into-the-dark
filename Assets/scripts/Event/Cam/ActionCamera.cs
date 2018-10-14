@@ -16,17 +16,37 @@ public class ActionCamera : MonoBehaviour
         
     }
 
+    public struct EventInfo
+    {
+        public State state;
+        public Transform target;
+        //이벤트 최소 보증시간
+        public float guarantee_time;
+        public float action_speed;
+
+        public EventInfo(State _state, Transform _tr, float _time, float _speed)
+        {
+            state = _state;
+            target = _tr;
+            guarantee_time = _time;
+            action_speed = _speed;
+        }
+    }
+
     public Camera cam;
 
     [SerializeField]
     private State now_state, cur_state;
 
+
     public Transform now_target, cur_target;
     public bool has_camera_using;
 
     public float action_speed = 1, default_speed;
+    public float guarantee_time, default_time = 0;
 
-    public Queue<State> command;
+    //public Queue<State> command;
+    public Queue<EventInfo> command;
 
     public float default_fov;
     public List<Transform> Pins;
@@ -62,32 +82,54 @@ public class ActionCamera : MonoBehaviour
 
     public void SetState(State state)
     {
-        if( !has_camera_using )
-        {
-            cur_state = now_state;
-            now_state = state;
-        }
-        else
-        {
-            if( state != now_state )
-            {
-                command.Enqueue(state);
-            }
-        }
+        cur_state = now_state;
+        now_state = state;
     }
 
     public void SetStateTarget(int num , State state , float _action_speed)
     {
-        SetTarget(Pins[ num ]);
-        SetState(state);
-        action_speed = _action_speed;
+        if(!has_camera_using)
+        {
+            SetTarget(Pins[num]);
+            SetState(state);
+            action_speed = _action_speed;
+        }
+        else
+        {
+            EventInfo info = new EventInfo(state, Pins[num], 0.0f, _action_speed);
+            command.Enqueue(info);
+        }
+
     }
 
     public void SetStateTarget(Transform transform , State state , float _action_speed)
     {
-        SetTarget(transform);
-        SetState(state);
-        action_speed = _action_speed;
+        if(!has_camera_using)
+        {
+            SetTarget(transform);
+            SetState(state);
+            action_speed = _action_speed;
+        }
+        else
+        {
+            EventInfo info = new EventInfo(state, transform, 0.0f, _action_speed);
+            command.Enqueue(info);
+        }
+    }
+
+    public void SetStateTarget(EventInfo _evnet_info)
+    {
+        if (!has_camera_using)
+        {
+            SetTarget(_evnet_info.target);
+            SetState(_evnet_info.state);
+            action_speed = _evnet_info.action_speed;
+        }
+        else
+        {
+            EventInfo info = new EventInfo(_evnet_info.state, _evnet_info.target, 0.0f, _evnet_info.guarantee_time);
+            command.Enqueue(info);
+        }
     }
 
     public void SetTarget(Transform target)
@@ -107,11 +149,13 @@ public class ActionCamera : MonoBehaviour
             now_target = this.Pins[ number ];
         }
     }
+
+    float guarantee_timer;
     IEnumerator calc_fsm()
     {
         while( true )
         {
-            switch( now_state )
+            switch ( now_state )
             {
                 case State.Idle:
                     has_camera_using = false;
@@ -126,17 +170,21 @@ public class ActionCamera : MonoBehaviour
                     break;
 
                 case State.Move_Pin:
+                    guarantee_timer += Time.deltaTime;
+
                     pos = Vector3.Lerp(transform.position , now_target.position , action_speed);
                     transform.position = pos;
 
                     transform.rotation = Quaternion.RotateTowards(transform.rotation , Quaternion.Euler(Angle) , action_speed * 10f);
                     if( Vector3.Distance(pos , now_target.position) >= 0.2f )
                     {
-                        has_camera_using = false;
+                        has_camera_using = true;
                     }
-                    else
+                    else if(guarantee_timer >= guarantee_time)
                     {
+                        guarantee_timer = 0;
                         has_camera_using = false;
+                        SetState(State.Idle);
                     }
                     break;
 
@@ -152,7 +200,8 @@ public class ActionCamera : MonoBehaviour
         {
             if( command.Count != 0 )
             {
-                SetState(command.Dequeue());
+                //SetState(command.Dequeue());
+                SetStateTarget((EventInfo)command.Dequeue());
             }
         }
     }
@@ -178,7 +227,7 @@ public class ActionCamera : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        command = new Queue<State>();
+        command = new Queue<EventInfo>();
 
         cam = Camera.main;
 
@@ -190,3 +239,55 @@ public class ActionCamera : MonoBehaviour
         StartCoroutine(calc_fsm());
     }
 }
+
+
+//public void SetState(State state)
+//{
+//    if (!has_camera_using)
+//    {
+//        cur_state = now_state;
+//        now_state = state;
+//    }
+//    else
+//    {
+//        if (state != now_state)
+//        {
+//            //command.Enqueue(state);
+//            EventInfo info = new EventInfo();
+//            info.state = state;
+//            command.Enqueue(info);
+//        }
+//    }
+//}
+
+//public void SetStateTarget(int num, State state, float _action_speed)
+//{
+//    SetTarget(Pins[num]);
+//    SetState(state);
+//    action_speed = _action_speed;
+//}
+
+//public void SetStateTarget(Transform transform, State state, float _action_speed)
+//{
+//    SetTarget(transform);
+//    SetState(state);
+//    action_speed = _action_speed;
+//}
+
+//public void SetTarget(Transform target)
+//{
+//    if (!target.Equals(now_target))
+//    {
+//        cur_target = now_target;
+//        now_target = target;
+//    }
+//}
+
+//public void SetTarget(int number)
+//{
+//    if (!Pins[number].Equals(now_target))
+//    {
+//        cur_target = now_target;
+//        now_target = this.Pins[number];
+//    }
+//}
