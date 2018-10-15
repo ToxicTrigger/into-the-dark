@@ -282,7 +282,7 @@ public class GroundCheck : Observer {
 
     public override void notify(Observable observable)
     {
-        Debug.Log(observable.name);
+        //Debug.Log(observable.name);
         if (observable.gameObject.GetComponent<DestroyCheck>())
         {
             enemy_count--;

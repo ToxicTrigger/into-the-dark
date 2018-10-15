@@ -18,7 +18,7 @@ public class AncientWeapon : Observer
 
     public Animator animator;
 
-    int activate_count = -1; //현재까지 활성화된 횟수를 저장
+    int activate_count = 0; //현재까지 활성화된 횟수를 저장
     [Tooltip("고대병기의 활성화 횟수에 따른 유지시간 지정")]
     public float[] time_list;   //엔진에서 횟수에 따른 시간을 지정해줄거임
     [Tooltip("고대병기에 할당된 스위치의 최대 개수")]
@@ -29,6 +29,7 @@ public class AncientWeapon : Observer
     public State state;
     IEnumerator _timer;
     public IEnumerator ready_timer;
+ 
 
     void Start()
     {
@@ -86,6 +87,13 @@ public class AncientWeapon : Observer
     //활성화 시키는 함수
     void activate()
     {
+        activate_count++;
+        //최초 활성화 연출
+        if (activate_count == 1)
+        {
+            manager.play_event(BossRoomManager.EventList.AncientWeapon);
+        }
+
         animator.SetBool("activate", true);
         //weapon_light.gameObject.SetActive(true);
         state = State.Activated;

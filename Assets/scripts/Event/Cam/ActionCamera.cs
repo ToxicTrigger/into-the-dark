@@ -13,7 +13,8 @@ public class ActionCamera : MonoBehaviour
         Move_Pin_AND_Rotate,
         Shake,
         Look,
-        
+        Teleport_Pin,
+        Flow,
     }
 
     public struct EventInfo
@@ -23,13 +24,19 @@ public class ActionCamera : MonoBehaviour
         //이벤트 최소 보증시간
         public float guarantee_time;
         public float action_speed;
+        public Vector3 angle;
+        public string event_name;
+        public Vector3 flow_dir;
 
-        public EventInfo(State _state, Transform _tr, float _time, float _speed)
+        public EventInfo(State _state, Transform _tr, float _time, float _speed, Vector3 _angle, string _name, Vector3 _flow_dir)
         {
             state = _state;
             target = _tr;
             guarantee_time = _time;
             action_speed = _speed;
+            angle = _angle;
+            event_name = _name;
+            flow_dir = _flow_dir;
         }
     }
 
@@ -44,6 +51,8 @@ public class ActionCamera : MonoBehaviour
 
     public float action_speed = 1, default_speed;
     public float guarantee_time, default_time = 0;
+    public string now_event_name;
+    public Vector3 flow_dir;
 
     //public Queue<State> command;
     public Queue<EventInfo> command;
@@ -86,48 +95,63 @@ public class ActionCamera : MonoBehaviour
         now_state = state;
     }
 
-    public void SetStateTarget(int num , State state , float _action_speed)
+    public void SetStateTarget(int num , State state , float _action_speed, float _guarantee_time, Vector3 angle, string _name, Vector3 _flow_dir)
     {
         if(!has_camera_using)
         {
+            has_camera_using = true;
             SetTarget(Pins[num]);
             SetState(state);
             action_speed = _action_speed;
+            guarantee_time = _guarantee_time;
+            now_event_name = _name;
+            Angle = angle;
+            flow_dir = _flow_dir;
         }
-        else
+        else if(!now_event_name.Equals(_name))
         {
-            EventInfo info = new EventInfo(state, Pins[num], 0.0f, _action_speed);
+            EventInfo info = new EventInfo(state, Pins[num], _guarantee_time, _action_speed, angle,_name, _flow_dir);
             command.Enqueue(info);
         }
 
     }
 
-    public void SetStateTarget(Transform transform , State state , float _action_speed)
+    public void SetStateTarget(Transform transform , State state , float _action_speed, float _guarantee_time, Vector3 angle, string _name, Vector3 _flow_dir)
     {
         if(!has_camera_using)
         {
+            has_camera_using = true;
             SetTarget(transform);
             SetState(state);
             action_speed = _action_speed;
+            guarantee_time = _guarantee_time;
+            now_event_name = _name;
+            Angle = angle;
+            flow_dir = _flow_dir;
         }
-        else
+        else if(!now_event_name.Equals(_name))  //같은 이벤트는 연속으로 받지 않는다.
         {
-            EventInfo info = new EventInfo(state, transform, 0.0f, _action_speed);
+            EventInfo info = new EventInfo(state, transform, _guarantee_time, _action_speed,angle,_name, _flow_dir);
             command.Enqueue(info);
         }
     }
 
-    public void SetStateTarget(EventInfo _evnet_info)
+    public void SetStateTarget(EventInfo _event_info)
     {
         if (!has_camera_using)
         {
-            SetTarget(_evnet_info.target);
-            SetState(_evnet_info.state);
-            action_speed = _evnet_info.action_speed;
+            has_camera_using = true;
+            SetTarget(_event_info.target);
+            SetState(_event_info.state);
+            action_speed = _event_info.action_speed;
+            guarantee_time = _event_info.guarantee_time;
+            now_event_name = _event_info.event_name;
+            Angle = _event_info.angle;
+            flow_dir = _event_info.flow_dir;
         }
-        else
+        else if (!now_event_name.Equals(_event_info.event_name))
         {
-            EventInfo info = new EventInfo(_evnet_info.state, _evnet_info.target, 0.0f, _evnet_info.guarantee_time);
+            EventInfo info = new EventInfo(_event_info.state, _event_info.target, _event_info.guarantee_time, _event_info.guarantee_time, _event_info.angle, _event_info.event_name, _event_info.flow_dir);
             command.Enqueue(info);
         }
     }
@@ -150,11 +174,12 @@ public class ActionCamera : MonoBehaviour
         }
     }
 
-    float guarantee_timer;
+    public float guarantee_timer;
     IEnumerator calc_fsm()
     {
         while( true )
         {
+            Debug.Log("cur_event_name = " + now_event_name);
             switch ( now_state )
             {
                 case State.Idle:
@@ -180,17 +205,39 @@ public class ActionCamera : MonoBehaviour
                     {
                         has_camera_using = true;
                     }
-                    else if(guarantee_timer >= guarantee_time)
+                    else
                     {
-                        guarantee_timer = 0;
-                        has_camera_using = false;
-                        SetState(State.Idle);
+                        end_state();
                     }
+                    break;
+
+                case State.Teleport_Pin:
+                    guarantee_timer += Time.deltaTime;
+                    transform.position = now_target.position;
+                    transform.rotation = Quaternion.Euler(Angle);
+                    end_state();
+                    break;
+
+                case State.Flow:
+                    guarantee_timer += Time.deltaTime;
+                    transform.position += flow_dir * action_speed *Time.deltaTime;
+                    end_state();
                     break;
 
             }
 
             yield return new WaitForEndOfFrame();
+        }
+    }
+
+    void end_state()
+    {
+        if (guarantee_timer >= guarantee_time)
+        {
+            guarantee_timer = 0;
+            has_camera_using = false;
+            flow_dir = Vector3.zero;
+            SetState(State.Idle);
         }
     }
 
@@ -200,7 +247,6 @@ public class ActionCamera : MonoBehaviour
         {
             if( command.Count != 0 )
             {
-                //SetState(command.Dequeue());
                 SetStateTarget((EventInfo)command.Dequeue());
             }
         }
@@ -238,6 +284,7 @@ public class ActionCamera : MonoBehaviour
 
         StartCoroutine(calc_fsm());
     }
+
 }
 
 

@@ -80,6 +80,14 @@ public class BossRoomManager : Observer {
     public GameObject tuto_enemy;
     public Transform tuto_enemy_pos;
 
+    public enum EventList
+    {
+        Entrance,       // 입장
+        AncientWeapon,  // 고대병기 활성화
+        Clear,          // 클리어
+    }
+    public BossRoomEvent[] event_slot;
+
     void Awake()
     {
         init_val[(int)phase].phase = Phase.one;
@@ -299,6 +307,24 @@ public class BossRoomManager : Observer {
         _destroy_check.add_observer(_observer);
 
         enemy_list.Add(_enemy);
+    }
+
+    public void play_event(EventList list)
+    {
+        switch (list)
+        {
+            case EventList.Entrance:
+                event_slot[(int)EventList.Entrance].play_event();
+                break;
+            case EventList.AncientWeapon:
+                event_slot[(int)EventList.AncientWeapon].play_event();
+                break;
+            case EventList.Clear:
+                event_slot[(int)EventList.Clear].play_event();
+                break;
+            default:
+                break;
+        }
     }
 
     //public void set_field_info(SendCollisionMessage.Field _field)

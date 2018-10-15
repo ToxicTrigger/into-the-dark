@@ -29,7 +29,7 @@ public class FootSwitch : Observer {
         if ((other.CompareTag("Player") && other.name == "Player") || other.CompareTag("Enemy"))
         {
             on_count++;
-            Debug.Log("발판에 올라옴");
+            //Debug.Log("발판에 올라옴");
 
             ground_move_ctrl(Vector3.up);
 
@@ -49,7 +49,7 @@ public class FootSwitch : Observer {
         if ((other.CompareTag("Player") && other.name == "Player") || other.CompareTag("Enemy"))
         {
             on_count--;
-            Debug.Log("발판에서 내려감");
+            //Debug.Log("발판에서 내려감");
 
             off_switch();
 
