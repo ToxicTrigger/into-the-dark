@@ -108,7 +108,7 @@ public class ActionCamera : MonoBehaviour
     IEnumerator calc_fsm()
     {
         bool has_use_Zone = FindObjectOfType<CalcPinDist>() == null ? false : true;
-        while( !has_use_Zone )
+        while( true )
         {
             switch( now_state )
             {
@@ -117,7 +117,21 @@ public class ActionCamera : MonoBehaviour
                     break;
 
                 case State.Follow:
-                    Vector3 pos = Vector3.Lerp(transform.position , now_target.position + Offset , action_speed);
+                    
+                    RaycastHit hit;
+                    Vector3 pos = Vector3.zero;
+                    Vector3 tmp = now_target.position;
+                    tmp.y += 1;
+                    Ray ray = new Ray(tmp , ( ( transform.position + Offset ) - tmp).normalized);
+                    if(Physics.Raycast(ray, out hit, Vector3.Distance(tmp , transform.position) , ~(1<<LayerMask.NameToLayer("Ground"))))
+                    {
+                        pos = Vector3.Lerp(transform.position , hit.point, action_speed);
+                    }
+                    else
+                    {
+                        pos = Vector3.Lerp(transform.position , now_target.position + Offset , action_speed);
+                    }
+                    Debug.DrawRay(ray.origin , ray.direction * Vector3.Distance(tmp , transform.position + Offset) , Color.blue);
                     transform.position = pos;
                     has_camera_using = false;
                     transform.eulerAngles = Angle;

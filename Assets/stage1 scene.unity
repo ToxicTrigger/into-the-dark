@@ -481,27 +481,29 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 9036734}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22a7154ccc455ce4491b7cff186ac79d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pins:
-  - {fileID: 1446022848}
+  - {fileID: 127677429}
   - {fileID: 1859452160}
-  - {fileID: 383080641}
   - {fileID: 1069827040}
   - {fileID: 1731134105}
+  - {fileID: 383080641}
   - {fileID: 1710116454}
   - {fileID: 1717030149}
-  - {fileID: 683460960}
   - {fileID: 1765219402}
-  - {fileID: 127677429}
+  - {fileID: 1446022848}
+  - {fileID: 683460960}
   near_pin: {fileID: 127677429}
-  cam_pos: {fileID: 728289011}
+  cam_pos: {fileID: 1331255185}
   player: {fileID: 1505530016}
   cam: {fileID: 2033807168}
   Speed: 1
+  pm: {fileID: 1135159018}
+  p: {fileID: 1080030334}
 --- !u!4 &9036736
 Transform:
   m_ObjectHideFlags: 0
@@ -1174,6 +1176,7 @@ GameObject:
   - component: {fileID: 33113482}
   - component: {fileID: 33113484}
   - component: {fileID: 33113483}
+  - component: {fileID: 33113485}
   m_Layer: 8
   m_Name: snow051
   m_TagString: Untagged
@@ -1238,6 +1241,20 @@ MeshFilter:
     type: 3}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 33113481}
+  m_Mesh: {fileID: 4300002, guid: adcf2c5c55b8c194794105c5c61f060e, type: 3}
+--- !u!64 &33113485
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 33113481}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300002, guid: adcf2c5c55b8c194794105c5c61f060e, type: 3}
 --- !u!1 &39299745
 GameObject:
@@ -1343,7 +1360,7 @@ GameObject:
   - component: {fileID: 39607634}
   - component: {fileID: 39607633}
   - component: {fileID: 39607635}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow034 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1362,7 +1379,7 @@ Transform:
   m_LocalScale: {x: 0.70381063, y: 0.70381033, z: 0.70381033}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 70
+  m_RootOrder: 69
   m_LocalEulerAnglesHint: {x: -90.00001, y: 0, z: 55.982002}
 --- !u!23 &39607633
 MeshRenderer:
@@ -5061,6 +5078,10 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 0.0100000035
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ca7ca5aff632e8b4b9511468babda33b, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca7ca5aff632e8b4b9511468babda33b, type: 3}
   m_IsPrefabAsset: 0
@@ -5370,7 +5391,7 @@ GameObject:
   - component: {fileID: 195571994}
   - component: {fileID: 195571993}
   - component: {fileID: 195571995}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow019
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7273,7 +7294,7 @@ GameObject:
   - component: {fileID: 255988475}
   - component: {fileID: 255988474}
   - component: {fileID: 255988476}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7292,7 +7313,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 61
+  m_RootOrder: 60
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &255988474
 MeshRenderer:
@@ -8725,7 +8746,7 @@ GameObject:
   - component: {fileID: 315769178}
   - component: {fileID: 315769177}
   - component: {fileID: 315769179}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow058
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8744,7 +8765,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 69
+  m_RootOrder: 68
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &315769177
 MeshRenderer:
@@ -8998,7 +9019,7 @@ GameObject:
   - component: {fileID: 325051113}
   - component: {fileID: 325051112}
   - component: {fileID: 325051114}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow056
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9017,7 +9038,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 55
+  m_RootOrder: 54
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &325051112
 MeshRenderer:
@@ -9222,7 +9243,7 @@ GameObject:
   - component: {fileID: 334327029}
   - component: {fileID: 334327028}
   - component: {fileID: 334327030}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow022
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10018,7 +10039,7 @@ GameObject:
   - component: {fileID: 355990506}
   - component: {fileID: 355990505}
   - component: {fileID: 355990507}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow020 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10037,7 +10058,7 @@ Transform:
   m_LocalScale: {x: 1.000001, y: 1.0000005, z: 1.0000005}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 71
+  m_RootOrder: 70
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &355990505
 MeshRenderer:
@@ -10711,7 +10732,7 @@ GameObject:
   - component: {fileID: 373787056}
   - component: {fileID: 373787055}
   - component: {fileID: 373787057}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Stone floor 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10832,6 +10853,97 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &376701801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 100206, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 376701802}
+  - component: {fileID: 376701805}
+  - component: {fileID: 376701804}
+  - component: {fileID: 376701803}
+  m_Layer: 0
+  m_Name: Rock_Wall_2C_03__2_ (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &376701802
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 400206, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 376701801}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -21.6, y: 113.04158, z: 8.086441}
+  m_LocalScale: {x: 1.0000007, y: 1.0000005, z: 1.0000005}
+  m_Children: []
+  m_Father: {fileID: 570123674}
+  m_RootOrder: 37
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &376701803
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 376701801}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300034, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+--- !u!23 &376701804
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2300204, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 376701801}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100002, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &376701805
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 3300204, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 376701801}
+  m_Mesh: {fileID: 4300034, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
 --- !u!1001 &377441352
 Prefab:
   m_ObjectHideFlags: 0
@@ -12057,7 +12169,7 @@ GameObject:
   - component: {fileID: 436379394}
   - component: {fileID: 436379393}
   - component: {fileID: 436379395}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Stone floor 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12152,6 +12264,7 @@ GameObject:
   - component: {fileID: 440671335}
   - component: {fileID: 440671337}
   - component: {fileID: 440671336}
+  - component: {fileID: 440671338}
   m_Layer: 8
   m_Name: snow050
   m_TagString: Untagged
@@ -12216,6 +12329,20 @@ MeshFilter:
     type: 3}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 440671334}
+  m_Mesh: {fileID: 4300000, guid: adcf2c5c55b8c194794105c5c61f060e, type: 3}
+--- !u!64 &440671338
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 440671334}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: adcf2c5c55b8c194794105c5c61f060e, type: 3}
 --- !u!1 &442235935
 GameObject:
@@ -12411,7 +12538,7 @@ GameObject:
   - component: {fileID: 457595040}
   - component: {fileID: 457595039}
   - component: {fileID: 457595041}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14174,7 +14301,7 @@ GameObject:
   - component: {fileID: 515971903}
   - component: {fileID: 515971902}
   - component: {fileID: 515971904}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow040
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14447,7 +14574,7 @@ GameObject:
   - component: {fileID: 521825676}
   - component: {fileID: 521825675}
   - component: {fileID: 521825677}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow047
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15435,7 +15562,7 @@ GameObject:
   - component: {fileID: 538684879}
   - component: {fileID: 538684878}
   - component: {fileID: 538684880}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow037
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16230,6 +16357,9 @@ Transform:
   - {fileID: 731112752}
   - {fileID: 700423920}
   - {fileID: 146032039}
+  - {fileID: 1054517029}
+  - {fileID: 862128235}
+  - {fileID: 376701802}
   m_Father: {fileID: 1494564707}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -16825,7 +16955,7 @@ GameObject:
   - component: {fileID: 591950462}
   - component: {fileID: 591950461}
   - component: {fileID: 591950463}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow035
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16992,7 +17122,7 @@ GameObject:
   - component: {fileID: 592785863}
   - component: {fileID: 592785862}
   - component: {fileID: 592785864}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow020
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17321,7 +17451,7 @@ GameObject:
   - component: {fileID: 608789054}
   - component: {fileID: 608789053}
   - component: {fileID: 608789055}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow031
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17867,7 +17997,7 @@ GameObject:
   - component: {fileID: 628815821}
   - component: {fileID: 628815820}
   - component: {fileID: 628815822}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17886,7 +18016,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 51
+  m_RootOrder: 50
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &628815820
 MeshRenderer:
@@ -18049,7 +18179,7 @@ GameObject:
   - component: {fileID: 632733617}
   - component: {fileID: 632733616}
   - component: {fileID: 632733618}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow033
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18809,7 +18939,7 @@ GameObject:
   - component: {fileID: 661838800}
   - component: {fileID: 661838799}
   - component: {fileID: 661838801}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow053
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18828,7 +18958,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 64
+  m_RootOrder: 63
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &661838799
 MeshRenderer:
@@ -21574,7 +21704,7 @@ GameObject:
   - component: {fileID: 723373054}
   - component: {fileID: 723373053}
   - component: {fileID: 723373055}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow048
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23773,7 +23903,7 @@ GameObject:
   - component: {fileID: 806232547}
   - component: {fileID: 806232546}
   - component: {fileID: 806232548}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24384,6 +24514,11 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1.8413
       objectReference: {fileID: 0}
+    - target: {fileID: 114668075872635420, guid: 4cefd2f6481af434bad9235c71ad7ec0,
+        type: 2}
+      propertyPath: direction
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
   m_IsPrefabAsset: 0
@@ -24606,7 +24741,7 @@ GameObject:
   - component: {fileID: 833576919}
   - component: {fileID: 833576918}
   - component: {fileID: 833576920}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow017
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24852,51 +24987,6 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300116, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
---- !u!1 &838077024
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 100270, guid: 937ea58c13c912c4895640621210c4b7,
-    type: 3}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 838077025}
-  - component: {fileID: 838077026}
-  m_Layer: 0
-  m_Name: snow005
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &838077025
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 400270, guid: 937ea58c13c912c4895640621210c4b7,
-    type: 3}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 838077024}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: -32.83185, y: -5.631878, z: -96.82852}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2028066957}
-  m_RootOrder: 49
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &838077026
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 838077024}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 0}
 --- !u!1 &840915280 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100006, guid: 415d1f929db11df44add30ab467394c2,
@@ -24928,7 +25018,7 @@ GameObject:
   - component: {fileID: 854972952}
   - component: {fileID: 854972951}
   - component: {fileID: 854972953}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow045
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25019,7 +25109,7 @@ GameObject:
   - component: {fileID: 860538641}
   - component: {fileID: 860538640}
   - component: {fileID: 860538642}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25189,6 +25279,97 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300042, guid: b829facc8b7806c47a9b3fbb4e3bf5e3, type: 3}
+--- !u!1 &862128234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 100206, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 862128235}
+  - component: {fileID: 862128238}
+  - component: {fileID: 862128237}
+  - component: {fileID: 862128236}
+  m_Layer: 0
+  m_Name: Rock_Wall_2C_03__2_ (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &862128235
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 400206, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 862128234}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -16.21, y: 113.04155, z: 8.086441}
+  m_LocalScale: {x: 1.0000007, y: 1.0000005, z: 1.0000005}
+  m_Children: []
+  m_Father: {fileID: 570123674}
+  m_RootOrder: 36
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &862128236
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 862128234}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300034, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+--- !u!23 &862128237
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2300204, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 862128234}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100002, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &862128238
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 3300204, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 862128234}
+  m_Mesh: {fileID: 4300034, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
 --- !u!1001 &862988693
 Prefab:
   m_ObjectHideFlags: 0
@@ -26373,7 +26554,7 @@ GameObject:
   - component: {fileID: 893818647}
   - component: {fileID: 893818646}
   - component: {fileID: 893818648}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow036
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27151,6 +27332,11 @@ Prefab:
     - target: {fileID: 4727412529167188, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
       propertyPath: m_LocalScale.z
       value: 1.8413
+      objectReference: {fileID: 0}
+    - target: {fileID: 114668075872635420, guid: 4cefd2f6481af434bad9235c71ad7ec0,
+        type: 2}
+      propertyPath: direction
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
@@ -28055,7 +28241,7 @@ GameObject:
   - component: {fileID: 955503737}
   - component: {fileID: 955503736}
   - component: {fileID: 955503738}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28335,6 +28521,11 @@ Prefab:
     - target: {fileID: 4890468561857812, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
       propertyPath: m_LocalPosition.z
       value: 7.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 114668075872635420, guid: 4cefd2f6481af434bad9235c71ad7ec0,
+        type: 2}
+      propertyPath: direction
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
@@ -28675,7 +28866,7 @@ GameObject:
   - component: {fileID: 984310215}
   - component: {fileID: 984310214}
   - component: {fileID: 984310216}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snwo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29014,7 +29205,7 @@ GameObject:
   - component: {fileID: 992485515}
   - component: {fileID: 992485514}
   - component: {fileID: 992485516}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29033,7 +29224,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 59
+  m_RootOrder: 58
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &992485514
 MeshRenderer:
@@ -29155,6 +29346,11 @@ Prefab:
     - target: {fileID: 4727412529167188, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
       propertyPath: m_LocalScale.z
       value: 1.8413
+      objectReference: {fileID: 0}
+    - target: {fileID: 114668075872635420, guid: 4cefd2f6481af434bad9235c71ad7ec0,
+        type: 2}
+      propertyPath: direction
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
@@ -29620,7 +29816,7 @@ GameObject:
   - component: {fileID: 998146871}
   - component: {fileID: 998146870}
   - component: {fileID: 998146872}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30035,7 +30231,7 @@ GameObject:
   - component: {fileID: 1003012324}
   - component: {fileID: 1003012323}
   - component: {fileID: 1003012325}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow043
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31464,7 +31660,7 @@ GameObject:
   - component: {fileID: 1032807865}
   - component: {fileID: 1032807864}
   - component: {fileID: 1032807866}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32450,6 +32646,97 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+--- !u!1 &1054517028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 100206, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1054517029}
+  - component: {fileID: 1054517032}
+  - component: {fileID: 1054517031}
+  - component: {fileID: 1054517030}
+  m_Layer: 0
+  m_Name: Rock_Wall_2C_03__2_ (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1054517029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 400206, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1054517028}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -10.45, y: 113.04152, z: 8.086441}
+  m_LocalScale: {x: 1.0000007, y: 1.0000005, z: 1.0000005}
+  m_Children: []
+  m_Father: {fileID: 570123674}
+  m_RootOrder: 35
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &1054517030
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1054517028}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300034, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+--- !u!23 &1054517031
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2300204, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1054517028}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100002, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &1054517032
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 3300204, guid: 937ea58c13c912c4895640621210c4b7,
+    type: 3}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1054517028}
+  m_Mesh: {fileID: 4300034, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
 --- !u!1 &1054805102
 GameObject:
   m_ObjectHideFlags: 0
@@ -32462,7 +32749,7 @@ GameObject:
   - component: {fileID: 1054805105}
   - component: {fileID: 1054805104}
   - component: {fileID: 1054805106}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32481,7 +32768,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 60
+  m_RootOrder: 59
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1054805104
 MeshRenderer:
@@ -33063,6 +33350,12 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300172, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+--- !u!114 &1080030334 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114668075872635420, guid: 4cefd2f6481af434bad9235c71ad7ec0,
+    type: 2}
+  m_PrefabInternal: {fileID: 2145453040}
+  m_Script: {fileID: 11500000, guid: 133949a16115d7845be985b02f142064, type: 3}
 --- !u!1001 &1080573167
 Prefab:
   m_ObjectHideFlags: 0
@@ -33512,7 +33805,7 @@ GameObject:
   - component: {fileID: 1112358119}
   - component: {fileID: 1112358118}
   - component: {fileID: 1112358120}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34236,6 +34529,12 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300938, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+--- !u!114 &1135159018 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114362397707611376, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1246304628}
+  m_Script: {fileID: 11500000, guid: 45050e0fc4a284a4fa70bb34c784844c, type: 3}
 --- !u!1001 &1140311239
 Prefab:
   m_ObjectHideFlags: 0
@@ -34370,7 +34669,7 @@ GameObject:
   - component: {fileID: 1141718020}
   - component: {fileID: 1141718019}
   - component: {fileID: 1141718021}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34389,7 +34688,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 58
+  m_RootOrder: 57
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1141718019
 MeshRenderer:
@@ -35236,7 +35535,7 @@ GameObject:
   - component: {fileID: 1156712294}
   - component: {fileID: 1156712293}
   - component: {fileID: 1156712295}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow025
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36914,7 +37213,7 @@ GameObject:
   - component: {fileID: 1190864448}
   - component: {fileID: 1190864447}
   - component: {fileID: 1190864449}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow054
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36933,7 +37232,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 53
+  m_RootOrder: 52
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1190864447
 MeshRenderer:
@@ -37101,7 +37400,7 @@ GameObject:
   - component: {fileID: 1198565622}
   - component: {fileID: 1198565621}
   - component: {fileID: 1198565623}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow021
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38065,7 +38364,7 @@ GameObject:
   - component: {fileID: 1229196502}
   - component: {fileID: 1229196501}
   - component: {fileID: 1229196503}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow056
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38084,7 +38383,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 67
+  m_RootOrder: 66
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1229196501
 MeshRenderer:
@@ -38156,7 +38455,7 @@ GameObject:
   - component: {fileID: 1230922968}
   - component: {fileID: 1230922967}
   - component: {fileID: 1230922969}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow053
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38175,7 +38474,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 52
+  m_RootOrder: 51
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1230922967
 MeshRenderer:
@@ -38714,19 +39013,19 @@ Prefab:
     - target: {fileID: 114835995099711248, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
         type: 2}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4795446247349236, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0.18517007
+      value: 0.18517098
       objectReference: {fileID: 0}
     - target: {fileID: 4795446247349236, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0.05557757
+      value: -0.05557486
       objectReference: {fileID: 0}
     - target: {fileID: 4795446247349236, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0.010489795
+      value: 0.010489317
       objectReference: {fileID: 0}
     - target: {fileID: 4795446247349236, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_LocalRotation.w
@@ -38734,17 +39033,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4795446247349236, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -7.774536
+      value: -7.7745514
       objectReference: {fileID: 0}
     - target: {fileID: 4795446247349236, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 11.217491
+      value: 11.217499
       objectReference: {fileID: 0}
     - target: {fileID: 4795446247349236, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
       propertyPath: m_LocalPosition.z
       value: 9.379995
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 54372140911909786, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: c2b87abda8ec82c4c98b53cd1d891ed8, type: 2}
   m_IsPrefabAsset: 0
 --- !u!4 &1246304629 stripped
@@ -39531,7 +39831,7 @@ GameObject:
   - component: {fileID: 1278580935}
   - component: {fileID: 1278580934}
   - component: {fileID: 1278580936}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39622,7 +39922,7 @@ GameObject:
   - component: {fileID: 1281393505}
   - component: {fileID: 1281393504}
   - component: {fileID: 1281393506}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow057
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39641,7 +39941,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 68
+  m_RootOrder: 67
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1281393504
 MeshRenderer:
@@ -40698,7 +40998,7 @@ GameObject:
   - component: {fileID: 1298679882}
   - component: {fileID: 1298679881}
   - component: {fileID: 1298679883}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow057
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40717,7 +41017,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 56
+  m_RootOrder: 55
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1298679881
 MeshRenderer:
@@ -40885,23 +41185,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 81.899994
+      value: 81.34
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.016983654
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.02504156
+      value: 0.06975666
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0004254921
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9995421
+      value: -0.997564
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_RootOrder
@@ -40913,7 +41213,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 177.13
+      value: 352
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalScale.x
@@ -40929,7 +41229,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -1.9470001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -40943,7 +41243,8 @@ Prefab:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1309819512
@@ -41398,7 +41699,7 @@ GameObject:
   - component: {fileID: 1319701133}
   - component: {fileID: 1319701132}
   - component: {fileID: 1319701134}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow058
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41489,7 +41790,7 @@ GameObject:
   - component: {fileID: 1320778087}
   - component: {fileID: 1320778086}
   - component: {fileID: 1320778088}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41508,7 +41809,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 63
+  m_RootOrder: 62
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1320778086
 MeshRenderer:
@@ -41672,7 +41973,7 @@ GameObject:
   - component: {fileID: 1323789846}
   - component: {fileID: 1323789845}
   - component: {fileID: 1323789847}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41991,6 +42292,11 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300540, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
+--- !u!4 &1331255185 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4795446247349236, guid: c2b87abda8ec82c4c98b53cd1d891ed8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1246304628}
 --- !u!1001 &1332049747
 Prefab:
   m_ObjectHideFlags: 0
@@ -42919,7 +43225,7 @@ GameObject:
   - component: {fileID: 1356655792}
   - component: {fileID: 1356655791}
   - component: {fileID: 1356655793}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43688,6 +43994,7 @@ GameObject:
   - component: {fileID: 1387147749}
   - component: {fileID: 1387147751}
   - component: {fileID: 1387147750}
+  - component: {fileID: 1387147752}
   m_Layer: 8
   m_Name: snow052
   m_TagString: Untagged
@@ -43753,6 +44060,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1387147748}
   m_Mesh: {fileID: 4300004, guid: adcf2c5c55b8c194794105c5c61f060e, type: 3}
+--- !u!64 &1387147752
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1387147748}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300004, guid: adcf2c5c55b8c194794105c5c61f060e, type: 3}
 --- !u!1 &1395729654
 GameObject:
   m_ObjectHideFlags: 0
@@ -43765,7 +44086,7 @@ GameObject:
   - component: {fileID: 1395729657}
   - component: {fileID: 1395729656}
   - component: {fileID: 1395729658}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow046
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44681,7 +45002,7 @@ GameObject:
   - component: {fileID: 1416503269}
   - component: {fileID: 1416503268}
   - component: {fileID: 1416503270}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45832,7 +46153,7 @@ GameObject:
   - component: {fileID: 1467523176}
   - component: {fileID: 1467523175}
   - component: {fileID: 1467523177}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46293,7 +46614,7 @@ GameObject:
   - component: {fileID: 1480461483}
   - component: {fileID: 1480461482}
   - component: {fileID: 1480461484}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow034
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46750,7 +47071,6 @@ GameObject:
   - component: {fileID: 1484339590}
   - component: {fileID: 1484339589}
   - component: {fileID: 1484339591}
-  - component: {fileID: 1484339592}
   m_Layer: 8
   m_Name: switch 1
   m_TagString: Untagged
@@ -46833,28 +47153,6 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300092, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
---- !u!114 &1484339592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1484339587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87effbcf148307b4cb198709554d6679, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ac: {fileID: 0}
-  pm: {fileID: 0}
-  time: 1
-  TransformNum: 0
-  UseZoomInOut: 0
-  zoomIn: 0
-  fov: 0
-  zoom_speed: 0
-  Change_angle: 1
-  euler_angle: {x: 35, y: -90, z: 0}
-  offset: {x: 6, y: 8, z: 0}
 --- !u!1 &1488285079
 GameObject:
   m_ObjectHideFlags: 0
@@ -47829,7 +48127,7 @@ GameObject:
   - component: {fileID: 1517632244}
   - component: {fileID: 1517632243}
   - component: {fileID: 1517632245}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47935,8 +48233,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 175.44936, y: 93.831726, z: 2062.2505}
-  m_Center: {x: 0.0009765625, y: 0, z: 0}
+  m_Size: {x: 175.44934, y: 93.831726, z: 1711}
+  m_Center: {x: -0.0009765625, y: 0.0009765625, z: 0}
 --- !u!1 &1518270029
 GameObject:
   m_ObjectHideFlags: 0
@@ -49016,7 +49314,7 @@ GameObject:
   - component: {fileID: 1552844402}
   - component: {fileID: 1552844401}
   - component: {fileID: 1552844403}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49722,7 +50020,7 @@ GameObject:
   - component: {fileID: 1575745722}
   - component: {fileID: 1575745721}
   - component: {fileID: 1575745723}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49879,7 +50177,7 @@ GameObject:
   - component: {fileID: 1581073685}
   - component: {fileID: 1581073684}
   - component: {fileID: 1581073686}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51858,7 +52156,7 @@ GameObject:
   - component: {fileID: 1636062717}
   - component: {fileID: 1636062716}
   - component: {fileID: 1636062718}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow042
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52046,7 +52344,6 @@ GameObject:
   - component: {fileID: 1642663311}
   - component: {fileID: 1642663310}
   - component: {fileID: 1642663312}
-  - component: {fileID: 1642663313}
   m_Layer: 8
   m_Name: switch
   m_TagString: Untagged
@@ -52129,28 +52426,6 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300086, guid: 937ea58c13c912c4895640621210c4b7, type: 3}
---- !u!114 &1642663313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1642663308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87effbcf148307b4cb198709554d6679, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ac: {fileID: 0}
-  pm: {fileID: 0}
-  time: 1
-  TransformNum: 0
-  UseZoomInOut: 0
-  zoomIn: 0
-  fov: 0
-  zoom_speed: 0
-  Change_angle: 1
-  euler_angle: {x: 35, y: 90, z: 0}
-  offset: {x: -6, y: 8, z: 0}
 --- !u!1001 &1650105712
 Prefab:
   m_ObjectHideFlags: 0
@@ -53011,7 +53286,7 @@ GameObject:
   - component: {fileID: 1676877776}
   - component: {fileID: 1676877775}
   - component: {fileID: 1676877777}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow039
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54082,7 +54357,7 @@ GameObject:
   - component: {fileID: 1712535872}
   - component: {fileID: 1712535871}
   - component: {fileID: 1712535873}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54101,7 +54376,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 62
+  m_RootOrder: 61
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1712535871
 MeshRenderer:
@@ -54805,7 +55080,7 @@ GameObject:
   - component: {fileID: 1730613808}
   - component: {fileID: 1730613807}
   - component: {fileID: 1730613809}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow020 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54824,7 +55099,7 @@ Transform:
   m_LocalScale: {x: 1.000001, y: 1.0000005, z: 1.0000005}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 72
+  m_RootOrder: 71
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1730613807
 MeshRenderer:
@@ -56869,7 +57144,7 @@ GameObject:
   - component: {fileID: 1809987622}
   - component: {fileID: 1809987621}
   - component: {fileID: 1809987623}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow049
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56888,7 +57163,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 57
+  m_RootOrder: 56
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1809987621
 MeshRenderer:
@@ -56960,7 +57235,7 @@ GameObject:
   - component: {fileID: 1812006940}
   - component: {fileID: 1812006939}
   - component: {fileID: 1812006941}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow024
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57051,7 +57326,7 @@ GameObject:
   - component: {fileID: 1812821711}
   - component: {fileID: 1812821710}
   - component: {fileID: 1812821709}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: brick 13 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57598,7 +57873,7 @@ GameObject:
   - component: {fileID: 1830775681}
   - component: {fileID: 1830775680}
   - component: {fileID: 1830775682}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57924,6 +58199,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9ea963d280538c84db696c0ecb1b4277, type: 2}
+    - target: {fileID: 100002, guid: 0676678f9b92bcb49a2c1658320dc1f4, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0676678f9b92bcb49a2c1658320dc1f4, type: 3}
   m_IsPrefabAsset: 0
@@ -58371,6 +58650,11 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1.8413
       objectReference: {fileID: 0}
+    - target: {fileID: 114668075872635420, guid: 4cefd2f6481af434bad9235c71ad7ec0,
+        type: 2}
+      propertyPath: direction
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
   m_IsPrefabAsset: 0
@@ -58528,7 +58812,7 @@ GameObject:
   - component: {fileID: 1872290632}
   - component: {fileID: 1872290631}
   - component: {fileID: 1872290633}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow055
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58547,7 +58831,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 66
+  m_RootOrder: 65
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1872290631
 MeshRenderer:
@@ -58619,7 +58903,7 @@ GameObject:
   - component: {fileID: 1874911003}
   - component: {fileID: 1874911002}
   - component: {fileID: 1874911004}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow054
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58638,7 +58922,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 65
+  m_RootOrder: 64
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1874911002
 MeshRenderer:
@@ -59914,7 +60198,7 @@ GameObject:
   - component: {fileID: 1897151944}
   - component: {fileID: 1897151943}
   - component: {fileID: 1897151945}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60005,7 +60289,7 @@ GameObject:
   - component: {fileID: 1898047277}
   - component: {fileID: 1898047276}
   - component: {fileID: 1898047275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: brick 13 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61603,6 +61887,11 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1.8413
       objectReference: {fileID: 0}
+    - target: {fileID: 114668075872635420, guid: 4cefd2f6481af434bad9235c71ad7ec0,
+        type: 2}
+      propertyPath: direction
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
   m_IsPrefabAsset: 0
@@ -61618,7 +61907,7 @@ GameObject:
   - component: {fileID: 1943684719}
   - component: {fileID: 1943684718}
   - component: {fileID: 1943684720}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow018
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62029,7 +62318,7 @@ GameObject:
   - component: {fileID: 1959233948}
   - component: {fileID: 1959233947}
   - component: {fileID: 1959233949}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow055
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62048,7 +62337,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 54
+  m_RootOrder: 53
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1959233947
 MeshRenderer:
@@ -62886,7 +63175,7 @@ GameObject:
   - component: {fileID: 1986674821}
   - component: {fileID: 1986674820}
   - component: {fileID: 1986674822}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62977,7 +63266,7 @@ GameObject:
   - component: {fileID: 1986851949}
   - component: {fileID: 1986851948}
   - component: {fileID: 1986851950}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63563,7 +63852,7 @@ GameObject:
   - component: {fileID: 2004000166}
   - component: {fileID: 2004000165}
   - component: {fileID: 2004000167}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow044
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63992,7 +64281,7 @@ GameObject:
   - component: {fileID: 2020719772}
   - component: {fileID: 2020719771}
   - component: {fileID: 2020719773}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow 11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64429,7 +64718,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2028066957}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64495,7 +64784,6 @@ Transform:
   - {fileID: 806232545}
   - {fileID: 1986851947}
   - {fileID: 1112358117}
-  - {fileID: 838077025}
   - {fileID: 2138884315}
   - {fileID: 628815819}
   - {fileID: 1230922966}
@@ -64926,19 +65214,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.016983654
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.02504156
+      value: -0.025042912
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0004254921
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9995421
+      value: 0.99968636
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_RootOrder
@@ -64950,7 +65238,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 177.13
+      value: -2.8700001
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalScale.x
@@ -64966,7 +65254,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -1.9470001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -64979,6 +65267,38 @@ Prefab:
     - target: {fileID: 100004, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67f00185ba66a0a43ba9e5d66e5f8d53, type: 3}
@@ -65550,6 +65870,22 @@ Prefab:
       propertyPath: m_LocalRotation.x
       value: 4.6566134e-10
       objectReference: {fileID: 0}
+    - target: {fileID: 1098918692351978, guid: e87df237149aa9d4fb15f9108f0d09a3, type: 2}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1040272271549082, guid: e87df237149aa9d4fb15f9108f0d09a3, type: 2}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1749728721456558, guid: e87df237149aa9d4fb15f9108f0d09a3, type: 2}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1488748439260530, guid: e87df237149aa9d4fb15f9108f0d09a3, type: 2}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e87df237149aa9d4fb15f9108f0d09a3, type: 2}
   m_IsPrefabAsset: 0
@@ -65727,7 +66063,7 @@ GameObject:
   - component: {fileID: 2086306299}
   - component: {fileID: 2086306298}
   - component: {fileID: 2086306300}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow023
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66399,7 +66735,7 @@ GameObject:
   - component: {fileID: 2109546160}
   - component: {fileID: 2109546159}
   - component: {fileID: 2109546161}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snow041
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67270,7 +67606,7 @@ GameObject:
   - component: {fileID: 2138884317}
   - component: {fileID: 2138884316}
   - component: {fileID: 2138884318}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: snwo (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67289,7 +67625,7 @@ Transform:
   m_LocalScale: {x: 1.000001, y: 1.0000005, z: 1.0000005}
   m_Children: []
   m_Father: {fileID: 2028066957}
-  m_RootOrder: 50
+  m_RootOrder: 49
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &2138884316
 MeshRenderer:
@@ -67361,7 +67697,7 @@ GameObject:
   - component: {fileID: 2140804316}
   - component: {fileID: 2140804315}
   - component: {fileID: 2140804314}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: brick 13 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67660,18 +67996,6 @@ Prefab:
     - target: {fileID: 4727412529167188, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
       propertyPath: m_RootOrder
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890468561857812, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -2.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890468561857812, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 8.39
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890468561857812, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -1.653
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cefd2f6481af434bad9235c71ad7ec0, type: 2}

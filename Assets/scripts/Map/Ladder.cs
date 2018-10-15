@@ -15,12 +15,17 @@ public class Ladder : MonoBehaviour
         cc = player.GetComponent<CharacterController>();
     }
 
-    private void OnTriggerEnter(Collider collision)
+    private void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast"))
+        if( collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast") )
         {
-            player.has_on_ladder = true;
-            pm.enabled = false;
+            var pos = player.transform.position;
+            pos += transform.up * 1.3f ;
+            pos.y += 0.2f;
+            player.transform.position = pos;
+            player.has_on_ladder = false;
+            player.ani.SetBool("Ladder" , false);
+            pm.enabled = true;
         }
     }
 
@@ -28,21 +33,34 @@ public class Ladder : MonoBehaviour
     {
         if (player.has_on_ladder)
         {
+            player.transform.rotation = Quaternion.LookRotation(transform.up);
             pm.set_movement_zero();
             float h = Input.GetAxisRaw("Vertical");
-            Vector3 up = Vector3.zero;
-            up.y = h;
-            up *= pm.moveSpeed * 0.5f;
-            cc.Move(up);
+            if( h != 0)
+            {
+                Vector3 up = Vector3.zero;
+                up.y = h;
+                up *= pm.moveSpeed * 0.5f;
+                cc.Move(up);
+            }
+            else
+            {
+
+            }
         }
     }
 
-    private void OnTriggerExit(Collider collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast") )
+        if( collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast") )
         {
-            player.has_on_ladder = false;
-            pm.enabled = true;
+            var pos = player.transform.position;
+            pos.y -= 1f;
+            player.transform.position = pos;
+            player.has_on_ladder = true;
+            player.ani.SetBool("Ladder" , true);
+            pm.enabled = false;
         }
     }
+
 }

@@ -26,7 +26,6 @@ public class PlayerMove : InputHandler
     float fall_tick;
     public Transform spawn_point;
     bool dash_start;
-    public float y;
 
     float step;
     public Material stamina;
@@ -37,11 +36,35 @@ public class PlayerMove : InputHandler
     {
         if( !im.has_not_anything_input() && ( player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle") ) )
         {
-            y = player.ac.cam.transform.eulerAngles.y;
-            Quaternion look = Quaternion.LookRotation(Camera.main.transform.position , cpd.near_pin.position);
+            if(cpd != null)
+            {
+                switch( cpd.p.direction )
+                {
+                    case Pin.Direction.Forward:
+                        movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() , moveSpeed);
+                        movement.z = Mathf.Lerp(movement.z , im.get_Vertical() , moveSpeed);
+                        break;
+                    case Pin.Direction.Back:
+                        movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() * -1 , moveSpeed);
+                        movement.z = Mathf.Lerp(movement.z , im.get_Vertical() * -1 , moveSpeed);
+                        break;
+                    case Pin.Direction.Left:
+                        movement.x = Mathf.Lerp(movement.x , im.get_Vertical() * -1 , moveSpeed);
+                        movement.z = Mathf.Lerp(movement.z , im.get_Horizontal() , moveSpeed);
+                        break;
+                    case Pin.Direction.Right:
+                        movement.x = Mathf.Lerp(movement.x , im.get_Vertical() , moveSpeed);
+                        movement.z = Mathf.Lerp(movement.z , im.get_Horizontal() * -1 , moveSpeed);
+                        break;
+                }
+            }
+            else
+            {
+                movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() , moveSpeed);
+                movement.z = Mathf.Lerp(movement.z , im.get_Vertical() , moveSpeed);
+            }
 
-            movement.x = Mathf.Lerp(movement.x , im.get_Horizontal()  , moveSpeed);
-            movement.z = Mathf.Lerp(movement.z , im.get_Vertical() , moveSpeed);
+
             /*
             if( cx >= 0 && sy >= 0 )
             {
