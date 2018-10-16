@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TimeSwitch : BasicSwitch {
     //시간에 따라 유지되는 스위치
     //
@@ -14,7 +15,6 @@ public class TimeSwitch : BasicSwitch {
 
     public float wait_time; //켜진 후 기다리는 시간
     public bool clear_puzzle = false;
-
 
     private void Start()
     {

@@ -83,7 +83,9 @@ public class GroundCheck : Observer {
             }
         }
         ac = FindObjectOfType<ActionCamera>();
-        boss_action = boss_state.gameObject.GetComponent<Boss_Action>();
+        boss_state = FindObjectOfType<Boss_State>();
+        boss_action = FindObjectOfType<Boss_Action>();
+        ui_black_screen = FindObjectOfType<BlackScreen>();
     }
 
     public IEnumerator shoot_player()

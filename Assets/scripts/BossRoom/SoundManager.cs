@@ -39,6 +39,7 @@ public class SoundManager : MonoBehaviour
         heartbeat,
         boss_attack_ready,
         boss_groggy,
+        switch_hit,
     };
     public SoundList sound_number;
 

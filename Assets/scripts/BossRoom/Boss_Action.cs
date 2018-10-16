@@ -98,11 +98,11 @@ public class Boss_Action : MonoBehaviour {
 
         ac = FindObjectOfType<ActionCamera>();
 
-        rotate_pos = new Vector3[4];
-        rotate_pos[0] = new Vector3 (rotate_center.position.x - map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z);
-        rotate_pos[1] = new Vector3(rotate_center.position.x , rotate_center.position.y - idle_y_pos, rotate_center.position.z + map_height);
-        rotate_pos[2] = new Vector3(rotate_center.position.x + map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z );
-        rotate_pos[3] = new Vector3(rotate_center.position.x, rotate_center.position.y - idle_y_pos, rotate_center.position.z - map_height);
+        //rotate_pos = new Vector3[4];
+        //rotate_pos[0] = new Vector3 (rotate_center.position.x - map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z);
+        //rotate_pos[1] = new Vector3(rotate_center.position.x , rotate_center.position.y - idle_y_pos, rotate_center.position.z + map_height);
+        //rotate_pos[2] = new Vector3(rotate_center.position.x + map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z );
+        //rotate_pos[3] = new Vector3(rotate_center.position.x, rotate_center.position.y - idle_y_pos, rotate_center.position.z - map_height);
     }
 
     private void LateUpdate()
