@@ -128,17 +128,18 @@ public class ActionCamera : MonoBehaviour
                         Ray ray = new Ray(tmp , ( ( transform.position + Offset ) - tmp ).normalized);
                         if( Physics.Raycast(ray , out hit , Vector3.Distance(tmp , transform.position) , ~( 1 << LayerMask.NameToLayer("Ground") )) )
                         {
-                            pos = Vector3.Lerp(transform.position , hit.point , action_speed);
+                            pos = Vector3.Lerp(pos , hit.point , action_speed);
                         }
                         else
                         {
-                            pos = Vector3.Lerp(transform.position , now_target.position + Offset , action_speed);
+                            pos = Vector3.Lerp(pos , now_target.position + Offset , action_speed);
                         }
                         Debug.DrawRay(ray.origin , ray.direction * Vector3.Distance(tmp , transform.position + Offset) , Color.blue);
                         transform.position = pos;
                         has_camera_using = false;
                         //transform.eulerAngles = Angle;
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation , Quaternion.Euler(Angle) , action_speed * 10f);
+                        var ang = Quaternion.Lerp(transform.rotation , Quaternion.RotateTowards(transform.rotation , Quaternion.Euler(Angle) , action_speed * 10f), action_speed);
+                        transform.rotation = ang;
                         break;
 
                     case State.Move_Pin:

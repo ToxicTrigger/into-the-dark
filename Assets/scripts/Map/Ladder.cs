@@ -7,12 +7,13 @@ public class Ladder : MonoBehaviour
     public Player player;
     PlayerMove pm;
     CharacterController cc;
-
+    float ani_speed;
     private void Start()
     {
         player = GameObject.FindObjectOfType<Player>();
         pm = player.GetComponent<PlayerMove>();
         cc = player.GetComponent<CharacterController>();
+        
     }
 
     /*
@@ -30,6 +31,7 @@ public class Ladder : MonoBehaviour
         }
     }
     */
+
     public void FixedUpdate()
     {
         if( player.has_on_ladder )
@@ -39,14 +41,15 @@ public class Ladder : MonoBehaviour
             float h = Input.GetAxisRaw("Vertical");
             if( h != 0 )
             {
+                player.ani.speed = 1;
                 Vector3 up = Vector3.zero;
                 up.y = h;
-                up *= pm.moveSpeed * 0.5f;
+                up *= pm.moveSpeed * 0.25f;
                 cc.Move(up);
             }
             else
             {
-
+                player.ani.speed = 0;
             }
         }
     }

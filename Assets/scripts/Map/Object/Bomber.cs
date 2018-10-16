@@ -13,10 +13,12 @@ public class Bomber : Damageable
     [SerializeField]
     private GameObject particle;
     private ActionCamera cam;
+    public AudioSource broken_sound;
 
     public void Awake()
     {
         cam = FindObjectOfType<ActionCamera>();
+        
     }
 
 
@@ -24,13 +26,11 @@ public class Bomber : Damageable
     {
         if( this.Dead )
         {
+
+            broken_sound.PlayOneShot(broken_sound.clip);
+            broken_sound.transform.parent = null;
+            Destroy(broken_sound , 4.0f);
             Collider[] targets = Physics.OverlapSphere(this.transform.position , explosion_range);
-
-            for( int i = 0 ; i < transform.childCount ; ++i )
-            {
-
-            }
-
 
             foreach( Collider coll in targets )
             {
@@ -49,7 +49,7 @@ public class Bomber : Damageable
                 {
                     if( !r.Equals(this) )
                     {
-                        r.AddExplosionForce(explosion_power * 20 , this.transform.position , explosion_range , 2400.0f);
+                        r.AddExplosionForce(explosion_power * 40 , this.transform.position , explosion_range* 3 , 2400.0f);
 
                         r.AddForce(( r.position - this.transform.position ).normalized * explosion_power , ForceMode.Impulse);
                     }
@@ -61,6 +61,7 @@ public class Bomber : Damageable
                 Destroy(tmp , 5f);
             }
             cam.Shake(4 , 1 , Time.deltaTime);
+            
             Destroy(gameObject);
         }
     }
