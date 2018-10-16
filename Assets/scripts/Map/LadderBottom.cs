@@ -21,11 +21,10 @@ public class LadderBottom : MonoBehaviour {
             )
         {
             var pos = player.transform.position;
-            //pos.y -= 1f;
             player.transform.position = pos;
-            player.has_on_ladder = true;
-            player.ani.SetBool("Ladder" , true);
-            pm.enabled = false;
+            player.has_on_ladder = false;
+            player.ani.SetBool("Ladder" , false);
+            pm.enabled = true;
         }
     }
 

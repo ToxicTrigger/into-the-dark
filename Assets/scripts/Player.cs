@@ -57,7 +57,6 @@ public class Player : MonoBehaviour
     public AudioSource Foot_Step, Sword_Sound;
     public GameObject Fail_UI;
     
-
     public void Start()
     {
         character = GetComponent<CharacterController>();
@@ -72,10 +71,11 @@ public class Player : MonoBehaviour
         ac.SetStateTarget(this.transform , ActionCamera.State.Follow);
     }
 
-    public void setSwordEnable(int val)
+    public void setSwordEnable()
     {
-        if( val == 0 )
+        if( !attack_click )
         {
+            sword_Effect.GetComponent<TrailRenderer>().Clear();
             sword_Effect.SetActive(false);
             Sword.GetComponent<Collider>().enabled = false;
         }
@@ -84,7 +84,7 @@ public class Player : MonoBehaviour
             Sword.GetComponent<Collider>().enabled = true;
             sword_Effect.SetActive(true);
             sword_Effect.GetComponent<TrailRenderer>().Clear();
-            Sword_Sound.PlayOneShot(Sword_Sound.clip);
+            
         }
     }
 
@@ -291,7 +291,6 @@ public class Player : MonoBehaviour
             is_fighting_something = false;
             is_attack = false;
             line.gameObject.SetActive(false);
-
         }
         else
         {
@@ -315,6 +314,7 @@ public class Player : MonoBehaviour
     {
         if( !damageable.Dead )
         {
+            setSwordEnable();
             if( !dodged )
             {
                 if( Input.GetButton("Dodge") )
