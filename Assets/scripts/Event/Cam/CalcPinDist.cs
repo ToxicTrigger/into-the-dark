@@ -20,12 +20,13 @@ public class CalcPinDist : MonoBehaviour
         var p = GameObject.FindGameObjectsWithTag("Pin");
         player = FindObjectOfType<Player>().transform;
         pm = player.GetComponent<PlayerMove>();
+        cam = Camera.main;
         cam_pos = cam.transform;
         foreach(var i in p)
         {
             pins.Add(i.transform);
         }
-        cam = Camera.main;
+
 	}
 
 	

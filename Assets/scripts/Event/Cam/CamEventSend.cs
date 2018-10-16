@@ -6,7 +6,6 @@ public class CamEventSend : MonoBehaviour
 {
     public ActionCamera ac;
     public PlayerMove pm;
-    public float time = 1;
     public int TransformNum;
     Player player;
 
@@ -16,6 +15,7 @@ public class CamEventSend : MonoBehaviour
     public bool Change_angle;
     public Vector3 euler_angle;
     public Vector3 offset;
+    public float change_ac_speed;
 
     public void Start()
     {
@@ -65,8 +65,8 @@ public class CamEventSend : MonoBehaviour
             {
                 ac.Offset = ac.default_offset;
             }
-            ac.Angle = ac.default_angle;
-            //ac.transform.eulerAngles = ac.default_angle;
+            ac.Angle = new Vector3(21,0,0);
+            ac.action_speed = change_ac_speed;
             ac.SetStateTarget(player.transform , ActionCamera.State.Follow);
         }
     }

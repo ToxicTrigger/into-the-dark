@@ -122,7 +122,7 @@ public class ActionCamera : MonoBehaviour
                     case State.Follow:
 
                         RaycastHit hit;
-                        Vector3 pos = Vector3.zero;
+                        Vector3 pos = transform.position;
                         Vector3 tmp = now_target.position;
                         tmp.y += 1;
                         Ray ray = new Ray(tmp , ( ( transform.position + Offset ) - tmp ).normalized);
@@ -137,7 +137,7 @@ public class ActionCamera : MonoBehaviour
                         Debug.DrawRay(ray.origin , ray.direction * Vector3.Distance(tmp , transform.position + Offset) , Color.blue);
                         transform.position = pos;
                         has_camera_using = false;
-                        transform.eulerAngles = Angle;
+                        //transform.eulerAngles = Angle;
                         transform.rotation = Quaternion.RotateTowards(transform.rotation , Quaternion.Euler(Angle) , action_speed * 10f);
                         break;
 
