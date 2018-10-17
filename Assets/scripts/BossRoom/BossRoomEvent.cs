@@ -71,16 +71,14 @@ public class BossRoomEvent : MonoBehaviour {
         {
             yield return new WaitForSeconds(event_scene[i].start_delay);
 
-            Debug.Log("몇번째 이벤트 ? " + i);
             if (!event_scene[i].is_player_ctrl)
             {
-                //플레이어 컨트롤 막기
-                Debug.Log("asdfasdfa");
                 p_ctrl.enabled = false;
             }
             else
             {
-                p_ctrl.enabled = true;
+                if(!manager.is_game_over)
+                    p_ctrl.enabled = true;
             }
 
             if (event_scene[i].cam_state != ActionCamera.State.Follow)

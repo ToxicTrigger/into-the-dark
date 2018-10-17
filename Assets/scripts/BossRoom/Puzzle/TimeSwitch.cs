@@ -7,18 +7,26 @@ public class TimeSwitch : BasicSwitch {
     //시간에 따라 유지되는 스위치
     //
 
+    enum State
+    {
+        red,
+        blue,
+    }
+
     FootSwitch foot_switch;
 
     public TimeSwitch [] time_switch_list;
 
-    public Light _light;
+    public GameObject []torch_light;
+    public Material[] crystal_mt;
+    public MeshRenderer crystal;
 
     public float wait_time; //켜진 후 기다리는 시간
     public bool clear_puzzle = false;
 
     private void Start()
     {
-        _light.gameObject.SetActive(false);
+        change_light(State.red);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,7 +40,6 @@ public class TimeSwitch : BasicSwitch {
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(this.name + " 충돌 =" + collision.gameObject.name + "//" + collision.gameObject.tag);
         if (collision.transform.CompareTag("Arrow") && !get_switch() && use_enable)
         {
             StartCoroutine(switch_on_timer());
@@ -42,7 +49,7 @@ public class TimeSwitch : BasicSwitch {
 
     IEnumerator switch_on_timer()
     {
-        _light.gameObject.SetActive(true);   //활성화 표시용 불 켜줌
+        //change_light(State.blue);   //활성화 표시용 불 켜줌
         set_switch(true);
 
         for(int i=0; i<time_switch_list.Length; i++)
@@ -66,16 +73,15 @@ public class TimeSwitch : BasicSwitch {
         yield return new WaitForSeconds(wait_time);
         if (!clear_puzzle)
         {
-            _light.gameObject.SetActive(false);
+            //change_light(State.red);
             set_switch(false);
             //foot_switch.ground_move_ctrl(Vector3.down);//시간이 다하면 강제로 내려줌
         }
-
     }
 
     public override void off_switch_set()
     {
-        _light.gameObject.SetActive(false);
+        change_light(State.red);
         clear_puzzle = false;
     }
 
@@ -107,7 +113,36 @@ public class TimeSwitch : BasicSwitch {
     //발판용
     public void off_switch()
     {
-        _light.gameObject.SetActive(false);
+        change_light(State.red);
         set_switch(false);
+    }
+
+    public override void set_switch(bool _onoff)
+    {
+        base.set_switch(_onoff);
+        if (_onoff)
+            change_light(State.blue);
+        else
+            change_light(State.red);
+                
+    }
+
+    void change_light(State _state)
+    {
+        switch (_state)
+        {
+            case State.red:
+                torch_light[(int)State.blue].SetActive(false);   //활성화 표시용 불 켜줌
+                torch_light[(int)State.red].SetActive(true);
+                crystal.material = crystal_mt[(int)State.red];
+                break;
+            case State.blue:
+                torch_light[(int)State.blue].SetActive(true);   //활성화 표시용 불 켜줌
+                torch_light[(int)State.red].SetActive(false);
+                crystal.material = crystal_mt[(int)State.blue];
+                break;
+            default:
+                break;
+        }
     }
 }

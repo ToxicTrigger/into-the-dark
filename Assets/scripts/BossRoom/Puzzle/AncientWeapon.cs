@@ -37,11 +37,6 @@ public class AncientWeapon : Observer
 
         _timer = activate_timer();
         state = State.Activated;  //초기 상태는 비활성화된 상태
-        if (ready_timer == null)
-        {
-            ready_timer = ready_action(true);
-            StartCoroutine(ready_timer);
-        }
     }
 
     void Update()
@@ -59,11 +54,7 @@ public class AncientWeapon : Observer
 
             if (activate_torch_count >= max_count)
             {
-                if(ready_timer == null)
-                {
-                    ready_timer = ready_action(false);
-                    StartCoroutine(ready_timer);
-                }
+                activate();
             }
         }
         else
@@ -74,12 +65,7 @@ public class AncientWeapon : Observer
             }
             if (state == State.Activated)
             {
-                if (ready_timer == null)
-                {
-                    ready_timer = ready_action(false);
-                    StartCoroutine(ready_timer);
-                }
-                //deactivate();
+                deactivate();
             }
         }
     }
@@ -94,26 +80,28 @@ public class AncientWeapon : Observer
             manager.play_event(BossRoomManager.EventList.AncientWeapon);
         }
 
+        manager.send_boss_state(Boss_State.State.Groggy, BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
+               
         animator.SetBool("activate", true);
-        //weapon_light.gameObject.SetActive(true);
         state = State.Activated;
 
-        //StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
-        //_timer = activate_timer();  //새로운 코루틴 할당 
-        //StartCoroutine(_timer);
+        timer_start();
     }
 
     //활성화 타이머
     IEnumerator activate_timer()
     {
-        BossRoomManager.get_instance().get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
+        manager.get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
         yield return new WaitForSeconds(time_list[(int)BossRoomManager.get_instance().phase]);
+        Debug.Log("** end activate **");
+        deactivate();
+    }
 
-        if (ready_timer == null)
-        {
-            ready_timer = ready_action(false);
-            StartCoroutine(ready_timer);
-        }
+    public void timer_start()
+    {
+        StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
+        _timer = activate_timer();  //새로운 코루틴 할당 
+        StartCoroutine(_timer);
     }
 
 
@@ -159,10 +147,6 @@ public class AncientWeapon : Observer
         }
         if (state == State.Activated)
         {
-            BossRoomManager.get_instance().send_boss_state(Boss_State.State.Groggy, BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
-            StopCoroutine(_timer);  //이전 코루틴 정지 _ 새로운 코루틴을 그냥 할당해 버리면 이전 코루틴을 정지시킬 수 없어짐 (아마도?)
-            _timer = activate_timer();  //새로운 코루틴 할당 
-            StartCoroutine(_timer);
         }
         move_dir = Vector3.zero;
         ready_timer = null;
@@ -173,11 +157,10 @@ public class AncientWeapon : Observer
     void deactivate()
     {
         animator.SetBool("activate", false);
-        //weapon_light.gameObject.SetActive(false);
         state = State.Deactivated;
-        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Soar_Attack, BossRoomManager.get_instance().center);
-        BossRoomManager.get_instance().increase_pahse(false);
-        BossRoomManager.get_instance().get_ancient_ui().switching_ui(false,0.0f);
+        manager.send_boss_state(Boss_State.State.Soar_Attack, BossRoomManager.get_instance().center);
+        manager.increase_pahse(false);
+        manager.get_ancient_ui().switching_ui(false,0.0f);
         //현재 고대병기가 비활성화되는 때는 완벽히 스위치를 초기화했을 때 이므로 여기서 임의로 카운트를0으로 만들어줌
         activate_torch_count = 0;
         StopCoroutine(_timer);
@@ -185,15 +168,13 @@ public class AncientWeapon : Observer
     }
 
     //외부 요인으로 인하여 고대병기 비활성화 _ 고대병기에 대한 처리만 해준다.
-    void torch_deactivate()
-    {
-        animator.SetBool("activate", false);
-        //외부 요인으로 인해 비활성화됨
-        //weapon_light.gameObject.SetActive(false);
-        state = State.Deactivated;
-        StopCoroutine(_timer);    //타이머가 정상적으로 종료되기 전에 외부요인으로 인해 비활성화 되었으므로 임의로 종료시킨다.
-        BossRoomManager.get_instance().get_ancient_ui().switching_ui(false, 0.0f);
-    }
+    //void torch_deactivate()
+    //{
+    //    animator.SetBool("activate", false);
+    //    state = State.Deactivated;
+    //    StopCoroutine(_timer);    //타이머가 정상적으로 종료되기 전에 외부요인으로 인해 비활성화 되었으므로 임의로 종료시킨다.
+    //    manager.get_ancient_ui().switching_ui(false, 0.0f);
+    //}
 
     public float get_activate_time()
     {

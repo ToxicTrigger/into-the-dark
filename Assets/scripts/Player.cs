@@ -227,6 +227,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void all_collect_item()
+    {
+        if (totems != null)
+        {
+            for(int i =0; i<totems.Count; i++)
+            {
+                Destroy(totems[i].gameObject);
+                ++installable_totems;
+            }
+            totems.Clear();
+        }
+    }
+
     void step_ani()
     {
         switch( cur_ani )

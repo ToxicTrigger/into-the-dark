@@ -27,10 +27,6 @@ public class BasicSwitch : Observable {
         switch_on = _onoff;
         if (_onoff == true)
         {
-            //hit_sound = on_sound;
-            //hit_sound.Play();
-            //on_sound.Play();
-            //gameObject.GetComponent<AudioSource>().Play();
             SoundManager.get_instance().play_sound(SoundManager.SoundList.switch_hit);
         }
         notify_all();

@@ -29,6 +29,8 @@ public class BossHpUI : MonoBehaviour {
 
     public float red_speed;
 
+    public Image[] image;
+
 	void Start () {
         boss = BossRoomManager.get_instance().get_boss();
         BossRoomManager.get_instance().set_hp_ui(this);
@@ -42,6 +44,7 @@ public class BossHpUI : MonoBehaviour {
         ui_down_pos = this_rt.position;
         ui_up_pos = new Vector3(ui_down_pos.x, ui_up_pos.y, ui_down_pos.z);
         corutine = slide_ui(Vector3.up);
+        switching_ui(false);
     }
 
     void Update()
@@ -65,14 +68,22 @@ public class BossHpUI : MonoBehaviour {
         onoff = _onoff;
         if (onoff)
         {
-            this_rt.position = new Vector3(this_rt.position.x, ui_up_pos.y, this_rt.position.z);
+            for(int i =0;i<image.Length; i++)
+            {
+                image[i].enabled = true;
+            }
+            //this_rt.position = new Vector3(this_rt.position.x, ui_up_pos.y, this_rt.position.z);
             //StopCoroutine(corutine);
             //corutine = slide_ui(Vector3.up);
             //StartCoroutine(corutine);
         }
         else
         {
-            this_rt.position = new Vector3(this_rt.position.x, -200 , this_rt.position.z);
+            for (int i = 0; i < image.Length; i++)
+            {
+                image[i].enabled = false;
+            }
+            //this_rt.position = new Vector3(this_rt.position.x, -200 , this_rt.position.z);
             //StopCoroutine(corutine);
             //corutine = slide_ui(Vector3.down);
             //StartCoroutine(corutine);

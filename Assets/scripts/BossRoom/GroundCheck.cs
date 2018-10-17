@@ -232,10 +232,10 @@ public class GroundCheck : Observer {
         }
         if (other.CompareTag("Boss"))
         {
-            //Debug.Log("충돌!" + this.name + " || " + other.name);
-            if (type == Type.Wood && manager.phase == BossRoomManager.Phase.two)
+            if (type == Type.Wood && manager.phase == BossRoomManager.Phase.two && boss_state.get_state() == Boss_State.State.Cross_Attack)
             {
                 type = Type.Null;
+                manager.minus_wood_bridge_count();
                 for (int i = 0; i < wood_bridge_piece.Length; i++)
                 {
                     wood_bridge_piece[i].isKinematic = false;
