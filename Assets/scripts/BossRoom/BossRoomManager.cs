@@ -81,6 +81,15 @@ public class BossRoomManager : Observer {
     public GameObject tuto_enemy;
     public Transform tuto_enemy_pos;
 
+    public GameObject hp_heal;
+
+    [System.Serializable]
+    public struct ItemPos
+    {
+        public Transform[] item_pos;
+    }
+    public ItemPos[] item_pos_list;
+
     public enum EventList
     {
         Entrance,       // 입장
@@ -134,6 +143,8 @@ public class BossRoomManager : Observer {
     //페이즈 증가 함수 (페이즈 증가 -> 새로운 페이즈 시작)
     public void increase_pahse(bool _add)
     {
+        player.all_collect_item();
+
         for (int i = 0; i < reloc.get_reloc((int)phase).torch_set[0].foot_switch.Length; i++)
         {
             reloc.get_reloc((int)phase).torch_set[0].switch_object[i].set_switch(false);
@@ -345,4 +356,11 @@ public class BossRoomManager : Observer {
         }
     }
 
+    public void drop_item()
+    {
+        for(int i=0; i<item_pos_list[boss_action.groggy_cnt].item_pos.Length; i++)
+        {
+            GameObject _item = Instantiate(hp_heal, item_pos_list[boss_action.groggy_cnt].item_pos[i].position, Quaternion.identity);
+        }        
+    }
 }

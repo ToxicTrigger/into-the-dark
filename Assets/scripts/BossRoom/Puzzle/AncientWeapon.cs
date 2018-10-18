@@ -36,7 +36,7 @@ public class AncientWeapon : Observer
         manager = BossRoomManager.get_instance();
 
         _timer = activate_timer();
-        state = State.Activated;  //초기 상태는 비활성화된 상태
+        state = State.Deactivated;  //초기 상태는 비활성화된 상태
     }
 
     void Update()
@@ -46,9 +46,8 @@ public class AncientWeapon : Observer
     public override void notify(Observable observable)
     {
         BasicSwitch torch = observable as BasicSwitch;
-        //ObservableTorch torch = observable as ObservableTorch;
+
         if (torch.get_switch())
-        //if(torch.get_state() == ObservableTorch.State.On)
         {
             if(activate_torch_count <max_count ) activate_torch_count++;
 
@@ -79,18 +78,19 @@ public class AncientWeapon : Observer
         {
             manager.play_event(BossRoomManager.EventList.AncientWeapon);
         }
-
-        manager.send_boss_state(Boss_State.State.Groggy, BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
-               
         animator.SetBool("activate", true);
+        manager.drop_item();
+
         state = State.Activated;
 
+        //이걸 애니메이션 재생이 완료 된 후 실행하자!
         timer_start();
     }
 
     //활성화 타이머
     IEnumerator activate_timer()
     {
+        manager.send_boss_state(Boss_State.State.Groggy, BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
         manager.get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
         yield return new WaitForSeconds(time_list[(int)BossRoomManager.get_instance().phase]);
         Debug.Log("** end activate **");
@@ -166,15 +166,6 @@ public class AncientWeapon : Observer
         StopCoroutine(_timer);
 
     }
-
-    //외부 요인으로 인하여 고대병기 비활성화 _ 고대병기에 대한 처리만 해준다.
-    //void torch_deactivate()
-    //{
-    //    animator.SetBool("activate", false);
-    //    state = State.Deactivated;
-    //    StopCoroutine(_timer);    //타이머가 정상적으로 종료되기 전에 외부요인으로 인해 비활성화 되었으므로 임의로 종료시킨다.
-    //    manager.get_ancient_ui().switching_ui(false, 0.0f);
-    //}
 
     public float get_activate_time()
     {
