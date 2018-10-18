@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 public class TitleAnimation : MonoBehaviour
 {
     public Animator ani;
+    public GameObject UI;
+    public GameObject Char;
+    public ActionCamera cam;
     public bool has_input_end, has_fade_out, somting_click;
     public int input;
 
@@ -41,6 +44,11 @@ public class TitleAnimation : MonoBehaviour
         input = target;
     }
 
+    private void Start()
+    {
+        Char.SetActive(false);
+    }
+
     void Update()
     {
         if( has_input_end )
@@ -64,8 +72,10 @@ public class TitleAnimation : MonoBehaviour
                 switch( input )
                 {
                     case 0:
-                        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-                        SceneManager.LoadSceneAsync("stage1 scene");
+                        gameObject.SetActive(false);
+                        UI.SetActive(true);
+                        Char.SetActive(true);
+                        cam.enabled = true;
                         break;
                     case 3:
                         Application.Quit();

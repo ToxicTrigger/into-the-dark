@@ -346,16 +346,36 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void Cancel()
+    {
+        esc_push = false;
+        UI_Ani.SetBool("esc" , esc_push);
+    }
+
     public bool has_on_ladder;
     float end_tick;
-
+    public Animator UI_Ani;
+    public bool esc_push;
     public void Update()
     {
         if( Input.GetKeyDown(KeyCode.Escape) )
         {
-            Application.Quit();
-
+            if(esc_push)
+            {
+                esc_push = false;
+            }
+            else
+            {
+                esc_push = true;
+            }
+            UI_Ani.SetBool("esc" , esc_push);
         }
+        
         if( damageable.Dead )
         {
             Fail_UI.SetActive(true);

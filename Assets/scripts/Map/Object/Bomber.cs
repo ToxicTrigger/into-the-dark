@@ -26,7 +26,6 @@ public class Bomber : Damageable
     {
         if( this.Dead )
         {
-
             broken_sound.PlayOneShot(broken_sound.clip);
             broken_sound.transform.parent = null;
             Destroy(broken_sound , 4.0f);

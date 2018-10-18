@@ -34,6 +34,9 @@ public class ActionCamera : MonoBehaviour
     public Vector3 Angle, default_angle;
     public Vector3 Offset, default_offset;
 
+    public bool GameStart;
+    public float StartTime;
+
     IEnumerator Zoom(float fov , bool zoom_in , float speed)
     {
         float cam_fov = cam.fieldOfView;
@@ -132,7 +135,14 @@ public class ActionCamera : MonoBehaviour
                         }
                         else
                         {
-                            pos = Vector3.Lerp(pos , now_target.position + Offset , action_speed);
+                            if(GameStart)
+                            {
+                                pos = Vector3.Lerp(pos , now_target.position + Offset , action_speed * 0.1f);
+                            }
+                            else
+                            {
+                                pos = Vector3.Lerp(pos , now_target.position + Offset , action_speed);
+                            }
                         }
                         Debug.DrawRay(ray.origin , ray.direction * Vector3.Distance(tmp , transform.position + Offset) , Color.blue);
                         transform.position = pos;
@@ -165,6 +175,18 @@ public class ActionCamera : MonoBehaviour
 
     public void Update()
     {
+        if(GameStart)
+        {
+            if(StartTime <= 0)
+            {
+                StartTime = 0;
+                GameStart = false;
+            }
+            else
+            {
+                StartTime -= Time.deltaTime;
+            }
+        }
         if( !has_camera_using )
         {
             if( command.Count != 0 )
