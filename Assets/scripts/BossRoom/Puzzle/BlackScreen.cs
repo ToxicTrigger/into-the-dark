@@ -21,7 +21,7 @@ public class BlackScreen : Observable
 	void Start () {        
         rt = this.GetComponent<RectTransform>();
         black_image = this.GetComponent<Image>();
-        //rt.sizeDelta = new Vector2(Camera.main.pixelWidth, Camera.main.pixelHeight);
+        rt.sizeDelta = new Vector2(Camera.main.pixelWidth, Camera.main.pixelHeight);
         black_image.color = color;
         state = ScreenState.Fade_Out;
     }

@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class FootSwitch : Observer {
 
+    enum State
+    {
+        Up,
+        Down,
+
+    }
+    State state;
+
     public GameObject switch_ground;
     public float move_speed;
     public Vector3 idle_position;
     public float y_up_pos;
     SoundManager sound_manager;
+    public List<Collider> p_coll;
 
     IEnumerator move_corutine;
 
@@ -17,6 +26,7 @@ public class FootSwitch : Observer {
     public bool is_time_switch;
 
 	void Start () {
+        p_coll = new List<Collider>();
         move_corutine = ground_move(Vector3.up);
 
         sound_manager = SoundManager.get_instance();
@@ -26,9 +36,11 @@ public class FootSwitch : Observer {
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((other.CompareTag("Player") && other.name == "Player") || other.CompareTag("Enemy"))
+        if (other.name.Equals("Player") || other.CompareTag("Enemy"))
         {
-            on_count++;
+            if(!p_coll.Contains(other))
+                on_count++;
+
             Debug.Log(other.name + "이 발판에 올라옴");
 
             ground_move_ctrl(Vector3.up);
@@ -40,6 +52,11 @@ public class FootSwitch : Observer {
             if(other.CompareTag("Enemy"))
             {
                 other.transform.Find("DestroyCheck(Clone)").GetComponent<DestroyCheck>().add_observer(this);
+            }
+            else
+            {
+                if (!p_coll.Contains(other))
+                    p_coll.Add(other);
             }
         }
     }
@@ -56,12 +73,16 @@ public class FootSwitch : Observer {
             {
                 other.transform.Find("DestroyCheck(Clone)").GetComponent<DestroyCheck>().remove_observer(this);
             }
+            else
+            {
+                p_coll.Remove(other);
+            }
         }
     }
 
     IEnumerator ground_move(Vector3 _move_dir)
     {
-        Debug.Log("move : " + _move_dir);
+
         while (true)
         {
             if(!sound_manager.sound_list[(int)SoundManager.SoundList.rumble].isPlaying)
@@ -74,15 +95,18 @@ public class FootSwitch : Observer {
                 switch_ground.transform.position.y > idle_position.y + y_up_pos)
             {
                 switch_ground.transform.position = new Vector3(idle_position.x, idle_position.y + y_up_pos, idle_position.z);
+                state = State.Up;
                 Debug.Log("break");
                 break;
             }
             else if (_move_dir == Vector3.down &&
-                switch_ground.transform.position.y < idle_position.y)
+                     switch_ground.transform.position.y < idle_position.y)
             {
                 switch_ground.transform.position = idle_position;
                 if (is_time_switch && switch_ground.GetComponent<TimeSwitch>().get_switch())
                 {
+                    state = State.Down;
+
                     switch_ground.GetComponent<TimeSwitch>().off_switch();
                 }
                 break;
@@ -99,6 +123,7 @@ public class FootSwitch : Observer {
 
     public void ground_move_ctrl(Vector3 _dir)
     {
+        Debug.Log("땅 움직이는 방향" + _dir);
         if (move_corutine != null)
         {
             StopCoroutine(move_corutine);
@@ -120,8 +145,8 @@ public class FootSwitch : Observer {
     {
         if (is_time_switch && on_count <= 0 && BossRoomManager.get_instance().get_ancient_weapon().get_state() != AncientWeapon.State.Activated)
         {
-            switch_ground.GetComponent<TimeSwitch>().set_use_enable(false);
             ground_move_ctrl(Vector3.down);
+            switch_ground.GetComponent<TimeSwitch>().set_use_enable(false);
         }
         else if(!is_time_switch && on_count <=0)
         {

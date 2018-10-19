@@ -179,7 +179,7 @@ public class ActionCamera : MonoBehaviour
     {
         while( true )
         {
-            Debug.Log("cur_event_name = " + now_event_name);
+            //Debug.Log("cur_event_name = " + now_event_name);
             switch ( now_state )
             {
                 case State.Idle:

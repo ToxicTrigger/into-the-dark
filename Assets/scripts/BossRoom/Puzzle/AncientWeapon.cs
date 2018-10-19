@@ -30,6 +30,7 @@ public class AncientWeapon : Observer
     IEnumerator _timer;
     public IEnumerator ready_timer;
  
+    
 
     void Start()
     {
@@ -83,8 +84,10 @@ public class AncientWeapon : Observer
 
         state = State.Activated;
 
+        for (int i = 0; i < 3; i++)
+            manager.reloc.get_reloc((int)manager.phase).torch_set[0].foot_switch[i].ground_move_ctrl(Vector3.up);
         //이걸 애니메이션 재생이 완료 된 후 실행하자!
-        timer_start();
+        //timer_start();
     }
 
     //활성화 타이머
@@ -103,7 +106,6 @@ public class AncientWeapon : Observer
         _timer = activate_timer();  //새로운 코루틴 할당 
         StartCoroutine(_timer);
     }
-
 
     public float move_y;
     public int ready_time;
@@ -161,6 +163,8 @@ public class AncientWeapon : Observer
         manager.send_boss_state(Boss_State.State.Soar_Attack, BossRoomManager.get_instance().center);
         manager.increase_pahse(false);
         manager.get_ancient_ui().switching_ui(false,0.0f);
+        for (int i = 0; i < 3; i++)
+            manager.reloc.get_reloc((int)manager.phase).torch_set[0].foot_switch[i].ground_move_ctrl(Vector3.down);
         //현재 고대병기가 비활성화되는 때는 완벽히 스위치를 초기화했을 때 이므로 여기서 임의로 카운트를0으로 만들어줌
         activate_torch_count = 0;
         StopCoroutine(_timer);

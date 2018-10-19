@@ -45,13 +45,10 @@ public class BossRoomRelocation : MonoBehaviour {
     [System.Serializable]
     public class Relocation_set
     {
-        //public Transform[] switch_position;
-        //public BasicSwitch[] switch_object;
         public Torch_set[] torch_set;
         public Transform[] water_position;
         public GameObject[] water_object;
         public GroundCheck[] ground_list;
-        //public Transform[] enemy_position;
         public CrumblingPillar[] c_pillar;
     }
 
