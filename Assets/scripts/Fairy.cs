@@ -39,6 +39,7 @@ public class Fairy : MonoBehaviour
     // 2 / 100 * LR = Hp
     void calc_range()
     {
+        if(PlayerHp != null)
         Hp_per = PlayerHp.Hp / 100;
 
         //50per down?
@@ -46,7 +47,7 @@ public class Fairy : MonoBehaviour
         {
             down_tick += Time.deltaTime;
             cur_color = ggg.Evaluate(down_tick % 1.0f);
-            VignetteModel.Settings s = ppb.profile.vignette.settings;
+
 
             if (smoothness >= 1.0f)
             {
@@ -65,11 +66,8 @@ public class Fairy : MonoBehaviour
             {
                 smoothness += Time.deltaTime;
             }
-
-
-            s.smoothness = smoothness;
-
-            ppb.profile.vignette.settings = s;
+            
+            
         }
         else
         {

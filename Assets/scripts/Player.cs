@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -346,9 +347,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    
     public void Quit()
     {
-        Application.Quit();
+        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadSceneAsync(3);
     }
 
     public void Cancel()

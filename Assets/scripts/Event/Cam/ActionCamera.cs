@@ -129,8 +129,9 @@ public class ActionCamera : MonoBehaviour
                         Vector3 tmp = now_target.position;
                         tmp.y += 1;
                         Ray ray = new Ray(tmp , ( ( transform.position + Offset ) - tmp ).normalized);
-                        if( Physics.Raycast(ray , out hit , Vector3.Distance(tmp , transform.position) , ~( 1 << LayerMask.NameToLayer("Ground") )) )
+                        if( Physics.Raycast(ray , out hit , Vector3.Distance(tmp , transform.position) , ~( 1 << LayerMask.NameToLayer("Ground") ) ))
                         {
+                            if(!hit.collider.gameObject.CompareTag("Sword") && hit.collider.gameObject.layer != LayerMask.NameToLayer("Object"))
                             pos = Vector3.Lerp(pos , hit.point , action_speed);
                         }
                         else

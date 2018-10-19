@@ -24,8 +24,9 @@ public class TotuUI : MonoBehaviour
     public IEnumerator StopTimer()
     {
         pm.enabled = false;
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(7.0f);
         pm.enabled = true;
+        state = -1;
     }
     private void Start()
     {
@@ -40,7 +41,7 @@ public class TotuUI : MonoBehaviour
             case -1:
                 if(pm.enabled)
                 {
-                    if( !InputManager.get_instance().has_not_anything_input() )
+                    if( InputManager.get_instance().get_Vertical() != 0 )
                     {
                         if(!event_run)
                         StartCoroutine(StartTimer(2));
