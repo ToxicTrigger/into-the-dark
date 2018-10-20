@@ -33,7 +33,7 @@ public class CheckAI : Switch
     public new void Update()
     {
         Empty = AIs.Count == 0 ? true : false;
-        this.OnOff = !Empty;
+        this.OnOff = Empty;
         remove_dead_ai();
     }
 }
