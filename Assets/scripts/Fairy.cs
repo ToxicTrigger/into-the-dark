@@ -75,6 +75,7 @@ public class Fairy : MonoBehaviour
         }
 
         Range_per = Hp_per / 2 * 4f;
+        if(Range != null)
         Range.radius = Range_per;
     }
 

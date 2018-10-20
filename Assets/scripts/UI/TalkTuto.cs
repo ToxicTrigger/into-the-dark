@@ -21,5 +21,9 @@ public class TalkTuto : Switch {
 
             }
         }
+        else
+        {
+            e.Down();
+        }
     }
 }

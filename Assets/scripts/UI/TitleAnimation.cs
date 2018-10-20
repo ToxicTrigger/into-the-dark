@@ -46,6 +46,7 @@ public class TitleAnimation : MonoBehaviour
 
     private void Start()
     {
+        UI.SetActive(false);
         Char.SetActive(false);
     }
 
