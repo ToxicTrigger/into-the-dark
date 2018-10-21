@@ -57,6 +57,7 @@ public class Player : MonoBehaviour
     public CharacterController character;
     public AudioSource Foot_Step, Sword_Sound;
     public GameObject Fail_UI;
+    
 
     public void Start()
     {
@@ -345,7 +346,6 @@ public class Player : MonoBehaviour
             }
         }
     }
-
 
     public void Quit()
     {

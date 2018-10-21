@@ -5,17 +5,26 @@ using UnityEngine;
 
 public class SceneInit : MonoBehaviour
 {
-    public void init_scene()
+    public Animator ani;
+    IEnumerator init_scene()
     {
-        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        ani.SetBool("fade" , true);
+        yield return new WaitForSeconds(3 / 2);
+        FindObjectOfType<Player>().transform.position = FindObjectOfType<PlayerMove>().spawn_point.position;
+        yield return new WaitForSeconds(2);
+        ani.SetBool("fade" , false);
     }
 
     public void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            init_scene();
+            StartCoroutine( init_scene());
         }
+    }
+
+    private void Start()
+    {
+        ani = FindObjectOfType<Player>().gameObject.transform.parent.GetComponent<Animator>();
     }
 }

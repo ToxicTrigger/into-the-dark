@@ -36,6 +36,7 @@ public class Portal : MonoBehaviour
         yield return new WaitForSeconds(time);
         cpd.Speed = speed;
         fade.SetBool("fade", false);
+        FindObjectOfType<PlayerMove>().spawn_point.position = des.position;
     }
 
     private void OnTriggerEnter(Collider other)
