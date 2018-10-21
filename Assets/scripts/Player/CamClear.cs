@@ -25,6 +25,7 @@ public class CamClear : MonoBehaviour
                 {
                     cur = now;
                     now = ray.collider;
+                    if(now.GetComponent<Renderer>() != null)
                     now.GetComponent<Renderer>().enabled = false;
                 }
             }
@@ -36,45 +37,6 @@ public class CamClear : MonoBehaviour
                     cur = null;
                 }
             }
-
-            /*
-            if( ray.collider != null )
-            {
-                if(!ray.collider.CompareTag("Player"))
-                {
-                    cur = ray.collider;
-                    if( !same )
-                    {
-                        if( cur.gameObject.layer != LayerMask.NameToLayer("Ground") && cur.Equals(ray.collider) )
-                        {
-                            same = true;
-                            Debug.Log("가리는 놈 : " + ray.collider.name);
-                            cur.GetComponent<MeshRenderer>().enabled = false;
-                        }
-                    }
-                    else if( !cur.Equals(ray.collider) )
-                    {
-                        same = false;
-                        cur.GetComponent<MeshRenderer>().enabled = true;
-                    }
-                }
-
-            }
-            else
-            {
-                Debug.Log("벗어남");
-                if( cur != null )
-                {
-                    if( cur.GetComponent<MeshRenderer>() != null )
-                    {
-                        cur.GetComponent<MeshRenderer>().enabled = true;
-                    }
-                }
-
-                same = false;
-                cur = null;
-            }
-                  */
         }
     }
 }

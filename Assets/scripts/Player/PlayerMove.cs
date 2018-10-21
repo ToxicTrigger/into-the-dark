@@ -31,12 +31,14 @@ public class PlayerMove : InputHandler
     public Material stamina;
 
     public CalcPinDist cpd;
+    public int cus_x = 1, cus_z = 1;
+    public bool reverse;
 
     public override void Work(InputManager im)
     {
         if( !im.has_not_anything_input() && ( player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle") ) )
         {
-            if(cpd != null)
+            if(cpd != null && cpd.enabled)
             {
                 switch( cpd.p.direction )
                 {
@@ -60,40 +62,24 @@ public class PlayerMove : InputHandler
             }
             else
             {
-                movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() , moveSpeed);
-                movement.z = Mathf.Lerp(movement.z , im.get_Vertical() , moveSpeed);
-            }
+                if(!reverse)
+                {
+                    movement.x = Mathf.Lerp(movement.x, im.get_Horizontal() * cus_x, moveSpeed);
+                    movement.z = Mathf.Lerp(movement.z, im.get_Vertical() * cus_z, moveSpeed);
+                }
+                else
+                {
+                    movement.x = Mathf.Lerp(movement.x, im.get_Vertical() * cus_z, moveSpeed);
+                    movement.z = Mathf.Lerp(movement.z, im.get_Horizontal() * cus_x, moveSpeed);
+                }
 
-
-            /*
-            if( cx >= 0 && sy >= 0 )
-            {
-                movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() , moveSpeed);
-                movement.z = Mathf.Lerp(movement.z , im.get_Vertical() , moveSpeed);
             }
-            else if( cx < 0 && sy >= 0 )
-            {
-                movement.x = Mathf.Lerp(movement.x , im.get_Vertical() , moveSpeed);
-                movement.z = Mathf.Lerp(movement.z , im.get_Horizontal() * -1 , moveSpeed);
-            }
-            else if( cx < 0 && sy < 0 )
-            {
-                movement.x = Mathf.Lerp(movement.x , im.get_Horizontal() * -1 , moveSpeed);
-                movement.z = Mathf.Lerp(movement.z , im.get_Vertical() * -1 , moveSpeed);
-            }
-            else if( cx >= 0 && sy < 0 )
-            {
-                movement.x = Mathf.Lerp(movement.x , im.get_Vertical() * -1 , moveSpeed);
-                movement.z = Mathf.Lerp(movement.z , im.get_Horizontal() , moveSpeed);
-            }
-            */
 
             player.ani.SetFloat("Forward" , movement.magnitude);
             Vector3 t = movement * 3;
             t.y = 0;
             Quaternion q = Quaternion.LookRotation(t);
             transform.rotation = Quaternion.Slerp(transform.rotation , q , moveSpeed * 1.5f);
-
 
             if( Input.GetButton("Dash") && stamina.GetFloat("_Amount") < 0 )
             {

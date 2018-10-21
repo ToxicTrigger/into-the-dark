@@ -511,7 +511,7 @@ public class Boss_Action : MonoBehaviour {
 
     void attack_player(int _damage)
     {
-        player.gameObject.GetComponent<Damageable>().Damaged(_damage, 1.0f);
+        player.gameObject.GetComponent<Damageable>().Damaged(_damage, 1.0f, player.transform);
     }
 
     public void set_idle_state(bool _state)

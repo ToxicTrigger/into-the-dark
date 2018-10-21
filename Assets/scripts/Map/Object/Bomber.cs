@@ -40,7 +40,7 @@ public class Bomber : Damageable
                 {
                     if( !d.Equals(this) )
                     {
-                        d.Damaged(Damage , 1);
+                        d.Damaged(Damage , 1, transform);
                     }
                 }
 

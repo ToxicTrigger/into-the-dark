@@ -105,7 +105,7 @@ public class AIAction : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Arrow"))
         {
-            damageable.Damaged(1 , 0);
+            damageable.Damaged(1 , 0, collision.transform);
         }
         else
         {
@@ -146,6 +146,7 @@ public class AIAction : MonoBehaviour
         {
             if(!first)
             {
+                RenderSettings.fogEndDistance = 70;
                 first = true;
                 state = state == State.Sleep ? State.Action : State.Idle;
                 find_target = true;

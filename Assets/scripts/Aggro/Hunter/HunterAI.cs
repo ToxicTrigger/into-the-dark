@@ -43,7 +43,7 @@ public class HunterAI : AggroAI {
                         var t = ai.target.transform.parent.GetComponent<Damageable>();
                         if(t != null)
                         {
-                            t.Damaged(ai.attack.Damage , ai.attack.attackTick);
+                            t.Damaged(ai.attack.Damage , ai.attack.attackTick, t.transform);
                             transform.LookAt(ai.target.transform);
                         }
 

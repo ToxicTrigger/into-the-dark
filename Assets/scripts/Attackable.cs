@@ -34,7 +34,7 @@ public class Attackable : MonoBehaviour
                     }
                     else
                     {
-                        player.Damaged(Damage , attackTick);
+                        player.Damaged(Damage , attackTick, player.transform);
                         tick = 0;
                     }
                 }
@@ -59,7 +59,7 @@ public class Attackable : MonoBehaviour
                 }
                 else
                 {
-                    player.Damaged(Damage , attackTick);
+                    player.Damaged(Damage , attackTick, player.transform);
                     tick = 0;
                 }
             }

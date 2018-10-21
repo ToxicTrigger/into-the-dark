@@ -208,8 +208,6 @@ public abstract class AggroAI : Observable {
                 rig.AddTorque((transform.position - player.transform.position).normalized * 200, ForceMode.Impulse);
                 Destroy(rig.gameObject, 2.0f);
             }
-
-
             na.enabled = false;
             //StartCoroutine(Make_DeadEffect());
             Make_DeadEffect();
@@ -244,46 +242,34 @@ public abstract class AggroAI : Observable {
             if (o == null) observers.RemoveAt(i);
         }
     }
-
+    /*
     private void OnTriggerEnter(Collider other)
     {   
         if(other.CompareTag("Sword") || other.CompareTag("Arrow"))
         {
+            Debug.Log(other.name + name);
             GameObject sound = Instantiate(HitSound.gameObject, transform.position, Quaternion.identity, null);
             sound.GetComponent<AudioSource>().PlayOneShot(sound.GetComponent<AudioSource>().clip);
             //HitSound.PlayOneShot(HitSound.clip);
             Destroy(sound, 1.0f);
             this.player.ac.Shake(1,0.2f,Time.deltaTime);
-            damage.Damaged(1, 0.2f);
+            damage.Damaged(1, 0.2f, transform);
             has_Hit = true;
         }
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Sword") || other.CompareTag("Arrow"))
-        {
-            //has_Hit = false;
-        }
-    }
+    */
 
     private void OnCollisionEnter(Collision collision)
     {   
-        if(collision.gameObject.CompareTag("Arrow"))
+        if(collision.gameObject.CompareTag("Arrow") || collision.gameObject.CompareTag("Sword"))
         {
-            Debug.Log("Hit by Arrow");
-            damage.Damaged(collision.gameObject.GetComponent<Arrow>().power, 0.1f);
+            GameObject sound = Instantiate(HitSound.gameObject, transform.position, Quaternion.identity, null);
+            sound.GetComponent<AudioSource>().PlayOneShot(sound.GetComponent<AudioSource>().clip);
+            Destroy(sound, 1.0f);
+            this.player.ac.Shake(1, 0.2f, Time.deltaTime);
+            damage.Damaged(1, 0.2f, transform);
             has_Hit = true;
             Destroy(collision.gameObject);
-        }else if(collision.gameObject.CompareTag("Sword"))
-        {
-             has_Hit = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision other) {
-        if(other.gameObject.CompareTag("Sword"))
-        {
-             //has_Hit = false;
         }
     }
 

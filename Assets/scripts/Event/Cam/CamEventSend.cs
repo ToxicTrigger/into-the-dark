@@ -44,8 +44,6 @@ public class CamEventSend : MonoBehaviour
                 ac.Offset = offset;
                 ac.SetStateTarget(player.transform , ActionCamera.State.Follow);
             }
-            
-           
         }
     }
 

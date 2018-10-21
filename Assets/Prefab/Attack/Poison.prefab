@@ -19,11 +19,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4823237878399010}
-  - component: {fileID: 33924889663653824}
-  - component: {fileID: 23748570664576524}
   - component: {fileID: 135660412554386480}
   - component: {fileID: 54190249421076236}
   - component: {fileID: 114565634296604730}
+  - component: {fileID: 114774364110535580}
   m_Layer: 2
   m_Name: Poison
   m_TagString: Untagged
@@ -31,6 +30,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1084433305569952
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4590550270209870}
+  - component: {fileID: 33336200023440528}
+  - component: {fileID: 23634889962299904}
+  m_Layer: 2
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4590550270209870
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1084433305569952}
+  m_LocalRotation: {x: -0, y: 0.6480003, z: -0, w: 0.76164013}
+  m_LocalPosition: {x: -0.74, y: -0.3, z: -0.14}
+  m_LocalScale: {x: 0.16136366, y: 0.16136366, z: 0.16136366}
+  m_Children: []
+  m_Father: {fileID: 4823237878399010}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 80.782005, z: 0}
 --- !u!4 &4823237878399010
 Transform:
   m_ObjectHideFlags: 1
@@ -38,18 +67,19 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1040700663550674}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -583.6424, y: -823.7907, z: 35.447937}
+  m_LocalPosition: {x: 2.6654902, y: 13.071106, z: -40.077126}
   m_LocalScale: {x: 2.131976, y: 2.131976, z: 2.131976}
-  m_Children: []
+  m_Children:
+  - {fileID: 4590550270209870}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23748570664576524
+--- !u!23 &23634889962299904
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1040700663550674}
+  m_GameObject: {fileID: 1084433305569952}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,7 +89,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 40f819e4b117ab944af720bce6e6ef12, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,13 +109,13 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33924889663653824
+--- !u!33 &33336200023440528
 MeshFilter:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1040700663550674}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_GameObject: {fileID: 1084433305569952}
+  m_Mesh: {fileID: 4300002, guid: 6505040e997da5b428372696766ec13a, type: 3}
 --- !u!54 &54190249421076236
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -118,6 +148,27 @@ MonoBehaviour:
   boss_name: "\uC2EC\uC5F0\uC758 \uC218\uD638\uC790"
   boss: {fileID: 0}
   prefab: {fileID: 1040700663550674}
+  Monster: {fileID: 1288428693582326, guid: b2425a152d9849c4b9ad6bc924f4041c, type: 2}
+--- !u!114 &114774364110535580
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1040700663550674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3bf2e237e92ec74bb587e2dbec7d720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp: 0
+  Max_Hp: 1
+  has_hit: 0
+  Dead: 0
+  Hit_particle: {fileID: 1311226359637562, guid: c5698753348f1d54b91e4f97c2311d2d,
+    type: 2}
+  only_player: 0
+  armor_power: 0
+  per: 0
 --- !u!135 &135660412554386480
 SphereCollider:
   m_ObjectHideFlags: 1

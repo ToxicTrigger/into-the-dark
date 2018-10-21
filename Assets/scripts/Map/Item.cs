@@ -46,7 +46,7 @@ public abstract class Item : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.name.Equals("Player"))
         {
             do_work();
         }

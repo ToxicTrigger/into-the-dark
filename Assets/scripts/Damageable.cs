@@ -9,6 +9,8 @@ public class Damageable : MonoBehaviour
     public bool Dead;
     Transform origin;
 
+    public GameObject Hit_particle;
+
     [SerializeField]
     private bool only_player;
 
@@ -39,7 +41,7 @@ public class Damageable : MonoBehaviour
                 {
                     if( other.gameObject.CompareTag("Arrow") || other.gameObject.CompareTag("Sword") )
                     {
-                        Damaged(attack.Damage , attack.attackTick);
+                        Damaged(attack.Damage , attack.attackTick, transform);
                         if(other.gameObject.CompareTag("Arrow"))
                         {
                             Destroy(other.gameObject);
@@ -48,7 +50,7 @@ public class Damageable : MonoBehaviour
                 }
                 else
                 {
-                    Damaged(attack.Damage , attack.attackTick);
+                    Damaged(attack.Damage , attack.attackTick, transform);
                 }
             }
             else
@@ -63,6 +65,7 @@ public class Damageable : MonoBehaviour
         per = armor_power == 0 ? 1 : armor_power + 1;
         per = armor_power < 0 ? armor_power - 1 : per;
         if( Hp > Max_Hp ) Hp = Max_Hp;
+        if (Hp <= 0) Dead = true;
     }
 
     IEnumerator attack_this(float damage , float tick)
@@ -77,8 +80,12 @@ public class Damageable : MonoBehaviour
         has_hit = false;
     }
 
-    public void Damaged(float dam , float tick)
+    public void Damaged(float dam , float tick, Transform other)
     {
+        Vector3 pos = other.position;
+        pos.y += 1f;
+        GameObject t = Instantiate(Hit_particle, pos, Quaternion.identity, null);
+        Destroy(t, 1.0f);
         StartCoroutine(attack_this(dam , tick));
     }
 }

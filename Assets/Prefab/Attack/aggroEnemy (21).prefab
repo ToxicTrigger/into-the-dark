@@ -918,7 +918,7 @@ GameObject:
   - component: {fileID: 4756752595397094}
   - component: {fileID: 135948379598760880}
   - component: {fileID: 114274986348341160}
-  m_Layer: 9
+  m_Layer: 2
   m_Name: AggroDetect
   m_TagString: TotemAggro
   m_Icon: {fileID: 0}
@@ -2048,7 +2048,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1288428693582326}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 131.92638, y: -28.52024, z: 228.1407}
+  m_LocalPosition: {x: 73.244026, y: 0.36962986, z: -87.66433}
   m_LocalScale: {x: 0.87168014, y: 0.87168014, z: 0.87168014}
   m_Children:
   - {fileID: 4731868778611742}
@@ -2122,10 +2122,10 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1288428693582326}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &82555621616180416
 AudioSource:
@@ -2342,6 +2342,8 @@ MonoBehaviour:
   Max_Hp: 5
   has_hit: 0
   Dead: 0
+  Hit_particle: {fileID: 1311226359637562, guid: c5698753348f1d54b91e4f97c2311d2d,
+    type: 2}
   only_player: 0
   armor_power: 0
   per: 0

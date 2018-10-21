@@ -10,6 +10,7 @@ public class Poison : MonoBehaviour
     public string boss_name;
     public Transform boss;
     public GameObject prefab;
+    public GameObject Monster;
 
     public void Start()
     {
@@ -31,17 +32,25 @@ public class Poison : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Switch"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            Vector3 pos = boss.position;
-            pos.y += 30f;
-            GameObject drop = Instantiate(prefab , pos , Quaternion.identity , null);
-            drop.GetComponent<Rigidbody>().useGravity = true;
-            drop.GetComponent<Poison>().Players = true;
-            drop.GetComponent<Collider>().isTrigger = false;
-            Destroy(gameObject);
-
+            if (other.CompareTag("Switch"))
+            {
+                Vector3 pos = boss.position;
+                pos.y += 30f;
+                GameObject drop = Instantiate(prefab, pos, Quaternion.identity, null);
+                drop.GetComponent<Rigidbody>().useGravity = true;
+                drop.GetComponent<Poison>().Players = true;
+                drop.GetComponent<Collider>().isTrigger = false;
+                Destroy(gameObject);
+            }
+            else
+            {
+                GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
+                Destroy(gameObject);
+            }
         }
+
         if(other.gameObject.name.Equals("Player"))
         {
             Player.Hp -= Damage;

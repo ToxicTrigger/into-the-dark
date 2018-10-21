@@ -108,13 +108,16 @@ public class ActionCamera : MonoBehaviour
             now_target = this.Pins[ number ];
         }
     }
+    int ignore;
     IEnumerator calc_fsm()
     {
+        ignore = (1 << LayerMask.NameToLayer("Ground")) + (1 << LayerMask.NameToLayer("Ignore Raycast"));
         CalcPinDist cpd = FindObjectOfType<CalcPinDist>();
-        bool has_use_Zone = cpd == null ? false : cpd.enabled ;
+        ignore = ~ignore;
         while( true )
         {
-            if(!has_use_Zone)
+            bool has_use_Zone = cpd == null ? false : cpd.enabled;
+            if (!has_use_Zone)
             {
                 switch( now_state )
                 {
@@ -129,10 +132,21 @@ public class ActionCamera : MonoBehaviour
                         Vector3 tmp = now_target.position;
                         tmp.y += 1;
                         Ray ray = new Ray(tmp , ( ( transform.position + Offset ) - tmp ).normalized);
-                        if( Physics.Raycast(ray , out hit , Vector3.Distance(tmp , transform.position) , ~( 1 << LayerMask.NameToLayer("Ground") ) ))
+                        if( Physics.Raycast(ray , out hit , Vector3.Distance(tmp , transform.position) , ignore ))
                         {
-                            if(!hit.collider.gameObject.CompareTag("Sword") && hit.collider.gameObject.layer != LayerMask.NameToLayer("Object"))
-                            pos = Vector3.Lerp(pos , hit.point , action_speed);
+                            if(!hit.collider.gameObject.CompareTag("Sword") 
+                                && hit.collider.gameObject.layer != LayerMask.NameToLayer("Object") 
+                                && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast")
+                                && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ground")
+                                && hit.collider.gameObject.layer != LayerMask.NameToLayer("Totem")
+                                )
+                            {
+                                pos = Vector3.Lerp(pos, hit.point, action_speed);
+                            }
+                            else
+                            {
+                                pos = Vector3.Lerp(pos, now_target.position + Offset, action_speed);
+                            }
                         }
                         else
                         {

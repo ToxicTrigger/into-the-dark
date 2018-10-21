@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4794643639715020}
   - component: {fileID: 114636915834900430}
   - component: {fileID: 135066648194700734}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TotemAggro
   m_TagString: TotemAggro
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4734788624007080}
   - component: {fileID: 33469691197649446}
   - component: {fileID: 23834409490857818}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Object002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4622642316642404}
   - component: {fileID: 33406774918409444}
   - component: {fileID: 23200796898293628}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Object001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4270610923246586}
   - component: {fileID: 198959234633742168}
   - component: {fileID: 199641461677520416}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,9 +89,9 @@ GameObject:
   - component: {fileID: 4784454487831020}
   - component: {fileID: 65435959557351022}
   - component: {fileID: 114469159508898728}
-  m_Layer: 9
+  m_Layer: 18
   m_Name: Totem
-  m_TagString: Totem
+  m_TagString: TotemAggro
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,7 +104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4646378192756250}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: totem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1742413703584996}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 145.8382, y: 6.9033437, z: 23.842731}
+  m_LocalPosition: {x: 84.557365, y: 13.345313, z: -109.78922}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4646378192756250}
@@ -288,8 +288,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2, y: 3, z: 2}
+  m_Center: {x: 0, y: 1.08, z: 0}
 --- !u!114 &114469159508898728
 MonoBehaviour:
   m_ObjectHideFlags: 1
