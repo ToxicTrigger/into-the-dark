@@ -77,13 +77,13 @@ public class Interactable : MonoBehaviour
             get_capture_area = true;
             Talk();
         }
-        else if(dis > talk_distance)
+        else if(dis > talk_distance && dis < 10)
         {
             up_push_button = false;
             down_push_button = false;
             get_capture_area = false;
             hasTalking = false;
-            
+            e.Down();
         }
     }
 

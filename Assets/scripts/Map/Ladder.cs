@@ -25,11 +25,22 @@ public class Ladder : MonoBehaviour
             float h = Input.GetAxisRaw("Vertical");
             if( h != 0 )
             {
-                player.ani.speed = 1;
-                Vector3 up = Vector3.zero;
-                up.y = h;
-                up *= pm.moveSpeed * 0.35f;
-                cc.Move(up);
+                if (!Input.GetButton("Dash"))
+                {
+                    player.ani.speed = 1;
+                    Vector3 up = Vector3.zero;
+                    up.y = h;
+                    up *= pm.moveSpeed * 0.35f;
+                    cc.Move(up);
+                }
+                else
+                {
+                    player.ani.speed = 1.5f;
+                    Vector3 up = Vector3.zero;
+                    up.y = h;
+                    up *= pm.moveSpeed * 0.6f;
+                    cc.Move(up);
+                }
             }
             else
             {

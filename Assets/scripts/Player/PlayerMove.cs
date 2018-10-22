@@ -26,13 +26,20 @@ public class PlayerMove : InputHandler
     float fall_tick;
     public Transform spawn_point;
     bool dash_start;
+    float dash_tick;
+    Color ui_color;
+    Color ui_def;
 
     float step;
     public Material stamina;
+    public float stamina_amount;
 
     public CalcPinDist cpd;
     public int cus_x = 1, cus_z = 1;
     public bool reverse;
+
+    public float stamina_tick;
+    public bool stamina_zero; 
 
     public override void Work(InputManager im)
     {
@@ -81,9 +88,8 @@ public class PlayerMove : InputHandler
             Quaternion q = Quaternion.LookRotation(t);
             transform.rotation = Quaternion.Slerp(transform.rotation , q , moveSpeed * 1.5f);
 
-            if( Input.GetButton("Dash") && stamina.GetFloat("_Amount") < 0 )
+            if( Input.GetButton("Dash") && !stamina_zero )
             {
-
                 if( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
                 {
                     movement = Vector3.Lerp(movement , player.ac.cam.transform.right.normalized * moveSpeed * 5f , moveSpeed);
@@ -102,12 +108,21 @@ public class PlayerMove : InputHandler
                 {
                     movement = Vector3.Lerp(movement , -player.ac.cam.transform.forward.normalized * moveSpeed * 5f , moveSpeed);
                 }
-                stamina.SetFloat("_Amount" , stamina.GetFloat("_Amount") + 0.005f);
+
+                if(stamina_amount >= 0 )
+                {
+                    stamina_zero = true;
+                    return;
+                }
+                else
+                {
+                    stamina.SetFloat("_Amount", stamina.GetFloat("_Amount") + 0.005f);
+                    dash_tick = 5;
+                }
 
             }
             else
             {
-
                 if( im.get_Horizontal() != 0 && im.get_Horizontal() > 0 )
                 {
                     movement = Vector3.Lerp(movement , player.ac.cam.transform.right.normalized * moveSpeed , moveSpeed);
@@ -187,6 +202,19 @@ public class PlayerMove : InputHandler
         }
     }
 
+    void update_stamina_ui()
+    {
+        if(dash_tick > 0)
+        {
+            dash_tick -= Time.deltaTime;
+            ui_color.a = 1;
+        }
+        else
+        {
+            dash_tick = 0;
+            ui_color.a = 0;
+        }
+    }
 
     void update_move_player_checkPoint()
     {
@@ -196,20 +224,41 @@ public class PlayerMove : InputHandler
             is_falling_out = false;
         }
     }
-
     public void FixedUpdate()
     {
+        ui_def = stamina.GetColor("_Color");
+        update_stamina_ui();
+        float a = Mathf.Lerp(ui_def.a, ui_color.a, Time.deltaTime);
+        ui_def.a = a;
+
+        stamina.SetColor("_Color", ui_def);
+
+        stamina_amount = stamina.GetFloat("_Amount");
         has_ground = cc.isGrounded;
+
+        if(stamina_zero)
+        {
+            if(stamina_tick > 3)
+            {
+                stamina_zero = false;
+                stamina_tick = 0;
+            }
+            else
+            {
+                stamina_tick += Time.deltaTime;
+            }
+        }
+
         if( check_falling )
         {
             update_fall();
             update_move_player_checkPoint();
         }
-        if( stamina.GetFloat("_Amount") < -1 )
+        if( stamina_amount < -1 )
         {
             stamina.SetFloat("_Amount" , -1);
         }
-        else if( stamina.GetFloat("_Amount") != -1 )
+        else if(stamina_amount != -1 )
         {
             stamina.SetFloat("_Amount" , stamina.GetFloat("_Amount") - 0.003f);
         }
@@ -222,5 +271,12 @@ public class PlayerMove : InputHandler
         cc = GetComponent<CharacterController>();
         cpd = FindObjectOfType<CalcPinDist>();
         step = cc.stepOffset;
+        ui_color = Color.white;
+    }
+
+    public void OnApplicationQuit()
+    {
+        stamina.SetColor("_Color", Color.white);
+        stamina.SetFloat("_Amount", -1);
     }
 }

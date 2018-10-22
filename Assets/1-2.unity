@@ -504,6 +504,15 @@ Prefab:
       propertyPath: m_LocalPosition.x
       value: 57.17
       objectReference: {fileID: 0}
+    - target: {fileID: 1176233376908158, guid: e3233af6147a3f14f97f39b008bdf2ad, type: 2}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 64939698155937576, guid: e3233af6147a3f14f97f39b008bdf2ad,
+        type: 2}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3233af6147a3f14f97f39b008bdf2ad, type: 2}
   m_IsPrefabAsset: 0
@@ -5868,6 +5877,7 @@ MonoBehaviour:
   Foot_Step: {fileID: 277925471}
   Sword_Sound: {fileID: 257624794}
   Fail_UI: {fileID: 1862506638}
+  has_stamina_useable: 0
   attack_click: 0
   click_tick: 0.23344576
   num: 0
@@ -5912,10 +5922,13 @@ MonoBehaviour:
   check_falling: 0
   spawn_point: {fileID: 1082590936}
   stamina: {fileID: 2100000, guid: 167c6343ef31ef241ac020ccbd1dd21e, type: 2}
+  stamina_amount: 0
   cpd: {fileID: 0}
   cus_x: -1
   cus_z: -1
   reverse: 0
+  stamina_tick: 0
+  stamina_zero: 0
 --- !u!114 &261859864
 MonoBehaviour:
   m_ObjectHideFlags: 0
