@@ -45,13 +45,10 @@ public class BossRoomRelocation : MonoBehaviour {
     [System.Serializable]
     public class Relocation_set
     {
-        //public Transform[] switch_position;
-        //public BasicSwitch[] switch_object;
         public Torch_set[] torch_set;
         public Transform[] water_position;
         public GameObject[] water_object;
         public GroundCheck[] ground_list;
-        //public Transform[] enemy_position;
         public CrumblingPillar[] c_pillar;
     }
 
@@ -70,20 +67,20 @@ public class BossRoomRelocation : MonoBehaviour {
     //재배치 시작!
     public void relocation(int phase)
     {
-        //페이즈가 2 이상이라면 기존 스위치와 횃불을 모두 삭제한다. (phase-1)
-        if(phase >= 1) //페이즈2이상
-        {
-            for (int i = 0; i < reloc_set[phase - 1].torch_set.Length; i++)
-            {
-                //Destroy(reloc_set[phase - 1].torch_set[i].torch_object.gameObject);
+        ////페이즈가 2 이상이라면 기존 스위치와 횃불을 모두 삭제한다. (phase-1)
+        //if(phase >= 1) //페이즈2이상
+        //{
+        //    for (int i = 0; i < reloc_set[phase - 1].torch_set.Length; i++)
+        //    {
+        //        //Destroy(reloc_set[phase - 1].torch_set[i].torch_object.gameObject);
 
-                for(int z= 0; z<reloc_set[phase-1].torch_set[i].switch_object.Length; z++)
-                {
-                    Destroy(reloc_set[phase - 1].torch_set[i].switch_object[z].gameObject);
-                    Destroy(reloc_set[phase - 1].torch_set[i].foot_switch[z].gameObject);
-                }
-            }
-        }
+        //        for(int z= 0; z<reloc_set[phase-1].torch_set[i].switch_object.Length; z++)
+        //        {
+        //            Destroy(reloc_set[phase - 1].torch_set[i].switch_object[z].gameObject);
+        //            Destroy(reloc_set[phase - 1].torch_set[i].foot_switch[z].gameObject);
+        //        }
+        //    }
+        //}
 
         //페이즈 정보에 따라 새로운 스위치와 횃불을 동적으로 생성한다.
         for(int i=0; i<reloc_set[phase].torch_set.Length; i++)

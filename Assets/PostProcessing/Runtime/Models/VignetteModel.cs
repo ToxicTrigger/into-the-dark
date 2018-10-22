@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace UnityEngine.PostProcessing
 {
@@ -65,6 +66,18 @@ namespace UnityEngine.PostProcessing
         {
             get { return m_Settings; }
             set { m_Settings = value; }
+        }
+
+        public void set_val(float _smooth, Vector4 _color)
+        {
+            if (_smooth >= 1) _smooth = 1;
+            else if (_smooth <= 0.01f) _smooth = 0.01f;
+
+            if (_color.x >= 1) _color.x = 1;
+            else if (_color.x <= 0) _color.x = 0;
+
+            m_Settings.smoothness = _smooth;
+            m_Settings.color = _color;
         }
 
         public override void Reset()

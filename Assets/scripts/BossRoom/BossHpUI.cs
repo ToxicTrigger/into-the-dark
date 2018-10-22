@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BossHpUI : MonoBehaviour {
 
     //public GameObject Image;
-    public GameObject red_hp;
+    public GameObject yellow_hp;
 
     float max_width;
 
@@ -17,7 +17,7 @@ public class BossHpUI : MonoBehaviour {
 
     public float hp_percentage;
 
-    public RectTransform rt;
+    public RectTransform rt_red, rt_yellow;
     RectTransform this_rt;
 
     Boss_Worm boss;
@@ -27,19 +27,24 @@ public class BossHpUI : MonoBehaviour {
 
     IEnumerator corutine;
 
+    public float red_speed;
+
+    public Image[] image;
+
 	void Start () {
         boss = BossRoomManager.get_instance().get_boss();
         BossRoomManager.get_instance().set_hp_ui(this);
-        red_hp = this.transform.GetChild(0).gameObject;
+        yellow_hp = this.transform.GetChild(1).gameObject;
         max_hp = boss.get_max_hp();
-        rt = red_hp.GetComponent<RectTransform>();
+        rt_yellow = yellow_hp.GetComponent<RectTransform>();
         this_rt = this.GetComponent<RectTransform>();
-        max_width = rt.rect.width;
+        max_width = rt_yellow.rect.width;
 
         onoff = false;
         ui_down_pos = this_rt.position;
         ui_up_pos = new Vector3(ui_down_pos.x, ui_up_pos.y, ui_down_pos.z);
         corutine = slide_ui(Vector3.up);
+        switching_ui(false);
     }
 
     void Update()
@@ -50,7 +55,11 @@ public class BossHpUI : MonoBehaviour {
 
             current_width = max_width * hp_percentage;
 
-            rt.sizeDelta = new Vector2(current_width, rt.rect.height);
+            rt_yellow.sizeDelta = new Vector2(current_width, rt_yellow.rect.height);
+        }
+        if (rt_red.sizeDelta.x > rt_yellow.sizeDelta.x)
+        {
+            rt_red.sizeDelta = new Vector2(rt_red.sizeDelta.x -red_speed, rt_red.rect.height);
         }
     }
 
@@ -59,15 +68,25 @@ public class BossHpUI : MonoBehaviour {
         onoff = _onoff;
         if (onoff)
         {
-            StopCoroutine(corutine);
-            corutine = slide_ui(Vector3.up);
-            StartCoroutine(corutine);
+            for(int i =0;i<image.Length; i++)
+            {
+                image[i].enabled = true;
+            }
+            //this_rt.position = new Vector3(this_rt.position.x, ui_up_pos.y, this_rt.position.z);
+            //StopCoroutine(corutine);
+            //corutine = slide_ui(Vector3.up);
+            //StartCoroutine(corutine);
         }
         else
         {
-            StopCoroutine(corutine);
-            corutine = slide_ui(Vector3.down);
-            StartCoroutine(corutine);
+            for (int i = 0; i < image.Length; i++)
+            {
+                image[i].enabled = false;
+            }
+            //this_rt.position = new Vector3(this_rt.position.x, -200 , this_rt.position.z);
+            //StopCoroutine(corutine);
+            //corutine = slide_ui(Vector3.down);
+            //StartCoroutine(corutine);
         }
     }
 

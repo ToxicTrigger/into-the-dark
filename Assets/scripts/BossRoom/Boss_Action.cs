@@ -98,11 +98,11 @@ public class Boss_Action : MonoBehaviour {
 
         ac = FindObjectOfType<ActionCamera>();
 
-        rotate_pos = new Vector3[4];
-        rotate_pos[0] = new Vector3 (rotate_center.position.x - map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z);
-        rotate_pos[1] = new Vector3(rotate_center.position.x , rotate_center.position.y - idle_y_pos, rotate_center.position.z + map_height);
-        rotate_pos[2] = new Vector3(rotate_center.position.x + map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z );
-        rotate_pos[3] = new Vector3(rotate_center.position.x, rotate_center.position.y - idle_y_pos, rotate_center.position.z - map_height);
+        //rotate_pos = new Vector3[4];
+        //rotate_pos[0] = new Vector3 (rotate_center.position.x - map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z);
+        //rotate_pos[1] = new Vector3(rotate_center.position.x , rotate_center.position.y - idle_y_pos, rotate_center.position.z + map_height);
+        //rotate_pos[2] = new Vector3(rotate_center.position.x + map_width, rotate_center.position.y - idle_y_pos, rotate_center.position.z );
+        //rotate_pos[3] = new Vector3(rotate_center.position.x, rotate_center.position.y - idle_y_pos, rotate_center.position.z - map_height);
     }
 
     private void LateUpdate()
@@ -248,13 +248,13 @@ public class Boss_Action : MonoBehaviour {
                     cross_start = cross_point + (-dir * cross_distance);
                     cross_end = cross_center.position;//cross_point + (dir * cross_distance);
 
-                    transform.parent.position = new Vector3(cross_start.x, transform.parent.position.y, cross_start.z);
+                    transform.parent.position = new Vector3(cross_start.x, around_transform.position.y, cross_start.z);
                     action_phase = 2;
 
                     move_target = new Vector3(cross_end.x, cross_end.y, cross_end.z);
                     origin_dis = Vector2.Distance(new Vector2(cross_start.x, cross_start.z), new Vector2(cross_end.x, cross_end.z));
 
-                    jump_power = 1;
+                    jump_power = 1; test_cnt = 0;
                 }
                 else if(action_phase ==2)
                 {
@@ -262,6 +262,8 @@ public class Boss_Action : MonoBehaviour {
                     float cur_dis = Vector2.Distance(new Vector2(transform.parent.position.x, transform.parent.position.z), new Vector2(move_target.x, move_target.z));
                     move_dir.y = Mathf.Lerp(cross_height, -2.0f, (origin_dis - cur_dis) / origin_dis - 0.3f);
                     move_dir.y *= jump_power;
+                    test_cnt++;
+                    //Debug.Log("["+test_cnt+"] cross_height = "+move_dir.y);
                     //if (move_dir.y < 0) move_dir.y *= jump_power;
 
                     transform.parent.position += move_dir * cross_speed * Time.deltaTime;
@@ -419,7 +421,7 @@ public class Boss_Action : MonoBehaviour {
             case Boss_State.State.Groggy_End:
 
                 break;
-            case Boss_State.State.Death:
+            case Boss_State.State.Death:               
                 //애니메이션/소리 재생등을 완료한 후 삭제까지 처리!
                 break;
             case Boss_State.State.Ready:
@@ -529,16 +531,26 @@ public class Boss_Action : MonoBehaviour {
         soar_target = _gameobj;
     }
 
+    public void set_soar_target(GroundCheck _gameobj, float _dis, float _height)
+    {
+        soar_target = _gameobj;
+        cross_distance = _dis;
+        cross_height = _height;
+    }
+
     public void groggy_shake_cam()
     {
         Debug.Log("shake");
         ac.Shake(shake_tick, shake_power, Time.deltaTime);
     }
 
-    public void set_cross_dis(float _dis, float _height)
+    public void set_cross_dis(float _dis, float _height, GameObject obj)
     {
-        cross_distance = _dis;
-        cross_height = _height;
+        if (obj == soar_target.gameObject)
+        {
+            cross_distance = _dis;
+            cross_height = _height;
+        }
     }
-
+    int test_cnt;
 }

@@ -17,6 +17,10 @@ public class CamEventSend : MonoBehaviour
     public Vector3 offset;
     public float change_ac_speed;
 
+    [Tooltip("기본 속도(1) * action_speed")]
+    public float action_speed;
+    public float guarantee_time;
+
     public void Start()
     {
         ac = FindObjectOfType<ActionCamera>();
@@ -51,9 +55,16 @@ public class CamEventSend : MonoBehaviour
     {
         if( other.gameObject.name.Equals("Player") )
         {
-            if(fov >= ac.default_fov)
+            if (UseZoomInOut)
             {
-                ac.ZoomInOut(ac.default_fov , true , zoom_speed);
+                if (fov >= ac.default_fov)
+                {
+                    ac.ZoomInOut(ac.default_fov, true, zoom_speed);
+                }
+                else
+                {
+                    ac.ZoomInOut(ac.default_fov, false, zoom_speed);
+                }
             }
             else
             {

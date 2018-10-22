@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundCheck : Observer {
+public class GroundCheck : Observer
+{
     //플레이어가 땅에 있는지에 대한 체크
 
     public enum Type
@@ -38,7 +39,7 @@ public class GroundCheck : Observer {
     public GameObject player;
     public GameObject _player;
 
-    public Transform [] enemy_position;
+    public Transform[] enemy_position;
 
     public int enemy_count;
     public int heartbeat_count;
@@ -46,14 +47,14 @@ public class GroundCheck : Observer {
     [Tooltip("몇걸음부터 인식할지")]
     public float cognition_step_count;
     [Tooltip("인식 후 보스의 상태 변화 시간")]
-    public int [] cognition_time_list;
+    public int[] cognition_time_list;
 
-    public Rigidbody []wood_bridge_piece;
+    public Rigidbody[] wood_bridge_piece;
 
     public GameObject wood_bridge;
     public GameObject active_bridge;
 
-    public float []sound_volume_list;
+    public float[] sound_volume_list;
 
     public int shack_tick;
     public float shack_power;
@@ -70,27 +71,30 @@ public class GroundCheck : Observer {
 
     public bool re_start;
 
-    void Start () {
+    void Start()
+    {
         if (type != Type.Null)
         {
             input_manager = InputManager.get_instance();
             sound_manager = SoundManager.get_instance();
             manager = BossRoomManager.get_instance();
             clear_guard();
-            if(type == Type.Wood)
+            if (type == Type.Wood)
             {
                 initialize_bridge();
             }
         }
         ac = FindObjectOfType<ActionCamera>();
-        boss_action = boss_state.gameObject.GetComponent<Boss_Action>();
+        boss_state = FindObjectOfType<Boss_State>();
+        boss_action = FindObjectOfType<Boss_Action>();
+        ui_black_screen = FindObjectOfType<BlackScreen>();
     }
 
     public IEnumerator shoot_player()
     {
         Vector3 dir = (transform.position - player.transform.position).normalized;
         _player = player;
-        while(true)
+        while (true)
         {
             dir.y -= gravity;
             _player.transform.position += dir * fly_speed * Time.deltaTime;
@@ -102,76 +106,115 @@ public class GroundCheck : Observer {
         fly_timer = null;
     }
 
+    bool attack;
     private void Update()
     {
         if (type == Type.Stone || (type == Type.Wood && manager.phase == BossRoomManager.Phase.two))
         {
-            if (is_danger)
+            if (is_danger&& player != null &&!attack)
             {
-                if (player != null)
+                //if (fly_timer == null)
+                //{
+                //    re_start = false;
+                //    fly_timer = shoot_player();
+                //    StartCoroutine(fly_timer);
+                //}
+                //manager.game_over(this);
+
+                //플레이어 스턴 추가
+                player.GetComponent<Damageable>().Damaged(100, 3.0f);
+
+                attack_ground();
+            }
+
+            if (is_ground)
+            {
+                if (input_manager.get_Horizontal() != 0 || input_manager.get_Vertical() != 0)
                 {
-                    if (fly_timer == null)
+                    if (player.GetComponent<Player>().cur_ani == ("Run"))
                     {
-                        re_start = false;
-                        fly_timer = shoot_player();
-                        StartCoroutine(fly_timer);
+                        if (!step_sound.isPlaying && !is_play)
+                        {
+                            is_play = true;
+                            step_sound.Play();
+                        }
+
+                        playing_time += Time.deltaTime;
+
+                        if (playing_time >= sound_delay)
+                            sound_delay_init();
                     }
-                    manager.game_over(this);
-                    player = null;
-                    //is_danger = false;
-                }
+                    else if(step_sound.isPlaying)
+                    {
+                        is_play = false;
+                        step_sound.Stop();
+                    }
+
+                }                
             }
 
             if (is_ground && (boss_state.get_state() == Boss_State.State.Idle || boss_state.get_state() == Boss_State.State.Move))
             {
-                if (type == Type.Stone)
+                //if (type == Type.Stone)
+                //{
+                //    //둘중 하나라도 입력이 되고 있다면
+                //    if (input_manager.get_Horizontal() != 0 || input_manager.get_Vertical() != 0)
+                //    {
+                //        if (step_sound.isPlaying == false && !is_play)
+                //        {
+                //            is_play = true;
+                //            step_sound.Play();
+
+                //            if (!is_cognition)
+                //                step_cnt++;
+                //        }
+                //        playing_time += Time.deltaTime;
+                //        if (playing_time >= sound_delay)
+                //        {
+                //            sound_delay_init();
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (!is_cognition)
+                //        {
+                //            step_cnt = 0;
+                //        }
+                //    }
+
+                //    if (step_cnt >= cognition_step_count && !is_cognition)
+                //    {
+                //        is_cognition = true;
+                //        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Cross_Attack, this, 50, 2);
+                //        //boss_action.set_cross_dis(50, 2.0f, this.gameObject);
+                //        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
+                //    }
+                //}
+                //else if (type == Type.Wood)
+                //{
+                //    on_ground_time += Time.deltaTime;
+                //    if (on_ground_time > cognition_step_count)
+                //    {
+                //        on_ground_time = 0;
+                //        is_cognition = true;
+                //        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
+                //    }
+                //}
+                
+                //입장시 바로 cross_attack실행 후 심장소리 재생, is_cognition = true
+                if(!is_cognition)
                 {
-                    //둘중 하나라도 입력이 되고 있다면
-                    if (input_manager.get_Horizontal() != 0 || input_manager.get_Vertical() != 0)
-                    {
-                        if (step_sound.isPlaying == false && !is_play)
-                        {
-                            is_play = true;
-                            step_sound.Play();
+                    if(type == Type.Stone)
+                        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Cross_Attack, this, 50, 2);
 
-                            if (!is_cognition)
-                                step_cnt++;
-                        }
-                        playing_time += Time.deltaTime;
-                        if (playing_time >= sound_delay)
-                        {
-                            sound_delay_init();
-                        }
-                    }
-                    else
-                    {
-                        if (!is_cognition)
-                            step_cnt = 0;
-                    }
-
-                    if (step_cnt >= cognition_step_count && !is_cognition)
-                    {
-                        is_cognition = true;
-                        boss_action.set_cross_dis(50,2.0f);
-                        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Cross_Attack, this);
-                        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
-                    }
+                    sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
+                    is_cognition = true;
+                    attack = false;
                 }
-                else if (type == Type.Wood)
-                {
-                    on_ground_time += Time.deltaTime;
-                    if (on_ground_time > cognition_step_count)
-                    {
-                        on_ground_time = 0;
-                        is_cognition = true;
-                        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
-                    }
-                }
-
                 if (is_cognition)
                 {
-                    if (!sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].isPlaying && (boss_state.get_state() == Boss_State.State.Idle || boss_state.get_state() == Boss_State.State.Move)) 
-                    {                        
+                    if (!sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].isPlaying && (boss_state.get_state() == Boss_State.State.Idle || boss_state.get_state() == Boss_State.State.Move))
+                    {
                         sound_manager.play_sound(SoundManager.SoundList.heartbeat);
                         ac.Shake(shack_tick, power, shack_tick_by_time * Time.deltaTime);
                         heartbeat_count++;
@@ -179,7 +222,7 @@ public class GroundCheck : Observer {
                             power += add_power;
                     }
 
-                    if(type == Type.Stone)
+                    if (type == Type.Stone)
                     {
                         if (heartbeat_count == 5)
                         {
@@ -191,24 +234,25 @@ public class GroundCheck : Observer {
                             sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[1];
                         }
 
-                        if(heartbeat_count ==6)
+                        if (heartbeat_count == 6)
                         {
-                            StartCoroutine(attack_timer(Boss_State.State.Soar_Attack));
+                            sound_manager.play_sound(SoundManager.SoundList.boss_attack_ready);
+                            manager.send_boss_state(Boss_State.State.Soar_Attack, this);
                             is_cognition = false;
                         }
                     }
                     else if (type == Type.Wood)
                     {
-                        if (heartbeat_count == 3)
+                        if (heartbeat_count == 5)
                             sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[2];
 
-                        else if (heartbeat_count == 2)
+                        else if (heartbeat_count == 3)
                             sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[1];
 
-                        if(heartbeat_count == 3)
+                        if (heartbeat_count == 6)
                         {
-                            boss_action.set_cross_dis(30,2.3f);
-                            StartCoroutine(attack_timer(Boss_State.State.Cross_Attack));
+                            sound_manager.play_sound(SoundManager.SoundList.boss_attack_ready);
+                            manager.send_boss_state(Boss_State.State.Cross_Attack, this,30,2.3f);
                             is_cognition = false;
                         }
                     }
@@ -219,18 +263,21 @@ public class GroundCheck : Observer {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.name.Equals("Player"))
         {
-            is_ground = true;
-            CancelInvoke();
-            player = other.transform.parent.gameObject;
+            if (type == Type.Stone || (type == Type.Wood && manager.phase == BossRoomManager.Phase.two))
+            {
+                is_ground = true;
+                CancelInvoke();
+                player = other.gameObject;
+            }
         }
         if (other.CompareTag("Boss"))
         {
-            //Debug.Log("충돌!" + this.name + " || " + other.name);
-            if (type == Type.Wood && manager.phase == BossRoomManager.Phase.two)
+            if (type == Type.Wood && manager.phase == BossRoomManager.Phase.two && boss_state.get_state() == Boss_State.State.Cross_Attack)
             {
                 type = Type.Null;
+                manager.minus_wood_bridge_count();
                 for (int i = 0; i < wood_bridge_piece.Length; i++)
                 {
                     wood_bridge_piece[i].isKinematic = false;
@@ -246,6 +293,7 @@ public class GroundCheck : Observer {
         {
             //캐릭터가 땅을 벗어나고 0.5초가 지나면 카운트 리셋, 
             Invoke("clear_guard", 0.5f);
+            is_ground = false;
         }
     }
 
@@ -253,16 +301,34 @@ public class GroundCheck : Observer {
     {
         power = shack_power;
         heartbeat_count = 0;
-        on_ground_time = 0;
         is_ground = false;
-        cognition_time = 0;
         is_cognition = false;
-        step_cnt = 0;
-        tick_count = cognition_time_list[0];
-        cognition_text = false;
-        attack_ready_text = false;
-        sound_delay_init();
         set_danger(false);
+        player = null;
+
+        //step_cnt = 0;
+        //tick_count = cognition_time_list[0];
+        //sound_delay_init();
+        //on_ground_time = 0;
+        //cognition_time = 0;
+    }
+
+    void attack_ground()
+    {
+        attack = true;
+        set_danger(false);
+        is_cognition = false;
+        power = shack_power;
+        heartbeat_count = 0;
+    }
+
+    void out_ground()
+    {
+        set_danger(false);
+        is_ground = false;
+        is_cognition = false;
+        power = shack_power;
+        heartbeat_count = 0;
         player = null;
     }
 
@@ -279,7 +345,7 @@ public class GroundCheck : Observer {
 
     public override void notify(Observable observable)
     {
-        Debug.Log(observable.name);
+        //Debug.Log(observable.name);
         if (observable.gameObject.GetComponent<DestroyCheck>())
         {
             enemy_count--;
@@ -292,7 +358,7 @@ public class GroundCheck : Observer {
 
     }
 
-    public Transform [] get_enemy_point()
+    public Transform[] get_enemy_point()
     {
         return enemy_position;
     }
@@ -313,16 +379,10 @@ public class GroundCheck : Observer {
         active_bridge.gameObject.SetActive(true);
 
         type = Type.Wood;
-        for(int i=0; i<wood_bridge_piece.Length; i++)
+        for (int i = 0; i < wood_bridge_piece.Length; i++)
         {
-            wood_bridge_piece[i] = active_wood_bridge.transform.Find((i+1).ToString()).GetComponent<Rigidbody>();
+            wood_bridge_piece[i] = active_wood_bridge.transform.Find((i + 1).ToString()).GetComponent<Rigidbody>();
         }
     }
 
-    IEnumerator attack_timer(Boss_State.State _state)
-    {
-        sound_manager.play_sound(SoundManager.SoundList.boss_attack_ready);
-        manager.send_boss_state(_state, this);
-        yield return new WaitForSeconds(3.0f);
-    }
 }

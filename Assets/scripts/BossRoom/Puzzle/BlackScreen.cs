@@ -9,7 +9,8 @@ public class BlackScreen : Observable
     RectTransform rt;
     Image black_image;
     public Color color;
-
+    public float in_speed, out_speed;
+    public float out_keep_time;
     public enum ScreenState
     {
         Fade_In,
@@ -31,7 +32,6 @@ public class BlackScreen : Observable
 
     public void change_screen(ScreenState _state)
     {
-        rt.sizeDelta = new Vector2(Camera.main.pixelWidth, Camera.main.pixelHeight);
         if(_state == ScreenState.Fade_In)
             StartCoroutine(fade_in());
         else
@@ -42,7 +42,7 @@ public class BlackScreen : Observable
     {
         while (true)
         {
-            color.a -= 0.01f;
+            color.a -= in_speed;
             black_image.color = color;
             if (color.a <= 0)
             {
@@ -58,7 +58,7 @@ public class BlackScreen : Observable
     {
         while (true)
         {
-            color.a += 0.01f;
+            color.a += out_speed;
             black_image.color = color;
             if (color.a >= 1)
             {
@@ -67,6 +67,7 @@ public class BlackScreen : Observable
             yield return new WaitForSeconds(0.01f);
         }
         state = ScreenState.Fade_Out;
+        yield return new WaitForSeconds(out_keep_time);
         notify_all();
     }
 

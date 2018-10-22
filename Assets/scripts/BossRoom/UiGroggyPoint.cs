@@ -38,7 +38,7 @@ public class UiGroggyPoint : MonoBehaviour {
                 Camera.main.WorldToScreenPoint(groggy_point.position).y < 0.0f)
             {                
                 _pos = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0.0f);
-                Debug.Log(Camera.main.pixelWidth +" , " +Camera.main.pixelHeight + " =>"+_pos);
+                //Debug.Log(Camera.main.pixelWidth +" , " +Camera.main.pixelHeight + " =>"+_pos);
                 Vector3 _dir = (Camera.main.WorldToScreenPoint(groggy_point.position) - new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0.0f)).normalized;
                 while(true)
                 {
@@ -47,7 +47,7 @@ public class UiGroggyPoint : MonoBehaviour {
                         _pos.y +10 > Camera.main.pixelHeight ||
                         _pos.y -10 < 0.0f)
                     {
-                        Debug.Log("break");
+                        //Debug.Log("break");
                         break;
                     }
                         _pos += _dir;
