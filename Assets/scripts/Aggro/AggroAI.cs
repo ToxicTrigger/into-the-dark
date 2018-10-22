@@ -232,33 +232,19 @@ public abstract class AggroAI : Observable {
             if (o == null) observers.RemoveAt(i);
         }
     }
-    /*
-    private void OnTriggerEnter(Collider other)
-    {   
-        if(other.CompareTag("Sword") || other.CompareTag("Arrow"))
-        {
-            Debug.Log(other.name + name);
-            GameObject sound = Instantiate(HitSound.gameObject, transform.position, Quaternion.identity, null);
-            sound.GetComponent<AudioSource>().PlayOneShot(sound.GetComponent<AudioSource>().clip);
-            //HitSound.PlayOneShot(HitSound.clip);
-            Destroy(sound, 1.0f);
-            this.player.ac.Shake(1,0.2f,Time.deltaTime);
-            damage.Damaged(1, 0.2f, transform);
-            has_Hit = true;
-        }
-    }
-    */
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider  collision)
     {   
         if(collision.gameObject.CompareTag("Arrow") || collision.gameObject.CompareTag("Sword"))
         {
+            Debug.Log("재생");
             GameObject sound = Instantiate(HitSound.gameObject, transform.position, Quaternion.identity, null);
             sound.GetComponent<AudioSource>().PlayOneShot(sound.GetComponent<AudioSource>().clip);
             Destroy(sound, 1.0f);
             this.player.ac.Shake(1, 0.2f, Time.deltaTime);
             damage.Damaged(1, 0.2f, transform);
             has_Hit = true;
+            if(!collision.gameObject.CompareTag("Sword"))
             Destroy(collision.gameObject);
         }
     }

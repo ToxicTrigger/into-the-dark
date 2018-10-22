@@ -23,7 +23,7 @@ public class SceneInit : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         ani = FindObjectOfType<Player>().gameObject.transform.parent.GetComponent<Animator>();
     }
