@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PostProcessing;
 
 public class BossRoomManager : Observer {  
 
@@ -21,6 +22,14 @@ public class BossRoomManager : Observer {
 
     /// ///////////////////////////////////////////////////
     /// 
+    public bool is_new;
+    public bool is_danger_loop;
+    public float add_smoothness, add_color_red;
+    public float danger_speed;
+    public PostProcessingProfile post;
+    public VignetteModel new_setting;
+    public VignetteModel default_setting;
+    IEnumerator danger_timer;
 
     public Boss_Worm boss;
     Boss_State boss_state;
@@ -36,6 +45,8 @@ public class BossRoomManager : Observer {
     public DestroyCheck destroy_check;
 
     public GroundCheck center;
+
+    public CutScenePlay cut_scene;
 
     public enum Phase
     {
@@ -90,6 +101,9 @@ public class BossRoomManager : Observer {
     }
     public ItemPos[] item_pos_list;
 
+    public Particle_Handler[] fog;
+
+
     public enum EventList
     {
         Entrance,       // 입장
@@ -118,18 +132,20 @@ public class BossRoomManager : Observer {
 
         player = FindObjectOfType<Player>();
         p_controller = player.GetComponent<CharacterController>();
-
     }
+    private void Start()
+    {
+        default_setting.settings = post.vignette.settings;
+        //post.vignette.settings = new_setting.settings;
+        //danger_screen(true);
+    }
+
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
     public void player_enter_bossroom()
     {
         phase = Phase.one;
         Map_Initialization();
-        if(!is_entrance)
-        {
-            //입장 연출 추가
-        }
     }
 
     //페이즈 정보에 따라 맵을 초기화한다.
@@ -186,6 +202,21 @@ public class BossRoomManager : Observer {
         }
     }
 
+    public void game_clear()
+    {
+        sound_manager.clear();
+        for (int i = 0; i < fog.Length; i++)
+        {
+            fog[i].OnOff = false;
+        }
+        for (int i = 0; i < enemy_list.Count; i++)
+        {
+            Destroy(enemy_list[i].gameObject);
+        }
+        enemy_list.Clear();
+        p_controller.enabled = false;
+    }
+
     public override void notify(Observable observable)
     {
         if (observable.gameObject.GetComponent<BlackScreen>())
@@ -213,6 +244,10 @@ public class BossRoomManager : Observer {
     public void send_boss_state(Boss_State.State _state, GroundCheck _gameobj)
     {
         boss_state.set_state(_state, _gameobj);
+    }
+    public void send_boss_state(Boss_State.State _state, GroundCheck _gameobj, float _dis, float _height)
+    {
+        boss_state.set_state(_state, _gameobj, _dis, _height);
     }
 
     public void set_cross_point(Vector3 _pos)
@@ -285,6 +320,11 @@ public class BossRoomManager : Observer {
         is_puzzle_clear = _is_clear;
     }
 
+    public void play_cut_scene()
+    {
+        cut_scene.play_scene();
+    }
+
     public void minus_wood_bridge_count()
     {
         wood_bridge_count--;
@@ -293,7 +333,8 @@ public class BossRoomManager : Observer {
             game_over();
         }
     }
-    
+
+
     public void init_bossroom()
     {
         for (int i = 0; i < reloc.get_reloc((int)phase).torch_set[0].foot_switch.Length; i++)
@@ -362,5 +403,86 @@ public class BossRoomManager : Observer {
         {
             GameObject _item = Instantiate(hp_heal, item_pos_list[boss_action.groggy_cnt].item_pos[i].position, Quaternion.identity);
         }        
+    }
+
+    GameObject cur_obj;
+    public void danger_screen(bool _is_danger, GameObject obj)
+    {
+        if (_is_danger && danger_timer == null)
+        {
+            cur_obj = obj;
+            is_danger_loop = true;
+            danger_timer = danger_loop();
+            StartCoroutine(danger_timer);
+        }
+        else if(_is_danger == false && cur_obj == obj)
+        {
+            is_danger_loop = false;
+        }
+    }
+
+
+    IEnumerator danger_loop()
+    {
+        float smoothness = default_setting.settings.smoothness;
+        Vector4 color = default_setting.settings.color;
+
+        while (is_danger_loop)
+        {
+            while (true)
+            {
+                if (!is_new)
+                {
+                    smoothness += add_smoothness;
+                    if (color.x >= new_setting.settings.color.r)
+                        color.x = new_setting.settings.color.r;
+                    else
+                        color.x += add_color_red;
+
+                    post.vignette.set_val(smoothness, color);
+
+                    if (smoothness >= new_setting.settings.smoothness && color.x >= new_setting.settings.color.r)
+                    {
+                        is_new = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    smoothness -= add_smoothness;
+                    if(color.x >0)
+                        color.x -= add_color_red;
+                    
+                    post.vignette.set_val(smoothness, color);
+
+                    if (smoothness <= default_setting.settings.smoothness && color.x <= default_setting.settings.color.r)
+                    {
+                        is_new = false;
+                        break;
+                    }
+                }
+
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            yield return new WaitForSeconds(danger_speed);
+        }
+
+        while (true)
+        {
+            smoothness -= add_smoothness;
+            color.x -= add_color_red;
+
+            post.vignette.set_val(smoothness, color);
+
+            if (smoothness <= default_setting.settings.smoothness && color.x <= default_setting.settings.color.r)
+            {
+                is_new = false;
+                post.vignette.settings = default_setting.settings;
+                break;
+            }
+            yield return new WaitForSeconds(0.01f);
+        }
+        danger_timer = null;
     }
 }

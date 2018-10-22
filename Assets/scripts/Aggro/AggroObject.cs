@@ -28,6 +28,7 @@ public class AggroObject : Observer {
     {
         if (other.GetComponent<AggroDetector>() != null)
         {
+            Debug.Log(other.name);
             other.GetComponent<AggroDetector>().ao.add_observer(this);
         }
     }

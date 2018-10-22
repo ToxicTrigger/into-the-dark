@@ -95,6 +95,7 @@ public class AncientWeapon : Observer
     {
         manager.send_boss_state(Boss_State.State.Groggy, BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
         manager.get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
+        Debug.Log("유지시간 = " + time_list[(int)BossRoomManager.get_instance().phase]);
         yield return new WaitForSeconds(time_list[(int)BossRoomManager.get_instance().phase]);
         Debug.Log("** end activate **");
         deactivate();

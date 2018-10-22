@@ -40,14 +40,10 @@ public class FootSwitch : Observer {
         {
             if(!p_coll.Contains(other))
                 on_count++;
-
+            //if (on_count == 1) sound_manager.play_sound(SoundManager.SoundList.botton);
             Debug.Log(other.name + "이 발판에 올라옴");
 
             ground_move_ctrl(Vector3.up);
-
-            if (is_time_switch)
-                switch_ground.GetComponent<TimeSwitch>().set_use_enable(true);
-
 
             if(other.CompareTag("Enemy"))
             {
@@ -85,9 +81,19 @@ public class FootSwitch : Observer {
 
         while (true)
         {
-            if(!sound_manager.sound_list[(int)SoundManager.SoundList.rumble].isPlaying)
-                sound_manager.play_sound(SoundManager.SoundList.rumble);
+            //if(!sound_manager.sound_list[(int)SoundManager.SoundList.rumble].isPlaying)
+            //    sound_manager.play_sound(SoundManager.SoundList.rumble);
             switch_ground.transform.position += _move_dir * move_speed * Time.deltaTime;
+
+            if(_move_dir == Vector3.down)
+            {
+                if (is_time_switch && switch_ground.GetComponent<TimeSwitch>().get_switch())
+                {
+                    state = State.Down;
+                    switch_ground.GetComponent<TimeSwitch>().off_switch();
+                    switch_ground.GetComponent<TimeSwitch>().set_use_enable(true);
+                }
+            }
 
             yield return new WaitForSeconds(0.01f);
 
@@ -96,7 +102,8 @@ public class FootSwitch : Observer {
             {
                 switch_ground.transform.position = new Vector3(idle_position.x, idle_position.y + y_up_pos, idle_position.z);
                 state = State.Up;
-                Debug.Log("break");
+                if (is_time_switch)
+                    switch_ground.GetComponent<TimeSwitch>().set_use_enable(true);
                 break;
             }
             else if (_move_dir == Vector3.down &&
@@ -106,13 +113,12 @@ public class FootSwitch : Observer {
                 if (is_time_switch && switch_ground.GetComponent<TimeSwitch>().get_switch())
                 {
                     state = State.Down;
-
                     switch_ground.GetComponent<TimeSwitch>().off_switch();
                 }
                 break;
             }
         }
-        sound_manager.stop_sound(SoundManager.SoundList.rumble, true);
+        //sound_manager.stop_sound(SoundManager.SoundList.rumble, true);
     }
 
     public void set_ground(GameObject _ground)

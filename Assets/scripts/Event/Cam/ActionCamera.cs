@@ -237,7 +237,7 @@ public class ActionCamera : MonoBehaviour
             guarantee_timer = 0;
             has_camera_using = false;
             flow_dir = Vector3.zero;
-            SetState(State.Idle);
+            //SetState(State.Idle);
         }
     }
 

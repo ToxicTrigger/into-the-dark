@@ -56,7 +56,9 @@ public class Boss_Worm : MonoBehaviour
             case BossRoomManager.Phase.two:
                 if (hp <= 0)
                 {
-                    state.set_state(Boss_State.State.Death, null);
+                    //state.set_state(Boss_State.State.Death, null);
+                    manager.play_cut_scene();
+                    manager.game_clear();
                 }
                 break;
         }

@@ -8,7 +8,8 @@ public class Sword : MonoBehaviour
     {
         if( other.gameObject.layer != LayerMask.NameToLayer("Player") && !other.gameObject.CompareTag("Sword"))
         {
-            other.GetComponent<Damageable>().Damaged(1 , 0.1f);
+            if(other.GetComponent<Damageable>() != null)
+                other.GetComponent<Damageable>().Damaged(1 , 0.1f);
         }
     }
 }

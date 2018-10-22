@@ -40,6 +40,9 @@ public class SoundManager : MonoBehaviour
         boss_attack_ready,
         boss_groggy,
         switch_hit,
+        bridge_idle,
+        puzzle_idle,
+        botton,
     };
     public SoundList sound_number;
 
@@ -48,6 +51,7 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+        play_sound(SoundList.bridge_idle);
     }
 
     public void play_sound(SoundList _sound_number)
@@ -69,6 +73,14 @@ public class SoundManager : MonoBehaviour
     public void mute_sound(SoundList _sound_number, bool _is_mute)
     {
         sound_list[(int)_sound_number].mute = _is_mute;
+    }
+
+    public void clear()
+    {
+        for (int i =0; i<sound_list.Length; i++)
+        {
+            sound_list[i].mute = true;
+        }
     }
 
     IEnumerator volume_ctrl(SoundList _sound_number)
