@@ -6,7 +6,7 @@ public class GameOverTrigger : MonoBehaviour {
     
     public void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if(other.name.Equals("Player"))
         {
             BossRoomManager.get_instance().game_over();
         }

@@ -41,12 +41,8 @@ public class Boss_State : MonoBehaviour
     {
         state = _state;
         soar_target = _soar_target;
-        //Debug.Log("목표상태 => " + state + ", soar_target => " + _soar_target.name);
-        this.GetComponent<Boss_Action>().action_phase = 1;
 
-        //if (_state == State.Idle)
-        //    boss_action.set_idle_state(true);
-        //else boss_action.set_idle_state(false);
+        this.GetComponent<Boss_Action>().action_phase = 1;
 
         if (_state == State.Groggy)
         {
@@ -62,6 +58,33 @@ public class Boss_State : MonoBehaviour
         if(_state == State.Soar_Attack || _state == State.Cross_Attack)
         {
             boss_action.set_soar_target(soar_target);
+        }
+
+        back_state = state;
+        //상태가 바뀔 때 항상 action_phase를 1로 만W들어준다.
+    }
+
+    public void set_state(State _state, GroundCheck _soar_target, float _dis, float _height )
+    {
+        state = _state;
+        soar_target = _soar_target;
+
+        this.GetComponent<Boss_Action>().action_phase = 1;
+
+        if (_state == State.Groggy)
+        {
+            manager.get_hp_ui().switching_ui(true);
+            manager.get_groggy_ui().set_boss_groggy(true, boss_action.get_groggy_point());
+        }
+        else if (back_state == State.Groggy)
+        {
+            manager.get_hp_ui().switching_ui(false);
+            manager.get_groggy_ui().set_boss_groggy(false, Vector3.zero);
+        }
+
+        if (_state == State.Soar_Attack || _state == State.Cross_Attack)
+        {
+            boss_action.set_soar_target(soar_target,_dis, _height);
         }
 
         back_state = state;

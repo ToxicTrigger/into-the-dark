@@ -96,22 +96,11 @@ public class WormTail : MonoBehaviour {
 
         if (Vector3.Distance(parent_tail.transform.position, transform.position) > stretch_limit)
         {
-            //if (child_tail && !child_tail.get_stretch())
-            //    child_tail.set_stretch(true);
-
-            set_stretch(true);
-
-            //transform.position = ago_pos;     //head의 반대방향으로 움직인 후``````````````````````````
-            ////자신의 움직임
-            ////move_dir = (origin_pos - transform.localPosition).normalized;
-            ////transform.localPosition += move_dir * speed * Time.deltaTime;               
-
-            //ago_pos = transform.position;            
+            set_stretch(true);        
         }
         else if (parent_tail.get_stretch() || parent_tail.head && !max_stretch && head_tail.get_move_dir() != Vector3.zero)
         {
             transform.position = ago_pos;
-            //transform.position -= head_tail.get_move_dir() * speed * Time.deltaTime;
             ago_pos = transform.position;
         }
         else
@@ -139,25 +128,14 @@ public class WormTail : MonoBehaviour {
                     ago_pos = origin_pos;
                     transform.rotation = ago_rot;
                 }
-
-                //move_dir = (parent_tail.transform.position - transform.position).normalized;
-                //transform.position += move_dir * speed * Time.deltaTime;
-                //if (transform.localPosition == new Vector3(0.0f, 0.0f, 0.0f))
-                //{
-                //    stretch = false;
-                //}
             }
             else
             {
-                //꼬리 이동 (앞 꼬리의 뒤로)
-
                 if (Vector3.Distance((parent_tail.transform.position + (parent_tail.transform.TransformVector(Vector3.back).normalized * stretch_limit)), transform.position) > 0.1)
                 {
                     move_dir = ((parent_tail.transform.position + (parent_tail.transform.TransformVector(Vector3.back).normalized * stretch_limit)) - transform.position).normalized;                    
 
                     transform.position += move_dir * follow_speed * Time.deltaTime;
-                    //ago_rot = Quaternion.LookRotation(move_dir);
-                    //transform.rotation = Quaternion.Slerp(transform.rotation, ago_rot, rot_speed * Time.deltaTime);
                 }
                 else
                 {

@@ -23,7 +23,7 @@ public class Fairy : MonoBehaviour
         Hp = GetComponent<Damageable>();
         Range = GameObject.Find("PlayerHpRange").GetComponent<SphereCollider>();
         Range_per = Range.radius;
-        cur_color = particle_color.color;
+        //cur_color = particle_color.color;
     }
 
     void Update()

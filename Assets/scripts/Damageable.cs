@@ -80,6 +80,12 @@ public class Damageable : MonoBehaviour
         has_hit = false;
     }
 
+
+    public void Damaged(float dam, float tick)
+    {
+        StartCoroutine(attack_this(dam, tick));
+    }
+
     public void Damaged(float dam , float tick, Transform other)
     {
         Vector3 pos = other.position;

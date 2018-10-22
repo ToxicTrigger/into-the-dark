@@ -9,7 +9,7 @@ public class BasicSwitch : Observable {
     public bool switch_on = false; //활성화 되어있는지 여부
     protected bool use_enable;
 
-    AudioSource hit_sound;
+    public AudioSource hit_sound;
 
     public void notify_all()
     {
@@ -27,10 +27,7 @@ public class BasicSwitch : Observable {
         switch_on = _onoff;
         if (_onoff == true)
         {
-            //hit_sound = on_sound;
-            //hit_sound.Play();
-            //on_sound.Play();
-            //gameObject.GetComponent<AudioSource>().Play();
+            SoundManager.get_instance().play_sound(SoundManager.SoundList.switch_hit);
         }
         notify_all();
     }

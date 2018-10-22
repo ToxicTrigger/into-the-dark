@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
         move = GetComponent<PlayerMove>();
 
         ac = FindObjectOfType<ActionCamera>();
-        ac.SetStateTarget(this.transform, ActionCamera.State.Follow);
+        ac.SetStateTarget(this.transform , ActionCamera.State.Follow,ac.default_speed,0.0f,ac.default_angle ,"player_follow",Vector3.zero);
     }
 
     public void setSwordEnable()
@@ -226,6 +226,19 @@ public class Player : MonoBehaviour
                     is_build_totem = false;
                 }
             }
+        }
+    }
+
+    public void all_collect_item()
+    {
+        if (totems != null)
+        {
+            for(int i =0; i<totems.Count; i++)
+            {
+                Destroy(totems[i].gameObject);
+                ++installable_totems;
+            }
+            totems.Clear();
         }
     }
 

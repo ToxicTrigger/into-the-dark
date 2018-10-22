@@ -112,16 +112,6 @@ public abstract class AggroAI : Observable {
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        IEnumerator iter = observers.GetEnumerator();
-        while(iter.MoveNext())
-        {
-            Observer obj = iter.Current as Observer;
-            //Debug.DrawLine(transform.position, obj.transform.position, Color.blue);
-        }
-    }
-
     void update_state()
     {
         //아래 4가지 변수들은 기본적으로 FSM 애니메이션에 포함되어야 합니다.
