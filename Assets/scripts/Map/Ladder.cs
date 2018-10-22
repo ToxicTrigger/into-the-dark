@@ -16,22 +16,6 @@ public class Ladder : MonoBehaviour
         
     }
 
-    /*
-    private void OnTriggerExit(Collider collision)
-    {
-        if( collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast") )
-        {
-            var pos = player.transform.position;
-            pos += transform.up * 1.3f ;
-            pos.y += 0.2f;
-            player.transform.position = pos;
-            player.has_on_ladder = false;
-            player.ani.SetBool("Ladder" , false);
-            pm.enabled = true;
-        }
-    }
-    */
-
     public void FixedUpdate()
     {
         if( player.has_on_ladder )
@@ -44,7 +28,7 @@ public class Ladder : MonoBehaviour
                 player.ani.speed = 1;
                 Vector3 up = Vector3.zero;
                 up.y = h;
-                up *= pm.moveSpeed * 0.25f;
+                up *= pm.moveSpeed * 0.35f;
                 cc.Move(up);
             }
             else

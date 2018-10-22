@@ -10,7 +10,7 @@ public class Sword : MonoBehaviour
         {
             if (other.GetComponent<Damageable>() != null)
             {
-                other.GetComponent<Damageable>().Hp -= 1;
+                other.GetComponent<Damageable>().Damaged(1, 0.1f, other.transform);
             }
         }
     }
