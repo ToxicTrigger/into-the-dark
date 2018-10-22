@@ -40,8 +40,7 @@ public class FootSwitch : Observer {
         {
             if(!p_coll.Contains(other))
                 on_count++;
-            //if (on_count == 1) sound_manager.play_sound(SoundManager.SoundList.botton);
-            Debug.Log(other.name + "이 발판에 올라옴");
+            //Debug.Log(other.name + "이 발판에 올라옴");
 
             ground_move_ctrl(Vector3.up);
 
@@ -81,8 +80,6 @@ public class FootSwitch : Observer {
 
         while (true)
         {
-            //if(!sound_manager.sound_list[(int)SoundManager.SoundList.rumble].isPlaying)
-            //    sound_manager.play_sound(SoundManager.SoundList.rumble);
             switch_ground.transform.position += _move_dir * move_speed * Time.deltaTime;
 
             if(_move_dir == Vector3.down)
@@ -118,7 +115,6 @@ public class FootSwitch : Observer {
                 break;
             }
         }
-        //sound_manager.stop_sound(SoundManager.SoundList.rumble, true);
     }
 
     public void set_ground(GameObject _ground)
@@ -129,7 +125,7 @@ public class FootSwitch : Observer {
 
     public void ground_move_ctrl(Vector3 _dir)
     {
-        Debug.Log("땅 움직이는 방향" + _dir);
+        //Debug.Log("땅 움직이는 방향" + _dir);
         if (move_corutine != null)
         {
             StopCoroutine(move_corutine);
@@ -149,14 +145,25 @@ public class FootSwitch : Observer {
 
     void off_switch()
     {
-        if (is_time_switch && on_count <= 0 && BossRoomManager.get_instance().get_ancient_weapon().get_state() != AncientWeapon.State.Activated)
+        if (FindObjectOfType<BossRoomManager>())
         {
-            ground_move_ctrl(Vector3.down);
-            switch_ground.GetComponent<TimeSwitch>().set_use_enable(false);
+            if (is_time_switch && on_count <= 0 && BossRoomManager.get_instance().get_ancient_weapon().get_state() != AncientWeapon.State.Activated)
+            {
+                ground_move_ctrl(Vector3.down);
+                switch_ground.GetComponent<TimeSwitch>().set_use_enable(false);
+            }
+            else if (!is_time_switch && on_count <= 0)
+            {
+                ground_move_ctrl(Vector3.down);
+            }
         }
-        else if(!is_time_switch && on_count <=0)
+        else
         {
-            ground_move_ctrl(Vector3.down);
+            if (is_time_switch && on_count <= 0)
+            {
+                ground_move_ctrl(Vector3.down);
+                switch_ground.GetComponent<TimeSwitch>().set_use_enable(false);
+            }
         }
     }
 
