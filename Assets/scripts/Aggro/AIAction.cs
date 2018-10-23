@@ -66,7 +66,7 @@ public class AIAction : MonoBehaviour
 
                 case State.Attack:
                     transform.LookAt(Player.transform);
-                    if( attack_tick <= 3.4f )
+                    if( attack_tick <= 2.0f )
                     {
                         attack_tick += Time.deltaTime;
                         ani.SetBool("isAttack" , false);
