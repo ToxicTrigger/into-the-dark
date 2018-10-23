@@ -323,7 +323,7 @@ public class Player : MonoBehaviour
         }
     }
     public float num;
-
+    bool load_;
     public float dodge_tick;
     bool dodged;
     public void FixedUpdate()
@@ -363,9 +363,14 @@ public class Player : MonoBehaviour
         }
         else
         {
-            int id = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.UnloadSceneAsync(id);
-            SceneManager.LoadSceneAsync(id);
+            if(!load_)
+            {
+                int id = SceneManager.GetActiveScene().buildIndex;
+                SceneManager.UnloadSceneAsync(id);
+                SceneManager.LoadSceneAsync(id);
+                load_ = true;
+            }
+
         }
     }
 

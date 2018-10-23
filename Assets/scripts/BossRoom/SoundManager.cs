@@ -57,7 +57,8 @@ public class SoundManager : MonoBehaviour
     public void play_sound(SoundList _sound_number)
     {
         //audio_source.PlayOneShot(sound_list[(int)_sound_number].clip);
-        sound_list[(int)_sound_number].Play();
+        if(sound_list[(int)_sound_number] != null)
+            sound_list[(int)_sound_number].Play();
     }
 
     public void stop_sound(SoundList _sound_number, bool is_immediately)
