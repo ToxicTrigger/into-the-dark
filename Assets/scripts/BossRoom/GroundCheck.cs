@@ -106,6 +106,12 @@ public class GroundCheck : Observer
         fly_timer = null;
     }
 
+    IEnumerator player_stun()
+    {
+        yield return new WaitForSeconds(2.0f);
+        player.GetComponent<Player>().ani.SetBool("stun", false);
+    }
+
     bool attack;
     private void Update()
     {
@@ -124,6 +130,7 @@ public class GroundCheck : Observer
                 //플레이어 스턴 추가
                 player.GetComponent<Player>().ani.SetBool("stun", true);
                 player.GetComponent<Damageable>().Damaged(100, 3.0f);
+                StartCoroutine(player_stun());
 
                 attack_ground();
             }
@@ -212,7 +219,6 @@ public class GroundCheck : Observer
                     is_cognition = true;
                     if (attack)
                     {
-                        player.GetComponent<Player>().ani.SetBool("stun", false);
                         attack = false;
                     }
                 }

@@ -35,7 +35,6 @@ public class HunterAI : AggroAI {
                 }
                 else
                 {
-                    
                     na.enabled = false;
                     tick = 0;
                     if (ai.target != null)

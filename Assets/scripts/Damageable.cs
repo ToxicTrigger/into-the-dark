@@ -91,6 +91,7 @@ public class Damageable : MonoBehaviour
         Vector3 pos = other.position;
         pos.y += 1f;
         GameObject t = Instantiate(Hit_particle, pos, Quaternion.identity, null);
+
         Destroy(t, 1.0f);
         StartCoroutine(attack_this(dam , tick));
     }

@@ -173,6 +173,9 @@ public abstract class AggroAI : Observable {
         {
             GameObject tmp = Instantiate(DeadParticle, transform.position, Quaternion.identity, null);
             GameObject item = Instantiate(Drop_Item.gameObject, transform.position, Quaternion.identity, null);
+            var rot = item.transform.eulerAngles;
+            rot.x = -90;
+            item.transform.eulerAngles = rot;
             Destroy(tmp, 4.0f);
         }
     }

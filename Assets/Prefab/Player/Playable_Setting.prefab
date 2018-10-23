@@ -985,7 +985,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4845586645819268}
   - component: {fileID: 96470212605953408}
-  m_Layer: 2
+  m_Layer: 13
   m_Name: Trail
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1637,7 +1637,7 @@ GameObject:
   - component: {fileID: 4635548960790914}
   - component: {fileID: 33521360419604306}
   - component: {fileID: 23798230637289906}
-  m_Layer: 2
+  m_Layer: 13
   m_Name: Box003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1987,7 +1987,7 @@ GameObject:
   - component: {fileID: 4011206737633284}
   - component: {fileID: 65498145748465836}
   - component: {fileID: 114370881379168914}
-  m_Layer: 2
+  m_Layer: 13
   m_Name: Box001
   m_TagString: Sword
   m_Icon: {fileID: 0}
@@ -2488,7 +2488,6 @@ GameObject:
   - component: {fileID: 114835995099711248}
   - component: {fileID: 114992947035737854}
   - component: {fileID: 114814945039823240}
-  - component: {fileID: 114173804584815812}
   m_Layer: 0
   m_Name: Cam
   m_TagString: MainCamera
@@ -3008,7 +3007,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1156272657769472}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 81.089554, y: 13.345314, z: -87.17}
+  m_LocalPosition: {x: 19.085043, y: -10.313735, z: 14.369066}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4795446247349236}
@@ -3517,7 +3516,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1989808618743090}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.86, y: 0.53, z: 18.8}
+  m_LocalPosition: {x: 6.31, y: 0.12, z: -23.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4204549724756444}
@@ -3682,13 +3681,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1931472277536980}
-  m_LocalRotation: {x: -0.16317107, y: 0.07749108, z: -0.012857279, w: -0.98346585}
-  m_LocalPosition: {x: 3.1400604, y: 13.062622, z: -37.467163}
+  m_LocalRotation: {x: 0.29323405, y: -0.4592768, z: 0.17640962, w: 0.81973064}
+  m_LocalPosition: {x: 16.48, y: 6.14, z: -26.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4272685250296666}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45.407, y: -0.395, z: -0.108}
+  m_LocalEulerAnglesHint: {x: 40, y: -57.981003, z: 1.4860001}
 --- !u!4 &4803931366223320
 Transform:
   m_ObjectHideFlags: 1
@@ -5176,7 +5175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: 35df0d741bc595f44946448f52471953, type: 2}
+  profile: {fileID: 11400000, guid: 69b0102cd566d924785522a4f53f241e, type: 2}
 --- !u!114 &114054302506142840
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5460,22 +5459,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Stage 3
---- !u!114 &114173804584815812
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1931472277536980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: a3cf914a1d9f84f4b97d7cdd872cf481, type: 2}
-  isGlobal: 1
-  blendDistance: 0
-  weight: 1
-  priority: 0
 --- !u!114 &114181867167822846
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5943,10 +5926,13 @@ MonoBehaviour:
   check_falling: 0
   spawn_point: {fileID: 4114107045413986}
   stamina: {fileID: 2100000, guid: 167c6343ef31ef241ac020ccbd1dd21e, type: 2}
+  stamina_amount: 0
   cpd: {fileID: 0}
   cus_x: 1
   cus_z: 1
   reverse: 0
+  stamina_tick: 0
+  stamina_zero: 0
 --- !u!114 &114363092824972520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6163,6 +6149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d31119292d6930f45b9a7d5f9448e556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  is_top_ladder: 0
   ani: {fileID: 95096750127666482}
   weapon: {fileID: 114545357217377246}
   line: {fileID: 120279859372687662}
@@ -6190,6 +6177,7 @@ MonoBehaviour:
   Foot_Step: {fileID: 82356267427409296}
   Sword_Sound: {fileID: 82459336113629258}
   Fail_UI: {fileID: 1506957139820928}
+  has_stamina_useable: 0
   attack_click: 0
   click_tick: 0.23344576
   num: 0
@@ -6706,6 +6694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d46cacfba5ac03444b8943d3c883979b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ani: {fileID: 0}
 --- !u!114 &114663162139864286
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7274,16 +7263,23 @@ MonoBehaviour:
   cur_target: {fileID: 0}
   has_camera_using: 0
   action_speed: 0.1
+  default_speed: 0
+  guarantee_time: 0
+  default_time: 0
+  now_event_name: 
+  flow_dir: {x: 0, y: 0, z: 0}
   default_fov: 0
   Pins:
   - {fileID: 0}
   - {fileID: 0}
   Angle: {x: 21, y: 0, z: 0}
   default_angle: {x: 0, y: 0, z: 0}
-  Offset: {x: 0, y: 8, z: -13}
+  Offset: {x: 10, y: 10, z: -6}
   default_offset: {x: 0, y: 0, z: 0}
   GameStart: 1
   StartTime: 0
+  overlap: 0
+  guarantee_timer: 0
 --- !u!114 &114847328815482952
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -40,10 +40,12 @@ public class FootSwitch : Observer {
     {
         if (other.name.Equals("Player") || other.CompareTag("Enemy"))
         {
-            if(!p_coll.Contains(other))
+            if (!p_coll.Contains(other))
+            {
                 on_count++;
-            //Debug.Log(other.name + "이 발판에 올라옴");
-
+                if(this.name == "FootSwitch_tuto")
+                    Debug.Log(this.name + " || "+other.gameObject.name);
+            }
             ground_move_ctrl(Vector3.up);
 
             if(other.CompareTag("Enemy"))
@@ -62,18 +64,17 @@ public class FootSwitch : Observer {
     {
         if (other.name.Equals("Player") || other.CompareTag("Enemy"))
         {
-            on_count--;
-
-            off_switch();
-
-            if (other.CompareTag("Enemy"))  
+            if (other.CompareTag("Enemy"))
             {
+                on_count--;
                 other.transform.Find("DestroyCheck(Clone)").GetComponent<DestroyCheck>().remove_observer(this);
             }
-            else
+            else if (p_coll.Contains(other))
             {
                 p_coll.Remove(other);
+                on_count--;
             }
+            off_switch();
         }
     }
 

@@ -366,11 +366,20 @@ public class Player : MonoBehaviour
             if(!load_)
             {
                 int id = SceneManager.GetActiveScene().buildIndex;
-                SceneManager.UnloadSceneAsync(id);
-                SceneManager.LoadSceneAsync(id);
-                load_ = true;
-            }
+                if(id != 8)
+                {
+                    SceneManager.UnloadSceneAsync(id);
+                    SceneManager.LoadSceneAsync(id);
+                    load_ = true;
 
+                }
+                else
+                {
+                    BossRoomManager.get_instance().game_over();
+                    damageable.Dead = false;
+                }
+
+            }
         }
     }
 
