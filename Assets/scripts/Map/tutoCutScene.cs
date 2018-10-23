@@ -9,19 +9,27 @@ public class tutoCutScene : MonoBehaviour
     public PlayerMove pm;
     public Animator player;
     public ActionCamera ac;
+    public AudioSource how, ready,wather;
 
     IEnumerator shake()
     {
         pm.enabled = false;
         ac.Shake(100, 0.2f, Time.deltaTime);
         player.SetBool("stun", true);
-        yield return new WaitForSeconds(2.2f);
-
+        ready.PlayOneShot(ready.clip);
+        yield return new WaitForSeconds(2.4f);
+        wather.PlayOneShot(wather.clip);
         dragon["new"].speed = 1;
         dragon.Play("new");
         ac.Shake(120, 0.5f, Time.deltaTime);
-        yield return new WaitForSeconds(2.8f);
+        yield return new WaitForSeconds(0.8f);
+        how.PlayOneShot(how.clip);
+        wather.PlayOneShot(wather.clip);
+        yield return new WaitForSeconds(2.0f);
+        wather.PlayOneShot(wather.clip);
         dragon["new"].speed = -1;
+        yield return new WaitForSeconds(1.2f);
+        wather.PlayOneShot(wather.clip);
         //dragon.Play("new");
 
         ac.Shake(50, 0.15f, 0.05f);

@@ -192,7 +192,7 @@ public class ActionCamera : MonoBehaviour
         }
     }
     int ignore;
-
+    public bool overlap;
     public float guarantee_timer;
     IEnumerator calc_fsm()
     {
@@ -226,7 +226,8 @@ public class ActionCamera : MonoBehaviour
                                 && hit.collider.gameObject.layer != LayerMask.NameToLayer("Totem")
                                 )
                             {
-                                pos = Vector3.Lerp(pos, hit.point, action_speed);
+                                pos = Vector3.Lerp(pos, hit.point, action_speed * 0.2f);
+                                overlap = true;
                             }
                             else
                             {
@@ -235,6 +236,7 @@ public class ActionCamera : MonoBehaviour
                         }
                         else
                         {
+                            overlap = false;
                             if (GameStart)
                             {
                                 pos = Vector3.Lerp(pos, now_target.position + Offset, action_speed * 0.1f);

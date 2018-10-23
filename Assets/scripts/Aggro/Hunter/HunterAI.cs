@@ -40,13 +40,15 @@ public class HunterAI : AggroAI {
                     tick = 0;
                     if (ai.target != null)
                     {
-                        var t = ai.target.transform.parent.GetComponent<Damageable>();
-                        if(t != null)
+                        if(ai.target.transform.parent.GetComponent<Damageable>() != null)
                         {
-                            t.Damaged(ai.attack.Damage , ai.attack.attackTick, t.transform);
-                            transform.LookAt(ai.target.transform);
+                            var t = ai.target.transform.parent.GetComponent<Damageable>();
+                            if (t != null)
+                            {
+                                t.Damaged(ai.attack.Damage, ai.attack.attackTick, t.transform);
+                                transform.LookAt(ai.target.transform);
+                            }
                         }
-
                     }
                 }
                 break;

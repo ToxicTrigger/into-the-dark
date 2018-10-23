@@ -15,10 +15,9 @@ public class TalkTuto : Switch {
             {
                 if(!has_on)
                 {
-                    ui.StartCoroutine(ui.StartTimer(1));
+                    ui.StartCoroutine(ui.StartTimer(3));
                     has_on = true;
                 }
-
             }
         }
         else

@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    public bool is_top_ladder;
     bool is_attack;
     public Animator ani;
     Vector3 click_pos;
@@ -337,6 +338,7 @@ public class Player : MonoBehaviour
                     //TODO :: 회피 코드 수정하기
                     //        현재 바라보는 방향이 아닌 입력되고 있는 방향으로의 회피
                     ani.SetBool("Dodge", true);
+                    move.stamina.SetFloat("_Amount", move.stamina_amount + 0.25f);
                     dodged = true;
                 }
             }
@@ -358,6 +360,12 @@ public class Player : MonoBehaviour
             {
                 ani.SetBool("Attack", false);
             }
+        }
+        else
+        {
+            int id = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.UnloadSceneAsync(id);
+            SceneManager.LoadSceneAsync(id);
         }
     }
 

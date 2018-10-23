@@ -35,6 +35,8 @@ public class AIAction : MonoBehaviour
     public Detecter detecter;
     public Animator ani;
 
+    public GameObject DeadEffect;
+
     public void Start()
     {
         state = State.Sleep;
@@ -64,7 +66,7 @@ public class AIAction : MonoBehaviour
 
                 case State.Attack:
                     transform.LookAt(Player.transform);
-                    if( attack_tick <= 1.4f )
+                    if( attack_tick <= 3.4f )
                     {
                         attack_tick += Time.deltaTime;
                         ani.SetBool("isAttack" , false);
@@ -79,6 +81,7 @@ public class AIAction : MonoBehaviour
                         poison.GetComponent<Rigidbody>().useGravity = true;
                         poison.GetComponent<Rigidbody>().velocity = ( Player.transform.position - pos ).normalized * Vector3.Distance(transform.position , Player.transform.position) / 2;
                         poison.GetComponent<Rigidbody>().AddForce(Vector3.up * 10 , ForceMode.Impulse);
+                        Player.ac.Shake(4, 0.4f, Time.deltaTime);
                         attack_tick = 0;
                     }
                     break;
@@ -129,7 +132,7 @@ public class AIAction : MonoBehaviour
             find_target = false;
         }
     }
-
+    bool dead;
     bool first;
     public void Update()
     {
@@ -139,8 +142,17 @@ public class AIAction : MonoBehaviour
             ani.SetBool("isGroggy" , false);
             ani.SetBool("isDead" , true);
             state = State.Dead;
-            Destroy(this.gameObject , 5);
+
+            if (!dead)
+            {
+                GameObject eff = Instantiate(DeadEffect, transform.position, Quaternion.identity, null);
+                //eff.transform.localScale *= 30;
+                Destroy(eff, 10);
+                dead = true;
+            }
+            Destroy(this.gameObject , 3);
         }
+
 
         if(detecter.is_find)
         {
@@ -151,9 +163,7 @@ public class AIAction : MonoBehaviour
                 state = state == State.Sleep ? State.Action : State.Idle;
                 find_target = true;
             }
-
         }
     }
-
 
 }

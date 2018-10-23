@@ -6,12 +6,14 @@ public class Switch : Interactable
 {
     public bool OnOff;
     public bool handlr;
-    public Particle_Handler ph;
+    public Particle_Handler[] ph;
     public AudioSource sound;
 
     private new void Awake()
     {
         base.Awake();
+
+        ph = transform.GetComponents<Particle_Handler>();
 
         if( ph != null )
         {
@@ -34,7 +36,11 @@ public class Switch : Interactable
                     }
                     if( handlr )
                     {
-                        ph.OnOff = false;
+                        foreach(var a in ph)
+                        {
+                            a.OnOff = false;
+                        }
+                        
                     }
                     OnOff = false;
                 }
@@ -46,7 +52,10 @@ public class Switch : Interactable
                     }
                     if( handlr )
                     {
-                        ph.OnOff = true;
+                        foreach (var a in ph)
+                        {
+                            a.OnOff = true;
+                        }
                     }
                     OnOff = true;
                 }

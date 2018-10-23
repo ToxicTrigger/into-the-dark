@@ -12,7 +12,7 @@ public class TotuUI : MonoBehaviour
 
     public float input_time;
     public bool event_run;
-    public IEnumerator StartTimer(int time)
+    public IEnumerator StartTimer(float time)
     {
         if( Tip != null  && state == 5) Tip.SetActive(true);
         event_run = true;

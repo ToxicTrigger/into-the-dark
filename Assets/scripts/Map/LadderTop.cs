@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LadderTop : MonoBehaviour {
+public class LadderTop : MonoBehaviour
+{
     public Player player;
     PlayerMove pm;
     CharacterController cc;
@@ -16,15 +17,15 @@ public class LadderTop : MonoBehaviour {
 
     private void OnTriggerEnter(Collider collision)
     {
-        if(!player.has_on_ladder)
+        if (!player.has_on_ladder)
         {
-            if( collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast") )
+            if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Ground") && collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast"))
             {
                 var pos = player.transform.position;
                 //pos.y -= 1f;
                 player.transform.position = pos;
                 player.has_on_ladder = true;
-                player.ani.SetBool("Ladder" , true);
+                player.ani.SetBool("Ladder", true);
                 pm.enabled = false;
             }
         }
@@ -32,18 +33,40 @@ public class LadderTop : MonoBehaviour {
 
     private void OnTriggerExit(Collider collision)
     {
-        if( collision.gameObject.CompareTag("Player") &&
-            collision.gameObject.layer != LayerMask.NameToLayer("Ground") &&
-            collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast")
-            )
+        if (!player.is_top_ladder)
         {
-            var pos = player.transform.position;
-            pos.y += 1f;
-            pos += transform.forward  * -1 * 2;
-            player.transform.position = pos;
-            player.has_on_ladder = false;
-            player.ani.SetBool("Ladder" , false);
-            pm.enabled = true;
+            if (collision.gameObject.CompareTag("Player") &&
+                collision.gameObject.layer != LayerMask.NameToLayer("Ground") &&
+                collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast")
+                )
+            {
+                var pos = player.transform.position;
+                pos.y += 1f;
+                pos += transform.forward * -1 * 2;
+                player.transform.position = pos;
+                player.has_on_ladder = false;
+                player.ani.SetBool("Ladder", false);
+                pm.enabled = true;
+                player.is_top_ladder = true;
+                player.ani.speed = 1;
+            }
+        }
+        else
+        {
+            if (collision.gameObject.CompareTag("Player") &&
+                collision.gameObject.layer != LayerMask.NameToLayer("Ground") &&
+                collision.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast")
+                )
+            {
+                //var pos = player.transform.position;
+                //pos.y += 1f;
+                //pos += transform.forward * -1 * 2;
+                //player.transform.position = pos;
+                player.has_on_ladder = true;
+                player.ani.SetBool("Ladder", true);
+                pm.enabled = false;
+                player.is_top_ladder = false;
+            }
         }
     }
 }

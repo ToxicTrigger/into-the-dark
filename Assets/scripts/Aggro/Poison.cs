@@ -11,6 +11,7 @@ public class Poison : MonoBehaviour
     public Transform boss;
     public GameObject prefab;
     public GameObject Monster;
+    public GameObject effect;
 
     public void Start()
     {
@@ -18,35 +19,26 @@ public class Poison : MonoBehaviour
         boss = GameObject.Find(boss_name).transform;
     }
 
-    public void OnCollisionEnter(Collision other)
-    {
-        if( other.gameObject.CompareTag("Enemy") )
-        {
-            if( Players )
-            {
-                other.gameObject.GetComponent<Damageable>().Hp -= 20;
-                Destroy(gameObject);
-            }
-        }
-    }
-
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && !other.gameObject.name.Contains("pot"))
         {
             if (other.CompareTag("Switch"))
             {
                 Vector3 pos = boss.position;
                 pos.y += 30f;
                 GameObject drop = Instantiate(prefab, pos, Quaternion.identity, null);
-                drop.GetComponent<Rigidbody>().useGravity = true;
-                drop.GetComponent<Poison>().Players = true;
-                drop.GetComponent<Collider>().isTrigger = false;
+                drop.transform.localScale *= 1.4f;
+                GameObject tmp = Instantiate(effect, transform.position, Quaternion.identity, null);
+                Destroy(tmp, 3.0f);
                 Destroy(gameObject);
             }
             else
             {
                 GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
+                GameObject t = Instantiate(effect, transform.position, Quaternion.identity, null);
+                Destroy(t, 3.0f);
+                Player.GetComponent<Player>().ac.Shake(3, 0.2f, Time.deltaTime);
                 Destroy(gameObject);
             }
         }
@@ -55,6 +47,8 @@ public class Poison : MonoBehaviour
         {
             Player.Hp -= Damage;
             Player.GetComponent<Player>().ac.Shake(3 , 0.2f , Time.deltaTime);
+            GameObject tmp = Instantiate(effect, transform.position, Quaternion.identity, null);
+            Destroy(tmp, 3.0f);
         }
         if(!other.CompareTag("Enemy") && other.gameObject.name.Equals("Player") )
         {
@@ -64,7 +58,10 @@ public class Poison : MonoBehaviour
         {
             if(Players)
             {
-                other.GetComponent<Damageable>().Hp -= 50;
+                Player.GetComponent<Player>().ac.Shake(3, 0.2f, Time.deltaTime);
+                other.GetComponent<Damageable>().Damaged(10,1,other.transform);
+                GameObject tmp = Instantiate(effect, transform.position, Quaternion.identity, null);
+                Destroy(tmp, 3.0f);
                 Destroy(gameObject);
             }
         }

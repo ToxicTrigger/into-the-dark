@@ -25,6 +25,8 @@ public class LadderBottom : MonoBehaviour {
             player.has_on_ladder = false;
             player.ani.SetBool("Ladder" , false);
             pm.enabled = true;
+            player.is_top_ladder = false;
+            player.ani.speed = 1;
         }
     }
 

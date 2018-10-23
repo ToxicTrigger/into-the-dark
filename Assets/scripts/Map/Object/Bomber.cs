@@ -21,7 +21,6 @@ public class Bomber : Damageable
         
     }
 
-
     public void Update()
     {
         if( this.Dead )
@@ -35,7 +34,6 @@ public class Bomber : Damageable
             {
                 Rigidbody r = coll.GetComponent<Rigidbody>();
                 Damageable d = coll.GetComponent<Damageable>();
-
                 if( d != null )
                 {
                     if( !d.Equals(this) )
