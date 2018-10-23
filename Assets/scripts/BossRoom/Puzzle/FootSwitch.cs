@@ -25,6 +25,8 @@ public class FootSwitch : Observer {
 
     public bool is_time_switch;
 
+    public TargetUI target_ui;
+
 	void Start () {
         p_coll = new List<Collider>();
         move_corutine = ground_move(Vector3.up);
@@ -77,6 +79,10 @@ public class FootSwitch : Observer {
 
     IEnumerator ground_move(Vector3 _move_dir)
     {
+        if (target_ui != null && _move_dir == Vector3.up)
+            target_ui.gameObject.SetActive(true);
+        else if (target_ui != null && _move_dir == Vector3.down)
+            target_ui.gameObject.SetActive(false);
 
         while (true)
         {
