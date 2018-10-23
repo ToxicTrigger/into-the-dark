@@ -28,9 +28,9 @@ public class HpUi : MonoBehaviour
             Vector3 des;
             int hp = (int)( player_hp.Max_Hp / 100 );
 
-            des = new Vector3(196 + ( ( i + 2 ) * 185 ) , -1.6f , 0);
+            des = new Vector3(196 + ( ( i + 2 ) * 185 ) , -1.7f , 0);
             Hp_bars[ i ].fillAmount =  ( (player_hp.Hp - i * 100) * 0.01f );
-            End.anchoredPosition3D = Vector3.Lerp(End.anchoredPosition3D , des / 3 , Time.deltaTime * 2);
+            End.anchoredPosition3D = Vector3.Lerp(End.anchoredPosition3D , des / 2.8f , Time.deltaTime * 2);
 
             if( Hp_bars[i].fillAmount == 0)
             {
