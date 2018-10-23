@@ -13,10 +13,12 @@ public class Poison : MonoBehaviour
     public GameObject Monster;
     public GameObject effect;
 
+    public bool is_item;
     public void Start()
     {
         Player = FindObjectOfType<Player>().GetComponent<Damageable>();
-        boss = GameObject.Find(boss_name).transform;
+        if(!is_item)
+            boss = GameObject.Find(boss_name).transform;
     }
 
     public void OnTriggerEnter(Collider other)

@@ -122,6 +122,7 @@ public class GroundCheck : Observer
                 //manager.game_over(this);
 
                 //플레이어 스턴 추가
+                player.GetComponent<Player>().ani.SetBool("stun", true);
                 player.GetComponent<Damageable>().Damaged(100, 3.0f);
 
                 attack_ground();
@@ -200,16 +201,20 @@ public class GroundCheck : Observer
                 //        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
                 //    }
                 //}
-                
+
                 //입장시 바로 cross_attack실행 후 심장소리 재생, is_cognition = true
-                if(!is_cognition)
+                if (!is_cognition)
                 {
-                    if(type == Type.Stone)
+                    if (type == Type.Stone)
                         BossRoomManager.get_instance().send_boss_state(Boss_State.State.Cross_Attack, this, 50, 2);
 
                     sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
                     is_cognition = true;
-                    attack = false;
+                    if (attack)
+                    {
+                        player.GetComponent<Player>().ani.SetBool("stun", false);
+                        attack = false;
+                    }
                 }
                 if (is_cognition)
                 {

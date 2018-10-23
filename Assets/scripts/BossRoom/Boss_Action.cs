@@ -81,6 +81,8 @@ public class Boss_Action : MonoBehaviour {
 
     //cross
     public Transform water_pos;
+    public Poison poison;
+    public Transform drop_point;
 
     ActionCamera ac;
 
@@ -255,6 +257,7 @@ public class Boss_Action : MonoBehaviour {
                     origin_dis = Vector2.Distance(new Vector2(cross_start.x, cross_start.z), new Vector2(cross_end.x, cross_end.z));
 
                     jump_power = 1; test_cnt = 0;
+                    StartCoroutine(drop_poison());
                 }
                 else if(action_phase ==2)
                 {
@@ -278,7 +281,7 @@ public class Boss_Action : MonoBehaviour {
                         SoundManager.get_instance().mute_sound(SoundManager.SoundList.boss_attack_up, true);
                         SoundManager.get_instance().play_sound(SoundManager.SoundList.boss_attack_down);
                     }
-                    
+                                        
 
                     if (cur_dis < 2 && tail[tail.Length - 1].transform.position.y < around_transform.position.y+10)//&& transform.position.y < move_target.y+5)
                     {
@@ -436,7 +439,19 @@ public class Boss_Action : MonoBehaviour {
 
     }
 
+    public float[] drop_time;
 
+    IEnumerator drop_poison()
+    {
+        //Rigidbody rig;
+        for (int i = 0; i < drop_time.Length; i++)
+        {
+            yield return new WaitForSeconds(drop_time[i]);
+            Poison _poison = Instantiate(poison, drop_point.position, Quaternion.identity);
+            //rig = _poison.GetComponent<Rigidbody>();
+            //rig.AddForce(Vector3.down);
+        }
+    }
 
     Vector3 rush_attack_start_pos;
     Vector3 move_target;
