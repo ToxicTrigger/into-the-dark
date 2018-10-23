@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class UiOnOff : MonoBehaviour {
 
-    public GameObject ui;
+    public UiAlphaCtrl ui;
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.name.Equals("Player"))
         {
-            ui.SetActive(true);
+            ui.onoff_ui(true);
         }
     }
 
@@ -18,7 +18,7 @@ public class UiOnOff : MonoBehaviour {
     {
         if (other.name.Equals("Player"))
         {
-            ui.SetActive(false);
+            ui.onoff_ui(false);
         }
     }
 }

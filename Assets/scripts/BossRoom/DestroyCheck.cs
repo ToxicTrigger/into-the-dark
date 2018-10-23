@@ -6,6 +6,7 @@ public class DestroyCheck : Observable {
 
     public void notify_all()
     {
+        Debug.Log(this.transform.parent.name);
         for (int i = 0; i < this.observers.Count; i++)
         {
             if (this.observers[i] == null)
