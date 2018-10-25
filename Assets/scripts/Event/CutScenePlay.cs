@@ -60,6 +60,14 @@ public class CutScenePlay : MonoBehaviour {
 
     public void play_scene()
     {
+        var all_sound = FindObjectsOfType<AudioSource>();
+        foreach (var s in all_sound)
+        {
+            if(!s.gameObject.name.Equals("CutScene"))
+            {
+                s.Stop();
+            }
+        }
         if (timer == null)
         {
             timer = play_timer();

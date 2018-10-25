@@ -79,8 +79,7 @@ public class TitleAnimation : MonoBehaviour
                         
                         cam.enabled = true;
                         gameObject.SetActive(false);
-                        
-
+                      
                         break;
                     case 3:
                         Application.Quit();

@@ -77,9 +77,27 @@ public class InputManager : MonoBehaviour
 
     }
 
+    float tick;
+
     void FixedUpdate()
     {
+        if(tick <= 3)
+        {
+            tick += Time.deltaTime;
+        }
+        else
+        {
+            tick = 0;
+            listeners = new List<InputHandler>();
+            InputHandler[] list = FindObjectsOfType<InputHandler>();
+            for (int i = 0; i < list.Length; i++)
+            {
+                listeners.Add(list[i]);
+                //Debug.Log("input Handler : " + listeners[i].name);
+            }
+        }
         update_raw_input();
         update_handlers();
     }
+   
 }

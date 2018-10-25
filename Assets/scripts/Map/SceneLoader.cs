@@ -11,6 +11,7 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator ChangeScene()
     {
+        ani.SetBool("load", true);
         FindObjectOfType<Player>().gameObject.GetComponent<AudioSource>().Stop();
         if(use_cutscene)
         {
@@ -21,10 +22,10 @@ public class SceneLoader : MonoBehaviour
                 t += i;
             }
 
-            yield return new WaitForSeconds(t + 24);
+            yield return new WaitForSeconds(t + 20);
         }
         
-        ani.SetBool("load", true);
+
         yield return new WaitForSeconds(4);
         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
         SceneManager.LoadSceneAsync(map_name);

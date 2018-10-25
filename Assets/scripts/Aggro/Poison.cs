@@ -12,6 +12,7 @@ public class Poison : MonoBehaviour
     public GameObject prefab;
     public GameObject Monster;
     public GameObject effect;
+    public GameObject sound;
 
     public bool is_item;
     public void Start()
@@ -27,6 +28,9 @@ public class Poison : MonoBehaviour
         {
             if (other.CompareTag("Switch"))
             {
+                var t = Instantiate(sound, transform.position, Quaternion.identity, null);
+                Destroy(t, 3.0f);
+
                 Vector3 pos = boss.position;
                 pos.y += 30f;
                 GameObject drop = Instantiate(prefab, pos, Quaternion.identity, null);
@@ -37,6 +41,8 @@ public class Poison : MonoBehaviour
             }
             else
             {
+                var tt = Instantiate(sound, transform.position, Quaternion.identity, null);
+                Destroy(tt, 3.0f);
                 GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
                 GameObject t = Instantiate(effect, transform.position, Quaternion.identity, null);
                 Destroy(t, 3.0f);
@@ -47,6 +53,8 @@ public class Poison : MonoBehaviour
 
         if(other.gameObject.name.Equals("Player"))
         {
+            var t = Instantiate(sound, transform.position, Quaternion.identity, null);
+            Destroy(t, 3.0f);
             Player.Hp -= Damage;
             Player.GetComponent<Player>().ac.Shake(3 , 0.2f , Time.deltaTime);
             GameObject tmp = Instantiate(effect, transform.position, Quaternion.identity, null);
