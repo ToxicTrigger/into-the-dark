@@ -143,38 +143,39 @@ public class CutScenePlay : MonoBehaviour {
 
         while (true)
         {
-            if (cur_scene != null)
-            {
-                minus_alpha -= add_alpha;
-                cur_scene.color = new Vector4(1, 1, 1, minus_alpha);
-            }
+            minus_alpha -= add_alpha;
+            if (minus_alpha <= 0)
+                minus_alpha = 0;
+            cur_scene.color = new Vector4(1, 1, 1, minus_alpha);
 
             if (cur_scene.color.a <= 0)
+            {
                 break;
-
+            }
             yield return new WaitForSeconds(0.05f);
         }
-
-        while(true)
+        Debug.Log("minus_alpha");
+        while (true)
         {
-            cut_scene_sound.volume -= 0.001f;
+            Debug.Log("vo");
+            if (cut_scene_sound.volume >= 0.002)
+                cut_scene_sound.volume -= 0.002f;
             yield return new WaitForSeconds(0.01f);
-            if (cut_scene_sound.volume <= 0)
+            Debug.Log("vo2");
+            if (cut_scene_sound.volume <= 0.002f)
+            {
                 break;
+            }
         }
-
-        timer = null;
         cut_scene_sound.Stop();
-        plus_alpha = 1;
-
+        Debug.Log("sound_stop");
         if (is_clear)
         {
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(3.0f);            
             scene_info.back_screen.color = new Vector4(0, 0, 0, 0);
-            ending.gameObject.SetActive(true);
             ending.play_scroll();
         }
-
+        Debug.Log("is_clear");
         while (!is_clear)
         {
             plus_alpha -= add_alpha * 0.13f;
@@ -186,5 +187,7 @@ public class CutScenePlay : MonoBehaviour {
             }
             yield return new WaitForSeconds(0.01f);
         }
+        Debug.Log("end");
+        timer = null;
     }
 }
