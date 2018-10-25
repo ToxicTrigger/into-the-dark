@@ -26,9 +26,6 @@ public class BossRoomManager : Observer {
     public bool is_danger_loop;
     public float add_smoothness, add_color_red;
     public float danger_speed;
-    public PostProcessingProfile post;
-    public VignetteModel new_setting;
-    public VignetteModel default_setting;
     IEnumerator danger_timer;
 
     public Boss_Worm boss;
@@ -39,6 +36,7 @@ public class BossRoomManager : Observer {
     SoundManager sound_manager;
     Vector3 cross_point = Vector3.zero;
     public Transform start_point;
+    public Transform tuto_start_point;
     public AncientWeapon ancient_weapon;
 
     public GameObject enemy;
@@ -133,12 +131,6 @@ public class BossRoomManager : Observer {
         player = FindObjectOfType<Player>();
         p_controller = player.GetComponent<CharacterController>();
     }
-    private void Start()
-    {
-        default_setting.settings = post.vignette.settings;
-        //post.vignette.settings = new_setting.settings;
-        //danger_screen(true);
-    }
 
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
@@ -173,12 +165,13 @@ public class BossRoomManager : Observer {
         if (_add)
         {
             //페이즈 증가
-            phase++;  
+            phase++;
             Map_Initialization();
         }
 
     }
 
+    public bool tuto_clear;
     public void game_over()
     {
         if (!is_game_over)
@@ -187,6 +180,21 @@ public class BossRoomManager : Observer {
             is_game_over = true;
             ui_black_screen.add_observer(this);
             ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+            Debug.Log("game over \\");
+        }
+    }
+
+    public Vector3 re_start_pos;
+    public void game_over(Vector3 pos)
+    {
+        if (!is_game_over)
+        {
+            re_start_pos = pos;
+            p_controller.enabled = false;
+            is_game_over = true;
+            ui_black_screen.add_observer(this);
+            ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+            Debug.Log("game over tuto");
         }
     }
 
@@ -199,6 +207,7 @@ public class BossRoomManager : Observer {
             ui_black_screen.add_observer(_this);
             p_controller.enabled = false;
             ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
+            Debug.Log("game over ground check");
         }
     }
 
@@ -331,6 +340,7 @@ public class BossRoomManager : Observer {
         if(wood_bridge_count <=1)
         {
             game_over();
+            Debug.Log("bridge");
         }
     }
 
@@ -344,7 +354,7 @@ public class BossRoomManager : Observer {
             Destroy(reloc.get_reloc((int)phase).torch_set[0].switch_object[i].gameObject);
         }
 
-        for(int i=0; i<enemy_list.Count;  i++)
+        for (int i = 0; i < enemy_list.Count; i++)
         {
             Destroy(enemy_list[i]);
         }
@@ -352,7 +362,7 @@ public class BossRoomManager : Observer {
         get_boss().set_hp(init_val[(int)phase].boss_hp);
         wood_bridge_count = 3;
 
-        for (int i=0; i<wood_bridge.Length; i++)
+        for (int i = 0; i < wood_bridge.Length; i++)
         {
             wood_bridge[i].initialize_bridge();
         }
@@ -362,9 +372,16 @@ public class BossRoomManager : Observer {
         }
         Map_Initialization();
         player.all_collect_item();
-        player.transform.position = start_point.position;
+
+        if (!tuto_clear)
+        {
+            re_start_pos = tuto_start_point.position;
+            player.transform.position = re_start_pos;
+        }
+        else
+            player.transform.position = start_point.position;
+
         player.gameObject.GetComponent<Damageable>().Hp = player.gameObject.GetComponent<Damageable>().Max_Hp;
-        
     }
 
     public void create_enemy(Vector3 _pos, Observer _observer)
@@ -399,90 +416,22 @@ public class BossRoomManager : Observer {
 
     public void drop_item()
     {
-        for(int i=0; i<item_pos_list[boss_action.groggy_cnt].item_pos.Length; i++)
-        {
-            GameObject _item = Instantiate(hp_heal, item_pos_list[boss_action.groggy_cnt].item_pos[i].position, Quaternion.identity);
-        }        
+        StartCoroutine(item_drop_timer());
     }
 
-    GameObject cur_obj;
-    public void danger_screen(bool _is_danger, GameObject obj)
+    IEnumerator item_drop_timer()
     {
-        if (_is_danger && danger_timer == null)
+        yield return new WaitForSeconds(4.5f);
+        for (int i = 0; i < item_pos_list[boss_action.groggy_cnt].item_pos.Length; i++)
         {
-            cur_obj = obj;
-            is_danger_loop = true;
-            danger_timer = danger_loop();
-            StartCoroutine(danger_timer);
-        }
-        else if(_is_danger == false && cur_obj == obj)
-        {
-            is_danger_loop = false;
-        }
-    }
-
-
-    IEnumerator danger_loop()
-    {
-        float smoothness = default_setting.settings.smoothness;
-        Vector4 color = default_setting.settings.color;
-
-        while (is_danger_loop)
-        {
-            while (true)
+            if (boss_action.groggy_cnt == 0)
             {
-                if (!is_new)
-                {
-                    smoothness += add_smoothness;
-                    if (color.x >= new_setting.settings.color.r)
-                        color.x = new_setting.settings.color.r;
-                    else
-                        color.x += add_color_red;
-
-                    post.vignette.set_val(smoothness, color);
-
-                    if (smoothness >= new_setting.settings.smoothness && color.x >= new_setting.settings.color.r)
-                    {
-                        is_new = true;
-                        break;
-                    }
-                }
-                else
-                {
-                    smoothness -= add_smoothness;
-                    if(color.x >0)
-                        color.x -= add_color_red;
-                    
-                    post.vignette.set_val(smoothness, color);
-
-                    if (smoothness <= default_setting.settings.smoothness && color.x <= default_setting.settings.color.r)
-                    {
-                        is_new = false;
-                        break;
-                    }
-                }
-
-                yield return new WaitForSeconds(0.01f);
+                GameObject _item = Instantiate(hp_heal, item_pos_list[2].item_pos[i].position, Quaternion.identity);
             }
-
-            yield return new WaitForSeconds(danger_speed);
-        }
-
-        while (true)
-        {
-            smoothness -= add_smoothness;
-            color.x -= add_color_red;
-
-            post.vignette.set_val(smoothness, color);
-
-            if (smoothness <= default_setting.settings.smoothness && color.x <= default_setting.settings.color.r)
+            else
             {
-                is_new = false;
-                post.vignette.settings = default_setting.settings;
-                break;
+                GameObject _item = Instantiate(hp_heal, item_pos_list[boss_action.groggy_cnt - 1].item_pos[i].position, Quaternion.identity);
             }
-            yield return new WaitForSeconds(0.01f);
         }
-        danger_timer = null;
     }
 }

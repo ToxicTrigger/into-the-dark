@@ -76,7 +76,7 @@ public class TitleAnimation : MonoBehaviour
                     case 0:
                         Char.SetActive(true);
                         UI.SetActive(true);
-                        Char.GetComponent<PlayerMove>().enabled = true;
+                        
                         cam.enabled = true;
                         gameObject.SetActive(false);
                         
