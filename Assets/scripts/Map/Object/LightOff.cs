@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class LightOff : MonoBehaviour
 {
-    public new Light light;
+    public Light this_light;
     public float power;
     public void Start()
     {
-        light = GetComponent<Light>();
+        this_light = GetComponent<Light>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (light.intensity > 0)
+        if (this_light.intensity > 0)
         {
-            light.intensity -= power;
+            this_light.intensity -= power;
         }
         else
         {
-            light.enabled = false;
+            this_light.enabled = false;
         }
     }
 }

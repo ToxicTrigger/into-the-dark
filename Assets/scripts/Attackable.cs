@@ -16,7 +16,7 @@ public class Attackable : MonoBehaviour
 
     private void Awake()
     {
-        player = FindObjectOfType<Player>().GetComponent<Damageable>();
+        player = FindObjectOfType<Player>().gameObject.GetComponent<Damageable>();
         tick = attackTick;
     }
 

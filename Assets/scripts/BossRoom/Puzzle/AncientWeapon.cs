@@ -70,7 +70,11 @@ public class AncientWeapon : Observer
         }
     }
 
-    //활성화 시키는 함수
+    public int tick;
+    public float power;
+    public float tick_by_tick_time;
+
+    //활성화 시키는 함수W
     void activate()
     {
         activate_count++;
@@ -84,6 +88,8 @@ public class AncientWeapon : Observer
 
         state = State.Activated;
 
+        manager.player.ac.Shake(tick, power, tick_by_tick_time * Time.deltaTime);
+
         for (int i = 0; i < 3; i++)
             manager.reloc.get_reloc((int)manager.phase).torch_set[0].foot_switch[i].ground_move_ctrl(Vector3.up);
         //이걸 애니메이션 재생이 완료 된 후 실행하자!
@@ -95,9 +101,7 @@ public class AncientWeapon : Observer
     {
         manager.send_boss_state(Boss_State.State.Groggy, BossRoomManager.get_instance().center); //weapon_activation() : 보스 그로기상태 전환 
         manager.get_ancient_ui().switching_ui(true, time_list[(int)BossRoomManager.get_instance().phase]);
-        Debug.Log("유지시간 = " + time_list[(int)BossRoomManager.get_instance().phase]);
         yield return new WaitForSeconds(time_list[(int)BossRoomManager.get_instance().phase]);
-        Debug.Log("** end activate **");
         deactivate();
     }
 

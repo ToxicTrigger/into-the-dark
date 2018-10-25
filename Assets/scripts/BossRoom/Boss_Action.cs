@@ -73,7 +73,6 @@ public class Boss_Action : MonoBehaviour {
     public int segments;
     public float x_radius;
     public float y_radius;
-    LineRenderer line;
 
     //move
     public Transform move_pos;
@@ -89,9 +88,6 @@ public class Boss_Action : MonoBehaviour {
     void Start () {
         animator = this.GetComponent<Animator>();
         rot_cnt = Rotate_Cnt.one;
-        line = GetComponent<LineRenderer>();
-        line.SetVertexCount(segments + 1);
-        line.useWorldSpace = false;
 
         boss = GetComponent<Boss_Worm>();
         state = GetComponent<Boss_State>();
@@ -131,9 +127,6 @@ public class Boss_Action : MonoBehaviour {
     bool idle_state;
 
     void Update () {
-
-        if(rush_attack)
-            create_point();
 
         switch (state.get_state())
         {
@@ -217,8 +210,6 @@ public class Boss_Action : MonoBehaviour {
                     else if (rush_attack)
                     {                        
                         rush_attack = false;
-                        line.SetVertexCount(0);
-                        line.SetVertexCount(segments + 1);
                     }
 
                     if(tail[tail.Length-1].transform.parent.position.y < around_transform.position.y-10)
@@ -448,8 +439,6 @@ public class Boss_Action : MonoBehaviour {
         {
             yield return new WaitForSeconds(drop_time[i]);
             Poison _poison = Instantiate(poison, drop_point.position, Quaternion.identity);
-            //rig = _poison.GetComponent<Rigidbody>();
-            //rig.AddForce(Vector3.down);
         }
     }
 
@@ -502,28 +491,6 @@ public class Boss_Action : MonoBehaviour {
         yield return new WaitForSeconds(_time);
         state.set_state(_state,null);
         action_phase = 2;
-    }
-
-    void create_point()
-    {
-        
-        float x, z;
-        float y = 1;
-
-        float angle = 20;
-
-        for(int i=0; i<(segments+1); i++)
-        {
-            x = Mathf.Cos(Mathf.Deg2Rad * angle) * x_radius;
-            z = Mathf.Sin(Mathf.Deg2Rad * angle) * y_radius;
-
-            Vector3 pos = player.transform.position + new Vector3(x, y, z);
-
-            line.SetPosition(i, transform.InverseTransformPoint(pos));
-
-            angle += (360f / segments); 
-        }
-
     }
 
     void attack_player(int _damage)

@@ -11,7 +11,6 @@ public class QueueTest : MonoBehaviour {
         public float age;
     }
 
-    public string name;
     public float age;
 
     public Queue<Man> test_queue;
@@ -26,7 +25,6 @@ public class QueueTest : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Man test_man = new Man();
-            test_man.name = name;
             test_man.age = age;
 
             test_queue.Enqueue(test_man);

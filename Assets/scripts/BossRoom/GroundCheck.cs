@@ -38,6 +38,7 @@ public class GroundCheck : Observer
     public bool is_danger;
     public GameObject player;
     public GameObject _player;
+    Animator p_ani;
 
     public Transform[] enemy_position;
 
@@ -108,8 +109,9 @@ public class GroundCheck : Observer
 
     IEnumerator player_stun()
     {
-        yield return new WaitForSeconds(2.0f);
-        player.GetComponent<Player>().ani.SetBool("stun", false);
+        yield return new WaitForSeconds(0.2f);
+        p_ani.SetBool("stun", false);
+        p_ani = null;
     }
 
     bool attack;
@@ -128,7 +130,8 @@ public class GroundCheck : Observer
                 //manager.game_over(this);
 
                 //플레이어 스턴 추가
-                player.GetComponent<Player>().ani.SetBool("stun", true);
+                p_ani = player.GetComponent<Player>().ani;
+                p_ani.SetBool("stun", true);
                 player.GetComponent<Damageable>().Damaged(100, 3.0f);
                 StartCoroutine(player_stun());
 
@@ -263,7 +266,7 @@ public class GroundCheck : Observer
                         if (heartbeat_count == 6)
                         {
                             sound_manager.play_sound(SoundManager.SoundList.boss_attack_ready);
-                            manager.send_boss_state(Boss_State.State.Cross_Attack, this,30,2.3f);
+                            manager.send_boss_state(Boss_State.State.Cross_Attack, this,28,2.2f);
                             is_cognition = false;
                         }
                     }
@@ -288,11 +291,12 @@ public class GroundCheck : Observer
             if (type == Type.Wood && manager.phase == BossRoomManager.Phase.two && boss_state.get_state() == Boss_State.State.Cross_Attack)
             {
                 type = Type.Null;
-                manager.minus_wood_bridge_count();
                 for (int i = 0; i < wood_bridge_piece.Length; i++)
                 {
                     wood_bridge_piece[i].isKinematic = false;
                 }
+                manager.minus_wood_bridge_count();
+                Debug.Log(this.name + "bridge attack");
                 clear_guard();
             }
         }

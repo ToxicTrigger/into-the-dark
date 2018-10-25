@@ -38,7 +38,7 @@ MonoBehaviour:
   ambientOcclusion:
     m_Enabled: 1
     m_Settings:
-      intensity: 0.65
+      intensity: 0.58
       radius: 1.72
       sampleCount: 10
       downsampling: 0
@@ -95,8 +95,8 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       bloom:
-        intensity: 0.15
-        threshold: 0.53
+        intensity: 0.2
+        threshold: 1.01
         softKnee: 0.188
         radius: 1
         antiFlicker: 0
@@ -129,9 +129,9 @@ MonoBehaviour:
       colorWheels:
         mode: 1
         log:
-          slope: {r: 0.88526493, g: 0.707574, b: 1, a: 0}
-          power: {r: 1, g: 0.72777313, b: 0.664539, a: -0.15384616}
-          offset: {r: 0.89757836, g: 1, b: 0.9734996, a: 0.038461536}
+          slope: {r: 0.72626054, g: 0.8506517, b: 1, a: 0}
+          power: {r: 1, g: 0.8048508, b: 0.6245826, a: -0.15384616}
+          offset: {r: 0.94069755, g: 1, b: 0.9443453, a: 0.038461536}
         linear:
           lift: {r: 0, g: 0, b: 0, a: 0}
           gamma: {r: 0, g: 0, b: 0, a: 0}

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CutScenePlay : MonoBehaviour {
 
-    SoundManager sound_manager;
+    public SoundManager sound_manager;
 
     [Tooltip("알파값 증감 정도")]
     public float add_alpha=0.05f;    
@@ -47,7 +47,6 @@ public class CutScenePlay : MonoBehaviour {
 
         this_rt = GetComponent<RectTransform>();
         this_rt. sizeDelta= new Vector2(Camera.main.pixelWidth, Camera.main.pixelHeight);
-        sound_manager = SoundManager.get_instance();
     }
 
     private void Update()
@@ -60,7 +59,8 @@ public class CutScenePlay : MonoBehaviour {
     {
         if (timer == null)
         {
-            sound_manager.clear();
+            if(sound_manager != null)
+                sound_manager.clear();
             timer = play_timer();
             StartCoroutine(timer);
         }
@@ -150,6 +150,14 @@ public class CutScenePlay : MonoBehaviour {
                 break;
 
             yield return new WaitForSeconds(0.05f);
+        }
+
+        while(true)
+        {
+            cut_scene_sound.volume -= 0.001f;
+            yield return new WaitForSeconds(0.01f);
+            if (cut_scene_sound.volume <= 0)
+                break;
         }
 
         timer = null;
