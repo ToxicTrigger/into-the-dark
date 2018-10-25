@@ -31,6 +31,9 @@ public class CutScenePlay : MonoBehaviour {
     Image cur_scene, now_scene;
     public bool test;
 
+    public bool is_clear;
+    public Ending ending;
+
     private void Start()
     {
         for (int i = 0; i < scene_info.screen.Length; i++)
@@ -162,8 +165,26 @@ public class CutScenePlay : MonoBehaviour {
 
         timer = null;
         cut_scene_sound.Stop();
+        plus_alpha = 1;
+
+        if (is_clear)
+        {
+            yield return new WaitForSeconds(3.0f);
+            scene_info.back_screen.color = new Vector4(0, 0, 0, 0);
+            ending.gameObject.SetActive(true);
+            ending.play_scroll();
+        }
+
+        while (!is_clear)
+        {
+            plus_alpha -= add_alpha * 0.13f;
+            scene_info.back_screen.color = new Vector4(0, 0, 0, plus_alpha);
+            if (plus_alpha <= 0)
+            {
+                plus_alpha = 0;
+                break;
+            }
+            yield return new WaitForSeconds(0.01f);
+        }
     }
-
-
-
 }
