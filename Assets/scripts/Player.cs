@@ -402,6 +402,11 @@ public class Player : MonoBehaviour
     public bool esc_push;
     public void Update()
     {
+        if(Input.GetKeyDown(KeyCode.F4))
+        {
+            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (esc_push)
