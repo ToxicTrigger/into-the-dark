@@ -48,6 +48,7 @@ public class TitleAnimation : MonoBehaviour
     {
         UI.SetActive(false);
         Char.SetActive(false);
+        cam.enabled = false;
     }
 
     void Update()
@@ -73,10 +74,13 @@ public class TitleAnimation : MonoBehaviour
                 switch( input )
                 {
                     case 0:
-                        gameObject.SetActive(false);
-                        UI.SetActive(true);
                         Char.SetActive(true);
+                        UI.SetActive(true);
+                        Char.GetComponent<PlayerMove>().enabled = true;
                         cam.enabled = true;
+                        gameObject.SetActive(false);
+                        
+
                         break;
                     case 3:
                         Application.Quit();

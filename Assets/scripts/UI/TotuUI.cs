@@ -25,7 +25,7 @@ public class TotuUI : MonoBehaviour
     public IEnumerator StopTimer()
     {
         pm.enabled = false;
-        yield return new WaitForSeconds(7.0f);
+        yield return new WaitForSeconds(6.7f);
         pm.enabled = true;
         state = -1;
     }

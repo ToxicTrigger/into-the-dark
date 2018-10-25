@@ -131,7 +131,7 @@ public class AIAction : MonoBehaviour
                     }
                     if (attack_end)
                     {
-                        ani.SetBool("isAttack", false);
+                        //ani.SetBool("isAttack", false);
                         count = 0;
                         cooldown = 0;
                         attack_end = false;

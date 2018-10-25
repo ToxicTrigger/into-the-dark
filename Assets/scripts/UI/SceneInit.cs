@@ -8,16 +8,17 @@ public class SceneInit : MonoBehaviour
     public Animator ani;
     IEnumerator init_scene()
     {
-        ani.SetBool("fade" , true);
-        yield return new WaitForSeconds(3 / 2);
-        FindObjectOfType<Player>().transform.position = FindObjectOfType<PlayerMove>().spawn_point.position;
-        yield return new WaitForSeconds(2);
-        ani.SetBool("fade" , false);
+        ani.SetBool("fade", true);
+        yield return new WaitForSeconds(1);
+        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        yield return new WaitForSeconds(3);
+        ani.SetBool("fade", false);
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Player"))
+        if(other.gameObject.name.Equals("Player"))
         {
             StartCoroutine( init_scene());
         }

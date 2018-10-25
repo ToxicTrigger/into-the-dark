@@ -335,11 +335,12 @@ public class Player : MonoBehaviour
             {
                 if (Input.GetButton("Dodge"))
                 {
-                    //TODO :: 회피 코드 수정하기
-                    //        현재 바라보는 방향이 아닌 입력되고 있는 방향으로의 회피
-                    ani.SetBool("Dodge", true);
-                    move.stamina.SetFloat("_Amount", move.stamina_amount + 0.25f);
-                    dodged = true;
+                    if(move.stamina_amount <= -0.125f)
+                    {
+                        ani.SetBool("Dodge", true);
+                        move.stamina.SetFloat("_Amount", move.stamina_amount + 0.125f);
+                        dodged = true;
+                    }
                 }
             }
             else
@@ -386,7 +387,7 @@ public class Player : MonoBehaviour
     public void Quit()
     {
         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-        SceneManager.LoadSceneAsync(3);
+        SceneManager.LoadSceneAsync(0);
     }
 
     public void Cancel()

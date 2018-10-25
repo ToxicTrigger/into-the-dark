@@ -171,6 +171,7 @@ public class PlayerMove : InputHandler
         else
         {
             movement = Vector3.Lerp(movement , Vector3.zero , moveSpeed);
+            
             player.ani.SetFloat("Forward" , movement.magnitude);
         }
         cc.Move(movement * 0.2f);
@@ -276,7 +277,7 @@ public class PlayerMove : InputHandler
 
     public void OnApplicationQuit()
     {
-        stamina.SetColor("_Color", Color.white);
+        stamina.SetColor("_Color", new Color(1, 1, 1, 0));
         stamina.SetFloat("_Amount", -1);
     }
 }
