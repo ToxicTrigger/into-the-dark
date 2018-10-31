@@ -4,9 +4,21 @@ using UnityEngine;
 
 public class DestroyCheck : Observable {
 
+    bool is_on;
+
+    private void Start()
+    {
+        is_on = true;
+    }
+
+    private void OnApplicationQuit()
+    {
+        is_on = false;
+    }
+
     public void notify_all()
     {
-        Debug.Log(this.transform.parent.name);
+        Debug.Log("파괴! = " + this.transform.parent.name);
         for (int i = 0; i < this.observers.Count; i++)
         {
             if (this.observers[i] == null)
@@ -19,6 +31,7 @@ public class DestroyCheck : Observable {
 
     private void OnDestroy()
     {
-        notify_all();
+        if(is_on)
+            notify_all();
     }
 }

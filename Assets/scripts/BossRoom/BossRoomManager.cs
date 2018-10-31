@@ -112,26 +112,29 @@ public class BossRoomManager : Observer {
 
     void Awake()
     {
+    }
+
+    private void Start()
+    {
         init_val[(int)phase].phase = Phase.one;
         phase = Phase.one;
         init_val[(int)phase].boss_hp = get_boss().get_max_hp();
-
         field = SendCollisionMessage.Field.NULL;
+
+        GameObject _tuto_enemy = (GameObject)Instantiate(enemy, tuto_enemy_pos.position, Quaternion.identity, this.transform);
+        DestroyCheck _destroy_check = (DestroyCheck)Instantiate(destroy_check,
+                                        Vector3.zero, Quaternion.identity, _tuto_enemy.transform);
+        _destroy_check.add_observer(this);
+
         boss_state = boss.gameObject.GetComponent<Boss_State>();
         boss_action = boss.gameObject.GetComponent<Boss_Action>();
 
         player_enter_bossroom();
         sound_manager = SoundManager.get_instance();
 
-        GameObject _tuto_enemy = (GameObject)Instantiate(enemy, tuto_enemy_pos.position, Quaternion.identity, this.transform);
-        DestroyCheck _destroy_check = (DestroyCheck)Instantiate(destroy_check,
-                                        Vector3.zero , Quaternion.identity, _tuto_enemy.transform);
-        _destroy_check.add_observer(this);
-
         player = FindObjectOfType<Player>();
         p_controller = player.GetComponent<CharacterController>();
     }
-
 
     //플레이어가 보스룸에 입장하면 호출하는 함수
     public void player_enter_bossroom()
@@ -174,7 +177,7 @@ public class BossRoomManager : Observer {
     public bool tuto_clear;
     public void game_over()
     {
-        if (!is_game_over)
+        if (!is_game_over && !is_stage_clear)
         {
             p_controller.enabled = false;
             is_game_over = true;
@@ -187,7 +190,7 @@ public class BossRoomManager : Observer {
     public Vector3 re_start_pos;
     public void game_over(Vector3 pos)
     {
-        if (!is_game_over)
+        if (!is_game_over && !is_stage_clear)
         {
             re_start_pos = pos;
             p_controller.enabled = false;
@@ -200,7 +203,7 @@ public class BossRoomManager : Observer {
 
     public void game_over(GroundCheck _this)
     {
-        if (!is_game_over)
+        if (!is_game_over && !is_stage_clear)
         {
             is_game_over = true;
             ui_black_screen.add_observer(this);
@@ -224,6 +227,9 @@ public class BossRoomManager : Observer {
         }
         enemy_list.Clear();
         p_controller.enabled = false;
+        is_stage_clear = true;
+
+        play_cut_scene();
     }
 
     public override void notify(Observable observable)

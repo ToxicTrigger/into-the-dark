@@ -22,6 +22,8 @@ public class Damageable : MonoBehaviour
     [Range(-1 , 1)]
     public float armor_power;
 
+    public bool is_invincibility;
+
     public void Start()
     {
         origin = this.transform;
@@ -83,16 +85,20 @@ public class Damageable : MonoBehaviour
 
     public void Damaged(float dam, float tick)
     {
-        StartCoroutine(attack_this(dam, tick));
+        if(!is_invincibility)
+            StartCoroutine(attack_this(dam, tick));
     }
 
-    public void Damaged(float dam , float tick, Transform other)
+    public void Damaged(float dam, float tick, Transform other)
     {
-        Vector3 pos = other.position;
-        pos.y += 1f;
-        GameObject t = Instantiate(Hit_particle, pos, Quaternion.identity, null);
+        if (!is_invincibility)
+        {
+            Vector3 pos = other.position;
+            pos.y += 1f;
+            GameObject t = Instantiate(Hit_particle, pos, Quaternion.identity, null);
 
-        Destroy(t, 1.0f);
-        StartCoroutine(attack_this(dam , tick));
+            Destroy(t, 1.0f);
+            StartCoroutine(attack_this(dam, tick));
+        }
     }
 }

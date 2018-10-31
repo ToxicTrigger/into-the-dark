@@ -24,6 +24,7 @@ public class Poison : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.name + " || "+other.gameObject.layer);
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && !other.gameObject.name.Contains("pot"))
         {
             if (other.CompareTag("Switch"))
@@ -43,7 +44,10 @@ public class Poison : MonoBehaviour
             {
                 var tt = Instantiate(sound, transform.position, Quaternion.identity, null);
                 Destroy(tt, 3.0f);
-                GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
+                if (Monster != null)
+                {
+                    GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
+                }
                 GameObject t = Instantiate(effect, transform.position, Quaternion.identity, null);
                 Destroy(t, 3.0f);
                 Player.GetComponent<Player>().ac.Shake(3, 0.2f, Time.deltaTime);

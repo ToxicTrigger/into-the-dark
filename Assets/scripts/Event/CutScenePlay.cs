@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class CutScenePlay : MonoBehaviour {
 
     public SoundManager sound_manager;
+    public Player player;
+    public Damageable p_damageable;
 
     [Tooltip("알파값 증감 정도")]
     public float add_alpha=0.05f;    
@@ -28,7 +30,7 @@ public class CutScenePlay : MonoBehaviour {
     RectTransform this_rt;
     IEnumerator timer;
 
-    Image cur_scene, now_scene;
+    Image pre_scene, now_scene;
     public bool test;
 
     public bool is_clear;
@@ -36,6 +38,9 @@ public class CutScenePlay : MonoBehaviour {
 
     private void Start()
     {
+        player = FindObjectOfType<Player>();
+        p_damageable = player.GetComponent<Damageable>();
+
         for (int i = 0; i < scene_info.screen.Length; i++)
         {
             scene_info.screen[i] = transform.GetChild(i+1).GetComponent<Image>();
@@ -54,12 +59,20 @@ public class CutScenePlay : MonoBehaviour {
 
     private void Update()
     {
-        if (test && Input.GetKeyDown(KeyCode.Space))
-            play_scene();
+        if (Input.GetKeyDown(KeyCode.Space) && test)
+        {
+            BossRoomManager.get_instance().game_clear();
+        }
     }
 
     public void play_scene()
     {
+        if (is_clear)
+        {
+            p_damageable.Hp = p_damageable.Max_Hp;
+            p_damageable.is_invincibility = true;
+        }
+
         var all_sound = FindObjectsOfType<AudioSource>();
         foreach (var s in all_sound)
         {
@@ -70,10 +83,11 @@ public class CutScenePlay : MonoBehaviour {
         }
         if (timer == null)
         {
-            timer = play_timer();
-            StartCoroutine(timer);
             if (sound_manager != null)
                 sound_manager.clear();
+
+            timer = play_timer();
+            StartCoroutine(timer);
         }
     }
 
@@ -113,7 +127,7 @@ public class CutScenePlay : MonoBehaviour {
 
         for (int i =0; i< scene_info.scene_image.Length; i++)
         {
-            if (cur_scene == scene_info.screen[0])
+            if (pre_scene == scene_info.screen[0])
             {
                 now_scene = scene_info.screen[1];
                 scene_info.screen[1].sprite = scene_info.scene_image[i];
@@ -126,17 +140,19 @@ public class CutScenePlay : MonoBehaviour {
 
             while(true)
             {
-                if(cur_scene != null)
+                if(pre_scene != null)
                 {
                     minus_alpha -= add_alpha;
-                    cur_scene.color = new Vector4(1, 1, 1, minus_alpha);
+                    if (minus_alpha <= 0) minus_alpha = 0;
+                    pre_scene.color = new Vector4(1, 1, 1, minus_alpha);
                 }
                 if (now_scene != null)
                 {
                     plus_alpha += add_alpha;
+                    if (plus_alpha >= 1) plus_alpha = 1;
                     now_scene.color = new Vector4(1, 1, 1, plus_alpha);
                 }
-                if (now_scene.color.a >= 1 && cur_scene == null || now_scene.color.a >= 1 && cur_scene.color.a <= 0)
+                if (now_scene.color.a >= 1 && pre_scene == null || now_scene.color.a >= 1 && pre_scene.color.a <= 0)
                     break;
 
                 yield return new WaitForSeconds(0.05f);
@@ -145,19 +161,20 @@ public class CutScenePlay : MonoBehaviour {
             yield return new WaitForSeconds(scene_info.keep_time[i]);
             minus_alpha = 1;
             plus_alpha = 0;
-            cur_scene = now_scene;
+            pre_scene = now_scene;
             now_scene = null;
         }
 
         while (true)
         {
-            if (cur_scene != null)
+            if (pre_scene != null)
             {
                 minus_alpha -= add_alpha;
-                cur_scene.color = new Vector4(1, 1, 1, minus_alpha);
+                if (minus_alpha <= 0) minus_alpha = 0;
+                pre_scene.color = new Vector4(1, 1, 1, minus_alpha);
             }
 
-            if (cur_scene.color.a <= 0)
+            if (pre_scene.color.a <= 0)
                 break;
 
             yield return new WaitForSeconds(0.05f);
@@ -165,9 +182,10 @@ public class CutScenePlay : MonoBehaviour {
 
         while(true)
         {
-            cut_scene_sound.volume -= 0.001f;
+            if(cut_scene_sound.volume >= 0.001f)
+                cut_scene_sound.volume -= 0.001f;
             yield return new WaitForSeconds(0.01f);
-            if (cut_scene_sound.volume <= 0)
+            if (cut_scene_sound.volume <= 0.001f)
                 break;
         }
 
@@ -179,13 +197,14 @@ public class CutScenePlay : MonoBehaviour {
         {
             yield return new WaitForSeconds(3.0f);
             scene_info.back_screen.color = new Vector4(0, 0, 0, 0);
-            ending.gameObject.SetActive(true);
+            //ending.gameObject.SetActive(true);
             ending.play_scroll();
         }
 
         while (!is_clear)
         {
             plus_alpha -= add_alpha * 0.13f;
+            if (plus_alpha <= 0) plus_alpha = 0;
             scene_info.back_screen.color = new Vector4(0, 0, 0, plus_alpha);
             if (plus_alpha <= 0)
             {

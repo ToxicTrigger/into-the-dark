@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Ending : MonoBehaviour {
 
     public RectTransform image_rt;
+    public Image ending_image;
     public float speed;
     public float y_pos;
     public AudioSource ending_sound;
@@ -18,6 +20,8 @@ public class Ending : MonoBehaviour {
     IEnumerator scroll()
     {
         ending_sound.Play();
+        ending_image.color = new Vector4(1, 1, 1, 1);
+
         while (true)
         {
             image_rt.position += Vector3.up * speed * Time.deltaTime;
@@ -25,6 +29,8 @@ public class Ending : MonoBehaviour {
             if (image_rt.position.y > y_pos)
                 break;
         }
+
+        SceneManager.LoadScene(0);
     }
 
 }
