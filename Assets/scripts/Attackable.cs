@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[ExecuteInEditMode]
 //PosionFOg 덜어내야 함
 public class Attackable : MonoBehaviour
 {

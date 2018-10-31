@@ -44,7 +44,7 @@ public class TitleAnimation : MonoBehaviour
         input = target;
     }
 
-    private void Awake()
+    private void Start()
     {
         UI.SetActive(false);
         Char.SetActive(false);

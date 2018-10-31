@@ -5,13 +5,19 @@ using UnityEngine;
 public class ShowFastRun : MonoBehaviour
 {
     public TotuUI ui;
-    public int state, match_state;
+    public int state;
+    bool In;
 
     private void OnTriggerEnter(Collider collision)
     {
-        if( collision.gameObject.name.Equals("Player"))
+        if(!In)
         {
-            ui.state = state;
+            if (collision.gameObject.name.Equals("Player"))
+            {
+                ui.state = state;
+                In = true;
+            }
         }
+
     }
 }
