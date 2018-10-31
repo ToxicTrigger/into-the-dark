@@ -40,6 +40,7 @@ public class AWTimerUI : MonoBehaviour {
 
     public void switching_ui(bool _onoff, float _max_time)
     {
+        Debug.Log(onoff);
         onoff = _onoff;
         max_time = _max_time;
         cur_time = max_time;

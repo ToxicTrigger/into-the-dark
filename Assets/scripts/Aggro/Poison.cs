@@ -68,16 +68,16 @@ public class Poison : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if( other.CompareTag("Enemy") )
-        {
-            if(Players)
-            {
-                Player.GetComponent<Player>().ac.Shake(3, 0.2f, Time.deltaTime);
-                other.GetComponent<Damageable>().Damaged(10,1,other.transform);
-                GameObject tmp = Instantiate(effect, transform.position, Quaternion.identity, null);
-                Destroy(tmp, 3.0f);
-                Destroy(gameObject);
-            }
-        }
+        //if( other.CompareTag("Enemy") )
+        //{
+        //    if(Players)
+        //    {
+        //        Player.GetComponent<Player>().ac.Shake(3, 0.2f, Time.deltaTime);
+        //        other.GetComponent<Damageable>().Damaged(10,1,other.transform);
+        //        GameObject tmp = Instantiate(effect, transform.position, Quaternion.identity, null);
+        //        Destroy(tmp, 3.0f);
+        //        Destroy(gameObject);
+        //    }
+        //}
     }
 }
