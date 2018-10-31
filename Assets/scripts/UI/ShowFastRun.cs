@@ -12,10 +12,6 @@ public class ShowFastRun : MonoBehaviour
         if( collision.gameObject.name.Equals("Player"))
         {
             ui.state = state;
-            //if (ui.state == match_state)
-            //{
-              //  ui.state = state;
-            //}
         }
     }
 }
