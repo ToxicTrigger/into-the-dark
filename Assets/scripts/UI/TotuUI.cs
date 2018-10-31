@@ -69,24 +69,20 @@ public class TotuUI : MonoBehaviour
                     if( !event_run )
                         StartCoroutine(StartTimer(1));
                 }
-                break;
-            case 6:
                 Tip.transform.GetChild(0).GetComponent<Text>().text = "마우스 왼쪽을 꾹 눌러 대상을 겨냥 하세요";
-                if (pm.transform.GetComponent<Player>().weapon.type == Weapon.Type.Bow)
+                if( pm.transform.GetComponent<Player>().weapon.type == Weapon.Type.Bow )
                 {
-                    if (!event_run)
+                    if( !event_run )
                     {
-                        if (Input.GetButtonDown("Fire1"))
+                        if( Input.GetButtonDown("Fire1") )
                         {
-                            StartCoroutine(StartTimer(5));
+                            StartCoroutine(StartTimer(3));
                             //Destroy(gameObject);
                         }
                     }
                 }
-
-                
                 break;
-            case 7:
+            case 8:
                 Tip.transform.GetChild(0).GetComponent<Text>().text = "지정된 위치에 토템을 설치 후 거점과 일직선이 되어 화살을 쏘세요";
                 if (Input.GetKeyDown(KeyCode.E))
                 {

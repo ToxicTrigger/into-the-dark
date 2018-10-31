@@ -2,27 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TalkTuto : Switch {
+public class TalkTuto : Switch
+{
     public TotuUI ui;
-    public bool has_on;
-    bool Use;
-	
-	// Update is called once per frame
-	new void Update () {
-        if(!Use)
+    public bool Use;
+    public bool popUpEnd;
+
+    new void Update()
+    {
+        if( !Use && ui.state == 7 )
         {
             base.Update();
-            if (this.get_capture_area)
+            if( this.get_capture_area )
             {
-                if (ui.state == 6)
+
+                if( !hasTalking )
                 {
-                    if (!has_on)
+                    if(!popUpEnd)
                     {
                         ui.StartCoroutine(ui.StartTimer(3));
-                        has_on = true;
-                        Use = true;
+                        popUpEnd = true;
                     }
                 }
+                else
+                {
+                    Use = true;
+                }
+
             }
             else
             {
