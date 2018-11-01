@@ -11,7 +11,6 @@ public class BossRoomManager : Observer {
     {
         if (instance == null)
         {
-            //FindObjectOfType은 유니티에서 비용이 큰 함수지만 처음 한번만 호출되므로 괜찮음~
             instance = GameObject.FindObjectOfType(typeof(BossRoomManager)) as BossRoomManager;
             if (instance == null)
                 Debug.LogError("Singleton Error");
@@ -22,12 +21,6 @@ public class BossRoomManager : Observer {
 
     /// ///////////////////////////////////////////////////
     /// 
-    public bool is_new;
-    public bool is_danger_loop;
-    public float add_smoothness, add_color_red;
-    public float danger_speed;
-    IEnumerator danger_timer;
-
     public Boss_Worm boss;
     Boss_State boss_state;
     Boss_Action boss_action;
@@ -54,19 +47,12 @@ public class BossRoomManager : Observer {
     }
 
     public Phase phase;
-    public SendCollisionMessage.Field field;
-    public GameObject player_coll;
+
     public BossRoomRelocation reloc;
     public BossHpUI boss_hp_ui;
     public UiGroggyPoint boss_groggy_ui;
     public AWTimerUI ancient_timer_ui;
     public BlackScreen ui_black_screen;
-
-    public TimeSelector time_selector;
-
-    public AudioSource sound;
-    public AudioSource idle_sound;
-    public AudioSource[] back_sound;
 
     public List<GameObject> enemy_list;
 
@@ -80,9 +66,9 @@ public class BossRoomManager : Observer {
 
     public GroundCheck []wood_bridge;
     public CrumblingPillar[] pillar_list;
-    public bool is_entrance;
     public bool is_puzzle_clear;
     public bool is_stage_clear;
+    public bool tuto_clear;
     public int wood_bridge_count =3;
 
     public bool is_game_over;
@@ -110,24 +96,19 @@ public class BossRoomManager : Observer {
     }
     public BossRoomEvent[] event_slot;
 
-    void Awake()
-    {
-    }
-
     private void Start()
     {
         init_val[(int)phase].phase = Phase.one;
         phase = Phase.one;
         init_val[(int)phase].boss_hp = get_boss().get_max_hp();
-        field = SendCollisionMessage.Field.NULL;
 
         GameObject _tuto_enemy = (GameObject)Instantiate(enemy, tuto_enemy_pos.position, Quaternion.identity, this.transform);
         DestroyCheck _destroy_check = (DestroyCheck)Instantiate(destroy_check,
                                         Vector3.zero, Quaternion.identity, _tuto_enemy.transform);
         _destroy_check.add_observer(this);
 
-        boss_state = boss.gameObject.GetComponent<Boss_State>();
-        boss_action = boss.gameObject.GetComponent<Boss_Action>();
+        boss_state = FindObjectOfType<Boss_State>();
+        boss_action = FindObjectOfType<Boss_Action>();
 
         player_enter_bossroom();
         sound_manager = SoundManager.get_instance();
@@ -136,22 +117,18 @@ public class BossRoomManager : Observer {
         p_controller = player.GetComponent<CharacterController>();
     }
 
-    //플레이어가 보스룸에 입장하면 호출하는 함수
     public void player_enter_bossroom()
     {
         phase = Phase.one;
         Map_Initialization();
     }
 
-    //페이즈 정보에 따라 맵을 초기화한다.
     public void Map_Initialization()
     {
-        //스위치, 기둥, 다리등의 초기화 리로케이션 클래스에서 함수를 실행
         BossRoomRelocation.get_instance().relocation((int)phase);
 
     }
 
-    //페이즈 증가 함수 (페이즈 증가 -> 새로운 페이즈 시작)
     public void increase_pahse(bool _add)
     {
         player.all_collect_item();
@@ -171,10 +148,8 @@ public class BossRoomManager : Observer {
             phase++;
             Map_Initialization();
         }
-
     }
 
-    public bool tuto_clear;
     public void game_over()
     {
         if (!is_game_over && !is_stage_clear)
@@ -183,7 +158,6 @@ public class BossRoomManager : Observer {
             is_game_over = true;
             ui_black_screen.add_observer(this);
             ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
-            Debug.Log("game over \\");
         }
     }
 
@@ -197,7 +171,6 @@ public class BossRoomManager : Observer {
             is_game_over = true;
             ui_black_screen.add_observer(this);
             ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
-            Debug.Log("game over tuto");
         }
     }
 
@@ -210,7 +183,6 @@ public class BossRoomManager : Observer {
             ui_black_screen.add_observer(_this);
             p_controller.enabled = false;
             ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
-            Debug.Log("game over ground check");
         }
     }
 
@@ -349,7 +321,6 @@ public class BossRoomManager : Observer {
             Debug.Log("bridge");
         }
     }
-
 
     public void init_bossroom()
     {

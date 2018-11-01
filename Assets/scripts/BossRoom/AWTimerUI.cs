@@ -9,19 +9,14 @@ public class AWTimerUI : MonoBehaviour {
     public Text ui_name, time;
     public Image back_ground;
 
-    float max_width;
-    float current_width;
-
     public float max_time;
     public float cur_time=0;
-
 
     public bool onoff;
 
     void Start () {
         BossRoomManager.get_instance().set_ancient_ui(this);
-        switching_ui(false,0.0f);
-        
+        switching_ui(false,0.0f);        
     }
 	
 	void Update () {
@@ -40,7 +35,6 @@ public class AWTimerUI : MonoBehaviour {
 
     public void switching_ui(bool _onoff, float _max_time)
     {
-        Debug.Log(onoff);
         onoff = _onoff;
         max_time = _max_time;
         cur_time = max_time;
@@ -56,6 +50,5 @@ public class AWTimerUI : MonoBehaviour {
             ui_name.enabled = false;
             time.enabled = false;
         }
-    }
-    
+    }    
 }

@@ -164,55 +164,8 @@ public class GroundCheck : Observer
                 }                
             }
 
-            if (is_ground && (boss_state.get_state() == Boss_State.State.Idle || boss_state.get_state() == Boss_State.State.Move))
+            if (is_ground && (boss_state.get_state() == Boss_State.State.Idle))
             {
-                //if (type == Type.Stone)
-                //{
-                //    //둘중 하나라도 입력이 되고 있다면
-                //    if (input_manager.get_Horizontal() != 0 || input_manager.get_Vertical() != 0)
-                //    {
-                //        if (step_sound.isPlaying == false && !is_play)
-                //        {
-                //            is_play = true;
-                //            step_sound.Play();
-
-                //            if (!is_cognition)
-                //                step_cnt++;
-                //        }
-                //        playing_time += Time.deltaTime;
-                //        if (playing_time >= sound_delay)
-                //        {
-                //            sound_delay_init();
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (!is_cognition)
-                //        {
-                //            step_cnt = 0;
-                //        }
-                //    }
-
-                //    if (step_cnt >= cognition_step_count && !is_cognition)
-                //    {
-                //        is_cognition = true;
-                //        BossRoomManager.get_instance().send_boss_state(Boss_State.State.Cross_Attack, this, 50, 2);
-                //        //boss_action.set_cross_dis(50, 2.0f, this.gameObject);
-                //        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
-                //    }
-                //}
-                //else if (type == Type.Wood)
-                //{
-                //    on_ground_time += Time.deltaTime;
-                //    if (on_ground_time > cognition_step_count)
-                //    {
-                //        on_ground_time = 0;
-                //        is_cognition = true;
-                //        sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].volume = sound_volume_list[0];
-                //    }
-                //}
-
-                //입장시 바로 cross_attack실행 후 심장소리 재생, is_cognition = true
                 if (!is_cognition)
                 {
                     if (type == Type.Stone)
@@ -227,7 +180,7 @@ public class GroundCheck : Observer
                 }
                 if (is_cognition)
                 {
-                    if (!sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].isPlaying && (boss_state.get_state() == Boss_State.State.Idle || boss_state.get_state() == Boss_State.State.Move))
+                    if (!sound_manager.sound_list[(int)SoundManager.SoundList.heartbeat].isPlaying && (boss_state.get_state() == Boss_State.State.Idle))
                     {
                         sound_manager.play_sound(SoundManager.SoundList.heartbeat);
                         ac.Shake(shack_tick, power, shack_tick_by_time * Time.deltaTime);

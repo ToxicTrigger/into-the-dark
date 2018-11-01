@@ -20,15 +20,10 @@ public class BossRoomRelocation : MonoBehaviour {
     }
 
     /// ///////////////////////////////////////////////////
-    ///
-    //그대로 스위치가 들어갈지 모르나 일단!
-    //hit 스위치에 대한것도 추가해야함
 
-    //횃불과 스위치는 세트로 정해준다.
     [System.Serializable]
-    public class Torch_set  //횃불 세트 하나에는 1횃불의 위치와 스위치 위치가 들어간다.
+    public class Torch_set 
     {
-        //public ObservableTorch torch_object;
         public ObserverTorch torch_object;
         public Transform torch_position;  
         public TimeSwitch[] switch_object;
@@ -56,33 +51,14 @@ public class BossRoomRelocation : MonoBehaviour {
     public GameObject enemy;
 
     [Tooltip("reloc_set 하나에 각 페이즈마다 쓰일 배치가 들어감")]
-    public Relocation_set[] reloc_set;
+    public Relocation_set[] reloc_set;    
 
-    public BasicSwitch[] hit_switch;
-
-    ArrayList water_list = new ArrayList();
-
-    int time =2;
+    public bool []switch_fog;
+    public GameObject s_fog;
 
     //재배치 시작!
     public void relocation(int phase)
     {
-        ////페이즈가 2 이상이라면 기존 스위치와 횃불을 모두 삭제한다. (phase-1)
-        //if(phase >= 1) //페이즈2이상
-        //{
-        //    for (int i = 0; i < reloc_set[phase - 1].torch_set.Length; i++)
-        //    {
-        //        //Destroy(reloc_set[phase - 1].torch_set[i].torch_object.gameObject);
-
-        //        for(int z= 0; z<reloc_set[phase-1].torch_set[i].switch_object.Length; z++)
-        //        {
-        //            Destroy(reloc_set[phase - 1].torch_set[i].switch_object[z].gameObject);
-        //            Destroy(reloc_set[phase - 1].torch_set[i].foot_switch[z].gameObject);
-        //        }
-        //    }
-        //}
-
-        //페이즈 정보에 따라 새로운 스위치와 횃불을 동적으로 생성한다.
         for(int i=0; i<reloc_set[phase].torch_set.Length; i++)
         {
             for (int z = 0; z < reloc_set[phase].torch_set[i].switch_object.Length; z++)
@@ -100,6 +76,14 @@ public class BossRoomRelocation : MonoBehaviour {
                 _switch.set_foot_switch(_f_switch);
 
                 _f_switch.set_ground(_switch.gameObject);
+
+                if(phase == 1 && switch_fog[z] == true)
+                {
+                    GameObject _fog = (GameObject)Instantiate(s_fog, _switch.gameObject.transform.position, Quaternion.identity, _switch.gameObject.transform);
+                    _fog.transform.localPosition = new Vector3(0, -1, 0);
+                    _fog.SetActive(true);
+                }
+
             }
 
 
@@ -132,7 +116,6 @@ public class BossRoomRelocation : MonoBehaviour {
             {
                 if (reloc_set[phase].ground_list[i].enemy_count >= 16)
                 {
-                   // Debug.Log(reloc_set[phase].ground_list[i].name + "의 몬스터 생성 정지 : " + z+"개 생성!! 해당 땅의 적 수 = "+ reloc_set[phase].ground_list[i].enemy_count);
                     break;
                 }
 
@@ -140,22 +123,6 @@ public class BossRoomRelocation : MonoBehaviour {
                                                             reloc_set[phase].ground_list[i].gameObject.GetComponent<Observer>());
                 reloc_set[phase].ground_list[i].enemy_count++;
             }
-        }
-
-
-        for (int i = 0; i < water_list.Count; i++)
-        {
-            Destroy((GameObject)water_list[i]);
-        }
-
-        water_list.Clear();
-
-        for (int i = 0; i < reloc_set[phase].water_position.Length; i++)
-        {
-            GameObject _water = (GameObject)Instantiate(reloc_set[phase].water_object[i],
-                                                        reloc_set[phase].water_position[i].position, Quaternion.identity);
-
-            water_list.Add(_water);
         }
 
         if (reloc_set[phase].c_pillar.Length > 0)

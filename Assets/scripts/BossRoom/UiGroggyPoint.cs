@@ -5,17 +5,13 @@ using UnityEngine.UI;
 
 public class UiGroggyPoint : MonoBehaviour {
 
-    public Sprite img;
     Image img_ui;
 
     public bool boss_groggy;
     public Vector3 groggy_point;
 
-    Transform s;
-
     float height;
     float width;
-
 
     void Start () {
         img_ui = this.gameObject.GetComponent<Image>();
@@ -38,7 +34,6 @@ public class UiGroggyPoint : MonoBehaviour {
                 Camera.main.WorldToScreenPoint(groggy_point).y < 0.0f)
             {                
                 _pos = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0.0f);
-                //Debug.Log(Camera.main.pixelWidth +" , " +Camera.main.pixelHeight + " =>"+_pos);
                 Vector3 _dir = (Camera.main.WorldToScreenPoint(groggy_point) - new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0.0f)).normalized;
                 while(true)
                 {
@@ -47,7 +42,6 @@ public class UiGroggyPoint : MonoBehaviour {
                         _pos.y +10 > Camera.main.pixelHeight ||
                         _pos.y -10 < 0.0f)
                     {
-                        //Debug.Log("break");
                         break;
                     }
                         _pos += _dir;
@@ -77,9 +71,4 @@ public class UiGroggyPoint : MonoBehaviour {
             img_ui.color = new Vector4(1, 1, 1, 0);
 
     }
-
-
-
-
-
 }
