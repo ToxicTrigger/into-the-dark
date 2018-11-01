@@ -5,10 +5,8 @@ using UnityEngine;
 public class Boss_Worm : MonoBehaviour
 {
     //
-
     public int max_hp;
     public int hp;
-
     //
 
     BossRoomManager manager;
