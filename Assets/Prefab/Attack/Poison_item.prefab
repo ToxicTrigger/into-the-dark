@@ -11,6 +11,22 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1588680387363838}
   m_IsPrefabAsset: 1
+--- !u!1 &1113459016362962
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4499258025627616}
+  - component: {fileID: 82575344565820220}
+  m_Layer: 2
+  m_Name: GameObject (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1313745924432990
 GameObject:
   m_ObjectHideFlags: 0
@@ -23,22 +39,6 @@ GameObject:
   - component: {fileID: 23748584286446522}
   m_Layer: 2
   m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1406369683379428
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4792899034889552}
-  - component: {fileID: 82024399878073198}
-  m_Layer: 2
-  m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,6 +76,19 @@ Transform:
   m_Father: {fileID: 4656792766435454}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 80.782005, z: 0}
+--- !u!4 &4499258025627616
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1113459016362962}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 17.267237, y: -9.209257, z: 19.39718}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4656792766435454}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4656792766435454
 Transform:
   m_ObjectHideFlags: 1
@@ -83,26 +96,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1588680387363838}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 16.198172, y: 5.0457487, z: 54.962223}
+  m_LocalPosition: {x: 2.6654902, y: 13.071106, z: -40.077126}
   m_LocalScale: {x: 2.131976, y: 2.131976, z: 2.131976}
   m_Children:
   - {fileID: 4381709327201954}
-  - {fileID: 4792899034889552}
+  - {fileID: 4499258025627616}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4792899034889552
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1406369683379428}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.24799, y: -0.027847873, z: -0.28556696}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4656792766435454}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23748584286446522
 MeshRenderer:
@@ -161,12 +161,12 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!82 &82024399878073198
+--- !u!82 &82575344565820220
 AudioSource:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1406369683379428}
+  m_GameObject: {fileID: 1113459016362962}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -268,14 +268,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
-  Damage: 10
+  Damage: 50
   Players: 0
   boss_name: "\uC2EC\uC5F0\uC758 \uC218\uD638\uC790"
   boss: {fileID: 0}
   prefab: {fileID: 1588680387363838}
-  Monster: {fileID: 1158113705525980, guid: 25081aee2dd1dbf4690f01b55a155b22, type: 2}
+  Monster: {fileID: 0}
   effect: {fileID: 1586860098349376, guid: b6f7896ed18e18c4ab771875790a2f82, type: 2}
-  sound: {fileID: 1406369683379428}
+  sound: {fileID: 1113459016362962}
   is_item: 1
 --- !u!114 &114726581291073392
 MonoBehaviour:
@@ -296,6 +296,7 @@ MonoBehaviour:
     type: 2}
   only_player: 0
   armor_power: 0
+  is_invincibility: 0
   per: 0
 --- !u!135 &135483795616766262
 SphereCollider:
@@ -307,5 +308,5 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_Center: {x: 0, y: 0, z: 0}

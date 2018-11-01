@@ -43,8 +43,6 @@ public class FootSwitch : Observer {
             if (!p_coll.Contains(other))
             {
                 on_count++;
-                if(this.name == "FootSwitch_tuto")
-                    Debug.Log(this.name + " || "+other.gameObject.name);
             }
             ground_move_ctrl(Vector3.up);
 
@@ -166,7 +164,7 @@ public class FootSwitch : Observer {
         }
         else
         {
-            if (is_time_switch && on_count <= 0)
+            if (on_count <= 0)
             {
                 ground_move_ctrl(Vector3.down);
                 switch_ground.GetComponent<TimeSwitch>().set_use_enable(false);

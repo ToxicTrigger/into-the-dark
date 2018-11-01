@@ -5,36 +5,35 @@ using UnityEngine;
 public class Boss_Worm : MonoBehaviour
 {
     //
-
     public int max_hp;
     public int hp;
-
     //
 
     BossRoomManager manager;
     Boss_State state;
 
+    bool is_dead;
+
     void Start()
     {
+        is_dead = false;
         hp = max_hp;
         state = GetComponent<Boss_State>();
         manager = BossRoomManager.get_instance();
     }
-    
-    void Update()
-    {
-    }
 
-    //약점공격을 받으면 (머리) -> 대화해봐야함
     void OnTrrigerEnter(Collider other)
     {
-        if (other.CompareTag("Arrow"))
+        if (!is_dead)
         {
-            add_damage();
-        }
-        if(other.CompareTag("Sword"))
-        {
-            add_damage();
+            if (other.CompareTag("Arrow"))
+            {
+                add_damage();
+            }
+            if (other.CompareTag("Sword"))
+            {
+                add_damage();
+            }
         }
     }
 
@@ -56,9 +55,8 @@ public class Boss_Worm : MonoBehaviour
             case BossRoomManager.Phase.two:
                 if (hp <= 0)
                 {
-                    //state.set_state(Boss_State.State.Death, null);
-                    manager.play_cut_scene();
                     manager.game_clear();
+                    is_dead = true;
                 }
                 break;
         }

@@ -5,17 +5,13 @@ using UnityEngine.UI;
 
 public class UiGroggyPoint : MonoBehaviour {
 
-    public Sprite img;
     Image img_ui;
 
     public bool boss_groggy;
-    public Transform groggy_point;
-
-    Transform s;
+    public Vector3 groggy_point;
 
     float height;
     float width;
-
 
     void Start () {
         img_ui = this.gameObject.GetComponent<Image>();
@@ -32,14 +28,13 @@ public class UiGroggyPoint : MonoBehaviour {
 
         if (boss_groggy)
         {
-            if(Camera.main.WorldToScreenPoint(groggy_point.position).x > Camera.main.pixelWidth ||
-                Camera.main.WorldToScreenPoint(groggy_point.position).x < 0.0f ||
-                Camera.main.WorldToScreenPoint(groggy_point.position).y > Camera.main.pixelHeight ||
-                Camera.main.WorldToScreenPoint(groggy_point.position).y < 0.0f)
+            if(Camera.main.WorldToScreenPoint(groggy_point).x > Camera.main.pixelWidth ||
+                Camera.main.WorldToScreenPoint(groggy_point).x < 0.0f ||
+                Camera.main.WorldToScreenPoint(groggy_point).y > Camera.main.pixelHeight ||
+                Camera.main.WorldToScreenPoint(groggy_point).y < 0.0f)
             {                
                 _pos = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0.0f);
-                //Debug.Log(Camera.main.pixelWidth +" , " +Camera.main.pixelHeight + " =>"+_pos);
-                Vector3 _dir = (Camera.main.WorldToScreenPoint(groggy_point.position) - new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0.0f)).normalized;
+                Vector3 _dir = (Camera.main.WorldToScreenPoint(groggy_point) - new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0.0f)).normalized;
                 while(true)
                 {
                     if (_pos.x +10 > Camera.main.pixelWidth ||
@@ -47,7 +42,6 @@ public class UiGroggyPoint : MonoBehaviour {
                         _pos.y +10 > Camera.main.pixelHeight ||
                         _pos.y -10 < 0.0f)
                     {
-                        //Debug.Log("break");
                         break;
                     }
                         _pos += _dir;
@@ -55,7 +49,7 @@ public class UiGroggyPoint : MonoBehaviour {
                 img_ui.transform.position = _pos;
             }
             else
-                img_ui.transform.position = Camera.main.WorldToScreenPoint(groggy_point.position);
+                img_ui.transform.position = Camera.main.WorldToScreenPoint(groggy_point);
 
 
         }
@@ -69,7 +63,7 @@ public class UiGroggyPoint : MonoBehaviour {
     public void set_boss_groggy(bool _groggy, Vector3 _point)
     {
         boss_groggy = _groggy;
-        groggy_point.position = _point;
+        groggy_point = _point;
 
         if(boss_groggy == true)
             img_ui.color = new Vector4(1, 1, 1, 1);
@@ -77,9 +71,4 @@ public class UiGroggyPoint : MonoBehaviour {
             img_ui.color = new Vector4(1, 1, 1, 0);
 
     }
-
-
-
-
-
 }
