@@ -42,7 +42,7 @@ public class TotuUI : MonoBehaviour
             case -1:
                 if(pm.enabled)
                 {
-                    if( InputManager.get_instance().get_Vertical() != 0 )
+                    if( !InputManager.get_instance().has_not_anything_input() )
                     {
                         if(!event_run)
                         StartCoroutine(StartTimer(2));
@@ -80,6 +80,14 @@ public class TotuUI : MonoBehaviour
                             //Destroy(gameObject);
                         }
                     }
+                }
+                break;
+            case 7:
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (!event_run)
+                        StartCoroutine(StartTimer(1));
+                    state = 7;
                 }
                 break;
             case 8:

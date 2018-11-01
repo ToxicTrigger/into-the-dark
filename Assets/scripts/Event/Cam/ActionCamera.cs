@@ -191,6 +191,7 @@ public class ActionCamera : MonoBehaviour
             now_target = this.Pins[number];
         }
     }
+
     int ignore;
     public bool overlap;
     public float guarantee_timer;
@@ -204,85 +205,88 @@ public class ActionCamera : MonoBehaviour
             bool has_use_Zone = cpd == null ? false : cpd.enabled;
             if (!has_use_Zone)
             {
-                switch (now_state)
+                if(enabled)
                 {
-                    case State.Idle:
-                        has_camera_using = false;
-                        break;
+                    switch (now_state)
+                    {
+                        case State.Idle:
+                            has_camera_using = false;
+                            break;
 
-                    case State.Follow:
+                        case State.Follow:
 
-                        RaycastHit hit;
-                        Vector3 pos = transform.position;
-                        Vector3 tmp = now_target.position;
-                        tmp.y += 1;
-                        Ray ray = new Ray(tmp, ((transform.position + Offset) - tmp).normalized);
-                        if (Physics.Raycast(ray, out hit, Vector3.Distance(tmp, transform.position), ignore))
-                        {
-                            if (!hit.collider.gameObject.CompareTag("Sword")
-                                && hit.collider.gameObject.layer != LayerMask.NameToLayer("Object")
-                                && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast")
-                                && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ground")
-                                && hit.collider.gameObject.layer != LayerMask.NameToLayer("Totem")
-                                )
+                            RaycastHit hit;
+                            Vector3 pos = transform.position;
+                            Vector3 tmp = now_target.position;
+                            tmp.y += 1;
+                            Ray ray = new Ray(tmp, ((transform.position + Offset) - tmp).normalized);
+                            if (Physics.Raycast(ray, out hit, Vector3.Distance(tmp, transform.position), ignore))
                             {
-                                pos = Vector3.Lerp(pos, hit.point, action_speed * 0.2f);
-                                overlap = true;
+                                if (!hit.collider.gameObject.CompareTag("Sword")
+                                    && hit.collider.gameObject.layer != LayerMask.NameToLayer("Object")
+                                    && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast")
+                                    && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ground")
+                                    && hit.collider.gameObject.layer != LayerMask.NameToLayer("Totem")
+                                    )
+                                {
+                                    pos = Vector3.Lerp(pos, hit.point, action_speed * 0.2f);
+                                    overlap = true;
+                                }
+                                else
+                                {
+                                    pos = Vector3.Lerp(pos, now_target.position + Offset, action_speed);
+                                }
                             }
                             else
                             {
-                                pos = Vector3.Lerp(pos, now_target.position + Offset, action_speed);
+                                overlap = false;
+                                if (GameStart)
+                                {
+                                    pos = Vector3.Lerp(pos, now_target.position + Offset, action_speed * 0.1f);
+                                }
+                                else
+                                {
+                                    pos = Vector3.Lerp(pos, now_target.position + Offset, action_speed);
+                                }
                             }
-                        }
-                        else
-                        {
-                            overlap = false;
-                            if (GameStart)
+                            Debug.DrawRay(ray.origin, ray.direction * Vector3.Distance(tmp, transform.position + Offset), Color.blue);
+                            transform.position = pos;
+                            has_camera_using = false;
+                            //transform.eulerAngles = Angle;
+                            var ang = Quaternion.Lerp(transform.rotation, Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(Angle), action_speed * 10f), action_speed);
+                            transform.rotation = ang;
+                            break;
+                        case State.Move_Pin:
+                            guarantee_timer += Time.deltaTime;
+
+                            pos = Vector3.Lerp(transform.position, now_target.position, action_speed);
+                            transform.position = pos;
+
+                            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(Angle), action_speed * 10f);
+                            if (Vector3.Distance(pos, now_target.position) >= 0.2f)
                             {
-                                pos = Vector3.Lerp(pos, now_target.position + Offset, action_speed * 0.1f);
+                                has_camera_using = true;
                             }
                             else
                             {
-                                pos = Vector3.Lerp(pos, now_target.position + Offset, action_speed);
+                                end_state();
                             }
-                        }
-                        Debug.DrawRay(ray.origin, ray.direction * Vector3.Distance(tmp, transform.position + Offset), Color.blue);
-                        transform.position = pos;
-                        has_camera_using = false;
-                        //transform.eulerAngles = Angle;
-                        var ang = Quaternion.Lerp(transform.rotation, Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(Angle), action_speed * 10f), action_speed);
-                        transform.rotation = ang;
-                        break;
-                    case State.Move_Pin:
-                        guarantee_timer += Time.deltaTime;
+                            break;
 
-                        pos = Vector3.Lerp(transform.position, now_target.position, action_speed);
-                        transform.position = pos;
-
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(Angle), action_speed * 10f);
-                        if (Vector3.Distance(pos, now_target.position) >= 0.2f)
-                        {
-                            has_camera_using = true;
-                        }
-                        else
-                        {
+                        case State.Teleport_Pin:
+                            guarantee_timer += Time.deltaTime;
+                            transform.position = now_target.position;
+                            transform.rotation = Quaternion.Euler(Angle);
                             end_state();
-                        }
-                        break;
+                            break;
 
-                    case State.Teleport_Pin:
-                        guarantee_timer += Time.deltaTime;
-                        transform.position = now_target.position;
-                        transform.rotation = Quaternion.Euler(Angle);
-                        end_state();
-                        break;
+                        case State.Flow:
+                            guarantee_timer += Time.deltaTime;
+                            transform.position += flow_dir * action_speed * Time.deltaTime;
+                            end_state();
+                            break;
 
-                    case State.Flow:
-                        guarantee_timer += Time.deltaTime;
-                        transform.position += flow_dir * action_speed * Time.deltaTime;
-                        end_state();
-                        break;
-
+                    }
                 }
             }
             yield return new WaitForEndOfFrame();
