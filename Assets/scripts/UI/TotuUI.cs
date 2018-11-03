@@ -14,7 +14,7 @@ public class TotuUI : MonoBehaviour
     public bool event_run;
     public IEnumerator StartTimer(float time)
     {
-        if( Tip != null  && state == 5) Tip.SetActive(true);
+        if( Tip != null && state == 5 ) Tip.SetActive(true);
         event_run = true;
         yield return new WaitForSeconds(time);
         state++;
@@ -34,37 +34,37 @@ public class TotuUI : MonoBehaviour
         StartCoroutine(StopTimer());
     }
 
-
+    bool temp;
     void Update()
     {
         switch( state )
         {
             case -1:
-                if(pm.enabled)
+                if( pm.enabled )
                 {
                     if( !InputManager.get_instance().has_not_anything_input() )
                     {
-                        if(!event_run)
-                        StartCoroutine(StartTimer(2));
+                        if( !event_run )
+                            StartCoroutine(StartTimer(2));
                     }
                 }
                 break;
             case 1:
-                if(Input.GetButtonDown("Dash"))
+                if( Input.GetButtonDown("Dash") )
                 {
                     if( !event_run )
                         StartCoroutine(StartTimer(3));
                 }
                 break;
             case 3:
-                if(Input.GetButtonDown("Fire1"))
+                if( Input.GetButtonDown("Fire1") )
                 {
                     if( !event_run )
                         StartCoroutine(StartTimer(1));
                 }
                 break;
             case 5:
-                if(Input.GetKeyDown(KeyCode.Tab))
+                if( Input.GetKeyDown(KeyCode.Tab) )
                 {
                     if( !event_run )
                         StartCoroutine(StartTimer(1));
@@ -82,21 +82,69 @@ public class TotuUI : MonoBehaviour
                     }
                 }
                 break;
-            case 7:
-                if (Input.GetKeyDown(KeyCode.E))
+            case 6:
+                if( !temp )
                 {
-                    if (!event_run)
-                        StartCoroutine(StartTimer(1));
                     state = 7;
+                    temp = true;
                 }
                 break;
-            case 8:
-                Tip.transform.GetChild(0).GetComponent<Text>().text = "지정된 위치에 토템을 설치 후 거점과 일직선이 되어 화살을 쏘세요";
-                if (Input.GetKeyDown(KeyCode.E))
+
+            case 9:
+                if( Input.GetKeyDown(KeyCode.E) )
                 {
+                    temp = false;
                     if( !event_run )
                         StartCoroutine(StartTimer(1));
-                    state = 8;
+                }
+                break;
+            case 11:
+                Tip.transform.GetChild(0).GetComponent<Text>().text = "안개가 있는 곳은 화살 공격이 무효화됩니다";
+
+                if( !event_run )
+                    StartCoroutine(StartTimer(3));
+                break;
+            case 12:
+                if( !event_run )
+                    StartCoroutine(StartTimer(1));
+                break;
+
+            case 13:
+                Tip.transform.GetChild(0).GetComponent<Text>().text = "밝게 빛나는 곳에 토템을 설치하세요";
+                if( !event_run && Input.GetKeyDown(KeyCode.R) )
+                {
+                    StartCoroutine(StartTimer(1));
+                    
+                }
+                break;
+            case 14:
+                if( !temp )
+                {
+                    StartCoroutine(StartTimer(1));
+                    temp = true;
+                }
+                break;
+            case 15:
+                temp = false;
+                Tip.transform.GetChild(0).GetComponent<Text>().text = "토템을 통과한 화살은 안개를 무시합니다";
+                if( !event_run )
+                {
+                    StartCoroutine(StartTimer(3));
+                }
+                break;
+            case 16:
+                Tip.transform.GetChild(0).GetComponent<Text>().text = "토템을 조준하여 활을 거점으로 발사 하세요";
+                if( !event_run  )
+                {
+                    StartCoroutine(StartTimer(6));
+                }
+                break;
+            case 17:
+                Tip.transform.GetChild(0).GetComponent<Text>().text = "토템으로 가서 토템을 회수할 수 있습니다";
+                if( !event_run && Input.GetKeyDown(KeyCode.R) )
+                {
+                    StartCoroutine(StartTimer(0.3f));
+
                 }
                 break;
         }

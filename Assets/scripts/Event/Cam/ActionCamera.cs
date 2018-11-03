@@ -312,6 +312,7 @@ public class ActionCamera : MonoBehaviour
             {
                 StartTime = 0;
                 GameStart = false;
+                FindObjectOfType<PlayerMove>().enabled = true;
             }
             else
             {

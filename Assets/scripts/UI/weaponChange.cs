@@ -11,7 +11,7 @@ public class weaponChange : CheckAI
         base.Update();
 		if(this.OnOff)
         {
-            if(ui.state == 4)
+            if(ui.state == 4 || ui.state == 7)
             {
                 ui.StartCoroutine(ui.StartTimer(0.3f));
                 Destroy(gameObject);

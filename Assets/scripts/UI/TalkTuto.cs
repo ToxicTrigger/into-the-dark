@@ -11,19 +11,7 @@ public class TalkTuto : Switch
 
     new void Update()
     {
-        if (ui.state == 5)
-        {
-            base.Update();
-            if (this.get_capture_area)
-            {
-                if (!skip)
-                {
-                    skip = true;
-                    ui.StartCoroutine(ui.StartTimer(1));
-                }
-            }
-        }
-        if( !Use && (ui.state == 6 || ui.state == 7)  )
+        if( !Use && (ui.state == 9 || ui.state == 8)  )
         {
             base.Update();
             if( this.get_capture_area )
@@ -33,7 +21,7 @@ public class TalkTuto : Switch
                 {
                     if(!popUpEnd)
                     {
-                        ui.StartCoroutine(ui.StartTimer(1));
+                        ui.StartCoroutine(ui.StartTimer(0.4f));
                         popUpEnd = true;
                     }
                 }

@@ -77,6 +77,7 @@ public class TitleAnimation : MonoBehaviour
                 {
                     case 0:
                         Char.SetActive(true);
+
                         UI.SetActive(true);
 
                         

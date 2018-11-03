@@ -27610,7 +27610,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1678300063
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30131,15 +30131,15 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1955220935}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e561d92812b4b5947bba044b0d5aca79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaTitle: {fileID: 0}
-  areaName: {fileID: 0}
-  L: {fileID: 0}
-  R: {fileID: 0}
+  areaTitle: {fileID: 1678300064}
+  areaName: {fileID: 1747502487}
+  L: {fileID: 999602910}
+  R: {fileID: 1073373540}
   text_color: {r: 1, g: 1, b: 1, a: 0}
   EventOn: 0
   speed: 0.01
@@ -30163,6 +30163,7 @@ MonoBehaviour:
     type: 2}
   only_player: 0
   armor_power: -0
+  is_invincibility: 0
   per: 0
 --- !u!114 &1955220944
 MonoBehaviour:
