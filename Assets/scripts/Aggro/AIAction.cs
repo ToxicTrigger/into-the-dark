@@ -96,7 +96,7 @@ public class AIAction : MonoBehaviour
                         {
                             if(cooltick <= 1)
                             {
-                                if (attack_tick <= attack_speed)
+                                if (attack_tick<= attack_speed)
                                 {
                                     attack_tick += Time.deltaTime;
                                     ani.SetBool("isAttack", false);

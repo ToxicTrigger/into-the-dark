@@ -25,7 +25,7 @@ public class Wall : MonoBehaviour {
             float level = mat.GetFloat("_Level");
             if(level < 1)
             {
-                level += Time.deltaTime * 1;
+                level += Time.deltaTime * 0.25f;
                 mat.SetFloat("_Level" , level);
             }
             else
@@ -40,7 +40,7 @@ public class Wall : MonoBehaviour {
             float level = mat.GetFloat("_Level");
             if( level > 0 )
             {
-                level -= Time.deltaTime * 1;
+                level -= Time.deltaTime * 0.25f;
                 mat.SetFloat("_Level" , level);
             }
             else
