@@ -17,9 +17,14 @@ public class HpUi : MonoBehaviour
         player = FindObjectOfType<Player>();
         player_hp = player.GetComponent<Damageable>();
     }
-
     void Update()
     {
+        int end_ = (int)( player_hp.Max_Hp / 100 );
+        var end_pos = End.anchoredPosition3D;
+        end_pos.x = (end_ * 235);
+        end_pos.x = end_pos.x - ( (3 - end_) * 20 );
+        End.anchoredPosition3D = Vector3.Lerp(End.anchoredPosition3D , end_pos , Time.deltaTime * 2);
+
         for( int i = 0 ; i < (int)( player_hp.Max_Hp / 100 ); ++i )
         {
             Hp_bars[ i ].enabled = true;
@@ -30,7 +35,6 @@ public class HpUi : MonoBehaviour
 
             des = new Vector3(196 + ( ( i + 2 ) * 185 ) , -1.7f , 0);
             Hp_bars[ i ].fillAmount =  ( (player_hp.Hp - i * 100) * 0.01f );
-            End.anchoredPosition3D = Vector3.Lerp(End.anchoredPosition3D , des / 2.8f , Time.deltaTime * 2);
 
             if( Hp_bars[i].fillAmount == 0)
             {

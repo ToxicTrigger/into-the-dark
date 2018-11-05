@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Pot : Damageable
 {
-    [SerializeField]
-    private List<MeshCollider> particles;
+    public List<MeshCollider> particles;
     public AudioSource broken_sound;
     bool ok;
 

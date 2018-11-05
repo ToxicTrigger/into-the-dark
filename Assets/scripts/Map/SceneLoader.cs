@@ -26,7 +26,7 @@ public class SceneLoader : MonoBehaviour
         }
         
 
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(8);
         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
         SceneManager.LoadSceneAsync(map_name);
     }

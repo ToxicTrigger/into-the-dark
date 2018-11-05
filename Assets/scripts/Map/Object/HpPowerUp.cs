@@ -9,6 +9,7 @@ public class HpPowerUp : Item
 
     public override void do_work()
     {
+        if( Player.GetComponent<Damageable>().Max_Hp < 201)
         this.Player.GetComponent<Damageable>().Max_Hp += hp_grow_point;
         Destroy(gameObject);
     }

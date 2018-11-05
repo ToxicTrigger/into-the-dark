@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour
     protected bool no_input;
     float dash_tick;
     bool in_dash_one, in_dash_two;
-    List<InputHandler> listeners;
+    public List<InputHandler> listeners;
 
     public static InputManager get_instance()
     {
@@ -54,9 +54,9 @@ public class InputManager : MonoBehaviour
 
     void update_handlers()
     {
-        for (int i = 0; i < listeners.Count; i++)
+        foreach( var t in listeners)
         {
-            listeners[i].Work(this);
+            if(t.enabled) t.Work(this);
         }
     }
 
@@ -81,21 +81,7 @@ public class InputManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(tick <= 3)
-        {
-            tick += Time.deltaTime;
-        }
-        else
-        {
-            tick = 0;
-            listeners = new List<InputHandler>();
-            InputHandler[] list = FindObjectsOfType<InputHandler>();
-            for (int i = 0; i < list.Length; i++)
-            {
-                listeners.Add(list[i]);
-                //Debug.Log("input Handler : " + listeners[i].name);
-            }
-        }
+
         update_raw_input();
         update_handlers();
     }

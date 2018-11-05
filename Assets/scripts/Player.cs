@@ -63,6 +63,19 @@ public class Player : MonoBehaviour
 
     public void Start()
     {
+        installable_totems = PlayerPrefs.GetInt("installable_totems");
+        damageable.Max_Hp = PlayerPrefs.GetInt("Max_Hp");
+
+        if(damageable.Max_Hp == 0)
+        {
+            damageable.Max_Hp = 100;
+        }
+
+        if(installable_totems == 0)
+        {
+            installable_totems = 1;
+        }
+
         character = GetComponent<CharacterController>();
         ani = GetComponent<Animator>();
         weapon = GetComponent<Weapon>();
@@ -498,5 +511,11 @@ public class Player : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        PlayerPrefs.SetInt("installable_totems",installable_totems);
+        PlayerPrefs.SetInt("Max_Hp", (int)damageable.Max_Hp);
     }
 }

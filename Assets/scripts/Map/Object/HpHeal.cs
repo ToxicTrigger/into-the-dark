@@ -9,6 +9,7 @@ public class HpHeal : Item
 
     public override void do_work()
     {
+        
         Player.GetComponent<Damageable>().Hp += heal_point;
         Destroy(gameObject);
     }
