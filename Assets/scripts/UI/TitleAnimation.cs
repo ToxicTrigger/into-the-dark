@@ -50,7 +50,7 @@ public class TitleAnimation : MonoBehaviour
         Char.SetActive(false);
         cam.action_speed = 0;
         cam.enabled = false;
-        
+        Time.timeScale = 1;
     }
 
     void Update()
@@ -77,14 +77,10 @@ public class TitleAnimation : MonoBehaviour
                 {
                     case 0:
                         Char.SetActive(true);
-
                         UI.SetActive(true);
-
-                        
                         cam.enabled = true;
-                        cam.action_speed =0.1f;
+                        cam.action_speed = 0.1f;
                         gameObject.SetActive(false);
-                      
                         break;
                     case 3:
                         Application.Quit();

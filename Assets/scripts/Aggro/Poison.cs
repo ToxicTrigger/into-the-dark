@@ -24,34 +24,39 @@ public class Poison : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name + " || "+other.gameObject.layer);
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && !other.gameObject.name.Contains("pot"))
         {
             if (other.CompareTag("Switch"))
             {
-                var t = Instantiate(sound, transform.position, Quaternion.identity, null);
-                Destroy(t, 3.0f);
+                if(FindObjectsOfType<Bomber>().Length < 10)
+                {
+                    var t = Instantiate(sound, transform.position, Quaternion.identity, null);
+                    Destroy(t, 3.0f);
 
-                Vector3 pos = boss.position;
-                pos.y += 30f;
-                GameObject drop = Instantiate(prefab, pos, Quaternion.identity, null);
-                drop.transform.localScale *= 1.4f;
-                GameObject tmp = Instantiate(effect, transform.position, Quaternion.identity, null);
-                Destroy(tmp, 3.0f);
-                Destroy(gameObject);
+                    Vector3 pos = boss.position;
+                    pos.y += 30f;
+                    GameObject drop = Instantiate(prefab, pos, Quaternion.identity, null);
+                    drop.transform.localScale *= 1.4f;
+                    GameObject tmp = Instantiate(effect, transform.position, Quaternion.identity, null);
+                    Destroy(tmp, 3.0f);
+                    Destroy(gameObject);
+                }
             }
             else
             {
                 var tt = Instantiate(sound, transform.position, Quaternion.identity, null);
                 Destroy(tt, 3.0f);
-                if (Monster != null)
+                if(FindObjectsOfType<AggroAI>().Length < 10)
                 {
-                    GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
+                    if (Monster != null)
+                    {
+                        GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
+                    }
+                    GameObject t = Instantiate(effect, transform.position, Quaternion.identity, null);
+                    Destroy(t, 3.0f);
+                    Destroy(gameObject);
                 }
-                GameObject t = Instantiate(effect, transform.position, Quaternion.identity, null);
-                Destroy(t, 3.0f);
                 Player.GetComponent<Player>().ac.Shake(3, 0.2f, Time.deltaTime);
-                Destroy(gameObject);
             }
         }
 

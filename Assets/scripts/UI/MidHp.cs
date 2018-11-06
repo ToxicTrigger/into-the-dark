@@ -7,6 +7,7 @@ public class MidHp : MonoBehaviour
 {
     public Color alpha;
     public Image Red, Yellow, Back;
+    public Text boss_name;
     public bool start;
     public Damageable damageable;
 
@@ -36,5 +37,6 @@ public class MidHp : MonoBehaviour
         Red.color = alpha;
         Yellow.color = alpha;
         Back.color = alpha;
+        boss_name.color = alpha;
 	}
 }

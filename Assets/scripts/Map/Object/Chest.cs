@@ -13,6 +13,7 @@ public class Chest : Interactable
     IEnumerator Gen()
     {
         var t = Instantiate(Item, transform.position, Quaternion.identity, null);
+        t.transform.Rotate(Vector3.left, 90);
         t.GetComponent<Item>().enabled = false;
         var pos = t.transform.position;
         

@@ -53,7 +53,7 @@ public class AIAction : MonoBehaviour
     public float attack_tick = 0;
     public float cooltick = 0;
     public int count = 0;
-
+    
     public bool attack_end;
 
     /*  중간 보스 공격
@@ -78,7 +78,7 @@ public class AIAction : MonoBehaviour
                     FindObjectOfType<MidHp>().start = true;
                     ani.applyRootMotion = false;
                     ani.SetBool("isAction" , true);
-                    yield return new WaitForSeconds(6);
+                    yield return new WaitForSeconds(4);
                     ani.SetBool("isAction" , false);
                     state = State.Attack;
                     ani.applyRootMotion = true;
@@ -96,7 +96,7 @@ public class AIAction : MonoBehaviour
                         {
                             if(cooltick <= 1)
                             {
-                                if (attack_tick<= attack_speed)
+                                if (attack_tick <= attack_speed)
                                 {
                                     attack_tick += Time.deltaTime;
                                     ani.SetBool("isAttack", false);
@@ -104,14 +104,16 @@ public class AIAction : MonoBehaviour
                                 else
                                 {
                                     ani.SetBool("isAttack", true);
-                                    //yield return new WaitForSeconds(0.3f);
+
+                                    yield return new WaitForSeconds(1f);
+                                    Player.ac.Shake(4, 0.4f, Time.deltaTime);
                                     Vector3 pos = transform.position;
                                     GameObject poison = Instantiate(Poison, pos, Quaternion.identity, null);
                                     poison.transform.position = transform.position;
                                     poison.GetComponent<Rigidbody>().useGravity = true;
                                     poison.GetComponent<Rigidbody>().velocity = (Player.transform.position - pos).normalized * Vector3.Distance(transform.position, Player.transform.position) / 2;
                                     poison.GetComponent<Rigidbody>().AddForce(Vector3.up * 10, ForceMode.Impulse);
-                                    Player.ac.Shake(4, 0.4f, Time.deltaTime);
+
                                     attack_tick = 0;
                                     count += 1;
                                     cooltick = 0;
@@ -125,6 +127,7 @@ public class AIAction : MonoBehaviour
                         }
                         else
                         {
+                            ani.SetBool("isAttack", false);
                             attack_end = true;
                         }
 

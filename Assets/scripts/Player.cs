@@ -66,15 +66,7 @@ public class Player : MonoBehaviour
         installable_totems = PlayerPrefs.GetInt("installable_totems");
         damageable.Max_Hp = PlayerPrefs.GetInt("Max_Hp");
 
-        if(damageable.Max_Hp == 0)
-        {
-            damageable.Max_Hp = 100;
-        }
 
-        if(installable_totems == 0)
-        {
-            installable_totems = 1;
-        }
 
         character = GetComponent<CharacterController>();
         ani = GetComponent<Animator>();
@@ -83,6 +75,16 @@ public class Player : MonoBehaviour
         damageable = GetComponent<Damageable>();
         cam = Camera.main;
         move = GetComponent<PlayerMove>();
+
+        if (damageable.Max_Hp == 0)
+        {
+            damageable.Max_Hp = 100;
+        }
+
+        if (installable_totems == 0)
+        {
+            installable_totems = 1;
+        }
 
         ac = FindObjectOfType<ActionCamera>();
         ac.SetStateTarget(this.transform , ActionCamera.State.Follow,ac.default_speed,0.0f,ac.default_angle ,"player_follow",Vector3.zero);
@@ -415,10 +417,23 @@ public class Player : MonoBehaviour
     public bool esc_push;
     public void Update()
     {
+        if(Input.GetKeyDown(KeyCode.F6))
+        {
+            damageable.Hp = 300;
+            damageable.Max_Hp = 300;
+            installable_totems = 5;
+        }
+        if(Input.GetKeyDown(KeyCode.F5))
+        {
+            damageable.Max_Hp = 100;
+            installable_totems = 1;
+            PlayerPrefs.DeleteAll();
+        }
         if(Input.GetKeyDown(KeyCode.F4))
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
             SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+            PlayerPrefs.DeleteAll();
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {

@@ -39,12 +39,15 @@ public class PlayerMove : InputHandler
     public bool reverse;
 
     public float stamina_tick;
-    public bool stamina_zero; 
+    public bool stamina_zero;
+
+    public ParticleSystem run_effect;
 
     public override void Work(InputManager im)
     {
         if( !im.has_not_anything_input() && ( player.cur_ani.Equals("Run") || player.cur_ani.Equals("Player_Idle") ) )
         {
+            
             if(cpd != null && cpd.enabled)
             {
                 switch( cpd.p.direction )
@@ -167,11 +170,9 @@ public class PlayerMove : InputHandler
                 }
             }
         }
-
         else
         {
             movement = Vector3.Lerp(movement , Vector3.zero , moveSpeed);
-            
             player.ani.SetFloat("Forward" , movement.magnitude);
         }
         cc.Move(movement * 0.2f);
@@ -227,6 +228,15 @@ public class PlayerMove : InputHandler
     }
     public void FixedUpdate()
     {
+        if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+        {
+            run_effect.Play();
+        }
+        if(!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        {
+            run_effect.Stop();
+        }
+
         ui_def = stamina.GetColor("_Color");
         update_stamina_ui();
         float a = Mathf.Lerp(ui_def.a, ui_color.a, Time.deltaTime);
@@ -273,6 +283,7 @@ public class PlayerMove : InputHandler
         cpd = FindObjectOfType<CalcPinDist>();
         step = cc.stepOffset;
         ui_color = Color.white;
+        run_effect = transform.GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<ParticleSystem>();
     }
 
     public void OnApplicationQuit()
