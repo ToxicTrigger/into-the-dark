@@ -21,7 +21,7 @@ public class Interactable : MonoBehaviour
 
     protected void Awake()
     {
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        target = GameObject.FindObjectOfType<Player>().transform;
         e = GameObject.FindGameObjectWithTag("E").GetComponent<EButton>();
     }
 
