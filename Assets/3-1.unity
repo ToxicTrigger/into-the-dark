@@ -231,6 +231,7 @@ MonoBehaviour:
   ph:
   - {fileID: 0}
   sound: {fileID: 0}
+  timer: 5
   AIs: []
 --- !u!65 &31906655
 BoxCollider:
@@ -437,7 +438,7 @@ GameObject:
   - component: {fileID: 62469626}
   - component: {fileID: 62469625}
   - component: {fileID: 62469624}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Object359 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6280,11 +6281,10 @@ GameObject:
   m_Component:
   - component: {fileID: 351392527}
   - component: {fileID: 351392532}
-  - component: {fileID: 351392531}
   - component: {fileID: 351392530}
-  - component: {fileID: 351392529}
   - component: {fileID: 351392528}
-  m_Layer: 0
+  - component: {fileID: 351392529}
+  m_Layer: 8
   m_Name: AreaPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6323,16 +6323,15 @@ BoxCollider:
 --- !u!114 &351392529
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114034377985192906, guid: 70b8831a21f06434dab963e0de7cb20b,
-    type: 2}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 351392526}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97b5b9c3f3695734cbfffe1092feac23, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e2dc760b7ecb524c9b1c16fcab9e480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  talk_distance: 0
+  talk_distance: 3
   target: {fileID: 0}
   hasTalking: 0
   events: []
@@ -6340,10 +6339,9 @@ MonoBehaviour:
   get_capture_area: 0
   OnOff: 0
   handlr: 0
-  ph:
-  - {fileID: 0}
-  sound: {fileID: 0}
-  timer: 7
+  ph: []
+  sound: {fileID: 351392530}
+  timer: 6
 --- !u!82 &351392530
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6440,20 +6438,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &351392531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114285637645685920, guid: 70b8831a21f06434dab963e0de7cb20b,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 351392526}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7b0b58c6878c464d8173760f8695f49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnOff: 1
-  particle: {fileID: 0}
 --- !u!114 &351392532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14086,10 +14070,10 @@ MeshCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 867603592}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -24480,7 +24464,7 @@ GameObject:
   - component: {fileID: 1734053338}
   - component: {fileID: 1734053337}
   - component: {fileID: 1734053336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Box039 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24512,7 +24496,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300442, guid: 2b0da9df37fefbd42ab9340e8ce88b04, type: 3}
@@ -24814,6 +24798,14 @@ Prefab:
         type: 2}
       propertyPath: m_Convex
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664161085272930, guid: 5b8f38cf8de9dc44ab3dac1e65117e42, type: 2}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1572548215901064, guid: 5b8f38cf8de9dc44ab3dac1e65117e42, type: 2}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b8f38cf8de9dc44ab3dac1e65117e42, type: 2}
