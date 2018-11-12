@@ -18,7 +18,7 @@ public class DestroyCheck : Observable {
 
     public void notify_all()
     {
-        Debug.Log("파괴! = " + this.transform.parent.name);
+        //Debug.Log("파괴! = " + this.transform.parent.name);
         for (int i = 0; i < this.observers.Count; i++)
         {
             if (this.observers[i] == null)

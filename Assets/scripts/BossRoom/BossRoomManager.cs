@@ -115,6 +115,9 @@ public class BossRoomManager : Observer {
 
         player = FindObjectOfType<Player>();
         p_controller = player.GetComponent<CharacterController>();
+
+        player.installable_totems = 5;
+        player.GetComponent<Damageable>().Max_Hp = 300;
     }
 
     public void player_enter_bossroom()
