@@ -28,7 +28,7 @@ public class Poison : MonoBehaviour
         {
             if (other.CompareTag("Switch"))
             {
-                if(FindObjectsOfType<Bomber>().Length < 10)
+                if (FindObjectsOfType<Bomber>().Length < 10)
                 {
                     var t = Instantiate(sound, transform.position, Quaternion.identity, null);
                     Destroy(t, 3.0f);
@@ -46,16 +46,13 @@ public class Poison : MonoBehaviour
             {
                 var tt = Instantiate(sound, transform.position, Quaternion.identity, null);
                 Destroy(tt, 3.0f);
-                if (FindObjectsOfType<AggroAI>().Length < 10)
+                if (FindObjectsOfType<AggroAI>().Length < 10 && Monster != null)
                 {
-                    if (Monster != null)
-                    {
-                        GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
-                    }
-                    GameObject t = Instantiate(effect, transform.position, Quaternion.identity, null);
-                    Destroy(t, 3.0f);
-                    Destroy(gameObject);
+                    GameObject tmp = Instantiate(Monster, transform.position, Quaternion.identity, null);
                 }
+                GameObject t = Instantiate(effect, transform.position, Quaternion.identity, null);
+                Destroy(t, 3.0f);
+                Destroy(gameObject);
                 Player.GetComponent<Player>().ac.Shake(3, 0.2f, Time.deltaTime);
             }
         }
