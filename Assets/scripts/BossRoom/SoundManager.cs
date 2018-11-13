@@ -43,6 +43,8 @@ public class SoundManager : MonoBehaviour
         bridge_idle,
         puzzle_idle,
         botton,
+        howling,
+
     };
     public SoundList sound_number;
 

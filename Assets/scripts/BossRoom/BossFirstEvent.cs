@@ -117,6 +117,12 @@ public class BossFirstEvent : Observer {
         }
 
     }
+
+    public void play_sound()
+    {
+        SoundManager.get_instance().play_sound(SoundManager.SoundList.howling);
+    }
+
     public void set_is_shake()
     {
         is_shake = true;

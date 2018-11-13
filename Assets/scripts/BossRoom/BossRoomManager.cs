@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PostProcessing;
+using UnityEngine.UI;
 
 public class BossRoomManager : Observer {  
 
@@ -191,9 +192,13 @@ public class BossRoomManager : Observer {
             ui_black_screen.change_screen(BlackScreen.ScreenState.Fade_Out);
         }
     }
-
+    public Image[] player_ui;
     public void game_clear()
     {
+        for(int i =0; i < player_ui.Length; i++)
+        {
+            player_ui[i].color = new Vector4(1, 1, 1, 0);
+        }
         sound_manager.clear();
         for (int i = 0; i < fog.Length; i++)
         {
