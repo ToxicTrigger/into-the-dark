@@ -8,21 +8,6 @@ public class ArrowSwitch : Switch
     private float timer = 5;
     private float now;
 
-    public void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Arrow"))
-        {
-            if( this.OnOff )
-            {
-                this.OnOff = false;
-            }
-            else
-            {
-                this.OnOff = true;
-            }
-        }
-    }
-
     public new void Update()
     {
         if( this.OnOff )

@@ -66,8 +66,6 @@ public class Player : MonoBehaviour
         installable_totems = PlayerPrefs.GetInt("installable_totems");
         damageable.Max_Hp = PlayerPrefs.GetInt("Max_Hp");
 
-
-
         character = GetComponent<CharacterController>();
         ani = GetComponent<Animator>();
         weapon = GetComponent<Weapon>();
@@ -454,77 +452,81 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (end_tick <= 1.0f)
+            if(!ani.GetBool("stun"))
             {
-                end_tick += Time.deltaTime;
-            }
-            else
-            {
-                damageable.Hp -= 0.5f;
-                //damageable.Damaged(0.5f, 0, damageable.transform);
-                end_tick = 0;
-            }
-
-            if (!has_on_ladder)
-                Update_Y_pos();
-
-            Vector3 tmp = transform.position;
-            tmp.y = 10f;
-            gen_totem();
-            cur_ani = ani.GetCurrentAnimatorClipInfo(0)[0].clip.name;
-            step_ani();
-            ani.SetFloat("Bow_Fire", bow_time);
-            change_weapon_type();
-            Click_Attack();
-
-            if (Input.GetButtonDown("Fire1"))
-            {
-                if (weapon.type.Equals(Weapon.Type.Sword))
+                if (end_tick <= 1.0f)
                 {
-                    attack_click = true;
-                    click_tick = 0;
+                    end_tick += Time.deltaTime;
                 }
-            }
-            else if (Input.GetButton("Fire1"))
-            {
-                if (!weapon.type.Equals(Weapon.Type.Sword))
+                else
                 {
-                    bow_time += Time.deltaTime;
-                    if (!bow_fullback.isPlaying) bow_fullback.Play();
-                    is_fighting_something = true;
-                    calc_click_pos(false);
+                    damageable.Hp -= 0.5f;
+                    //damageable.Damaged(0.5f, 0, damageable.transform);
+                    end_tick = 0;
                 }
-            }
 
-            if (Input.GetMouseButtonUp(0))
-            {
-                is_fighting_something = false;
-                if (weapon.isUsing)
+                if (!has_on_ladder)
+                    Update_Y_pos();
+
+                Vector3 tmp = transform.position;
+                tmp.y = 10f;
+                gen_totem();
+                cur_ani = ani.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+                step_ani();
+                ani.SetFloat("Bow_Fire", bow_time);
+                change_weapon_type();
+                Click_Attack();
+
+                if (Input.GetButtonDown("Fire1"))
                 {
-                    if (bow_time >= 0.5f)
+                    if (weapon.type.Equals(Weapon.Type.Sword))
                     {
+                        attack_click = true;
+                        click_tick = 0;
+                    }
+                }
+                else if (Input.GetButton("Fire1"))
+                {
+                    if (!weapon.type.Equals(Weapon.Type.Sword))
+                    {
+                        bow_time += Time.deltaTime;
+                        if (!bow_fullback.isPlaying) bow_fullback.Play();
+                        is_fighting_something = true;
                         calc_click_pos(false);
-                        gen_arrow();
-
-                        bow_time = 0f;
-                        line.gameObject.SetActive(false);
-                        if (!bow_release.isPlaying)
-                        {
-                            bow_fullback.Stop();
-                            bow_release.Play();
-                        }
                     }
-                    else
+                }
+
+                if (Input.GetMouseButtonUp(0))
+                {
+                    is_fighting_something = false;
+                    if (weapon.isUsing)
                     {
-                        bow_time = 0f;
-                        line.gameObject.SetActive(false);
-                        if (!bow_release.isPlaying)
+                        if (bow_time >= 0.5f)
                         {
-                            bow_fullback.Stop();
+                            calc_click_pos(false);
+                            gen_arrow();
+
+                            bow_time = 0f;
+                            line.gameObject.SetActive(false);
+                            if (!bow_release.isPlaying)
+                            {
+                                bow_fullback.Stop();
+                                bow_release.Play();
+                            }
+                        }
+                        else
+                        {
+                            bow_time = 0f;
+                            line.gameObject.SetActive(false);
+                            if (!bow_release.isPlaying)
+                            {
+                                bow_fullback.Stop();
+                            }
                         }
                     }
                 }
             }
+            
         }
     }
 
