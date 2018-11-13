@@ -95,7 +95,7 @@ public class BossRoomManager : Observer {
         Clear,          // 클리어
     }
     public BossRoomEvent[] event_slot;
-
+    ActionCamera ac;
     private void Start()
     {
         init_val[(int)phase].phase = Phase.one;
@@ -118,6 +118,9 @@ public class BossRoomManager : Observer {
 
         player.installable_totems = 5;
         player.GetComponent<Damageable>().Max_Hp = 300;
+
+        ac = FindObjectOfType<ActionCamera>();
+        ac.use_overlap = false;
     }
 
     public void player_enter_bossroom()

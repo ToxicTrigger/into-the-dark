@@ -30,6 +30,7 @@ public class BossHpUI : MonoBehaviour {
     public float red_speed;
 
     public Image[] image;
+    public Text boss_name;
 
 	void Start () {
         boss = BossRoomManager.get_instance().get_boss();
@@ -71,6 +72,7 @@ public class BossHpUI : MonoBehaviour {
             for(int i =0;i<image.Length; i++)
             {
                 image[i].enabled = true;
+                boss_name.enabled = true;
             }
             //this_rt.position = new Vector3(this_rt.position.x, ui_up_pos.y, this_rt.position.z);
             //StopCoroutine(corutine);
@@ -82,6 +84,7 @@ public class BossHpUI : MonoBehaviour {
             for (int i = 0; i < image.Length; i++)
             {
                 image[i].enabled = false;
+                boss_name.enabled = false;
             }
             //this_rt.position = new Vector3(this_rt.position.x, -200 , this_rt.position.z);
             //StopCoroutine(corutine);

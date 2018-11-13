@@ -46,7 +46,7 @@ public class Poison : MonoBehaviour
             {
                 var tt = Instantiate(sound, transform.position, Quaternion.identity, null);
                 Destroy(tt, 3.0f);
-                if(FindObjectsOfType<AggroAI>().Length < 10)
+                if (FindObjectsOfType<AggroAI>().Length < 10)
                 {
                     if (Monster != null)
                     {

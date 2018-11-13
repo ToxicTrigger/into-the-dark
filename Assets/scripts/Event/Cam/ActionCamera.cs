@@ -195,6 +195,7 @@ public class ActionCamera : MonoBehaviour
     int ignore;
     public bool overlap;
     public float guarantee_timer;
+    public bool use_overlap=true;
     IEnumerator calc_fsm()
     {
         ignore = (1 << LayerMask.NameToLayer("Ground")) + (1 << LayerMask.NameToLayer("Ignore Raycast"));
@@ -214,7 +215,6 @@ public class ActionCamera : MonoBehaviour
                             break;
 
                         case State.Follow:
-
                             RaycastHit hit;
                             Vector3 pos = transform.position;
                             Vector3 tmp = now_target.position;
@@ -227,6 +227,7 @@ public class ActionCamera : MonoBehaviour
                                     && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast")
                                     && hit.collider.gameObject.layer != LayerMask.NameToLayer("Ground")
                                     && hit.collider.gameObject.layer != LayerMask.NameToLayer("Totem")
+                                    && use_overlap
                                     )
                                 {
                                     pos = Vector3.Lerp(pos, hit.point, action_speed * 0.2f);
